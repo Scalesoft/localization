@@ -1,0 +1,10 @@
+﻿@using Localization
+@{
+    ViewBag.Title = "Localization Sample";
+}
+
+
+<a href="@Url.Action("ChangeTranslation", "Home", new {locale = "en"})">EN</a>
+<a href="@Url.Action("ChangeTranslation", "Home", new {locale = "cs"})">CZ</a>
+
+<h2>@Translator.Translate("Hello")</h2>
