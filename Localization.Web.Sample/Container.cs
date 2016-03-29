@@ -19,7 +19,7 @@ namespace Localization.Web.Sample
                     {
                         if (m_current == null)
                         {
-                            m_current = new Container(string.Format(@"{0}.Container.Config", GetAssemblyNamePrefixForWebservice()));
+                            m_current = new Container(string.Format(@"{0}.Container.config", GetAssemblyNamePrefixForWebservice()));
                         }
                     }
                 }

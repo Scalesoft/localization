@@ -4,32 +4,38 @@ using System.Globalization;
 namespace Localization
 {
     
-    public class LocalizationManager
+    public sealed class LocalizationManager
     {
         private readonly ILocalizationRepository m_repository;
         private readonly ILocalizationResourceManager m_resourceManager;
         private readonly LocalizationConfiguration m_configuration;
 
-        private static LocalizationManager m_instance;
+        private volatile static LocalizationManager m_instance;
+        private static readonly object m_lock = new object();
 
-        public LocalizationManager(LocalizationConfiguration configuration, ILocalizationRepository repository, ILocalizationResourceManager resourceManager)
+
+        private LocalizationManager()
         {
-            m_configuration = configuration;
-            m_repository = repository;
-            m_resourceManager = resourceManager;
-            SetAsStaticInstance();
+            m_configuration = Container.Current.Resolve<LocalizationConfiguration>();
+            m_repository = Container.Current.Resolve<ILocalizationRepository>();
+            m_resourceManager = Container.Current.Resolve<ILocalizationResourceManager>();
         }
 
-        public void SetAsStaticInstance()
-        {
-            m_instance = this;
-        }
-
-        //Instance can return null when called before SetAsStaticInstance is called
+        
         public static LocalizationManager Instance
         {
             get
             {
+                if (m_instance == null)
+                {
+                    lock (m_lock)
+                    {
+                        if (m_instance == null)
+                        {
+                            m_instance = new LocalizationManager();
+                        }
+                    }
+                }
                 return m_instance;
             }
         }
@@ -71,7 +77,7 @@ namespace Localization
                 cultureInfo = new CultureInfo(m_configuration.DefaultCulture);
             }
 
-            return cultureInfo;;
+            return cultureInfo;
         }
     }
 }

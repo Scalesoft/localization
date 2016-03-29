@@ -8,9 +8,6 @@ namespace Localization.Web.Sample
     {
         protected void Application_Start()
         {
-            var container = Container.Current; //Create container on startup
-            container.Resolve<LocalizationManager>();
-
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
