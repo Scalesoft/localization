@@ -39,7 +39,7 @@ namespace ResourceLocaleTest {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ResourceLocaleTest.localizedText", typeof(localizedText).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Localization.Web.Sample.localizedText", typeof(localizedText).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,24 @@ namespace ResourceLocaleTest {
         internal static string Hello {
             get {
                 return ResourceManager.GetString("Hello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JS Hello!!!.
+        /// </summary>
+        internal static string JSHello {
+            get {
+                return ResourceManager.GetString("JSHello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Localized Text By Javascript.
+        /// </summary>
+        internal static string ShowLocalizedTextByJavascript {
+            get {
+                return ResourceManager.GetString("ShowLocalizedTextByJavascript", resourceCulture);
             }
         }
     }

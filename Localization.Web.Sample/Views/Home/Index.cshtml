@@ -3,8 +3,21 @@
     ViewBag.Title = "Localization Sample";
 }
 
+<script src="/Scripts/localization.test.js"></script>
 
 <a href="@Url.Action("ChangeTranslation", "Home", new {locale = "en"})">EN</a>
 <a href="@Url.Action("ChangeTranslation", "Home", new {locale = "cs"})">CZ</a>
 
 <h2>@Translator.Translate("Hello")</h2>
+
+<script>
+    $(document).ready(() => {
+        $("#razorViewJsLocalization").html('@Translator.Translate("JSHello")');
+    });
+</script>
+
+<h2 id="razorViewJsLocalization"></h2>
+
+<button onclick="showLocalizedText()">@Translator.Translate("ShowLocalizedTextByJavascript")</button>
+
+<h2 id="jslocalization"></h2>

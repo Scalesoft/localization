@@ -120,4 +120,10 @@
   <data name="Hello" xml:space="preserve">
     <value>Hello!!!</value>
   </data>
+  <data name="JSHello" xml:space="preserve">
+    <value>JS Hello!!!</value>
+  </data>
+  <data name="ShowLocalizedTextByJavascript" xml:space="preserve">
+    <value>Show Localized Text By Javascript</value>
+  </data>
 </root>
