@@ -6,18 +6,22 @@
     </modules>
   </system.webServer>
 
-2. In javascript use as this:
+2. Reference javascript file in Views/Shared/_Layout.cshtml:
 
-translate("JSHello");
+	<script src="/Scripts/Localize.js"></script>
 
-3. In Razor view use as this:
+3. In javascript use as this:
 
-<h2>@Translator.Translate("Hello")</h2>
+	translate("JSHello");
+
+4. In Razor view use as this:
+
+	<h2>@Translator.Translate("Hello")</h2>
 
 or this in script part:
 
-<script>
-    $(document).ready(() => {
-        $("#razorViewJsLocalization").html('@Translator.Translate("JSHello")');
-    });
-</script>
+	<script>
+		$(document).ready(() => {
+			$("#razorViewJsLocalization").html('@Translator.Translate("JSHello")');
+		});
+	</script>
