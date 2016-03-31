@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using Castle.Core.Resource;
 using Castle.Windsor;
@@ -46,6 +47,15 @@ namespace Localization
         {
             var assembly = GetAssembly();
 
+            var mainAssemblyPath = Path.GetDirectoryName(new Uri(assembly.EscapedCodeBase).LocalPath);
+
+            if (mainAssemblyPath != null)
+            {
+                var externalConfigPath = Path.Combine(mainAssemblyPath, GetConfigName(assembly));
+                if (File.Exists(externalConfigPath))
+                    return new FileResource(externalConfigPath);
+            }
+
             var fileConfigPath = GetFileConfigPath(assembly);
             if (File.Exists(fileConfigPath))
                 return new FileResource(fileConfigPath);
@@ -74,7 +84,7 @@ namespace Localization
 
         private static Assembly GetAssembly()
         {
-            return Assembly.GetExecutingAssembly();
+            return Assembly.GetCallingAssembly();
         }
     }
 }

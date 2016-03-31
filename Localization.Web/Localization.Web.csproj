@@ -39,7 +39,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Localization.0.1.0\lib\net452\Localization.dll</HintPath>
+      <HintPath>..\packages\Localization.0.1.1\lib\net452\Localization.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -90,9 +90,10 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Localize.ts" />
+    <TypeScriptCompile Include="content\Localize.ts" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Localization.Web.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

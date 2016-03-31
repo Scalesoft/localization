@@ -55,11 +55,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Localization.0.1.0\lib\net452\Localization.dll</HintPath>
+      <HintPath>..\packages\Localization.0.1.1\lib\net452\Localization.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Localization.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Localization.Web.0.1.0\lib\net452\Localization.Web.dll</HintPath>
+      <HintPath>..\packages\Localization.Web.0.1.1\lib\net452\Localization.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -171,21 +171,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="localizedText.cs.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>localizedText.cs.resx</DependentUpon>
-    </Compile>
-    <Compile Include="localizedText.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>localizedText.resx</DependentUpon>
-    </Compile>
-    <Compile Include="localizedText.en.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>localizedText.en.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +186,7 @@
     <Content Include="Localization.Web.Sample.Container.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Localization.Container.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -238,23 +224,12 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="localizedText.cs.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>localizedText.cs.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="localizedText.en.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>localizedText.en.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>ResourceLocaleTest</CustomToolNamespace>
-    </EmbeddedResource>
-    <EmbeddedResource Include="localizedText.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>localizedText.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>ResourceLocaleTest</CustomToolNamespace>
-    </EmbeddedResource>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <EmbeddedResource Include="Localization\localizedText.cs.resx" />
+    <EmbeddedResource Include="Localization\localizedText.en.resx" />
+    <EmbeddedResource Include="Localization\localizedText.resx" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\Localize.ts" />

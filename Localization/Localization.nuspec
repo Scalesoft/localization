@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Localization</id>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <title>Localization</title>
     <authors>Scalesoft s.r.o.</authors>
     <owners>Scalesoft s.r.o.</owners>
@@ -12,4 +12,9 @@
     <copyright>Copyright 2016</copyright>
     <tags>Localization Core Scalesoft</tags>
   </metadata>
+
+  <files>
+    <file src="content\Localization.Container.config" target="content" />
+    <file src="tools\Install.ps1" target="Tools"/>
+  </files>
 </package>

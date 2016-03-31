@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Localization.Web</id>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <title>Localization for Web</title>
     <authors>Scalesoft s.r.o.</authors>
     <owners>Scalesoft s.r.o.</owners>
@@ -13,6 +13,6 @@
     <tags>Localization Web Scalesoft</tags>
   </metadata>
  <files>
-  <file src="Localize.ts" target="content\Scripts" /> 
+  <file src="content\Localize.ts" target="content\Scripts" /> 
 </files>
 </package>

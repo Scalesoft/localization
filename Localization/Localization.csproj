@@ -59,8 +59,12 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Localization.Container.config" />
+    <Content Include="content\Localization.Container.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Localization.nuspec" />
     <None Include="packages.config" />
+    <None Include="tools\Install.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
