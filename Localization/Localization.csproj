@@ -59,7 +59,7 @@
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\Localization.Container.config">
+    <Content Include="Localization.Container.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Localization.nuspec" />

@@ -14,7 +14,7 @@
   </metadata>
 
   <files>
-    <file src="content\Localization.Container.config" target="content" />
+    <file src="Localization.Container.config" target="content" />
     <file src="tools\Install.ps1" target="Tools"/>
   </files>
 </package>

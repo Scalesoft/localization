@@ -90,7 +90,7 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="content\Localize.ts" />
+    <TypeScriptCompile Include="Localize.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Localization.Web.nuspec" />
