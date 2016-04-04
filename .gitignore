@@ -64,3 +64,6 @@ packages/
 *.testsettings
 Solution/UpgradeLog.htm
 Solution/.vs/
+
+#Adds nuget.exe
+!NugetPackaging/nuget.exe
