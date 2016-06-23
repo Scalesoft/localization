@@ -99,13 +99,23 @@ class LocalizationDictionary {
 
     constructor(data: string) {
         this.data = JSON.parse(data);
+
+        for (var key in this.data) {
+            if (this.data.hasOwnProperty(key)) {
+                if (key.toLocaleLowerCase() !== key) {
+                    this.data[key.toLowerCase()] = this.data[key];
+                    delete this.data[key];
+                }
+            }
+        }
     }
 
     getText(text: string): string {
-        if (typeof this.data[text] == "undefined") {
+        var textKey = text.toLowerCase();
+        if (typeof this.data[textKey] == "undefined") {
             return text;
         }
 
-        return this.data[text];
+        return this.data[textKey];
     }
 }
