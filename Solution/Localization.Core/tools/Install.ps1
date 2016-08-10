@@ -7,7 +7,7 @@ $copyToOutput = $configItem.Properties.Item("CopyToOutputDirectory")
 
 # Copy Always Always copyToOutput.Value = 1
 # Copy if Newer copyToOutput.Value = 2  
-$copyToOutput.Value = 1
+$copyToOutput.Value = 2
 
 # set 'Build Action' to 'Content'
 $buildAction = $configItem.Properties.Item("BuildAction")

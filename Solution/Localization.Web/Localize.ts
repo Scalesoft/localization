@@ -36,11 +36,11 @@ class LocalizationManager {
 
 
     private updateLocalizationFile(newCurrentLang: string, doneCallback?: () => void) {
-        if (this.downloading && this.downloadingLanguage === newCurrentLang) return;
+        //if (this.downloading && this.downloadingLanguage === newCurrentLang) return; //Better to download multiple times instead of throw undefined error
         this.downloading = true;
         this.downloadingLanguage = newCurrentLang;
 
-        delete this.dictionary;
+        //delete this.dictionary;
 
         var xmlhttp = new XMLHttpRequest();
 
