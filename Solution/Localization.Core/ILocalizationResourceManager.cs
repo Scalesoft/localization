@@ -5,7 +5,7 @@ namespace Localization.Core
 {
     public interface ILocalizationResourceManager
     {
-        string GetString(string text, CultureInfo currentCultureInfo);
+        string GetString(string textKey, CultureInfo currentCultureInfo);
 
         IDictionary<string, string> GetDictionary(CultureInfo cultureInfo);
     }

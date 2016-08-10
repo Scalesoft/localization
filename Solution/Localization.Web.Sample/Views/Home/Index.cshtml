@@ -1,4 +1,4 @@
-﻿@using Localization
+﻿@using Localization.Core
 @{
     ViewBag.Title = "Localization Sample";
 }
@@ -9,7 +9,8 @@
 <a href="@Url.Action("ChangeTranslation", "Home", new {locale = "cs"})">CZ</a>
 
 <h2>@Translator.Translate("Hello")</h2>
-
+<h2>@Translator.Translate("Hello with date", new[]{DateTime.Now.Date.ToString()})</h2>
+<h2>@Translator.Translate("Hello with date and scope", "global", new[]{DateTime.Now.Date.ToString(), "global"})</h2>
 <script>
     $(document).ready(() => {
         $("#razorViewJsLocalization").html('@Translator.Translate("JSHello")');

@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="global-Hello with date and scope" xml:space="preserve">
+    <value>Ahoj v čase {0} a scopu {1}</value>
+  </data>
   <data name="Hello" xml:space="preserve">
     <value>Ahoj světe!!!</value>
+  </data>
+  <data name="Hello with date" xml:space="preserve">
+    <value>Ahoj v čase {0}</value>
   </data>
   <data name="JSHello" xml:space="preserve">
     <value>JS Ahoj světe!!!</value>

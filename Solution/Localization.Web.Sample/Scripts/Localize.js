@@ -1,9 +1,12 @@
-function translate(text) {
-    return LocalizationManager.getInstance().translate(text);
+function translate(text, scope, parameters) {
+    if (scope === void 0) { scope = ""; }
+    if (parameters === void 0) { parameters = null; }
+    return LocalizationManager.getInstance().translate(text, scope, parameters);
 }
 var LocalizationManager = (function () {
     function LocalizationManager() {
         this.langCookieName = "current-lang";
+        this.scopeDelimeter = "-";
         this.currentLang = "";
     }
     LocalizationManager.getInstance = function () {
@@ -12,20 +15,22 @@ var LocalizationManager = (function () {
         }
         return LocalizationManager.instance;
     };
-    LocalizationManager.prototype.translate = function (text) {
-        if (typeof this.dictionary != "undefined") {
-            return this.dictionary.getText(text);
+    LocalizationManager.prototype.translate = function (textKey, scope, parameters) {
+        if (scope === void 0) { scope = ""; }
+        if (parameters === void 0) { parameters = null; }
+        if (typeof this.dictionary == "undefined") {
+            this.updateLocalizationFile(this.getCurrentLang());
         }
-        this.updateLocalizationFile(this.getCurrentLang());
-        return this.dictionary.getText(text);
+        var translationKey = !scope ? textKey : scope + this.scopeDelimeter + textKey;
+        var translation = this.dictionary.getText(translationKey);
+        return !parameters ? translation : this.formatString(translation, parameters);
     };
     LocalizationManager.prototype.updateLocalizationFile = function (newCurrentLang, doneCallback) {
         var _this = this;
-        if (this.downloading && this.downloadingLanguage === newCurrentLang)
-            return;
+        //if (this.downloading && this.downloadingLanguage === newCurrentLang) return; //Better to download multiple times instead of throw undefined error
         this.downloading = true;
         this.downloadingLanguage = newCurrentLang;
-        delete this.dictionary;
+        //delete this.dictionary;
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == XMLHttpRequest.DONE) {
@@ -70,18 +75,30 @@ var LocalizationManager = (function () {
         }
         return "";
     };
+    LocalizationManager.prototype.formatString = function (str, obj) {
+        return str.replace(/\{\s*([^}\s]+)\s*\}/g, function (m, p1, offset, string) { return obj[p1]; });
+    };
     return LocalizationManager;
-})();
+}());
 var LocalizationDictionary = (function () {
     function LocalizationDictionary(data) {
         this.data = JSON.parse(data);
+        for (var key in this.data) {
+            if (this.data.hasOwnProperty(key)) {
+                if (key.toLocaleLowerCase() !== key) {
+                    this.data[key.toLowerCase()] = this.data[key];
+                    delete this.data[key];
+                }
+            }
+        }
     }
     LocalizationDictionary.prototype.getText = function (text) {
-        if (typeof this.data[text] == "undefined") {
+        var textKey = text.toLowerCase();
+        if (typeof this.data[textKey] == "undefined") {
             return text;
         }
-        return this.data[text];
+        return this.data[textKey];
     };
     return LocalizationDictionary;
-})();
+}());
 //# sourceMappingURL=Localize.js.map

@@ -55,11 +55,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Localization.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Scalesoft.Localization.Core.0.1.1\lib\net452\Localization.Core.dll</HintPath>
+      <HintPath>..\packages\Scalesoft.Localization.Core.0.1.2\lib\net452\Localization.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Localization.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Scalesoft.Localization.Web.0.1.1\lib\net452\Localization.Web.dll</HintPath>
+      <HintPath>..\packages\Scalesoft.Localization.Web.0.1.2\lib\net452\Localization.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -187,7 +187,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Localization.Core.Container.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

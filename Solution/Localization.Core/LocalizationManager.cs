@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using Castle.Core.Internal;
 
 namespace Localization.Core
 {
@@ -10,7 +12,9 @@ namespace Localization.Core
         private readonly ILocalizationResourceManager m_resourceManager;
         private readonly LocalizationConfiguration m_configuration;
 
-        private volatile static LocalizationManager m_instance;
+        private readonly string m_scopeDelimeter = "-";
+
+        private static volatile LocalizationManager m_instance;
         private static readonly object m_lock = new object();
 
 
@@ -51,12 +55,21 @@ namespace Localization.Core
         }
 
 
-        public string Translate(string text, CultureInfo cultureInfo = null)
+        public string Translate(string textKey, string scope = "", string[] parameters = null, CultureInfo cultureInfo = null)
         {
             cultureInfo = ResolveCultureInfo(cultureInfo);
-            return m_resourceManager.GetString(text, cultureInfo);
+
+            var translationKey = scope.IsNullOrEmpty() ? textKey : string.Format("{0}{1}{2}", scope, m_scopeDelimeter, textKey);
+
+            var translation =  m_resourceManager.GetString(translationKey, cultureInfo);
+
+            return parameters == null ? translation : string.Format(translation, parameters);
         }
 
+        public string Translate(string textKey, string[] parameters, CultureInfo cultureInfo = null)
+        {
+            return Translate(textKey, "", parameters, cultureInfo);
+        }
 
         public IDictionary<string, string> GetTranslation(CultureInfo cultureInfo = null)
         {

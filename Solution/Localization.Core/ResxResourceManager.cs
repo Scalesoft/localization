@@ -15,9 +15,9 @@ namespace Localization.Core
             m_resourceManager = new ResourceManager(configuration.ResourceBaseName, configuration.ResourceAssembly);
         }
 
-        public string GetString(string text, CultureInfo cultureInfo)
+        public string GetString(string textKey, CultureInfo cultureInfo)
         {
-            return m_resourceManager.GetString(text, cultureInfo);
+            return m_resourceManager.GetString(textKey, cultureInfo);
         }
 
         public IDictionary<string, string> GetDictionary(CultureInfo cultureInfo)

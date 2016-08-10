@@ -1,15 +1,15 @@
 ﻿
 
-function translate(text: string) {
+function translate(text: string, scope: string = "", parameters: Array<string> = null) {
 
-    return LocalizationManager.getInstance().translate(text);
+    return LocalizationManager.getInstance().translate(text, scope, parameters);
 
 }
 
 class LocalizationManager {
 
     private langCookieName = "current-lang";
-
+    private scopeDelimeter = "-";
     private currentLang = "";
     private static instance: LocalizationManager;
     private dictionary: LocalizationDictionary;
@@ -24,23 +24,24 @@ class LocalizationManager {
         return LocalizationManager.instance;
     }
 
-    translate(text: string): string {
-        if (typeof this.dictionary != "undefined") {
-            return this.dictionary.getText(text);
+    public translate(textKey: string, scope: string = "", parameters: Array<string> = null): string {
+        if (typeof this.dictionary == "undefined") {
+            this.updateLocalizationFile(this.getCurrentLang());
         }
 
-        this.updateLocalizationFile(this.getCurrentLang());
+        var translationKey = !scope ? textKey : scope + this.scopeDelimeter + textKey;
 
-        return this.dictionary.getText(text);
+        var translation = this.dictionary.getText(translationKey);
+
+        return !parameters ? translation : this.formatString(translation, parameters);
     }
 
-
     private updateLocalizationFile(newCurrentLang: string, doneCallback?: () => void) {
-        if (this.downloading && this.downloadingLanguage === newCurrentLang) return;
+        //if (this.downloading && this.downloadingLanguage === newCurrentLang) return; //Better to download multiple times instead of throw undefined error
         this.downloading = true;
         this.downloadingLanguage = newCurrentLang;
 
-        delete this.dictionary;
+        //delete this.dictionary;
 
         var xmlhttp = new XMLHttpRequest();
 
@@ -92,6 +93,10 @@ class LocalizationManager {
         }
         return "";
     }
+
+    private formatString(str, obj) {
+        return str.replace(/\{\s*([^}\s]+)\s*\}/g, (m, p1, offset, string) => obj[p1]);
+    }
 }
 
 class LocalizationDictionary {
@@ -99,13 +104,23 @@ class LocalizationDictionary {
 
     constructor(data: string) {
         this.data = JSON.parse(data);
+
+        for (var key in this.data) {
+            if (this.data.hasOwnProperty(key)) {
+                if (key.toLocaleLowerCase() !== key) {
+                    this.data[key.toLowerCase()] = this.data[key];
+                    delete this.data[key];
+                }
+            }
+        }
     }
 
     getText(text: string): string {
-        if (typeof this.data[text] == "undefined") {
+        var textKey = text.toLowerCase();
+        if (typeof this.data[textKey] == "undefined") {
             return text;
         }
 
-        return this.data[text];
+        return this.data[textKey];
     }
 }
