@@ -1,8 +1,14 @@
 ﻿
 
-function translate(text: string, scope: string = "", parameters: Array<string> = null) {
+function translate(text: string, scope: string = null) {
 
-    return LocalizationManager.getInstance().translate(text, scope, parameters);
+    return LocalizationManager.getInstance().translate(text, scope);
+
+}
+
+function translateFormat(text: string, parameters: string[], scope: string = null) {
+
+    return LocalizationManager.getInstance().translateFormat(text, parameters, scope);
 
 }
 
@@ -17,21 +23,36 @@ class LocalizationManager {
     private downloadingLanguage: string;
 
     static getInstance() {
-        if (typeof LocalizationManager.instance == "undefined" || LocalizationManager.instance === null) {
+        if (typeof LocalizationManager.instance == "undefined" || LocalizationManager.instance == null) {
             LocalizationManager.instance = new LocalizationManager();
         }
 
         return LocalizationManager.instance;
     }
 
-    public translate(textKey: string, scope: string = "", parameters: Array<string> = null): string {
+    public translate(textKey: string, scope: string = null): string {
         if (typeof this.dictionary == "undefined") {
             this.updateLocalizationFile(this.getCurrentLang());
         }
 
-        var translationKey = !scope ? textKey : scope + this.scopeDelimeter + textKey;
+        var translationKey = scope == null ? textKey : scope + this.scopeDelimeter + textKey;
 
         var translation = this.dictionary.getText(translationKey);
+
+        if (translation == null) {
+            if (scope == null) {
+                throw new Error(this.formatString("Given translation key '{0}' does not exit in resource file", [textKey]));
+            }
+
+            throw new Error(this.formatString("Given translation key '{0}' with scope '{1}' does not exit in resource file", [textKey, scope]));
+        }
+
+        return translation;
+    }
+
+    public translateFormat(textKey: string, parameters: string[], scope: string = ""): string {
+
+        var translation = this.translate(textKey, scope);
 
         return !parameters ? translation : this.formatString(translation, parameters);
     }
@@ -46,8 +67,8 @@ class LocalizationManager {
         var xmlhttp = new XMLHttpRequest();
 
         xmlhttp.onreadystatechange = () => {
-            if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+                if (xmlhttp.status === 200) {
 
                     this.dictionary = new LocalizationDictionary(xmlhttp.responseText);
                     this.downloading = false;
@@ -88,8 +109,8 @@ class LocalizationManager {
         const cookiesList = document.cookie.split(";");
         for (let i = 0; i < cookiesList.length; i++) {
             let currentCookie = cookiesList[i];
-            while (currentCookie.charAt(0) == " ") currentCookie = currentCookie.substring(1);
-            if (currentCookie.indexOf(name) == 0) return currentCookie.substring(name.length, currentCookie.length);
+            while (currentCookie.charAt(0) === " ") currentCookie = currentCookie.substring(1);
+            if (currentCookie.indexOf(name) === 0) return currentCookie.substring(name.length, currentCookie.length);
         }
         return "";
     }
@@ -117,8 +138,8 @@ class LocalizationDictionary {
 
     getText(text: string): string {
         var textKey = text.toLowerCase();
-        if (typeof this.data[textKey] == "undefined") {
-            return text;
+        if (typeof this.data[textKey] === "undefined") {
+            return null;
         }
 
         return this.data[textKey];

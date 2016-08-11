@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Castle.Core.Internal;
 
 namespace Localization.Core
 {
@@ -55,20 +54,31 @@ namespace Localization.Core
         }
 
 
-        public string Translate(string textKey, string scope = "", string[] parameters = null, CultureInfo cultureInfo = null)
+        public string Translate(string textKey, string scope = null, CultureInfo cultureInfo = null)
         {
             cultureInfo = ResolveCultureInfo(cultureInfo);
 
-            var translationKey = scope.IsNullOrEmpty() ? textKey : string.Format("{0}{1}{2}", scope, m_scopeDelimeter, textKey);
+            var translationKey = string.IsNullOrEmpty(scope) ? textKey : string.Format("{0}{1}{2}", scope, m_scopeDelimeter, textKey);
 
-            var translation =  m_resourceManager.GetString(translationKey, cultureInfo);
+            var translation = m_resourceManager.GetString(translationKey, cultureInfo);
 
-            return parameters == null ? translation : string.Format(translation, parameters);
+            if (translation == null)
+            {
+                if (string.IsNullOrEmpty(scope))
+                {
+                    throw new ArgumentException(string.Format("Given translation key '{0}' does not exit in resource file", textKey));
+                }
+                
+                throw new ArgumentException(string.Format("Given translation key '{0}' with scope '{1}' does not exit in resource file", textKey, scope));
+            }
+
+            return translation;
         }
 
-        public string Translate(string textKey, string[] parameters, CultureInfo cultureInfo = null)
+        public string TranslateFormat(string textKey, string[] parameters, string scope = null, CultureInfo cultureInfo = null)
         {
-            return Translate(textKey, "", parameters, cultureInfo);
+            var translation = Translate(textKey, scope, cultureInfo);
+            return parameters == null ? translation : string.Format(translation, parameters);
         }
 
         public IDictionary<string, string> GetTranslation(CultureInfo cultureInfo = null)

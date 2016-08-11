@@ -4,10 +4,14 @@ function showLocalizedText() {
     $("#jslocalization").html(localized);
     $("#jslocalization").append("<br>");
 
-    var localizedWithScope = translate("Hello with date", "", [Date.now()]);
+    var localizedWithScope = translate("Hello", "greetings");
     $("#jslocalization").append(localizedWithScope);
     $("#jslocalization").append("<br>");
 
-    var localizedWithDateAndScope = translate("Hello with date and scope", "global", [Date.now(), "global"]);
-    $("#jslocalization").append(localizedWithDateAndScope);
+    var localizedWithFormat = translateFormat("HelloWithDate", [Date.now()]);
+    $("#jslocalization").append(localizedWithFormat);
+    $("#jslocalization").append("<br>");
+
+    var localizedWithScopeAndFormat = translateFormat("HelloWithDateAndScope", [Date.now(), "global"], "global");
+    $("#jslocalization").append(localizedWithScopeAndFormat);
 }

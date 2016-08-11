@@ -9,8 +9,9 @@
 <a href="@Url.Action("ChangeTranslation", "Home", new {locale = "cs"})">CZ</a>
 
 <h2>@Translator.Translate("Hello")</h2>
-<h2>@Translator.Translate("Hello with date", new[]{DateTime.Now.Date.ToString()})</h2>
-<h2>@Translator.Translate("Hello with date and scope", "global", new[]{DateTime.Now.Date.ToString(), "global"})</h2>
+<h2>@Translator.Translate("Hello", "greetings")</h2>
+<h2>@Translator.TranslateFormat("HelloWithDate", new[]{DateTime.Now.Date.ToString()})</h2>
+<h2>@Translator.TranslateFormat("HelloWithDateAndScope", new[]{DateTime.Now.Date.ToString(), "global"}, "global")</h2>
 <script>
     $(document).ready(() => {
         $("#razorViewJsLocalization").html('@Translator.Translate("JSHello")');
