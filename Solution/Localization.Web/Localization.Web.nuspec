@@ -13,6 +13,6 @@
     <tags>Localization Web Scalesoft</tags>
   </metadata>
  <files>
-  <file src="Localize.ts" target="content\Scripts" /> 
+  <file src="localization.localize.ts" target="content\Scripts" /> 
 </files>
 </package>

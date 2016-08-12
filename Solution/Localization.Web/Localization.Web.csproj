@@ -86,7 +86,7 @@
     <Content Include="README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Localize.ts" />
+    <TypeScriptCompile Include="localization.localize.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Localization.Web.nuspec" />

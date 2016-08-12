@@ -236,7 +236,7 @@
     <EmbeddedResource Include="Localization\localizedText.resx" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Localize.ts" />
+    <TypeScriptCompile Include="Scripts\localization.localize.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

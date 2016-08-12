@@ -12,6 +12,10 @@ function translateFormat(text: string, parameters: string[], scope: string = nul
 
 }
 
+function configureSiteUrlForTranslation(siteUrl: string) {
+    LocalizationManager.getInstance().configureSiteUrl(siteUrl);
+}
+
 class LocalizationManager {
 
     private langCookieName = "current-lang";
@@ -21,6 +25,7 @@ class LocalizationManager {
     private dictionary: LocalizationDictionary;
     private downloading: boolean;
     private downloadingLanguage: string;
+    private siteUrl: string = "";
 
     static getInstance() {
         if (typeof LocalizationManager.instance == "undefined" || LocalizationManager.instance == null) {
@@ -28,6 +33,10 @@ class LocalizationManager {
         }
 
         return LocalizationManager.instance;
+    }
+
+    public configureSiteUrl(siteUrl: string) {
+        this.siteUrl = siteUrl;
     }
 
     public translate(textKey: string, scope: string = null): string {
@@ -83,7 +92,12 @@ class LocalizationManager {
                 }
             }
         };
-        xmlhttp.open("GET", `/Localize/Translation?lang=${newCurrentLang}`, false);
+
+        var baseUrl = this.siteUrl;
+        if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
+            baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+        }
+        xmlhttp.open("GET", `${baseUrl}/Localize/Translation?lang=${newCurrentLang}`, false);
         xmlhttp.send();
 
     }

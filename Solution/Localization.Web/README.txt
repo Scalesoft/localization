@@ -8,7 +8,13 @@
 
 2. Reference javascript file in Views/Shared/_Layout.cshtml:
 
-	<script src="/Scripts/Localize.js"></script>
+	<script src="/Scripts/localization.localize.js"></script>
+
+3. Set base site url for javascript translation (used for download localization dictionary) before first call of translate method. Best place is shared _Layout.cshtml 
+
+	<script>
+		configureSiteUrlForTranslation('@Url.Content("~")');
+	</script>
 
 3. In javascript use as this:
 

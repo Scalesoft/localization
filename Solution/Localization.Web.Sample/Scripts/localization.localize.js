@@ -6,17 +6,24 @@ function translateFormat(text, parameters, scope) {
     if (scope === void 0) { scope = null; }
     return LocalizationManager.getInstance().translateFormat(text, parameters, scope);
 }
+function configureSiteUrlForTranslation(siteUrl) {
+    LocalizationManager.getInstance().configureSiteUrl(siteUrl);
+}
 var LocalizationManager = (function () {
     function LocalizationManager() {
         this.langCookieName = "current-lang";
         this.scopeDelimeter = "-";
         this.currentLang = "";
+        this.siteUrl = "";
     }
     LocalizationManager.getInstance = function () {
         if (typeof LocalizationManager.instance == "undefined" || LocalizationManager.instance == null) {
             LocalizationManager.instance = new LocalizationManager();
         }
         return LocalizationManager.instance;
+    };
+    LocalizationManager.prototype.configureSiteUrl = function (siteUrl) {
+        this.siteUrl = siteUrl;
     };
     LocalizationManager.prototype.translate = function (textKey, scope) {
         if (scope === void 0) { scope = null; }
@@ -62,7 +69,11 @@ var LocalizationManager = (function () {
                 }
             }
         };
-        xmlhttp.open("GET", "/Localize/Translation?lang=" + newCurrentLang, false);
+        var baseUrl = this.siteUrl;
+        if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
+            baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+        }
+        xmlhttp.open("GET", baseUrl + "/Localize/Translation?lang=" + newCurrentLang, false);
         xmlhttp.send();
     };
     LocalizationManager.prototype.getCurrentLang = function () {
@@ -114,4 +125,4 @@ var LocalizationDictionary = (function () {
     };
     return LocalizationDictionary;
 }());
-//# sourceMappingURL=Localize.js.map
+//# sourceMappingURL=localization.localize.js.map
