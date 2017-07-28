@@ -5,9 +5,8 @@ namespace Localization.CoreLibrary.Manager
 {
     public interface ILocalizationManager
     {
-        LocalizedString Translate(string text, string scope = null, CultureInfo cultureInfo = null);
+        LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null, string part = null);
 
-        LocalizedString TranslateFormat(string text, string[] parameters, string scope = null,
-            CultureInfo cultureInfo = null);       
+        LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null, string scope = null, string part = null);       
     }
 }

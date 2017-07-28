@@ -11,6 +11,6 @@ namespace Localization.CoreLibrary.Util
 
         string DbSource();
         string DbUser();
-        string DbPass();
+        string DbPassword();
     }
 }
