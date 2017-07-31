@@ -30,7 +30,7 @@ namespace Localization.CoreLibrary.Util.Impl
         public IConfiguration ReadConfiguration()
         {           
             JsonSerializer serializer = new JsonSerializer();
-            serializer.Converters.Add(new ToStringJsonConverter());
+            //serializer.Converters.Add(new ToStringJsonConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
 
             LocalizationConfiguration.Configuration configuration;

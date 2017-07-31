@@ -1,29 +1,90 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
     public class DictionaryManager : IDictionaryManager
     {
-        private static readonly ILogger Logger  = LogProvider.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
-        private IConfiguration m_configuration;
+        private const string JsonStructureWildcardPath = "dictionary.parts.*.*";
+        public const char ScopeDelimiter = '#';
+
+        private readonly IConfiguration m_configuration;
+
+        private Dictionary<string, JObject> m_dictionaries;
 
         public DictionaryManager(IConfiguration configuration)
         {
-            m_configuration = configuration;
-            
-            //1] Load config (folder hierarchy, db credentials)
-            //2] Check dictionary hierarchy (folders and files)
-            //      If something doesnt exist, create them and LOG it.
-            //3] Lazyload dictionaries?
+            m_configuration = configuration;                                  
         }
 
-        public HashSet<LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public Dictionary<string, JObject> Dictionaries
+        {
+            get { return m_dictionaries; }
+        }
+
+        private string MakeDictionaryKey(CultureInfo cultureInfo, string scope)
+        {
+            if (string.IsNullOrWhiteSpace(scope))
+            {
+                return cultureInfo.Name;
+            }
+
+            return string.Concat(cultureInfo.Name, ScopeDelimiter, scope);
+        }
+
+        public void LoadAndCheck()
+        {
+            m_dictionaries = new Dictionary<string, JObject>(); 
+
+            //TODO: If something doesnt exist, create it and LOG IT using logger.
+
+            //Start TestInit
+            using (StreamReader reader = File.OpenText(@"local\slovniky\slovniky-cs.json"))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                m_dictionaries.Add(MakeDictionaryKey(new CultureInfo("cs"), "slovniky"), o);
+            }
+
+            using (StreamReader reader = File.OpenText(@"local\slovniky\slovniky-en.json"))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                m_dictionaries.Add(MakeDictionaryKey(new CultureInfo("en"), "slovniky"), o);
+            }
+
+            using (StreamReader reader = File.OpenText(@"local\cs.json"))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                m_dictionaries.Add(MakeDictionaryKey(new CultureInfo("cs"), ""), o);
+            }
+
+            using (StreamReader reader = File.OpenText(@"local\en.json"))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                m_dictionaries.Add(MakeDictionaryKey(new CultureInfo("en"), ""), o);
+            }
+            //END test init
+        }
+
+        private string JsonStructurePartPath(string part)
+        {
+            if (string.IsNullOrWhiteSpace(part))
+            {
+                Logger.LogWarning(string.Format("Požadovaná část slovníku má nevalidní formu (IsNullOrWhiteSpace): \"{0}\"", part));
+            }
+            return string.Concat("dictionary.parts.", part, ".*");
+        }
+
+        public IEnumerable<LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             if (scope == null)
             {
@@ -33,56 +94,94 @@ namespace Localization.CoreLibrary.Manager.Impl
             return GetScopedDictionary(cultureInfo, scope);           
         }
 
-        public HashSet<LocalizedString> GetDictionaryPart(string part, CultureInfo cultureInfo = null, string scope = null)
+        public IEnumerable<LocalizedString> GetDictionaryPart(string part, CultureInfo cultureInfo = null, string scope = null)
         {
-            if (scope == null)
+            JObject dictionary;
+
+            if (cultureInfo == null)
             {
-                //GetGlobalPartDictionary(cultureInfo)
-            }
-            else
-            {
-                //GetScopedPartDictionary(cultureInfo)
+                cultureInfo = m_configuration.DefaultCulture();
             }
 
-            throw new System.NotImplementedException();
+            if (scope == null)
+            {        
+                m_dictionaries.TryGetValue(cultureInfo.TwoLetterISOLanguageName, out dictionary);
+
+                return ExtractPartDictionary(dictionary, part);
+            }
+
+            //GetScopedPartDictionary(cultureInfo)
+            string dictionaryKey = string.Concat(cultureInfo.TwoLetterISOLanguageName, ScopeDelimiter, scope);
+            m_dictionaries.TryGetValue(dictionaryKey, out dictionary);
+
+            return ExtractPartDictionary(dictionary, part);
         }
 
-        private HashSet<LocalizedString> GetGlobalDictionary(CultureInfo cultureInfo)
+        private IEnumerable<LocalizedString> GetGlobalDictionary(CultureInfo cultureInfo)
         {
             if (IsCultureSupported(cultureInfo))
             {
+                JObject dictionary;
+                m_dictionaries.TryGetValue(cultureInfo.TwoLetterISOLanguageName, out dictionary);                                                                  
+               
                 //return global dictionary in requested culture
-
-                throw new System.NotImplementedException();
+                return ExtractDictionary(dictionary);
             }
 
             return GetGlobalDictionaryWithDefaultCulture();
         }
 
-        private HashSet<LocalizedString> GetGlobalDictionaryWithDefaultCulture()
-        {
+        private IEnumerable<LocalizedString> GetGlobalDictionaryWithDefaultCulture()
+        {          
+            JObject dictionary;
+            m_dictionaries.TryGetValue(m_configuration.DefaultCulture().TwoLetterISOLanguageName, out dictionary);
+           
             //return global dictionary in default culture
-
-            throw new System.NotImplementedException();
+            return ExtractDictionary(dictionary);
         }
 
-        private HashSet<LocalizedString> GetScopedDictionary(CultureInfo cultureInfo, string scope)
+
+        private IEnumerable<LocalizedString> ExtractDictionary(JObject dictionary)
         {
+            return dictionary.SelectTokens(JsonStructureWildcardPath).Select(c => new LocalizedString((string)c.Path, (string)c)).ToList();
+        }
+
+        private IEnumerable<LocalizedString> ExtractPartDictionary(JObject dictionary, string part)
+        {
+            return dictionary.SelectTokens(JsonStructurePartPath(part)).Select(c => new LocalizedString((string)c.Path, (string)c)).ToList();
+        }
+
+        private IEnumerable<LocalizedString> GetScopedDictionary(CultureInfo cultureInfo, string scope)
+        {
+            JObject dictionary;
+            string dictionaryKey = string.Concat(cultureInfo.TwoLetterISOLanguageName, ScopeDelimiter, scope);
+
             if (IsCultureSupported(cultureInfo))
             {
                 //return scoped dictionary in requested culture (if scope exists)
+                
+                m_dictionaries.TryGetValue(dictionaryKey, out dictionary);
+                return ExtractDictionary(dictionary);
             }
 
-            //return scoped dictionary in default culture
+            m_dictionaries.TryGetValue(dictionaryKey, out dictionary);
 
-            throw new System.NotImplementedException();
+            //return scoped dictionary in default culture
+            return ExtractDictionary(dictionary);
         }
 
 
-        //TODO: Check cultureInfo = null behavior
-        private bool IsCultureSupported(CultureInfo cultureInfo)
+        /// <summary>
+        /// Resturns true if given culture is default culture or it is in supported cultures.
+        /// </summary>
+        /// <param name="cultureInfo">Culture to check</param>
+        /// <returns>
+        /// Resturns true if given culture is default culture or it is in supported cultures.
+        /// If given culture is null method returns false.
+        /// </returns>
+        public bool IsCultureSupported(CultureInfo cultureInfo)
         {
-            if (m_configuration.SupportedCultures().Contains(cultureInfo) || m_configuration.DefaultCulture().Equals(cultureInfo))
+            if (m_configuration.DefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures().Contains(cultureInfo))
             {
                 return true;
             }
