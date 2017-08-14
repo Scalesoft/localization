@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Exception;
+using Localization.CoreLibrary.Manager;
 
 namespace Localization.CoreLibrary.Util.Impl
 {
@@ -44,6 +47,11 @@ namespace Localization.CoreLibrary.Util.Impl
         public CultureInfo DefaultCulture()
         {
             return new CultureInfo(m_configuration.DefaultCulture);
+        }
+
+        public TranslateFallbackMode TranslateFallbackMode()
+        {
+            return m_configuration.TranslationFallbackMode;
         }
 
         public string DbSource()
@@ -109,11 +117,26 @@ namespace Localization.CoreLibrary.Util.Impl
             return this;
         }
 
+        public LocalizationConfiguration SetTranslationFallbackMode(string translationFallbackMode)
+        {
+            TranslateFallbackMode translateFallbackModeEnum = Manager.TranslateFallbackMode.Null;           
+            bool parseSuccess = Enum.TryParse(translationFallbackMode, out translateFallbackModeEnum);
+            if (!parseSuccess || translateFallbackModeEnum.Equals(Manager.TranslateFallbackMode.Null))
+            {
+                string message = string.Format(@"Cannot parse TranslateFallbackMode value ""{0}""", translationFallbackMode);
+
+                throw new LibraryConfigurationException(message);
+            }
+
+            return this;
+        }
+
         public class Configuration
         {
             public string BasePath { get; set; }
             public IList<string> SupportedCultures { get; set; }
             public string DefaultCulture { get; set; }
+            public TranslateFallbackMode TranslationFallbackMode { get; set; }
 
             public string DbSource { get; set; }
             public string DbUser { get; set; }

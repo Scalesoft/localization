@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Dictionary.Impl;
+using Localization.CoreLibrary.Exception;
+using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Manager.Impl;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
@@ -22,7 +27,7 @@ namespace Localization.CoreLibrary.Tests.Manager
         public void CultureSupportTest()
         {
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
-            configuration.BasePath = @"";
+            configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es" };
             configuration.DbSource = @"cosi://sql-source";
@@ -46,32 +51,57 @@ namespace Localization.CoreLibrary.Tests.Manager
         }
 
         [TestMethod]
-        public void Test()
+        public void TreeTest()
         {
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
-            configuration.BasePath = @"local";
+            configuration.BasePath = @"localizationTree";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
+            configuration.SupportedCultures = new List<string> { "en", "en-US", "en-GB", "en-CA", "es-MX", "es-US"};
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             DictionaryManager dictionaryManager = new DictionaryManager(localizationConfiguration);
-            dictionaryManager.LoadAndCheck();
+            dictionaryManager.BuildDictionaryHierarchyTrees(dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance));
 
-            IEnumerable<LocalizedString> dictionary = dictionaryManager.GetDictionary(new CultureInfo("cs"), "slovniky");
-            IEnumerator<LocalizedString> dictionaryEnumerator = dictionary.GetEnumerator();
+            LocalizationManager localizationManager = new LocalizationManager(localizationConfiguration);
 
-            while (dictionaryEnumerator.MoveNext())
+            localizationManager.AddDictionaryManager(dictionaryManager);
+
+
+            LocalizedString s1 = localizationManager.Translate("text-1-odst", new CultureInfo("cs"));
+            Assert.AreEqual("global cs [text-1-odst]", s1);
+
+            LocalizedString s2 = localizationManager.Translate("extra-cs-key", new CultureInfo("en-MX"));
+            Assert.AreEqual("extra string in CS culture", s2);
+
+            LocalizedString s3 = localizationManager.Translate("extra-cs-key", new CultureInfo("es-MX"));
+            Assert.AreEqual("extra string in CS culture", s3);
+
+            string nopeKey = "nope-key";
+            LocalizedString sNope = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+            Assert.AreEqual(nopeKey, sNope);
+
+            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString;
+
+            LocalizedString sNope2 = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+            Assert.AreEqual("", sNope2);
+
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Exception;
+
+            bool exceptionThrown = false;
+            try
             {
-                Debug.WriteLine(dictionaryEnumerator.Current.Name + "=" + dictionaryEnumerator.Current.Value);
+                LocalizedString sNope3 = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             }
-
-
-            dictionaryEnumerator.Dispose();
+            catch (TranslateException e)
+            {
+                exceptionThrown = true;
+            }
+             
+            Assert.IsTrue(exceptionThrown);
         }
+
 
     }
 }

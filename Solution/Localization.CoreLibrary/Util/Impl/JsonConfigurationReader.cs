@@ -20,7 +20,7 @@ namespace Localization.CoreLibrary.Util.Impl
 
                 Logger.LogError(errorMsg);
 
-                throw new Exception(errorMsg);
+                throw new System.Exception(errorMsg);
             }
 
             m_configPath = configPath;
@@ -30,7 +30,6 @@ namespace Localization.CoreLibrary.Util.Impl
         public IConfiguration ReadConfiguration()
         {           
             JsonSerializer serializer = new JsonSerializer();
-            //serializer.Converters.Add(new ToStringJsonConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
 
             LocalizationConfiguration.Configuration configuration;
