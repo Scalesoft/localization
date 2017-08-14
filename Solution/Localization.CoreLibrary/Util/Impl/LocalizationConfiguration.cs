@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Manager;
+using Newtonsoft.Json;
 
 namespace Localization.CoreLibrary.Util.Impl
 {
@@ -51,7 +52,16 @@ namespace Localization.CoreLibrary.Util.Impl
 
         public TranslateFallbackMode TranslateFallbackMode()
         {
-            return m_configuration.TranslationFallbackMode;
+            TranslateFallbackMode translateFallbackModeEnum = Manager.TranslateFallbackMode.Null;
+            bool parseSuccess = Enum.TryParse(m_configuration.TranslationFallbackMode, out translateFallbackModeEnum);
+            if (!parseSuccess || translateFallbackModeEnum.Equals(Manager.TranslateFallbackMode.Null))
+            {
+                string message = string.Format(@"Cannot parse TranslateFallbackMode value ""{0}""", m_configuration.TranslationFallbackMode);
+
+                throw new LibraryConfigurationException(message);
+            }
+
+            return translateFallbackModeEnum;
         }
 
         public string DbSource()
@@ -119,14 +129,7 @@ namespace Localization.CoreLibrary.Util.Impl
 
         public LocalizationConfiguration SetTranslationFallbackMode(string translationFallbackMode)
         {
-            TranslateFallbackMode translateFallbackModeEnum = Manager.TranslateFallbackMode.Null;           
-            bool parseSuccess = Enum.TryParse(translationFallbackMode, out translateFallbackModeEnum);
-            if (!parseSuccess || translateFallbackModeEnum.Equals(Manager.TranslateFallbackMode.Null))
-            {
-                string message = string.Format(@"Cannot parse TranslateFallbackMode value ""{0}""", translationFallbackMode);
-
-                throw new LibraryConfigurationException(message);
-            }
+            m_configuration.TranslationFallbackMode = translationFallbackMode;
 
             return this;
         }
@@ -136,7 +139,8 @@ namespace Localization.CoreLibrary.Util.Impl
             public string BasePath { get; set; }
             public IList<string> SupportedCultures { get; set; }
             public string DefaultCulture { get; set; }
-            public TranslateFallbackMode TranslationFallbackMode { get; set; }
+
+            public string TranslationFallbackMode { get; set; }
 
             public string DbSource { get; set; }
             public string DbUser { get; set; }

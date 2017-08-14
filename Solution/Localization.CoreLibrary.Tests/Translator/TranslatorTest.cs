@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
@@ -20,7 +21,7 @@ namespace Localization.CoreLibrary.Tests.Translator
             configuration.DbUser = @"SA";
             configuration.DefaultCulture = "cs";
             configuration.SupportedCultures = new List<string>() {"en", "hu", "zh"};
-            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString.ToString();
             
             IConfiguration libConfiguration = new LocalizationConfiguration(configuration);
             
@@ -68,10 +69,8 @@ namespace Localization.CoreLibrary.Tests.Translator
                 LocalizedString lsA = CoreLibrary.Translator.Translator.TranslatePluralization("klíč-stringu", pluralizationNum);
 
                 Assert.AreEqual(expectedStrings[i], lsA);
+
             }
-
-            
-
         }
 
     }

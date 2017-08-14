@@ -24,7 +24,7 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -50,7 +50,7 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 

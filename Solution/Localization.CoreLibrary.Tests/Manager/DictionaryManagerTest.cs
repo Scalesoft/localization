@@ -57,7 +57,7 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.BasePath = @"localizationTree";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "en-US", "en-GB", "en-CA", "es-MX", "es-US"};
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -82,12 +82,12 @@ namespace Localization.CoreLibrary.Tests.Manager
             LocalizedString sNope = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             Assert.AreEqual(nopeKey, sNope);
 
-            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString.ToString();
 
             LocalizedString sNope2 = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             Assert.AreEqual("", sNope2);
 
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Exception;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Exception.ToString();
 
             bool exceptionThrown = false;
             try

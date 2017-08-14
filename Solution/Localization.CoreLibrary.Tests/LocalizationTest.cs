@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Manager;
@@ -106,11 +107,12 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
 
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
+            //IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
+            //Localization.LibInit(localizationConfiguration);
 
-            Localization.LibInit(localizationConfiguration);
+            Localization.LibInit("localization.json.config");
 
             Localization.AttachLogger(new NullLoggerFactory());
 
@@ -139,7 +141,7 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 

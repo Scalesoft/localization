@@ -31,6 +31,7 @@ LocalizationConfiguration.Configuration configuration = new LocalizationConfigur
 IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 Localization.LibInit(localizationConfiguration);
 ``
+
 ##Structure of config json file:
 ``
 {
@@ -104,7 +105,9 @@ Example of json resource file in global scope and cs culture:
 	}
 }
 ``
+
 **Notice support for parametrized strings {0}.**
+
 **Notice support for constant strings. (To separate programming stuff from translators.)**
 
 ###Pluralized resource files:
