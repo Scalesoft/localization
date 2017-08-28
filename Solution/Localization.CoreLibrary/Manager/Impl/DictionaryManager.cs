@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
@@ -117,7 +118,7 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            return GetLocalizationDictionary(cultureInfo, scope).ListConstants();//TODO List() -> ListConstants()
+            return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
         }
 
         public ILocalizationDictionary GetLocalizationDictionary(CultureInfo cultureInfo = null, string scope = null)
@@ -143,13 +144,28 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         private ILocalizationDictionary GetScopedDictionary(CultureInfo cultureInfo, string scope)
         {
-            if (IsCultureSupported(cultureInfo)) //return scoped dictionary in requested culture (if scope exists)
-            {              
-                return m_dictionaries.First(w => w.CultureInfo().Equals(cultureInfo) && w.Scope().Equals(scope));
+            if (m_dictionaries == null)
+            {
+                m_dictionaries = new HashSet<ILocalizationDictionary>();
             }
 
-            //return scoped dictionary in default culture
-            return m_dictionaries.First(w => w.CultureInfo().Equals(m_configuration.DefaultCulture()) && w.Scope().Equals(scope));
+            ILocalizationDictionary result = null;
+            if (IsCultureSupported(cultureInfo)) //return scoped dictionary in requested culture (if scope exists)
+            {              
+                result = m_dictionaries.First(w => w.CultureInfo().Equals(cultureInfo) && w.Scope().Equals(scope));
+            }
+            else
+            {
+                //return scoped dictionary in default culture
+                result = m_dictionaries.FirstOrDefault(w => w.CultureInfo().Equals(m_configuration.DefaultCulture()) && w.Scope().Equals(scope)); 
+            }
+
+            if (result == null)
+            {
+                return new EmptyLocalizationDictionary();
+            }
+
+            return result;
         }
 
 

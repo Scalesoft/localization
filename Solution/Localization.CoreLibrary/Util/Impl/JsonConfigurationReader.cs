@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Logging;

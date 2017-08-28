@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Localization.CoreLibrary.Dictionary.Impl;
+using Localization.Service.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -23,6 +26,14 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Localization.CoreLibrary.Localization.Init(
+                @"C:\Pool\localization-ridics\Solution\Localization.Service\bin\Debug\netstandard1.3\localization.json.config",
+                null,
+                new JsonDictionaryFactory());
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddLocalizationService();
+
             // Add framework services.
             services.AddMvc();
         }
@@ -32,6 +43,7 @@ namespace Localization.Web.AspNetCore.Sample
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);         
 
             if (env.IsDevelopment())
             {

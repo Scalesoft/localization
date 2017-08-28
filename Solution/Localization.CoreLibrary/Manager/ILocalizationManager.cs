@@ -12,5 +12,7 @@ namespace Localization.CoreLibrary.Manager
         LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null);
 
         LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null);
+
+        CultureInfo DefaultCulture();
     }
 }

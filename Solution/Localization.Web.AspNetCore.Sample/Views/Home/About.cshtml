@@ -1,7 +1,16 @@
-﻿@{
+﻿@using System.Globalization
+@using Localization.Service
+
+@inject ILocalization Localizer
+
+@{
     ViewData["Title"] = "About";
 }
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
 
 <p>Use this area to provide additional information.</p>
+
+Test ViewLocalization:
+@Localizer.Translate("text-1-odst")
+

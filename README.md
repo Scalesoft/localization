@@ -188,3 +188,45 @@ Dictionary<string, LocalizedString> dC = Translator.GetConstantsDictionary(new C
 ``
 Dictionary<string, PluralizedString> dP Translator.GetPluralizedDictionary(new CultureInfo("cs"), "global");
 ``
+
+Konfigurace v ASP.NET:
+
+Startup.cs
+
+public void ConfigureServices(IServiceCollection services)
+        {
+            Localization.CoreLibrary.Localization.Init(
+                @"C:\Pool\localization-ridics\Solution\Localization.Service\bin\Debug\netstandard1.3\localization.json.config",
+                null,
+                new JsonDictionaryFactory());
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddLocalizationService();
+		}
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+			
+            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);   
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

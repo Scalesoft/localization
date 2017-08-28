@@ -10,6 +10,8 @@ namespace Localization.CoreLibrary.Util
         IList<CultureInfo> SupportedCultures();
         CultureInfo DefaultCulture();
         TranslateFallbackMode TranslateFallbackMode();
+        bool AutoLoadResources();
+        EnLocalizationResource FirstAutoTranslateResource();
         string DbSource();
         string DbUser();
         string DbPassword();

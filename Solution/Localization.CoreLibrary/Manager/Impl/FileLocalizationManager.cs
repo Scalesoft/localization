@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class LocalizationManager : ILocalizationManager
+    public class FileLocalizationManager : ILocalizationManager
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private const string GlobalScope = "global";
@@ -21,7 +17,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private DictionaryManager m_dictionaryManager;
 
 
-        public LocalizationManager(IConfiguration configuration)
+        public FileLocalizationManager(IConfiguration configuration)
         {
             m_configuration = configuration;
         }
@@ -63,7 +59,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
             else
             {
-                return TranslateFallback(text, m_configuration.TranslateFallbackMode());
+                return null;
             }
         }
 
@@ -87,27 +83,11 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
             else
             {
-                return TranslateFallback(text, m_configuration.TranslateFallbackMode());
+                return null;
             }
         }
 
-        private LocalizedString TranslateFallback(string text, TranslateFallbackMode translateFallbackMode)
-        {
-            switch (translateFallbackMode)
-            {
-                case TranslateFallbackMode.Key:
-                    return new LocalizedString(text,text, true);
-                case TranslateFallbackMode.Exception:
-                    string errorMessage = string.Format("String with key {0} was not found.", text);
-
-                    Logger.LogError(errorMessage);
-                    throw new TranslateException(errorMessage);
-                case TranslateFallbackMode.EmptyString:
-                    return new LocalizedString(text,"", true);
-                default:
-                    throw new LocalizationLibraryException("Unspecified fallback mode in library configuration");
-            }
-        }
+        
 
 
         public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
@@ -151,7 +131,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
             else
             {
-                return TranslateFallback(text, m_configuration.TranslateFallbackMode());
+                return null;
             }
         }
 
@@ -165,6 +145,11 @@ namespace Localization.CoreLibrary.Manager.Impl
                 result = TranslateConstantInParent(localizationDictionary, text, cultureInfo, scope);
             }
             return result;
+        }
+
+        public CultureInfo DefaultCulture()
+        {
+            return m_configuration.DefaultCulture();
         }
     }
 }

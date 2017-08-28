@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Manager;
-using Newtonsoft.Json;
 
 namespace Localization.CoreLibrary.Util.Impl
 {
@@ -62,6 +61,25 @@ namespace Localization.CoreLibrary.Util.Impl
             }
 
             return translateFallbackModeEnum;
+        }
+
+        public bool AutoLoadResources()
+        {
+            return m_configuration.AutoLoadResources;
+        }
+
+        public EnLocalizationResource FirstAutoTranslateResource()
+        {
+            EnLocalizationResource firstAutoTranslateResourceEnum;
+            bool parseSuccess = Enum.TryParse(m_configuration.FirstAutoTranslateResource, out firstAutoTranslateResourceEnum);
+            if (!parseSuccess)
+            {
+                string message = string.Format(@"Cannot parse FirstAutoTranslateResource value ""{0}""", m_configuration.FirstAutoTranslateResource);
+
+                throw new LibraryConfigurationException(message);
+            }
+
+            return firstAutoTranslateResourceEnum;
         }
 
         public string DbSource()
@@ -127,12 +145,27 @@ namespace Localization.CoreLibrary.Util.Impl
             return this;
         }
 
-        public LocalizationConfiguration SetTranslationFallbackMode(string translationFallbackMode)
+        public LocalizationConfiguration SetTranslationFallbackMode(TranslateFallbackMode translationFallbackMode)
         {
-            m_configuration.TranslationFallbackMode = translationFallbackMode;
+            m_configuration.TranslationFallbackMode = translationFallbackMode.ToString();
 
             return this;
         }
+
+        public LocalizationConfiguration SetAutoLoadResources(bool autoLoadResources)
+        {
+            m_configuration.AutoLoadResources = autoLoadResources;
+
+            return this;
+        }
+
+        public LocalizationConfiguration SetFirstAutoTranslateResource(EnLocalizationResource localizationResource)
+        {
+            m_configuration.FirstAutoTranslateResource = localizationResource.ToString();
+
+            return this;
+        }
+
 
         public class Configuration
         {
@@ -141,6 +174,8 @@ namespace Localization.CoreLibrary.Util.Impl
             public string DefaultCulture { get; set; }
 
             public string TranslationFallbackMode { get; set; }
+            public bool AutoLoadResources { get; set; }
+            public string FirstAutoTranslateResource { get; set; }
 
             public string DbSource { get; set; }
             public string DbUser { get; set; }

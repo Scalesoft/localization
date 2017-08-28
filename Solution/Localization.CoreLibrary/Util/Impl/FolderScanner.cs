@@ -23,7 +23,7 @@ namespace Localization.CoreLibrary.Util.Impl
         /// <summary>
         /// Scans recursively folders inside basePath.
         /// </summary>
-        /// <param name="basePath">Localization base path.</param>
+        /// <param name="basePath">FileLocalization base path.</param>
         /// <returns>array containing all scope folders.</returns>
         private static string[] ScanScopeDirectories(string basePath)
         {
