@@ -18,13 +18,14 @@ namespace Localization.CoreLibrary
 {
     public class Localization : IAutoLocalizationManager, IDictionaryManager
     {
-        private static volatile Localization m_instance;
+        private static Lazy<Localization> m_instance;
         private static IConfiguration m_configuration;
         private static readonly object SyncObj = new object();
 
         private ILocalizationManager m_fileLocalizationManager;
         private readonly ILocalizationManager m_databaseLocalizationManager;
         private readonly ILocalizationManager m_autoLocalizationManager;
+
         private IDictionaryManager m_dictionaryManager;
 
         public static CultureInfo[] SupportedCultures()
@@ -50,12 +51,12 @@ namespace Localization.CoreLibrary
 
         public static ILocalizationManager FileTranslator
         {
-            get { return m_instance.m_fileLocalizationManager; }
+            get { return m_instance.Value.m_fileLocalizationManager; }
         }
 
         public static ILocalizationManager DatabaseTranslator
         {
-            get { return m_instance.m_databaseLocalizationManager; }
+            get { return m_instance.Value.m_databaseLocalizationManager; }
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace Localization.CoreLibrary
             {
                 throw new LocalizationLibraryException("Localization library is not initialized.");
             }
-            return m_instance;
+            return m_instance.Value;
         }
 
         /// <summary>
@@ -131,9 +132,9 @@ namespace Localization.CoreLibrary
                 loggerFactory = new NullLoggerFactory();
             }
 
-            // m_instance = new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalization);
+            //m_instance = new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalization);
 
-            m_instance = new Lazy<Localization>(() => new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalization)).Value;
+            m_instance = new Lazy<Localization>(() => new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalization));
         }
 
         /// <summary>
@@ -184,17 +185,7 @@ namespace Localization.CoreLibrary
         /// <returns>True if library is instantiated.</returns>
         private static bool IsInstantinated()
         {
-            if (m_instance == null)
-            {
-                lock (SyncObj)
-                {
-                    if (m_instance == null)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return m_instance != null;
         }
 
         /// <summary>

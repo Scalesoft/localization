@@ -24,12 +24,15 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = defaultCulture;
             configuration.SupportedCultures = new List<string> { supportedCulture, "es" };
+
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";       
+            configuration.DbPassword = "SA";
+            configuration.AutoLoadResources = true;
+            configuration.FirstAutoTranslateResource = EnTranslationSource.File.ToString();
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            Localization.LibInit(localizationConfiguration);
+            Localization.Init(localizationConfiguration);
            
         }
 
@@ -129,38 +132,5 @@ namespace Localization.CoreLibrary.Tests
 
             Assert.AreEqual("I had to parse JSON into key value pairs recently. The key would be the path of the JSON property. Consider the following JSON:", q0);
         }
-
-        [TestMethod]
-        public void GetDefaultNoScopedDictionaryPartTest()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void GetManuallyDefaultNoScopedDictionaryPartTest()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void GetManuallyDefaultScopedDictionaryPartTest()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        [TestMethod]
-        public void GetSupportedNoScopedDictionaryPartTest()
-        {
-            throw new NotImplementedException();
-        }
-
-        [TestMethod]
-        public void GetSupportedScopedDictionaryPartTest()
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

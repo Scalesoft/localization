@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Manager;
@@ -35,7 +34,7 @@ namespace Localization.CoreLibrary.Tests
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            Localization.LibInit(localizationConfiguration);  
+            Localization.Init(localizationConfiguration);  
             
             Assert.IsNotNull(Localization.Dictionary);
             Assert.IsNotNull(Localization.Translator);
@@ -54,12 +53,12 @@ namespace Localization.CoreLibrary.Tests
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            Localization.LibInit(localizationConfiguration);
+            Localization.Init(localizationConfiguration);
 
             bool exceptionThrown = false;
             try
             {
-                Localization.LibInit(localizationConfiguration);
+                Localization.Init(localizationConfiguration);
             }
             catch (LocalizationLibraryException e)
             {
@@ -84,7 +83,7 @@ namespace Localization.CoreLibrary.Tests
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            Localization.LibInit(localizationConfiguration);
+            Localization.Init(localizationConfiguration);
 
             LoggerFactory loggerFactory = new LoggerFactory();
             loggerFactory.AddDebug();
@@ -108,30 +107,32 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
             configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.AutoLoadResources = true;
 
-            //IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
-            //Localization.LibInit(localizationConfiguration);
+            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
+            Localization.Init(localizationConfiguration);
 
-            Localization.LibInit("localization.json.config");
+            //Localization.Init("localization.json.config");
 
             Localization.AttachLogger(new NullLoggerFactory());
 
-            LocalizedString ls = Localization.Translator.Translate("text-2-odst");
+            LocalizedString ls = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst");
 
             Assert.AreEqual("text-2-odst", ls.Name);
+            Assert.IsFalse(ls.ResourceNotFound);
             Assert.AreEqual("Druhý odstavec v globálním slovníku", ls.Value);
 
-            LocalizedString lsQQ = Localization.Translator.Translate("text-QQ-odst");
+            LocalizedString lsQQ = Localization.Translator.Translate(EnTranslationSource.File, "text-QQ-odst");
             Assert.AreEqual("text-QQ-odst", lsQQ);
 
-            LocalizedString lsEn = Localization.Translator.Translate("text-2-odst", new CultureInfo("en"));
+            LocalizedString lsEn = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst", new CultureInfo("en"));
 
             Assert.AreEqual("text-2-odst", lsEn.Name);
             Assert.AreEqual("The second paragraph in global dictionary", lsEn.Value);
         }
 
-        [TestMethod]
-       
+        [TestMethod]   
+        [Ignore]
         public void PerformanceTest()
         {
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
@@ -141,11 +142,12 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
+            configuration.AutoLoadResources = true;
             configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            Localization.LibInit(localizationConfiguration);
+            Localization.Init(localizationConfiguration);
 
             Localization.AttachLogger(new NullLoggerFactory());
 
@@ -156,13 +158,13 @@ namespace Localization.CoreLibrary.Tests
             {
                 for (int j = 0; j < 50; j++)
                 {
-                    LocalizedString ls = Localization.Translator.Translate("text-2-odst");
-                    LocalizedString lsQQ = Localization.Translator.Translate("text-qq-odst");
-                    LocalizedString lsEn = Localization.Translator.Translate("text-2-odst", new CultureInfo("en"));
+                    LocalizedString ls = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst");
+                    LocalizedString lsQQ = Localization.Translator.Translate(EnTranslationSource.File, "text-qq-odst");
+                    LocalizedString lsEn = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst", new CultureInfo("en"));
 
-                    LocalizedString ls2 = Localization.Translator.Translate("text-1-odst");
-                    LocalizedString ls2QQ = Localization.Translator.Translate("q");
-                    LocalizedString ls2En = Localization.Translator.Translate("text-5-odst", new CultureInfo("en"));
+                    LocalizedString ls2 = Localization.Translator.Translate(EnTranslationSource.File, "text-1-odst");
+                    LocalizedString ls2QQ = Localization.Translator.Translate(EnTranslationSource.File, "q");
+                    LocalizedString ls2En = Localization.Translator.Translate(EnTranslationSource.File, "text-5-odst", new CultureInfo("en"));
                 }
             }
 
@@ -170,6 +172,29 @@ namespace Localization.CoreLibrary.Tests
             Debug.WriteLine("300 000 translations in " + sw.ElapsedMilliseconds + " miliseconds");
         }
 
+        [TestMethod]
+        public void AutoOffInitTest()
+        {
+            LibDeInit();
 
+            LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
+            configuration.BasePath = @"localization";
+            configuration.DefaultCulture = @"cs";
+            configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh" };
+            configuration.DbSource = @"cosi://sql-source";
+            configuration.DbUser = "SA";
+            configuration.DbPassword = "SA";
+            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.AutoLoadResources = false;
+            configuration.FirstAutoTranslateResource = EnTranslationSource.File.ToString();
+
+            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
+
+            Localization.Init(localizationConfiguration);
+
+            LocalizedString resA = CoreLibrary.Translator.Translator.Translate("ahoj");
+            Assert.IsTrue(resA.ResourceNotFound);
+
+        }
     }
 }

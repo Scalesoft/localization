@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Localization.Database.EFCore.Data;
+using Localization.Database.EFCore.Data.Impl;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -34,8 +37,12 @@ namespace Localization.Web.AspNetCore.Sample
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
 
+
             // Add framework services.
             services.AddMvc();
+
+            var configuration = @"Server=ENUMERATIO;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
+            services.AddDbContext<StaticTextsContext>(options => options.UseSqlServer(configuration, b => b.MigrationsAssembly("Localization.Web.AspNetCore.Sample")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +62,7 @@ namespace Localization.Web.AspNetCore.Sample
                 app.UseExceptionHandler("/Home/Error");
             }
 
+           
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

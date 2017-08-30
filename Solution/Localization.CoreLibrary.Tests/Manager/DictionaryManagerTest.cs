@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Manager;
@@ -64,27 +61,27 @@ namespace Localization.CoreLibrary.Tests.Manager
             DictionaryManager dictionaryManager = new DictionaryManager(localizationConfiguration);
             dictionaryManager.BuildDictionaryHierarchyTrees(dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance));
 
-            LocalizationManager localizationManager = new LocalizationManager(localizationConfiguration);
+            FileLocalizationManager fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
 
-            localizationManager.AddDictionaryManager(dictionaryManager);
+            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
 
 
-            LocalizedString s1 = localizationManager.Translate("text-1-odst", new CultureInfo("cs"));
+            LocalizedString s1 = fileLocalizationManager.Translate("text-1-odst", new CultureInfo("cs"));
             Assert.AreEqual("global cs [text-1-odst]", s1);
 
-            LocalizedString s2 = localizationManager.Translate("extra-cs-key", new CultureInfo("en-MX"));
+            LocalizedString s2 = fileLocalizationManager.Translate("extra-cs-key", new CultureInfo("en-MX"));
             Assert.AreEqual("extra string in CS culture", s2);
 
-            LocalizedString s3 = localizationManager.Translate("extra-cs-key", new CultureInfo("es-MX"));
+            LocalizedString s3 = fileLocalizationManager.Translate("extra-cs-key", new CultureInfo("es-MX"));
             Assert.AreEqual("extra string in CS culture", s3);
 
             string nopeKey = "nope-key";
-            LocalizedString sNope = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+            LocalizedString sNope = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             Assert.AreEqual(nopeKey, sNope);
 
             configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString.ToString();
 
-            LocalizedString sNope2 = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+            LocalizedString sNope2 = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             Assert.AreEqual("", sNope2);
 
             configuration.TranslationFallbackMode = TranslateFallbackMode.Exception.ToString();
@@ -92,7 +89,7 @@ namespace Localization.CoreLibrary.Tests.Manager
             bool exceptionThrown = false;
             try
             {
-                LocalizedString sNope3 = localizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+                LocalizedString sNope3 = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             }
             catch (TranslateException e)
             {

@@ -22,17 +22,19 @@ namespace Localization.CoreLibrary.Tests.Translator
             configuration.DefaultCulture = "cs";
             configuration.SupportedCultures = new List<string>() {"en", "hu", "zh"};
             configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString.ToString();
+            configuration.AutoLoadResources = true;
+            configuration.FirstAutoTranslateResource = EnLocalizationResource.File.ToString();
             
             IConfiguration libConfiguration = new LocalizationConfiguration(configuration);
             
             
-            Localization.LibInit(libConfiguration);            
+            Localization.Init(libConfiguration);            
         }
 
         [TestCleanup]
         public void LibDeInit()
         {
-            //Localization.LibDeinit();
+            //FileLocalization.LibDeinit();
         }
 
         [TestMethod]

@@ -1,5 +1,7 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
@@ -15,7 +17,6 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         private readonly IConfiguration m_configuration;
         private DictionaryManager m_dictionaryManager;
-
 
         public FileLocalizationManager(IConfiguration configuration)
         {
@@ -59,7 +60,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
             else
             {
-                return null;
+                return TranslateFallback(text);
             }
         }
 
@@ -83,11 +84,27 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
             else
             {
-                return null;
+                return TranslateFallback(text);
             }
         }
 
-        
+        private LocalizedString TranslateFallback(string text)
+        {
+            switch (m_configuration.TranslateFallbackMode())
+            {
+                case TranslateFallbackMode.Null:
+                    return null;
+                case TranslateFallbackMode.Key:
+                    return new LocalizedString(text,text, true);
+                case TranslateFallbackMode.Exception:
+                    throw new TranslateException("string with text " + text + " not found");
+                case TranslateFallbackMode.EmptyString:
+                    return new LocalizedString(text,"");
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
 
 
         public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
@@ -131,7 +148,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
             else
             {
-                return null;
+                return TranslateFallback(text);
             }
         }
 

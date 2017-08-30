@@ -32,10 +32,10 @@ namespace Localization.CoreLibrary.Tests.Manager
             ILocalizationDictionary[] loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
             dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
 
-            LocalizationManager localizationManager = new LocalizationManager(localizationConfiguration);
-            localizationManager.AddDictionaryManager(dictionaryManager);
+            FileLocalizationManager fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
+            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
 
-            LocalizedString ls = localizationManager.TranslateFormat("klíč-stringu", new []{"pondělí"}, new CultureInfo(configuration.DefaultCulture), "global");
+            LocalizedString ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new []{"pondělí"}, new CultureInfo(configuration.DefaultCulture), "global");
 
             Assert.AreEqual("Dnes je pondělí.", ls.Value);
         }
@@ -58,10 +58,10 @@ namespace Localization.CoreLibrary.Tests.Manager
             ILocalizationDictionary[] loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
             dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
 
-            LocalizationManager localizationManager = new LocalizationManager(localizationConfiguration);
-            localizationManager.AddDictionaryManager(dictionaryManager);
+            FileLocalizationManager fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
+            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
 
-            LocalizedString ls = localizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
+            LocalizedString ls = fileLocalizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
 
             Assert.AreEqual("MMMM dd, yyyy", ls.Value);
             Assert.IsFalse(ls.ResourceNotFound);

@@ -1,0 +1,10 @@
+﻿using System.Collections.Generic;
+using Localization.Database.Abstractions.Entity;
+
+namespace Localization.Database.EFCore.Entity
+{
+    public sealed class PluralizedStaticText : BaseText, IPluralizedStaticText
+    {
+        public ICollection<IntervalText> IntervalTexts { get; set; }
+    }
+}
