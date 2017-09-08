@@ -1,4 +1,5 @@
-﻿using Localization.CoreLibrary.Manager;
+﻿using System;
+using Localization.CoreLibrary.Manager;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Localization.Service.Extensions
@@ -7,8 +8,11 @@ namespace Localization.Service.Extensions
     {
         public static void AddLocalizationService(this IServiceCollection services)
         {
-            services.AddSingleton<ILocalizationManager>(Localization.CoreLibrary.Localization.FileTranslator);
-            services.AddTransient<ILocalization, TransientLocalizationService>();
+            services.AddSingleton<IAutoLocalizationManager>(Localization.CoreLibrary.Localization.Translator);
+            services.AddSingleton<IAutoDictionaryManager>(Localization.CoreLibrary.Localization.Dictionary);
+
+            services.AddTransient<ILocalization, LocalizationService>();
+            services.AddTransient<IDictionary, DictionaryService>();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
@@ -12,9 +13,10 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Dictionary.Impl
 {
-    public class JsonLocalizationDictionary : ILocalizationDictionary
+    internal class JsonLocalizationDictionary : ILocalizationDictionary
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 

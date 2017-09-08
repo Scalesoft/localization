@@ -22,7 +22,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             return LogAndThrowError();
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null,
+        public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null,
             string scope = null)
         {
             return LogAndThrowError();
@@ -40,6 +40,12 @@ namespace Localization.CoreLibrary.Manager.Impl
         }
 
         public CultureInfo DefaultCulture()
+        {
+            LogAndThrowError();
+            return null;
+        }
+
+        public string DefaultScope()
         {
             LogAndThrowError();
             return null;

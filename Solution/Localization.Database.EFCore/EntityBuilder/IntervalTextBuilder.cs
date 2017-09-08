@@ -2,12 +2,19 @@
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.EntityBuilder.Common;
 using Localization.Database.EFCore.Exception;
+using Localization.Database.EFCore.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.EntityBuilder
 {
     public class IntervalTextBuilder
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly IntervalText m_intervalText;
+        private bool m_intervalStartSet = false;
+        private bool m_intervalEndSet = false;
+
 
         public IntervalTextBuilder()
         {
@@ -16,24 +23,26 @@ namespace Localization.Database.EFCore.EntityBuilder
 
         public IntervalTextBuilder IntervalStart(int intervalStart)
         {
+            BuilderGuard.ArgumentAlreadySet(nameof(intervalStart), m_intervalStartSet, Logger);
+
             m_intervalText.IntervalStart = intervalStart;
 
+            m_intervalStartSet = true;
             return this;
         }
 
         public IntervalTextBuilder IntervalEnd(int intervalEnd)
         {
-            m_intervalText.IntervalEnd = intervalEnd;
+            BuilderGuard.ArgumentAlreadySet(nameof(intervalEnd), m_intervalEndSet, Logger);
 
+            m_intervalText.IntervalEnd = intervalEnd;
+            m_intervalEndSet = true;
             return this;
         }
 
         public IntervalTextBuilder Text(string text)
         {
-            if (m_intervalText.Text != null)
-            {
-                throw new BuilderException("Text is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(text), m_intervalText.Text, Logger);
 
             m_intervalText.Text = text;
 
@@ -42,10 +51,7 @@ namespace Localization.Database.EFCore.EntityBuilder
 
         public IntervalTextBuilder PluralizedStaticText(PluralizedStaticText pluralizedStaticText)
         {
-            if (m_intervalText.PluralizedStaticText != null)
-            {
-                throw new BuilderException("Text is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(pluralizedStaticText), m_intervalText.PluralizedStaticText, Logger);
 
             NullCheck.Check(pluralizedStaticText);
 

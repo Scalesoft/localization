@@ -6,24 +6,24 @@ namespace Localization.Database.EFCore.Dao.Impl
 {
     public class ConstantStaticTextDao : GenericDao<ConstantStaticText, int>
     {
-        protected ConstantStaticTextDao(DbSet<ConstantStaticText> dbSet) : base(dbSet)
+        public ConstantStaticTextDao(DbSet<ConstantStaticText> dbSet) : base(dbSet)
         {
-        }
-
-        public ConstantStaticText FindByName(string name)
-        {
-            return m_dbSet.First(w => w.Name == name);
-        }
-
-        public ConstantStaticText FindByNameAndCulture(string name, Culture culture)
-        {
-            return m_dbSet.First(w => w.Name == name && w.Culture == culture);
+            //Should be empty.
         }
 
         public ConstantStaticText FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope)
         {
-            return m_dbSet.First(w => w.Name == name && w.Culture == culture && w.DictionaryScope == dictionaryScope);
+            return DbSet.First(w => w.Name == name && w.Culture == culture && w.DictionaryScope == dictionaryScope);
         }
 
+        public ConstantStaticText[] FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)
+        {
+            ConstantStaticText[] result = DbSet
+                .Where(w => w.Culture == culture && w.DictionaryScope == dictionaryScope)
+                .DefaultIfEmpty()
+                .ToArray();
+
+            return result;
+        }
     }
 }

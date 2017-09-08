@@ -1,12 +1,17 @@
 ﻿using System;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Entity;
+using Localization.Database.EFCore.EntityBuilder.Common;
 using Localization.Database.EFCore.Exception;
+using Localization.Database.EFCore.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.EntityBuilder
 {
     public class DictionaryScopeBuilder
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly DictionaryScope m_dictionaryScope;
 
         public DictionaryScopeBuilder()
@@ -22,16 +27,12 @@ namespace Localization.Database.EFCore.EntityBuilder
         /// <exception cref="BuilderException">Thrown if Name is already set.</exception>
         public DictionaryScopeBuilder Name(string name)
         {
-            if (m_dictionaryScope.Name != null)
-            {
-                throw new BuilderException("Name is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(name), m_dictionaryScope.Name, Logger);
 
             m_dictionaryScope.Name = name;
 
             return this;
         }
-
 
         public IDictionaryScope Build()
         {

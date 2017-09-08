@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Dictionary.Impl
 {
-    public class EmptyLocalizationDictionary : ILocalizationDictionary
+    internal class EmptyLocalizationDictionary : ILocalizationDictionary
     {
         public const string EmptyExtension = ""; //Should be empty.
 

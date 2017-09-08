@@ -4,7 +4,7 @@ namespace Localization.Database.EFCore.EntityBuilder
 {
     public class StaticTextBuilder : ITextBuilder<StaticText>
     {
-        private BaseTextBuilder<StaticText> m_baseTextBuilder;
+        private readonly BaseTextBuilder<StaticText> m_baseTextBuilder;
 
         public StaticTextBuilder()
         {
@@ -16,7 +16,7 @@ namespace Localization.Database.EFCore.EntityBuilder
             return m_baseTextBuilder.Name(name);
         }
 
-        public ITextBuilder<StaticText> Format(int format)
+        public ITextBuilder<StaticText> Format(short format)
         {
             return m_baseTextBuilder.Format(format);
         }

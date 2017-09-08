@@ -1,4 +1,6 @@
-﻿using Localization.CoreLibrary.Dictionary.Impl;
+﻿using System;
+using Localization.CoreLibrary.Dictionary.Factory;
+using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.Service.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,8 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Data.Impl;
+using Localization.Database.EFCore.Factory;
+using Localization.Database.EFCore.Service;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -29,9 +32,16 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string databaseConnectionString = @"Server=ENUMERATIO;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
+
+            services.AddDbContext<StaticTextsContext>(options => options
+                .UseSqlServer(databaseConnectionString));
+
+            IServiceProvider sp = services.BuildServiceProvider();
+
             Localization.CoreLibrary.Localization.Init(
                 @"C:\Pool\localization-ridics\Solution\Localization.Service\bin\Debug\netstandard1.3\localization.json.config",
-                null,
+                new DatabaseServiceFactory(sp.GetService<StaticTextsContext>()),
                 new JsonDictionaryFactory());
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -40,10 +50,7 @@ namespace Localization.Web.AspNetCore.Sample
 
             // Add framework services.
             services.AddMvc();
-
-            var configuration = @"Server=ENUMERATIO;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
-            services.AddDbContext<StaticTextsContext>(options => options.UseSqlServer(configuration, b => b.MigrationsAssembly("Localization.Web.AspNetCore.Sample")));
-        }
+            }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

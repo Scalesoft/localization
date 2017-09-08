@@ -8,10 +8,10 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     public class AutoLocalizationManager : ILocalizationManager
     {
-        private ILocalizationManager m_fileLocalizationManager;
-        private ILocalizationManager m_databaseLocalizationManager;
+        private readonly ILocalizationManager m_fileLocalizationManager;
+        private readonly ILocalizationManager m_databaseLocalizationManager;
 
-        private IConfiguration m_configuration;
+        private readonly IConfiguration m_configuration;
 
         public AutoLocalizationManager(ILocalizationManager fileLocalizationManager, ILocalizationManager databaseLocalizationManager, IConfiguration configuration)
         {
@@ -20,26 +20,26 @@ namespace Localization.CoreLibrary.Manager.Impl
             m_configuration = configuration;
         }
 
-        private ILocalizationManager GetLocalizationManager(EnLocalizationResource localizationResource)
+        private ILocalizationManager GetLocalizationManager(LocLocalizationResource localizationResource)
         {
             switch (localizationResource)
             {
-                case EnLocalizationResource.Database:
+                case LocLocalizationResource.Database:
                     return m_databaseLocalizationManager;
-                case EnLocalizationResource.File:
+                case LocLocalizationResource.File:
                     return m_fileLocalizationManager;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(localizationResource), localizationResource, null);
             }
         }
 
-        private ILocalizationManager GetOtherLocalizationManager(EnLocalizationResource localizationResource)
+        private ILocalizationManager GetOtherLocalizationManager(LocLocalizationResource localizationResource)
         {
             switch (localizationResource)
             {
-                case EnLocalizationResource.Database:
+                case LocLocalizationResource.Database:
                     return m_fileLocalizationManager;
-                case EnLocalizationResource.File:
+                case LocLocalizationResource.File:
                     return m_databaseLocalizationManager;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(localizationResource), localizationResource, null);
@@ -67,7 +67,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             return result;
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null, string scope = null)
         {
             ILocalizationManager localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource());
 
@@ -133,6 +133,11 @@ namespace Localization.CoreLibrary.Manager.Impl
         public CultureInfo DefaultCulture()
         {
             return m_configuration.DefaultCulture();
+        }
+
+        public string DefaultScope()
+        {
+            return Localization.DefaultScope;
         }
     }
 }

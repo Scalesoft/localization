@@ -1,5 +1,7 @@
 ﻿
-namespace Localization.CoreLibrary.Dictionary.Impl
+using Localization.CoreLibrary.Dictionary.Impl;
+
+namespace Localization.CoreLibrary.Dictionary.Factory
 {
     public class JsonDictionaryFactory : IDictionaryFactory
     {

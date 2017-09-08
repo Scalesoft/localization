@@ -1,21 +1,25 @@
 ﻿using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.EntityBuilder.Common;
 using Localization.Database.EFCore.Exception;
+using Localization.Database.EFCore.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.EntityBuilder
 {
     public class BaseTextBuilder<T> : ITextBuilder<T> where T : BaseText
     {
-        protected readonly T BaseText;
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
+        private readonly T m_baseText;
 
         public BaseTextBuilder(T baseText)
         {
-            BaseText = baseText;
+            m_baseText = baseText;
         }
 
         public T CurrentInstance()
         {
-            return BaseText;
+            return m_baseText;
         }
 
         /// <summary>
@@ -26,79 +30,65 @@ namespace Localization.Database.EFCore.EntityBuilder
         /// <exception cref="BuilderException">Thrown if Name is already set.</exception>
         public ITextBuilder<T> Name(string name)
         {
-            if (BaseText.Name != null)
-            {
-                throw new BuilderException("Name is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(name), m_baseText.Name, Logger);
 
-            BaseText.Name = name;
+            m_baseText.Name = name;
 
             return this;
         }
 
-        public ITextBuilder<T> Format(int format)
+        public ITextBuilder<T> Format(short format)
         {
-            BaseText.Format = format;
+            BuilderGuard.ArgumentAlreadySet(nameof(format), m_baseText.Format, Logger);
+
+            m_baseText.Format = format;
 
             return this;
         }
 
         public ITextBuilder<T> ModificationUser(string modificationUser)
         {
-            if (BaseText.ModificationUser != null)
-            {
-                throw new BuilderException("ModificationUser is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(modificationUser), m_baseText.ModificationUser, Logger);
 
-            BaseText.ModificationUser = modificationUser;
+            m_baseText.ModificationUser = modificationUser;
 
             return this;
         }
 
         public ITextBuilder<T> DictionaryScope(DictionaryScope dictionaryScope)
         {
-            if (BaseText.DictionaryScope != null)
-            {
-                throw new BuilderException("DictionaryScope is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(dictionaryScope), m_baseText.DictionaryScope, Logger);
 
-            BaseText.DictionaryScopeId = dictionaryScope.Id;
-            BaseText.DictionaryScope = dictionaryScope;
+            m_baseText.DictionaryScopeId = dictionaryScope.Id;
+            m_baseText.DictionaryScope = dictionaryScope;
             return this;
         }
 
         public ITextBuilder<T> Culture(Culture culture)
         {
-            if (BaseText.Culture != null)
-            {
-                throw new BuilderException("Culture is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(culture), m_baseText.Culture, Logger);
 
-            BaseText.CultureId = culture.Id;
-            BaseText.Culture = culture;
+            m_baseText.CultureId = culture.Id;
+            m_baseText.Culture = culture;
             return this;
         }
 
         public ITextBuilder<T> Text(string text)
         {
-            if (BaseText.Text != null)
-            {
-                throw new BuilderException("Text is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(text), m_baseText.Text, Logger);
 
-            BaseText.Text = text;
+            m_baseText.Text = text;
             return this;
         }
 
         public T Build()
         {
-            NullCheck.Check(BaseText.DictionaryScope);
-            NullCheck.Check(BaseText.Culture);
-            NullCheck.Check(BaseText.ModificationUser);
-            NullCheck.Check(BaseText.Text);
+            NullCheck.Check(m_baseText.DictionaryScope);
+            NullCheck.Check(m_baseText.Culture);
+            NullCheck.Check(m_baseText.ModificationUser);
+            NullCheck.Check(m_baseText.Text);
 
-
-            return BaseText;
+            return m_baseText;
         }
     }
 }

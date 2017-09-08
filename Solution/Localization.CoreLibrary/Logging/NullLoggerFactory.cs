@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Logging
 {
-    public class NullLoggerFactory : ILoggerFactory
+    internal class NullLoggerFactory : ILoggerFactory
     {
         public void Dispose()
         {

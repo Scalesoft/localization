@@ -1,26 +1,26 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Localization.CoreLibrary.Manager
+namespace Localization.CoreLibrary.Util
 {
-    public class FallbackModeConverter : JsonConverter
+    internal class FallbackModeConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            TranslateFallbackMode translateFallbackMode = (TranslateFallbackMode) value;
+            LocTranslateFallbackMode translateFallbackMode = (LocTranslateFallbackMode) value;
 
             switch (translateFallbackMode)
             {
-                case TranslateFallbackMode.Null:
+                case LocTranslateFallbackMode.Null:
                     writer.WriteValue("Null");
                     break;
-                case TranslateFallbackMode.Key:
+                case LocTranslateFallbackMode.Key:
                     writer.WriteValue("Key");
                     break;
-                case TranslateFallbackMode.Exception:
+                case LocTranslateFallbackMode.Exception:
                     writer.WriteValue("Exception");
                     break;
-                case TranslateFallbackMode.EmptyString:
+                case LocTranslateFallbackMode.EmptyString:
                     writer.WriteValue("EmptyString");
                     break;
                 default:
@@ -32,7 +32,7 @@ namespace Localization.CoreLibrary.Manager
         {
             var enumString = (string) reader.Value;
 
-            return Enum.Parse(typeof(TranslateFallbackMode), enumString, true);
+            return Enum.Parse(typeof(LocTranslateFallbackMode), enumString, true);
         }
 
         public override bool CanConvert(Type objectType)

@@ -4,31 +4,31 @@ namespace Localization.Database.EFCore.Dao.Impl
 {
     public class GenericDao<T, PK> : IGenericDao<T, PK> where T : class
     {
-        protected readonly DbSet<T> m_dbSet;
+        protected readonly DbSet<T> DbSet;
 
         protected GenericDao(DbSet<T> dbSet)
         {
-            m_dbSet = dbSet;
+            DbSet = dbSet;
         }
 
         public T Create(T t)
         {
-            return m_dbSet.Add(t).Entity;
+            return DbSet.Add(t).Entity;
         }
 
         public T Read(PK id)
         {
-            return m_dbSet.Find(id);
+            return DbSet.Find(id);
         }
 
         public T Update(T t)
         {
-            return m_dbSet.Update(t).Entity;
+            return DbSet.Update(t).Entity;
         }
 
         public void Delete(T t)
         {
-            m_dbSet.Remove(t);
+            DbSet.Remove(t);
         }
     }
 }

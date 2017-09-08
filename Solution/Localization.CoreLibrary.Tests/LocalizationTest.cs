@@ -106,7 +106,7 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
             configuration.AutoLoadResources = true;
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
@@ -116,16 +116,16 @@ namespace Localization.CoreLibrary.Tests
 
             Localization.AttachLogger(new NullLoggerFactory());
 
-            LocalizedString ls = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst");
+            LocalizedString ls = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst");
 
             Assert.AreEqual("text-2-odst", ls.Name);
             Assert.IsFalse(ls.ResourceNotFound);
             Assert.AreEqual("Druhý odstavec v globálním slovníku", ls.Value);
 
-            LocalizedString lsQQ = Localization.Translator.Translate(EnTranslationSource.File, "text-QQ-odst");
+            LocalizedString lsQQ = Localization.Translator.Translate(LocTranslationSource.File, "text-QQ-odst");
             Assert.AreEqual("text-QQ-odst", lsQQ);
 
-            LocalizedString lsEn = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst", new CultureInfo("en"));
+            LocalizedString lsEn = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
 
             Assert.AreEqual("text-2-odst", lsEn.Name);
             Assert.AreEqual("The second paragraph in global dictionary", lsEn.Value);
@@ -143,7 +143,7 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
             configuration.AutoLoadResources = true;
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -158,13 +158,13 @@ namespace Localization.CoreLibrary.Tests
             {
                 for (int j = 0; j < 50; j++)
                 {
-                    LocalizedString ls = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst");
-                    LocalizedString lsQQ = Localization.Translator.Translate(EnTranslationSource.File, "text-qq-odst");
-                    LocalizedString lsEn = Localization.Translator.Translate(EnTranslationSource.File, "text-2-odst", new CultureInfo("en"));
+                    LocalizedString ls = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst");
+                    LocalizedString lsQQ = Localization.Translator.Translate(LocTranslationSource.File, "text-qq-odst");
+                    LocalizedString lsEn = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
 
-                    LocalizedString ls2 = Localization.Translator.Translate(EnTranslationSource.File, "text-1-odst");
-                    LocalizedString ls2QQ = Localization.Translator.Translate(EnTranslationSource.File, "q");
-                    LocalizedString ls2En = Localization.Translator.Translate(EnTranslationSource.File, "text-5-odst", new CultureInfo("en"));
+                    LocalizedString ls2 = Localization.Translator.Translate(LocTranslationSource.File, "text-1-odst");
+                    LocalizedString ls2QQ = Localization.Translator.Translate(LocTranslationSource.File, "q");
+                    LocalizedString ls2En = Localization.Translator.Translate(LocTranslationSource.File, "text-5-odst", new CultureInfo("en"));
                 }
             }
 
@@ -184,9 +184,9 @@ namespace Localization.CoreLibrary.Tests
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
             configuration.AutoLoadResources = false;
-            configuration.FirstAutoTranslateResource = EnTranslationSource.File.ToString();
+            configuration.FirstAutoTranslateResource = LocTranslationSource.File.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 

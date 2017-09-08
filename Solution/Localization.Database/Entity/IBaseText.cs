@@ -6,7 +6,7 @@ namespace Localization.Database.Abstractions.Entity
     {
         int Id { get; }
         string Name { get; }
-        int Format { get; }
+        Int16 Format { get; }
         DateTime ModificationTime { get; }
         string ModificationUser { get; }
         IDictionaryScope DictionaryScope { get; set; }

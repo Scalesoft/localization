@@ -1,7 +1,5 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
@@ -10,22 +8,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class FileLocalizationManager : ILocalizationManager
+    public class FileLocalizationManager : LocalizationManager, ILocalizationManager
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
-        private const string GlobalScope = "global";
 
-        private readonly IConfiguration m_configuration;
-        private DictionaryManager m_dictionaryManager;
+        private FileDictionaryManager m_dictionaryManager;
 
-        public FileLocalizationManager(IConfiguration configuration)
+        public FileLocalizationManager(IConfiguration configuration) : base(configuration)
         {
-            m_configuration = configuration;
+            //Should be empty
         }
 
         public void AddDictionaryManager(IDictionaryManager dictionaryManager)
         {
-            m_dictionaryManager = (DictionaryManager)dictionaryManager;
+            m_dictionaryManager = (FileDictionaryManager)dictionaryManager;
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
@@ -88,26 +84,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
         }
 
-        private LocalizedString TranslateFallback(string text)
-        {
-            switch (m_configuration.TranslateFallbackMode())
-            {
-                case TranslateFallbackMode.Null:
-                    return null;
-                case TranslateFallbackMode.Key:
-                    return new LocalizedString(text,text, true);
-                case TranslateFallbackMode.Exception:
-                    throw new TranslateException("string with text " + text + " not found");
-                case TranslateFallbackMode.EmptyString:
-                    return new LocalizedString(text,"");
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-
-
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null, string scope = null)
         {
             LocalizedString unparametrizedTranslation = Translate(text, cultureInfo, scope);
             string parametrizedTranslationStrng = string.Format(unparametrizedTranslation.Value, parameters);
@@ -166,7 +143,12 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public CultureInfo DefaultCulture()
         {
-            return m_configuration.DefaultCulture();
+            return Configuration.DefaultCulture();
+        }
+
+        public string DefaultScope()
+        {
+            return Localization.DefaultScope;
         }
     }
 }

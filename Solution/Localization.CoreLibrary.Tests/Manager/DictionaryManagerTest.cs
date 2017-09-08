@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Manager;
@@ -33,7 +34,7 @@ namespace Localization.CoreLibrary.Tests.Manager
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            DictionaryManager dictionaryManager = new DictionaryManager(localizationConfiguration);
+            FileDictionaryManager dictionaryManager = new FileDictionaryManager(localizationConfiguration);
 
             Assert.AreEqual(true, dictionaryManager.IsCultureSupported(new CultureInfo("cs")));
             Assert.AreEqual(true, dictionaryManager.IsCultureSupported(new CultureInfo("en")));
@@ -54,11 +55,11 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.BasePath = @"localizationTree";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "en-US", "en-GB", "en-CA", "es-MX", "es-US"};
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            DictionaryManager dictionaryManager = new DictionaryManager(localizationConfiguration);
+            FileDictionaryManager dictionaryManager = new FileDictionaryManager(localizationConfiguration);
             dictionaryManager.BuildDictionaryHierarchyTrees(dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance));
 
             FileLocalizationManager fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
@@ -79,12 +80,12 @@ namespace Localization.CoreLibrary.Tests.Manager
             LocalizedString sNope = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             Assert.AreEqual(nopeKey, sNope);
 
-            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString();
 
             LocalizedString sNope2 = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             Assert.AreEqual("", sNope2);
 
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Exception.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Exception.ToString();
 
             bool exceptionThrown = false;
             try

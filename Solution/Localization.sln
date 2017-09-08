@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Service", "Loc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Database.EFCore", "Localization.Database.EFCore\Localization.Database.EFCore.csproj", "{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Database.EFCore.Tests", "Localization.Database.EFCore.Tests\Localization.Database.EFCore.Tests.csproj", "{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

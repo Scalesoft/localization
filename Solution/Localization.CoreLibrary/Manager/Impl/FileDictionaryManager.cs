@@ -13,18 +13,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class DictionaryManager : IDictionaryManager
+    public class FileDictionaryManager : IDictionaryManager
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly IConfiguration m_configuration;
-        private const string GlobalDictionaryScope = "global";
         private HashSet<ILocalizationDictionary> m_dictionaries;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="configuration">Library configuration.</param>
-        public DictionaryManager(IConfiguration configuration)
+        public FileDictionaryManager(IConfiguration configuration)
         {
             m_configuration = configuration;
         }
@@ -106,11 +106,6 @@ namespace Localization.CoreLibrary.Manager.Impl
             return GetLocalizationDictionary(cultureInfo, scope).List();
         }
 
-        public Dictionary<string, LocalizedString> GetDictionaryPart(string part, CultureInfo cultureInfo = null, string scope = null)
-        {
-            return GetLocalizationDictionaryPart(part, cultureInfo, scope).List();
-        }
-
         public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
@@ -121,25 +116,24 @@ namespace Localization.CoreLibrary.Manager.Impl
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
         }
 
+        public CultureInfo DefaultCulture()
+        {
+            return m_configuration.DefaultCulture();
+        }
+
+        public string DefaultScope()
+        {
+            return Localization.DefaultScope;
+        }
+
         public ILocalizationDictionary GetLocalizationDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             if (scope == null)
             {
-                scope = GlobalDictionaryScope;
+                scope = Localization.DefaultScope;
             }
 
             return GetScopedDictionary(cultureInfo, scope);
-        }
-
-        //TODO: PART
-        public ILocalizationDictionary GetLocalizationDictionaryPart(string part, CultureInfo cultureInfo = null, string scope = null)
-        {
-            if (scope == null)
-            {
-                scope = GlobalDictionaryScope;
-            }
-
-            throw new NotImplementedException();
         }
 
         private ILocalizationDictionary GetScopedDictionary(CultureInfo cultureInfo, string scope)
@@ -152,7 +146,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             ILocalizationDictionary result = null;
             if (IsCultureSupported(cultureInfo)) //return scoped dictionary in requested culture (if scope exists)
             {              
-                result = m_dictionaries.First(w => w.CultureInfo().Equals(cultureInfo) && w.Scope().Equals(scope));
+                result = m_dictionaries.FirstOrDefault(w => w.CultureInfo().Equals(cultureInfo) && w.Scope().Equals(scope));
             }
             else
             {

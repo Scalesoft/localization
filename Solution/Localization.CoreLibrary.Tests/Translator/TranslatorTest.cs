@@ -21,9 +21,9 @@ namespace Localization.CoreLibrary.Tests.Translator
             configuration.DbUser = @"SA";
             configuration.DefaultCulture = "cs";
             configuration.SupportedCultures = new List<string>() {"en", "hu", "zh"};
-            configuration.TranslationFallbackMode = TranslateFallbackMode.EmptyString.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString();
             configuration.AutoLoadResources = true;
-            configuration.FirstAutoTranslateResource = EnLocalizationResource.File.ToString();
+            configuration.FirstAutoTranslateResource = LocLocalizationResource.File.ToString();
             
             IConfiguration libConfiguration = new LocalizationConfiguration(configuration);
             

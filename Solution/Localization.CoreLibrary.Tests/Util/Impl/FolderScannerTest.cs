@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;

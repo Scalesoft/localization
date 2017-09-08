@@ -10,44 +10,39 @@ namespace Localization.CoreLibrary.Translator
     {
         public static LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
         {
-            return Localization.Translator.Translate(EnTranslationSource.File, text, cultureInfo, scope);
+            return Localization.Translator.Translate(LocTranslationSource.File, text, cultureInfo, scope);
         }
 
         public static LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null, string scope = null)
         {
-            return Localization.Translator.TranslateFormat(EnTranslationSource.File, text, parameters, cultureInfo, scope);
+            return Localization.Translator.TranslateFormat(LocTranslationSource.File, text, parameters, cultureInfo, scope);
         }
 
         public static LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null)
         {
-            return Localization.Translator.TranslatePluralization(EnTranslationSource.File, text, number, cultureInfo, scope);
+            return Localization.Translator.TranslatePluralization(LocTranslationSource.File, text, number, cultureInfo, scope);
         }
 
         public static LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
         {
-            return Localization.Translator.TranslateConstant(EnTranslationSource.File, text, cultureInfo, scope);
+            return Localization.Translator.TranslateConstant(LocTranslationSource.File, text, cultureInfo, scope);
         }
 
         public static Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            return Localization.Dictionary.GetDictionary(cultureInfo, scope);
-        }
-
-        public static Dictionary<string, LocalizedString> GetDictionaryPart(string part, CultureInfo cultureInfo = null, string scope = null)
-        {
-            return Localization.Dictionary.GetDictionaryPart(part, cultureInfo, scope);
+            return Localization.Dictionary.GetDictionary(LocTranslationSource.File, cultureInfo, scope);
         }
 
         public static Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            return Localization.Dictionary.GetConstantsDictionary(cultureInfo, scope);
+            return Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.File, cultureInfo, scope);
         }
 
         public static Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            return Localization.Dictionary.GetPluralizedDictionary(cultureInfo, scope);
+            return Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.File, cultureInfo, scope);
         }       
     }
 }

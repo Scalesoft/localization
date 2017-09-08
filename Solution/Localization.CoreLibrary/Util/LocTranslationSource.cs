@@ -1,6 +1,6 @@
 ﻿namespace Localization.CoreLibrary.Util
 {
-    public enum EnTranslationSource
+    public enum LocTranslationSource
     {
         File,
         Database,

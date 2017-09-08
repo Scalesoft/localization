@@ -15,14 +15,14 @@ namespace Localization.Database.EFCore.Entity
 
         [Required]
         [Column(TypeName = "smallint")]
-        public int Format { get; set; }
+        public Int16 Format { get; set; }
 
         [Required]
         [Column(TypeName = "datetime")]
         public DateTime ModificationTime { get; set; }
 
         [Required]
-        [Column(TypeName = "varchar(255)")]
+        [Column(TypeName = "nvarchar(255)")]
         public string ModificationUser { get; set; }
 
         [Required]

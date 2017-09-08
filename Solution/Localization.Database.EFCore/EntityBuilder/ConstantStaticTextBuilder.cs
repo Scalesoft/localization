@@ -16,7 +16,7 @@ namespace Localization.Database.EFCore.EntityBuilder
             return m_baseTextBuilder.Name(name);
         }
 
-        public ITextBuilder<ConstantStaticText> Format(int format)
+        public ITextBuilder<ConstantStaticText> Format(short format)
         {
             return m_baseTextBuilder.Format(format);
         }

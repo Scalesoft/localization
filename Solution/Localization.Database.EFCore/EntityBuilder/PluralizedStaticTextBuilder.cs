@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.EntityBuilder.Common;
 using Localization.Database.EFCore.Exception;
@@ -7,7 +8,7 @@ namespace Localization.Database.EFCore.EntityBuilder
 {
     public class PluralizedStaticTextBuilder : ITextBuilder<PluralizedStaticText>
     {
-        private BaseTextBuilder<PluralizedStaticText> m_baseTextBuilder;
+        private readonly BaseTextBuilder<PluralizedStaticText> m_baseTextBuilder;
 
         public PluralizedStaticTextBuilder() 
         {
@@ -44,7 +45,7 @@ namespace Localization.Database.EFCore.EntityBuilder
             return m_baseTextBuilder.Name(name);
         }
 
-        public ITextBuilder<PluralizedStaticText> Format(int format)
+        public ITextBuilder<PluralizedStaticText> Format(short format)
         {
             return m_baseTextBuilder.Format(format);
         }

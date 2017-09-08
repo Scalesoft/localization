@@ -9,9 +9,9 @@ namespace Localization.CoreLibrary.Util
         string BasePath();
         IList<CultureInfo> SupportedCultures();
         CultureInfo DefaultCulture();
-        TranslateFallbackMode TranslateFallbackMode();
+        LocTranslateFallbackMode TranslateFallbackMode();
         bool AutoLoadResources();
-        EnLocalizationResource FirstAutoTranslateResource();
+        LocLocalizationResource FirstAutoTranslateResource();
         string DbSource();
         string DbUser();
         string DbPassword();

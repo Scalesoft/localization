@@ -18,7 +18,7 @@ namespace Localization.CoreLibrary.Pluralization
         {
             if (defaultLocalizedString == null)
             {
-                throw new PluralizedDefaultStringException("The defaultLocalizedString cannot be null.");
+                throw new PluralizedDefaultStringException(string.Format("The {0} cannot be null.", nameof(defaultLocalizedString)));
             }
 
             m_defaultLocalizedString = defaultLocalizedString; 

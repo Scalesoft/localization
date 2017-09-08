@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Manager;
+using Localization.CoreLibrary.Util;
 
-namespace Localization.CoreLibrary.Util.Impl
+namespace Localization.CoreLibrary
 {
     public sealed class LocalizationConfiguration : IConfiguration
     {
@@ -17,7 +17,7 @@ namespace Localization.CoreLibrary.Util.Impl
             m_configuration = new Configuration();
         }
 
-        public LocalizationConfiguration(LocalizationConfiguration.Configuration configuration)
+        public LocalizationConfiguration(Configuration configuration)
         {
             m_configuration = configuration;
 
@@ -49,11 +49,11 @@ namespace Localization.CoreLibrary.Util.Impl
             return new CultureInfo(m_configuration.DefaultCulture);
         }
 
-        public TranslateFallbackMode TranslateFallbackMode()
+        public LocTranslateFallbackMode TranslateFallbackMode()
         {
-            TranslateFallbackMode translateFallbackModeEnum = Manager.TranslateFallbackMode.Null;
+            LocTranslateFallbackMode translateFallbackModeEnum = LocTranslateFallbackMode.Null;
             bool parseSuccess = Enum.TryParse(m_configuration.TranslationFallbackMode, out translateFallbackModeEnum);
-            if (!parseSuccess || translateFallbackModeEnum.Equals(Manager.TranslateFallbackMode.Null))
+            if (!parseSuccess || translateFallbackModeEnum.Equals(LocTranslateFallbackMode.Null))
             {
                 string message = string.Format(@"Cannot parse TranslateFallbackMode value ""{0}""", m_configuration.TranslationFallbackMode);
 
@@ -68,9 +68,9 @@ namespace Localization.CoreLibrary.Util.Impl
             return m_configuration.AutoLoadResources;
         }
 
-        public EnLocalizationResource FirstAutoTranslateResource()
+        public LocLocalizationResource FirstAutoTranslateResource()
         {
-            EnLocalizationResource firstAutoTranslateResourceEnum;
+            LocLocalizationResource firstAutoTranslateResourceEnum;
             bool parseSuccess = Enum.TryParse(m_configuration.FirstAutoTranslateResource, out firstAutoTranslateResourceEnum);
             if (!parseSuccess)
             {
@@ -145,7 +145,7 @@ namespace Localization.CoreLibrary.Util.Impl
             return this;
         }
 
-        public LocalizationConfiguration SetTranslationFallbackMode(TranslateFallbackMode translationFallbackMode)
+        public LocalizationConfiguration SetTranslationFallbackMode(LocTranslateFallbackMode translationFallbackMode)
         {
             m_configuration.TranslationFallbackMode = translationFallbackMode.ToString();
 
@@ -159,7 +159,7 @@ namespace Localization.CoreLibrary.Util.Impl
             return this;
         }
 
-        public LocalizationConfiguration SetFirstAutoTranslateResource(EnLocalizationResource localizationResource)
+        public LocalizationConfiguration SetFirstAutoTranslateResource(LocLocalizationResource localizationResource)
         {
             m_configuration.FirstAutoTranslateResource = localizationResource.ToString();
 

@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Logging;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Util.Impl
-{
-    public class FolderScanner : ILocalizationStructureScanner
+{    
+    internal class FolderScanner : ILocalizationStructureScanner
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private readonly IDictionaryFactory m_dictionaryFactory;

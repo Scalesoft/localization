@@ -1,12 +1,14 @@
 ﻿using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Util.Impl
 {
-    public class JsonConfigurationReader
+    internal class JsonConfigurationReader
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private readonly string m_configPath;

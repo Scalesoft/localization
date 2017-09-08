@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Manager.Impl;
@@ -24,11 +25,11 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            DictionaryManager dictionaryManager = new DictionaryManager(localizationConfiguration);
+            FileDictionaryManager dictionaryManager = new FileDictionaryManager(localizationConfiguration);
             ILocalizationDictionary[] loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
             dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
 
@@ -50,11 +51,11 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.DbSource = @"cosi://sql-source";
             configuration.DbUser = "SA";
             configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key.ToString();
+            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            DictionaryManager dictionaryManager = new DictionaryManager(localizationConfiguration);
+            FileDictionaryManager dictionaryManager = new FileDictionaryManager(localizationConfiguration);
             ILocalizationDictionary[] loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
             dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
 

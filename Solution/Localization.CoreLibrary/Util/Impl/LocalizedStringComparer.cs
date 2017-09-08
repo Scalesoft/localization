@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Localization;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Util.Impl
 {
-    public class LocalizedStringComparer : IEqualityComparer<LocalizedString>
+    internal class LocalizedStringComparer : IEqualityComparer<LocalizedString>
     {
         /// <summary>
         /// Determines whether the property "name" of specified objects are equal.

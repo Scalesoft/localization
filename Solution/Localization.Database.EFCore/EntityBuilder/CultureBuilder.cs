@@ -2,12 +2,17 @@
 using System.Globalization;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Entity;
+using Localization.Database.EFCore.EntityBuilder.Common;
 using Localization.Database.EFCore.Exception;
+using Localization.Database.EFCore.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.EntityBuilder
 {
     public class CultureBuilder
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly Culture m_culture;
 
         public CultureBuilder()
@@ -23,10 +28,7 @@ namespace Localization.Database.EFCore.EntityBuilder
         /// <exception cref="BuilderException">Thrown if Name is already set.</exception>
         public CultureBuilder Name(string name)
         {
-            if (m_culture.Name != null)
-            {
-                throw new BuilderException("Name is already set");
-            }
+            BuilderGuard.ArgumentAlreadySet(nameof(name), m_culture.Name, Logger);
 
             CheckCultureValidity(name);
             m_culture.Name = name;

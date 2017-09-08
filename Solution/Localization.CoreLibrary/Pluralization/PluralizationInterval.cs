@@ -4,15 +4,15 @@ namespace Localization.CoreLibrary.Pluralization
 {
     public class PluralizationInterval
     {
-        private readonly Int32 m_x;
-        private readonly Int32 m_y;
+        private readonly int m_x;
+        private readonly int m_y;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="x">Begining of interval (inclusive)</param>
         /// <param name="y">End of interval (inclusive)</param>
-        public PluralizationInterval(Int32 x, Int32 y)
+        public PluralizationInterval(int x, int y)
         {
             if (x > y)
             {
