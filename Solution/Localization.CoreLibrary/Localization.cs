@@ -19,6 +19,8 @@ namespace Localization.CoreLibrary
 {
     public class Localization : IAutoLocalizationManager, IAutoDictionaryManager
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         public const string DefaultScope = "global";
 
         private static Lazy<Localization> m_instance;
@@ -30,7 +32,6 @@ namespace Localization.CoreLibrary
         private readonly Dictionary<LocTranslationSource, IDictionaryManager> m_dictionaryManagers
             = new Dictionary<LocTranslationSource, IDictionaryManager>();
 
-        //private IDictionaryManager m_dictionaryManager;
 
         public static CultureInfo[] SupportedCultures()
         {
@@ -90,6 +91,8 @@ namespace Localization.CoreLibrary
             m_instance = null;            
         }
 
+
+
         /// <summary>
         /// Initializes FileLocalization library.
         /// </summary>
@@ -102,17 +105,27 @@ namespace Localization.CoreLibrary
         /// Default is <see cref="NullLoggerFactory"/></param>
         /// <exception cref="LocalizationLibraryException">Thrown if libary is already initialized.</exception>
         public static void Init(IConfiguration configuration,
-           IDatabaseServiceFactory databaseServiceFactory = null,
-            IDictionaryFactory dictionaryFactory = null, 
-            ILoggerFactory loggerFactory = null)
+                                IDatabaseServiceFactory databaseServiceFactory = null,
+                                IDictionaryFactory dictionaryFactory = null, 
+                                ILoggerFactory loggerFactory = null)
         {
-            ILocalizationManager databaseLocalizationManager;
-            IDictionaryManager databaseDictionaryManager;
+            if (loggerFactory == null)
+            {
+                loggerFactory = new NullLoggerFactory();
+            }
 
             if (IsInstantinated())
             {
-                throw new LocalizationLibraryException("Localization library is already initialized.");
+                string libraryAlreadyInitMsg = "Localization library is already initialized.";
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(libraryAlreadyInitMsg);
+                }
+
+                throw new LocalizationLibraryException(libraryAlreadyInitMsg);
             }
+
+            //
             if (dictionaryFactory == null)
             {
                 if (configuration.AutoLoadResources())
@@ -125,27 +138,30 @@ namespace Localization.CoreLibrary
                 }                
             }
 
-            if (loggerFactory == null)
-            {
-                loggerFactory = new NullLoggerFactory();
-            }
-
+            //Db loc manager.
+            ILocalizationManager databaseLocalizationManager;
             if (databaseServiceFactory == null)
             {
-                databaseLocalizationManager = new NullDatabaseLocalization();
+                databaseLocalizationManager = new NullDatabaseLocalizationManager();
             }
             else
             {
                 IDatabaseTranslateService dbTranslateService = databaseServiceFactory.CreateTranslateService(configuration, loggerFactory);
 
-
-                databaseLocalizationManager = new DatabaseLocalizationManager(configuration, dbTranslateService);   
-               
+                databaseLocalizationManager = new DatabaseLocalizationManager(configuration, dbTranslateService);                   
             }
 
-            databaseDictionaryManager = new DatabaseDictionaryManager(configuration, databaseServiceFactory.CreateDictionaryService(configuration, loggerFactory));
+            //Db dic manager.
+            IDictionaryManager databaseDictionaryManager;
+            if (databaseServiceFactory == null)
+            {
+                databaseDictionaryManager = new NullDatabaseDictionaryManager();
+            }
+            else
+            {
+                databaseDictionaryManager = new DatabaseDictionaryManager(configuration, databaseServiceFactory.CreateDictionaryService(configuration, loggerFactory));
+            }
 
-            //m_instance = new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalization);
 
             m_instance = new Lazy<Localization>(() => new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalizationManager, databaseDictionaryManager));
         }

@@ -1,7 +1,6 @@
 ﻿using System;
+using Localization.AspNetCore.Service.Extensions;
 using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Dictionary.Impl;
-using Localization.Service.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Factory;
-using Localization.Database.EFCore.Service;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -40,7 +38,7 @@ namespace Localization.Web.AspNetCore.Sample
             IServiceProvider sp = services.BuildServiceProvider();
 
             Localization.CoreLibrary.Localization.Init(
-                @"C:\Pool\localization-ridics\Solution\Localization.Service\bin\Debug\netstandard1.3\localization.json.config",
+                @"C:\Pool\localization-ridics\Solution\Localization.AspNetCore.Service\bin\Debug\netstandard1.3\localization.json.config",
                 new DatabaseServiceFactory(sp.GetService<StaticTextsContext>()),
                 new JsonDictionaryFactory());
 

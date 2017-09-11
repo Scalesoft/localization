@@ -8,6 +8,7 @@ using System.Text;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
+using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private const string PluralJPath = "plural";
 
         private const string NotLoadedMsg = "Dictionary is not loaded.";
-        private const string NotLoadedPluralizedMsg = "Dictionary is not loaded.";
+        private const string NotLoadedPluralizedMsg = "Pluralized dictionary is not loaded.";
 
         private JObject m_jsonDictionary;
         private JObject m_jsonPluralizedDictionary;
@@ -48,7 +49,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public JsonLocalizationDictionary()
         {
-            //SHOULD BE EMPTY - NOW
+            //SHOULD BE EMPTY
         }
 
         public ILocalizationDictionary Load(string filePath)
@@ -82,17 +83,17 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
             m_jsonPluralizedDictionary = LoadDictionaryJObject(newFilePath);
             string cultureString = (string)m_jsonPluralizedDictionary[CultureJPath];
-            if (m_cultureInfo.Equals(new CultureInfo(cultureString)))
+            if (!m_cultureInfo.Equals(new CultureInfo(cultureString)))
             {
+                string message = string.Format(@"Culture in pluralized version of dictionary ""{0}"" does not match expected value.
+                                                    Expected value is ""{1}""", filePath, m_cultureInfo.Name);
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(message);
+                }
                 
-            }
-            else
-            {
-                string message = string.Format(@"Pluralized version of dictionary ""{0}""", filePath);
-                Logger.LogError(message);
-                throw new System.Exception(message);
-            }
-            
+                throw new DictionaryLoadException(message);
+            }          
         }
 
         private JObject LoadDictionaryJObject(string filePath)
@@ -122,7 +123,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         {
             if (!IsLoaded())
             {
-                Logger.LogWarning(NotLoadedMsg);                
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedMsg);
+                }                
             }
 
             return m_cultureInfo; 
@@ -132,7 +136,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         {
             if (!IsLoaded())
             {
-                Logger.LogWarning(NotLoadedMsg);
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedMsg);
+                }
             }
 
             return m_scope; 
@@ -142,7 +149,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         {
             if (!IsLoaded())
             {
-                Logger.LogWarning(NotLoadedMsg);
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedMsg);
+                }
             }
 
             return JsonExtension;           
@@ -159,7 +169,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             Dictionary<string, LocalizedString> result = new Dictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
-                Logger.LogWarning(NotLoadedMsg);
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedMsg);
+                }
                 return result;
             }
 
@@ -186,7 +199,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             Dictionary<string, PluralizedString> result = new Dictionary<string, PluralizedString>();
             if (!IsPluralizationLoaded())
             {
-                Logger.LogWarning(NotLoadedPluralizedMsg);
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedPluralizedMsg);
+                }
                 return result;
             }
             m_pluralizedDictionary = new Dictionary<string, PluralizedString>();
@@ -215,7 +231,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                         {
                             string errorMessage = string.Format(@"The x value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
                                 xToken.ToString(), m_scope, m_cultureInfo.Name);
-                            Logger.LogError(errorMessage);
+                            if (Logger.IsErrorEnabled())
+                            {
+                                Logger.LogError(errorMessage);
+                            }
                             throw new DictionaryFormatException(errorMessage);
                         }
 
@@ -232,7 +251,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                         {
                             string errorMessage = string.Format(@"The y value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
                                 yToken.ToString(), m_scope, m_cultureInfo.Name);
-                            Logger.LogError(errorMessage);
+                            if (Logger.IsErrorEnabled())
+                            {
+                                Logger.LogError(errorMessage);
+                            }
                             throw new DictionaryFormatException(errorMessage);
                         }
                     }
@@ -260,7 +282,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             Dictionary<string, LocalizedString> result = new Dictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
-                Logger.LogWarning(NotLoadedMsg);
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedMsg);
+                }
                 return result;
             }
 

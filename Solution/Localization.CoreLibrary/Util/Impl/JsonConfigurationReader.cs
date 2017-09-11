@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -11,22 +12,14 @@ namespace Localization.CoreLibrary.Util.Impl
     internal class JsonConfigurationReader
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
-        private readonly string m_configPath;
+        private readonly string m_configurationFilePath;
 
-        public JsonConfigurationReader(string configPath)
+        public JsonConfigurationReader(string configurationFilePath)
         {
-            if (!File.Exists(configPath))
-            {
-                string errorMsg = string.Format("Configuration file \"{0}\" does not exist or you don't have permisson to read.", configPath);
+            CheckFileExists(configurationFilePath);
 
-                Logger.LogError(errorMsg);
-
-                throw new System.Exception(errorMsg);
-            }
-
-            m_configPath = configPath;
+            m_configurationFilePath = configurationFilePath;
         }
-
 
         public IConfiguration ReadConfiguration()
         {           
@@ -35,7 +28,7 @@ namespace Localization.CoreLibrary.Util.Impl
 
             LocalizationConfiguration.Configuration configuration;
 
-            using (Stream stream = new FileStream(m_configPath, FileMode.Open))
+            using (Stream stream = new FileStream(m_configurationFilePath, FileMode.Open))
             using (StreamReader streamReader = new StreamReader(stream, Encoding.Unicode))
             using (JsonReader jsonReader = new JsonTextReader(streamReader))
             {
@@ -43,6 +36,19 @@ namespace Localization.CoreLibrary.Util.Impl
             }
             
             return new LocalizationConfiguration(configuration);
+        }
+
+        private void CheckFileExists(string configurationFilePath)
+        {
+            if (!File.Exists(configurationFilePath))
+            {
+                string errorMsg = string.Format("Configuration file \"{0}\" does not exist or you don't have permisson to read.", configurationFilePath);
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(errorMsg);
+                }
+                throw new LibraryConfigurationException(errorMsg);
+            }
         }
     }
 }

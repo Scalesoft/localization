@@ -35,6 +35,11 @@ namespace Localization.CoreLibrary.Manager.Impl
                 case LocLocalizationResource.File:
                     return m_fileLocalizationManager;
                 default:
+                    if (Logger.IsErrorEnabled())
+                    {
+                        Logger.LogError(@"Requested resource type is not supported ""{0}"":""{1}""", nameof(localizationResource), localizationResource);
+                    }
+
                     throw new ArgumentOutOfRangeException(nameof(localizationResource), localizationResource, null);
             }
         }
@@ -48,6 +53,11 @@ namespace Localization.CoreLibrary.Manager.Impl
                 case LocLocalizationResource.File:
                     return m_databaseLocalizationManager;
                 default:
+                    if (Logger.IsErrorEnabled())
+                    {
+                        Logger.LogError(@"Requested resource type is not supported ""{0}"":""{1}""", nameof(localizationResource), localizationResource);
+                    }
+
                     throw new ArgumentOutOfRangeException(nameof(localizationResource), localizationResource, null);
             }
         }

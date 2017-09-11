@@ -1,9 +1,15 @@
 ﻿using System;
+using Localization.CoreLibrary.Common;
+using Localization.CoreLibrary.Logging;
+using Localization.CoreLibrary.Util.Impl;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Pluralization
 {
     public class PluralizationInterval
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly int m_x;
         private readonly int m_y;
 
@@ -16,7 +22,14 @@ namespace Localization.CoreLibrary.Pluralization
         {
             if (x > y)
             {
-                throw new ArgumentException("The x value should be less or equal than y.");
+                string intervalErrorMsg = "The x value should be less or equal than y.";
+
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(intervalErrorMsg);
+                }
+
+                throw new ArgumentException(intervalErrorMsg);
             }
 
             m_x = x;
@@ -31,10 +44,8 @@ namespace Localization.CoreLibrary.Pluralization
         /// <exception cref="NullReferenceException">Is thrown if obj is null.</exception>
         public bool IsOverlaping(PluralizationInterval obj)
         {
-            if (obj == null)
-            {
-                throw new NullReferenceException("Comparing Pluralization interval cannot be null.");
-            }
+            Guard.ArgumentNull(nameof(obj), obj, Logger);
+
             return this.m_x <= obj.m_y && obj.m_x <= this.m_y;
         }
 

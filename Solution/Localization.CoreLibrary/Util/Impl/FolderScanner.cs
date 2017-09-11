@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -52,7 +53,10 @@ namespace Localization.CoreLibrary.Util.Impl
             {
                 string message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                     defaultCultureResourceFilePath);
-                Logger.LogError(message);
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(message);
+                }           
                 exceptionLogStringBuilder.AppendLine(message);
                 shouldThrowException = true;
             }
@@ -71,7 +75,10 @@ namespace Localization.CoreLibrary.Util.Impl
                 {
                     string message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                         supportedcultureFilePath);
-                    Logger.LogError(message);
+                    if (Logger.IsErrorEnabled())
+                    {
+                        Logger.LogError(message);
+                    }                  
                     exceptionLogStringBuilder.AppendLine(message);
                     shouldThrowException = true;
                 }
@@ -79,7 +86,7 @@ namespace Localization.CoreLibrary.Util.Impl
 
             if (shouldThrowException)
             {
-                throw new System.Exception(string.Concat("Missing resource file/s.", '\n', exceptionLogStringBuilder.ToString()));
+                throw new DictionaryLoadException(string.Concat("Missing resource file/s.", '\n', exceptionLogStringBuilder.ToString()));
             }
 
             return localizationFiles;
@@ -125,7 +132,10 @@ namespace Localization.CoreLibrary.Util.Impl
                 {
                     string message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                         defaultPath);
-                    Logger.LogError(message);
+                    if (Logger.IsErrorEnabled())
+                    {
+                        Logger.LogError(message);
+                    }                 
                     exceptionLogStringBuilder.AppendLine(message);
                     shouldThrowException = true;
                 }
@@ -141,14 +151,17 @@ namespace Localization.CoreLibrary.Util.Impl
                 else
                 {
                     string message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.", globalPath);
-                    Logger.LogError(message);
+                    if (Logger.IsErrorEnabled())
+                    {
+                        Logger.LogError(message);
+                    }                
                     exceptionLogStringBuilder.AppendLine(message);
                     shouldThrowException = true;
                 }
             }          
             if (shouldThrowException)
             {
-                throw new System.Exception(string.Concat("Missing resource file/s.", '\n', exceptionLogStringBuilder.ToString()));
+                throw new DictionaryLoadException(string.Concat("Missing resource file/s.", '\n', exceptionLogStringBuilder.ToString()));
             }
 
             return localizationFiles;
@@ -178,8 +191,12 @@ namespace Localization.CoreLibrary.Util.Impl
             {
                 string message = string.Format(@"Provided path ""{0}"" is not inside basepath: ""{1}""", directory,
                     libConfiguration.BasePath());
-                Logger.LogError(message);
-                throw new System.Exception(message);
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(message);
+                }
+                
+                throw new DictionaryLoadException(message);
             }
             string dotNotatedFileName = nameBase[1].Replace(Path.DirectorySeparatorChar, '.');           
             dotNotatedFileName = string.Concat(dotNotatedFileName, '.', cultureInfo.Name, '.', m_dictionaryFactory.FileExtension);

@@ -1,12 +1,18 @@
 ﻿using System;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using Localization.CoreLibrary.Common;
 using Localization.CoreLibrary.Exception;
+using Localization.CoreLibrary.Logging;
+using Localization.CoreLibrary.Util.Impl;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Pluralization
 {
     public class PluralizedString
-    {        
+    {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly Dictionary<PluralizationInterval, LocalizedString> m_pluralized;
         private readonly LocalizedString m_defaultLocalizedString;
 
@@ -14,15 +20,12 @@ namespace Localization.CoreLibrary.Pluralization
         /// Constructor.
         /// </summary>
         /// <param name="defaultLocalizedString">Default Localized string. Used if requested number does not fit in any interval.</param>
+        /// <exception cref="ArgumentNullException">If defaultLocalizedString is null.</exception>
         public PluralizedString(LocalizedString defaultLocalizedString)
         {
-            if (defaultLocalizedString == null)
-            {
-                throw new PluralizedDefaultStringException(string.Format("The {0} cannot be null.", nameof(defaultLocalizedString)));
-            }
+            Guard.ArgumentNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
 
             m_defaultLocalizedString = defaultLocalizedString; 
-
             m_pluralized = new Dictionary<PluralizationInterval, LocalizedString>();
         }
 
@@ -35,7 +38,7 @@ namespace Localization.CoreLibrary.Pluralization
         {
             PluralizationInterval pluralizationKey = new PluralizationInterval(number, number);
 
-            foreach (var pluralizedLocalizedString in m_pluralized)
+            foreach (KeyValuePair<PluralizationInterval, LocalizedString> pluralizedLocalizedString in m_pluralized)
             {
                 if (pluralizedLocalizedString.Key.Equals(pluralizationKey))
                 {
@@ -57,7 +60,13 @@ namespace Localization.CoreLibrary.Pluralization
         {
             if (CheckOverlaping(pluralizationInterval))
             {
-                throw new PluralizedStringIntervalOverlapException("Intervals are overlaping in the Pluralized string.");
+                string overlapErrorMsg = "Intervals are overlaping in the Pluralized string.";
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(overlapErrorMsg);
+                }
+
+                throw new PluralizedStringIntervalOverlapException(overlapErrorMsg);
             }        
 
             m_pluralized.Add(pluralizationInterval, localizedString);
@@ -70,10 +79,7 @@ namespace Localization.CoreLibrary.Pluralization
         /// <returns>True if overlap was found.</returns>
         private bool CheckOverlaping(PluralizationInterval pluralizationInterval)
         {
-            if (pluralizationInterval == null)
-            {
-                throw new ArgumentNullException(nameof(pluralizationInterval));
-            }
+            Guard.ArgumentNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
 
             Dictionary<PluralizationInterval, LocalizedString>.KeyCollection pluralizedKeys = m_pluralized.Keys;
             foreach (PluralizationInterval pluralizedKey in pluralizedKeys)
