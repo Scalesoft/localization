@@ -51,17 +51,11 @@ namespace Localization.CoreLibrary.Manager.Impl
             ILocalizationManager localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource());
 
             LocalizedString result = localizationManager.Translate(text, cultureInfo, scope);
-            if (result == null)
+            if (result == null || result.ResourceNotFound)
             {
                 localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource());
-                try
-                {
-                    result = localizationManager.Translate(text, cultureInfo, scope);
-                }
-                catch (DatabaseLocalizationManagerException e)
-                {
-                    return null;
-                }              
+                
+                return localizationManager.Translate(text, cultureInfo, scope);
             }
 
             return result;
@@ -75,14 +69,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             if (result == null)
             {
                 localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource());               
-                try
-                {
-                    result = localizationManager.TranslateFormat(text, parameters, cultureInfo, scope);
-                }
-                catch (DatabaseLocalizationManagerException e)
-                {
-                    return null;
-                }
+                return localizationManager.TranslateFormat(text, parameters, cultureInfo, scope);
             }
 
             return result;
@@ -95,15 +82,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             LocalizedString result = localizationManager.TranslatePluralization(text, number, cultureInfo, scope);
             if (result == null)
             {
-                localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource());               
-                try
-                {
-                    result = localizationManager.TranslatePluralization(text, number, cultureInfo, scope);
-                }
-                catch (DatabaseLocalizationManagerException e)
-                {
-                    return null;
-                }
+                return localizationManager.TranslatePluralization(text, number, cultureInfo, scope);
             }
 
             return result;
@@ -117,14 +96,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             if (result == null)
             {
                 localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource());              
-                try
-                {
-                    result = localizationManager.TranslateConstant(text, cultureInfo, scope);
-                }
-                catch (DatabaseLocalizationManagerException e)
-                {
-                    return null;
-                }
+                return localizationManager.TranslateConstant(text, cultureInfo, scope);               
             }
 
             return result;
