@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="RD /S /Q &quot;$(TargetDir)Resources\&quot;&#xD;&#xA;&#xD;&#xA;" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="XCOPY &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
   </Target>
 

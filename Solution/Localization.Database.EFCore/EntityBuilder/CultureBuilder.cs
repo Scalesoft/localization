@@ -36,7 +36,7 @@ namespace Localization.Database.EFCore.EntityBuilder
             return this;
         }
 
-        public ICulture Build()
+        public Culture Build()
         {
             if (m_culture.Name == null)
             {

@@ -14,5 +14,10 @@ namespace Localization.Database.EFCore.Dao.Impl
         {
             return DbSet.FirstOrDefault(c => c.Name == name);
         }
+
+        public bool CultureExist(Culture culture)
+        {
+            return DbSet.Any(p => p.Name == culture.Name);
+        }
     }
 }

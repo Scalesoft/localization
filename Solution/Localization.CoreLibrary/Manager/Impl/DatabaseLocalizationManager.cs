@@ -17,7 +17,15 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public DatabaseLocalizationManager(IConfiguration configuration, IDatabaseTranslateService dbTranslateService) : base(configuration)
         {
-            this.m_dbTranslateService = dbTranslateService;
+            m_dbTranslateService = dbTranslateService;
+
+            Check();
+        }
+
+        //TODO: Check if default culture and supported cultures from json config file are in DB. If not, new are created.
+        private void Check()
+        {
+
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)

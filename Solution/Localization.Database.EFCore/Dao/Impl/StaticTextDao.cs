@@ -11,14 +11,21 @@ namespace Localization.Database.EFCore.Dao.Impl
         {
         }
 
-        public IStaticText FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope)
+        public IStaticText FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope, DbSet<CultureHierarchy> cultureHierarchies)
         {
-            StaticText result = DbSet
-                .Where(w => w.Name == name && w.Culture == culture && w.DictionaryScope == dictionaryScope)
-                .DefaultIfEmpty()
-                .First();
+            IQueryable<StaticText> result = DbSet
+                .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope)
+                .Join(
+                    cultureHierarchies
+                    .Where(hierarchyCulture => hierarchyCulture.Culture == culture)
+                    , text => text.Culture.Id, hierarchy => hierarchy.ParentCulture.Id
+                    , (text, hierarchy) => new {text, hierarchy})
+                
+                .OrderBy(r => r.hierarchy.LevelProperty)     
+                .Take(4)
+                .Select(r => r.text);
 
-            return result;
+            return result.DefaultIfEmpty().First();
         }
 
         public IStaticText[] FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)

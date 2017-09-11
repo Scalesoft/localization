@@ -3,10 +3,10 @@
     public interface ICultureHierarchy
     {
         int Id { get; }
-        int CultureId { get; }
-        int ParentCultureId { get; } 
+        //int CultureId { get; }
+        //int ParentCultureId { get; } 
         ICulture Culture { get; set; }
         ICulture ParentCulture { get; set; }
-        int LevelProperty { get; }
+        byte LevelProperty { get; }
     }
 }

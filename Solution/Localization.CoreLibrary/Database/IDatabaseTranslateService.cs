@@ -12,5 +12,7 @@ namespace Localization.CoreLibrary.Database
         LocalizedString DatabaseTranslatePluralization(string text, int number, CultureInfo cultureInfo, string scope);
 
         LocalizedString DatabaseTranslateConstant(string text, CultureInfo cultureInfo, string scope);
+
+        void CheckCultures();
     }
 }

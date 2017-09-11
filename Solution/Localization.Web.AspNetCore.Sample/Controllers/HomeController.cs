@@ -1,6 +1,5 @@
 ﻿using System;
-using Localization.CoreLibrary.Util;
-using Localization.Service;
+using Localization.AspNetCore.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,9 +45,10 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
             return View();
         }
 
-        public string Contact()
+        public IActionResult Contact()
         {
-            return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
+            //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
+            return Json(m_dictionaryManager.GetDictionary("home"));
         }
 
         public IActionResult Error()

@@ -1,6 +1,5 @@
-﻿@using System.Globalization
+﻿@using Localization.AspNetCore.Service
 @using Localization.CoreLibrary.Util
-@using Localization.Service
 
 @inject ILocalization Localizer
 
@@ -14,9 +13,9 @@
 <p>Use this area to provide additional information.</p>
 
 Test ViewLocalization:
-@Localizer.Translate("text-1-odst", LocTranslationSource.File)
+@Localizer.Translate("text-1-odst")
 
 <br />
 Database:
 <br />
-@Localizer.Translate("support", "home", LocTranslationSource.Database)
+@Localizer.Translate("support", "home")

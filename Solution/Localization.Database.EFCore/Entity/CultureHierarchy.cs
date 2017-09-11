@@ -21,9 +21,13 @@ namespace Localization.Database.EFCore.Entity
 
         [Required]
         [Column(TypeName = "tinyint")]
-        public int LevelProperty { get; set; }
+        public byte LevelProperty { get; set; }
 
-        ICulture ICultureHierarchy.Culture { get; set; }
+        ICulture ICultureHierarchy.Culture
+        {
+            get;
+            set;
+        }
 
         ICulture ICultureHierarchy.ParentCulture { get; set; }
     }

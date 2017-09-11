@@ -43,7 +43,7 @@ namespace Localization.Database.EFCore.Tests.Dao
 
 
                 StaticTextDao staticTextDao = new StaticTextDao(context.StaticText);
-                IStaticText result = staticTextDao.FindByNameAndCultureAndScope("support", culture, dictionaryScope);
+                IStaticText result = staticTextDao.FindByNameAndCultureAndScope("support", culture, dictionaryScope, context.CultureHierarchy);
                 Assert.AreEqual(1, result.Id);
                 Assert.AreEqual(1, result.Format);
                 Assert.AreEqual("# Podpora\r\nPodpora Vokabuláře webového: \r\n\r\n2012–2015 projekt MK ČR č. DF12P01OVV028 *Informační technologie ve službách jazykového kulturního bohatství (IT JAKUB)*  \r\n2010–2015 projekt MŠMT LINDAT-CLARIN č. LM2010013 *Vybudování a provoz českého uzlu pan-evropské infrastruktury pro výzkum*  \r\n2010–2014 projekt GA ČR č. P406/10/1140 *Výzkum historické češtiny (na základě nových materiálových bází)*  \r\n2010–2014 projekt GA ČR č. P406/10/1153 *Slovní zásoba staré češtiny a její lexikografické zpracování*  \r\n2005–2011 projekt MŠMT ČR LC 546 *Výzkumné centrum vývoje staré a střední češtiny (od praslovanských kořenů po současný stav)*  \r\n", result.Text);

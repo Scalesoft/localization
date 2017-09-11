@@ -6,13 +6,45 @@ namespace Localization.Database.EFCore.Dao.Impl
 {
     public class CultureHierarchyDao : GenericDao<CultureHierarchy, int>
     {
-        protected CultureHierarchyDao(DbSet<CultureHierarchy> dbSet) : base(dbSet)
+        public CultureHierarchyDao(DbSet<CultureHierarchy> dbSet) : base(dbSet)
         {
         }
 
         public IQueryable<Culture> FindParentCultures(Culture culture)
         {
-            return DbSet.Where(p => p.CultureId == culture.Id).OrderBy(p => p.LevelProperty).Select(p => p.ParentCulture);
+            return DbSet.Where(p => p.Culture.Id == culture.Id).OrderBy(p => p.LevelProperty).Select(p => p.ParentCulture);
         }
+
+        public bool IsCultureSelfReferencing(Culture culture)
+        {
+            return DbSet.Any(p => p.LevelProperty == 0 && p.Culture.Name == culture.Name && p.ParentCulture.Name == culture.Name);
+        }
+
+        public bool IsCultureReferencing(Culture culture, Culture parentCulture)
+        {
+            return DbSet.Any(p => p.LevelProperty != 0 && p.Culture.Name == culture.Name && p.ParentCulture.Name == parentCulture.Name);
+        }
+
+        public void MakeCultureSelfReferencing(Culture culture)
+        {
+            Create(new CultureHierarchy()
+            {
+                Culture = culture,
+                ParentCulture = culture,
+                LevelProperty = 0,          
+            });
+        }
+
+        public void MakeCultureReference(Culture culture, Culture parentCulture, byte level)
+        {
+            Create(new CultureHierarchy()
+            {
+                Culture = culture,
+                ParentCulture = parentCulture,
+                LevelProperty = level,
+            });
+        }
+
+
     }
 }
