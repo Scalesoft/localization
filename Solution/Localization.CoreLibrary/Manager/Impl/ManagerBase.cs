@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Util;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class ManagerBase
+    internal class ManagerBase
     {
         protected readonly IConfiguration Configuration;
 

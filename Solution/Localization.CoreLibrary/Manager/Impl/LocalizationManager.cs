@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public abstract class LocalizationManager : ManagerBase
+    internal abstract class LocalizationManager : ManagerBase
     {
         protected LocalizationManager(IConfiguration configuration) : base(configuration)
         {

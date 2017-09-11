@@ -1,15 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Exception;
+using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
+using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class AutoDictionaryManager : IDictionaryManager
+    internal class AutoDictionaryManager : IDictionaryManager
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly IDictionaryManager m_fileDictionaryManager;
         private readonly IDictionaryManager m_databaseDictionaryManager;
 

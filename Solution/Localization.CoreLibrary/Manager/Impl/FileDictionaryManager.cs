@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Logging;
@@ -11,9 +12,10 @@ using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class FileDictionaryManager : IDictionaryManager
+    internal class FileDictionaryManager : IDictionaryManager
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
