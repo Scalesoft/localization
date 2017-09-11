@@ -30,19 +30,37 @@ namespace Localization.CoreLibrary.Translator
 
         public static Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            return Localization.Dictionary.GetDictionary(LocTranslationSource.File, cultureInfo, scope);
+            Dictionary<string, LocalizedString> result = Localization.Dictionary.GetDictionary(LocTranslationSource.File, cultureInfo, scope);
+            if (result == null)
+            {
+                result = new Dictionary<string, LocalizedString>();
+            }
+
+            return result;
         }
 
         public static Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            return Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.File, cultureInfo, scope);
+            Dictionary<string, LocalizedString> result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.File, cultureInfo, scope);
+            if (result == null)
+            {
+                result = new Dictionary<string, LocalizedString>();
+            }
+
+            return result;
         }
 
         public static Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            return Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.File, cultureInfo, scope);
+            Dictionary<string, PluralizedString> result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.File, cultureInfo, scope);
+            if (result == null)
+            {
+                result = new Dictionary<string, PluralizedString>();
+            }
+
+            return result;
         }       
     }
 }
