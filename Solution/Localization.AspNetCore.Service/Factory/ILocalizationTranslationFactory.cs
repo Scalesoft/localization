@@ -1,6 +1,6 @@
 ﻿using Localization.CoreLibrary.Manager;
 
-namespace Localization.Service.Factory
+namespace Localization.AspNetCore.Service.Factory
 {
     public interface ILocalizationTranslationFactory
     {

@@ -1,53 +1,61 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Exception;
+using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Logging;
+using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
+[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class NullDatabaseLocalization : ILocalizationManager
+    internal class NullDatabaseLocalizationManager : ILocalizationManager
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private const string NotSetMessage = "Database localization manager is not set.";
 
-        private LocalizedString LogAndThrowError()
+        private void LogNotSet()
         {
-            Logger.LogError(NotSetMessage);
-            throw new DatabaseLocalizationManagerException(NotSetMessage);
+            if (Logger.IsInformationEnabled())
+            {
+                Logger.LogInformation(NotSetMessage);
+            }
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
         {
-            return LogAndThrowError();
+            LogNotSet();
+            return null;
         }
 
         public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null,
             string scope = null)
         {
-            return LogAndThrowError();
+            LogNotSet();
+            return null;
         }
 
         public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null,
             string scope = null)
         {
-            return LogAndThrowError();
+            LogNotSet();
+            return null;
         }
 
         public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
         {
-            return LogAndThrowError();
+            LogNotSet();
+            return null;
         }
 
         public CultureInfo DefaultCulture()
         {
-            LogAndThrowError();
+            LogNotSet();
             return null;
         }
 
         public string DefaultScope()
         {
-            LogAndThrowError();
+            LogNotSet();
             return null;
         }
     }

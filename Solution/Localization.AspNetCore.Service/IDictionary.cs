@@ -3,7 +3,7 @@ using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
-namespace Localization.Service
+namespace Localization.AspNetCore.Service
 {
     public interface IDictionary
     {

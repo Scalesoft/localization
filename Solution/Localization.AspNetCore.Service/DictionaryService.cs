@@ -6,7 +6,7 @@ using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
-namespace Localization.Service
+namespace Localization.AspNetCore.Service
 {
     public class DictionaryService : ServiceBase, IDictionary
     {

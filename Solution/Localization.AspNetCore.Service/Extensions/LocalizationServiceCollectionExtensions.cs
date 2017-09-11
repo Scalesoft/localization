@@ -1,8 +1,7 @@
-﻿using System;
-using Localization.CoreLibrary.Manager;
+﻿using Localization.CoreLibrary.Manager;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Localization.Service.Extensions
+namespace Localization.AspNetCore.Service.Extensions
 {
     public static class LocalizationServiceCollectionExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Localization.Service
+namespace Localization.AspNetCore.Service
 {
     public abstract class ServiceBase
     {
