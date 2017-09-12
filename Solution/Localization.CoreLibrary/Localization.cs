@@ -91,7 +91,22 @@ namespace Localization.CoreLibrary
             m_instance = null;            
         }
 
+        private static IDictionaryFactory InitDictionaryFactory(IDictionaryFactory dictionaryFactory, IConfiguration configuration)
+        {
+            if (dictionaryFactory == null)
+            {
+                if (configuration.AutoLoadResources())
+                {
+                    dictionaryFactory = new JsonDictionaryFactory();
+                }
+                else
+                {
+                    dictionaryFactory = new EmptyDictionaryFactory();
+                }
+            }
 
+            return dictionaryFactory;
+        }
 
         /// <summary>
         /// Initializes FileLocalization library.
@@ -125,18 +140,8 @@ namespace Localization.CoreLibrary
                 throw new LocalizationLibraryException(libraryAlreadyInitMsg);
             }
 
-            //
-            if (dictionaryFactory == null)
-            {
-                if (configuration.AutoLoadResources())
-                {
-                    dictionaryFactory = new JsonDictionaryFactory();
-                }
-                else
-                {
-                    dictionaryFactory = new EmptyDictionaryFactory();
-                }                
-            }
+            //File dictionary factory
+            dictionaryFactory = InitDictionaryFactory(dictionaryFactory, configuration);
 
             //Db loc manager.
             ILocalizationManager databaseLocalizationManager;
@@ -219,6 +224,25 @@ namespace Localization.CoreLibrary
         }
 
         /// <summary>
+        /// Checks if configuration is valid.
+        /// </summary>
+        /// <param name="configuration">Configuration to check.</param>
+        private void CheckConfiguration(IConfiguration configuration)
+        {
+            if (!configuration.SupportedCultures().Contains(configuration.DefaultCulture()))
+            {
+                string defaultCultureErrorMsg = "Default language in configuration is not in supported languages.";
+                LocalizationLibraryException localizationLibraryException = new LocalizationLibraryException(defaultCultureErrorMsg);
+                if (Logger.IsErrorEnabled())
+                {
+                    Logger.LogError(defaultCultureErrorMsg, localizationLibraryException);
+                }
+
+                throw localizationLibraryException;
+            }
+        }
+
+        /// <summary>
         /// Private constructor.
         /// </summary>
         /// <param name="configuration">Library configuration instance.</param>
@@ -239,6 +263,8 @@ namespace Localization.CoreLibrary
 
             InitDictionaryManager(configuration, dictionaryFactory);
             InitLocalizationManager(configuration);
+
+            CheckConfiguration(configuration);
             m_configuration = configuration;
 
             ILocalizationManager autoLocalizationManager 

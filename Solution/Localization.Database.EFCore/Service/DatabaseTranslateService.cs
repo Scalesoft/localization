@@ -145,8 +145,11 @@ namespace Localization.Database.EFCore.Service
                         {
                             if (cultureHierarchyDao.IsCultureReferencing(cultureEntityA, defaultCultureEntity))
                             {
-                                cultureHierarchyDao.MakeCultureReference(cultureEntityB, defaultCultureEntity, 2);
-                                ((DbContext)DbContext).SaveChanges();
+                                if (!cultureHierarchyDao.IsCultureReferencing(cultureEntityB, defaultCultureEntity))
+                                {
+                                    cultureHierarchyDao.MakeCultureReference(cultureEntityB, defaultCultureEntity, 2);
+                                    ((DbContext)DbContext).SaveChanges();
+                                }                               
                             }                        
                         }
                     }
