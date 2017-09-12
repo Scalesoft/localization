@@ -18,9 +18,6 @@ namespace Localization.CoreLibrary.Tests.Util
             IConfiguration configuration = configurationReader.ReadConfiguration();
 
             Assert.AreEqual(@"localization", configuration.BasePath());
-            Assert.AreEqual("", configuration.DbSource());
-            Assert.AreEqual("bla", configuration.DbUser());
-            Assert.AreEqual("kla", configuration.DbPassword());
 
             Assert.AreEqual(3, configuration.SupportedCultures().Count);
             Assert.AreEqual(new CultureInfo("cs"), configuration.SupportedCultures()[0]);

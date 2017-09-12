@@ -28,9 +28,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> {"en", "es"};
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -47,9 +44,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -77,9 +71,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -103,9 +94,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
             configuration.AutoLoadResources = true;
 
@@ -139,9 +127,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
             configuration.AutoLoadResources = true;
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
 
@@ -181,9 +166,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
             configuration.AutoLoadResources = false;
             configuration.FirstAutoTranslateResource = LocTranslationSource.File.ToString();

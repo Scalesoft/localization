@@ -22,17 +22,23 @@ namespace Localization.Database.EFCore.Dao.Impl
 
         public bool IsCultureReferencing(Culture culture, Culture parentCulture)
         {
-            return DbSet.Any(p => p.LevelProperty != 0 && p.Culture.Name == culture.Name && p.ParentCulture.Name == parentCulture.Name);
+            return DbSet.Any(p => p.Culture.Name == culture.Name && p.ParentCulture.Name == parentCulture.Name);
         }
 
-        public void MakeCultureSelfReferencing(Culture culture)
+        public bool MakeCultureSelfReferencing(Culture culture)
         {
-            Create(new CultureHierarchy()
+            CultureHierarchy newCultureHierarchy = Create(new CultureHierarchy()
             {
                 Culture = culture,
                 ParentCulture = culture,
                 LevelProperty = 0,          
             });
+            if (newCultureHierarchy == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void MakeCultureReference(Culture culture, Culture parentCulture, byte level)

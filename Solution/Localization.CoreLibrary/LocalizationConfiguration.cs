@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Util;
@@ -9,7 +10,7 @@ namespace Localization.CoreLibrary
     public sealed class LocalizationConfiguration : IConfiguration
     {
         private readonly Configuration m_configuration;
-        private IList<CultureInfo> m_supportedCultures;
+        private IImmutableList<CultureInfo> m_supportedCultures;
 
 
         public LocalizationConfiguration()
@@ -21,11 +22,7 @@ namespace Localization.CoreLibrary
         {
             m_configuration = configuration;
 
-            m_supportedCultures = new List<CultureInfo>();
-            foreach (var cultureName in configuration.SupportedCultures)
-            {
-                m_supportedCultures.Add(new CultureInfo(cultureName));
-            }
+            m_supportedCultures = SupportedCultures();
         }
 
         public string BasePath()
@@ -33,12 +30,17 @@ namespace Localization.CoreLibrary
             return m_configuration.BasePath;
         }
 
-        public IList<CultureInfo> SupportedCultures()
+        public IImmutableList<CultureInfo> SupportedCultures()
         {
-            m_supportedCultures = new List<CultureInfo>();
-            foreach (var cultureName in m_configuration.SupportedCultures)
+            if (m_supportedCultures == null)
             {
-                m_supportedCultures.Add(new CultureInfo(cultureName));
+                IList<CultureInfo> supportedCultures = new List<CultureInfo>();
+                foreach (var cultureName in m_configuration.SupportedCultures)
+                {
+                    supportedCultures.Add(new CultureInfo(cultureName));
+                }
+
+                m_supportedCultures = supportedCultures.ToImmutableList();
             }
 
             return m_supportedCultures;
@@ -82,21 +84,6 @@ namespace Localization.CoreLibrary
             return firstAutoTranslateResourceEnum;
         }
 
-        public string DbSource()
-        {
-            return m_configuration.DbSource;
-        }
-
-        public string DbUser()
-        {
-            return m_configuration.DbUser;
-        }
-
-        public string DbPassword()
-        {
-            return m_configuration.DbPassword;
-        }
-
         public LocalizationConfiguration SetBasePath(string basePath)
         {
             m_configuration.BasePath = basePath;
@@ -120,27 +107,6 @@ namespace Localization.CoreLibrary
         public LocalizationConfiguration SetDefaultCulture(CultureInfo defaultCulture)
         {
             m_configuration.DefaultCulture = defaultCulture.ToString();
-
-            return this;
-        }
-
-        public LocalizationConfiguration SetDbSource(string dbSource)
-        {
-            m_configuration.DbSource = dbSource;
-
-            return this;
-        }
-
-        public LocalizationConfiguration SetDbUser(string dbUser)
-        {
-            m_configuration.DbUser = dbUser;
-
-            return this;
-        }
-
-        public LocalizationConfiguration SetDbPass(string dbPass)
-        {
-            m_configuration.DbPassword = dbPass;
 
             return this;
         }
@@ -176,10 +142,6 @@ namespace Localization.CoreLibrary
             public string TranslationFallbackMode { get; set; }
             public bool AutoLoadResources { get; set; }
             public string FirstAutoTranslateResource { get; set; }
-
-            public string DbSource { get; set; }
-            public string DbUser { get; set; }
-            public string DbPassword { get; set; }
         }
     }
 }

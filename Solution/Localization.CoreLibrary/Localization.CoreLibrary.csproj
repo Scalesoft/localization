@@ -17,4 +17,10 @@
     <ProjectReference Include="..\Localization.Database\Localization.Database.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\..\..\Users\jirip\.nuget\packages\system.collections.immutable\1.3.0\lib\netstandard1.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

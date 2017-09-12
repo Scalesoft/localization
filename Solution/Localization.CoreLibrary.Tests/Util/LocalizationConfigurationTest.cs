@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Localization.CoreLibrary.Tests.Util
@@ -24,28 +24,20 @@ namespace Localization.CoreLibrary.Tests.Util
                 new LocalizationConfiguration()
                     .SetBasePath("/localizationfolder")
                     .SetSupportedCultures(supportedCultures)
-                    .SetDefaultCulture(defaultCulture)
-                    .SetDbSource("mysql://localhost:3306/texty")
-                    .SetDbUser("SA")
-                    .SetDbPass("SA");
+                    .SetDefaultCulture(defaultCulture);
 
             IConfiguration configuration = localizationConfiguration;
 
 
             Assert.AreEqual("/localizationfolder", configuration.BasePath());
 
-            IList<CultureInfo> takenCulture = configuration.SupportedCultures();
+            IImmutableList<CultureInfo> takenCulture = configuration.SupportedCultures();
             Assert.AreEqual(3, takenCulture.Count);
             Assert.AreEqual(new CultureInfo("cs"), takenCulture[0]);
             Assert.AreEqual(new CultureInfo("en"), takenCulture[1]);
             Assert.AreEqual(new CultureInfo("es"), takenCulture[2]);
 
             Assert.AreEqual(new CultureInfo("cs"), configuration.DefaultCulture());
-
-
-            Assert.AreEqual("mysql://localhost:3306/texty", configuration.DbSource());
-            Assert.AreEqual("SA", configuration.DbUser());
-            Assert.AreEqual("SA", configuration.DbPassword());
         }
 
 

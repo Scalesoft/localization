@@ -22,9 +22,6 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
                     BasePath = @"localization",
                     DefaultCulture = "cs",
                     SupportedCultures = new List<string> {"cs", "en", "es"},
-                    DbSource = "vla",
-                    DbUser = "bla",
-                    DbPassword = "kla"
                 };
 
             Localization.AttachLogger(new LoggerFactory());
@@ -44,9 +41,6 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
                     BasePath = @"localization",
                     DefaultCulture = "cs",
                     SupportedCultures = new List<string> { "cs", "en", "es" },
-                    DbSource = "vla",
-                    DbUser = "bla",
-                    DbPassword = "kla"
                 };
 
             Localization.AttachLogger(new LoggerFactory());

@@ -28,9 +28,6 @@ namespace Localization.CoreLibrary.Tests.Manager
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
             configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 

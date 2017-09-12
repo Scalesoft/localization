@@ -28,11 +28,10 @@ namespace Localization.Database.EFCore.Dao.Impl
             return result.DefaultIfEmpty().First();
         }
 
-        public IStaticText[] FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)
+        public StaticText[] FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)
         {
             StaticText[] result = DbSet
                 .Where(w => w.Culture == culture && w.DictionaryScope == dictionaryScope)
-                .DefaultIfEmpty()
                 .ToArray();
 
             return result;

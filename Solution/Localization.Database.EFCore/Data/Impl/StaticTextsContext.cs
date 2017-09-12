@@ -8,9 +8,7 @@ namespace Localization.Database.EFCore.Data.Impl
     {
         public StaticTextsContext(DbContextOptions options) : base(options)
         {
-            
-
-
+            //Should be empty
         }
 
         public DbSet<Culture> Culture { get; set; }

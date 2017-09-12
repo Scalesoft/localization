@@ -16,9 +16,6 @@ namespace Localization.CoreLibrary.Tests.Translator
         {
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
-            configuration.DbPassword = @"SA";
-            configuration.DbSource = @"localhost";
-            configuration.DbUser = @"SA";
             configuration.DefaultCulture = "cs";
             configuration.SupportedCultures = new List<string>() {"en", "hu", "zh"};
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString();

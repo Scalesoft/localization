@@ -13,6 +13,6 @@ namespace Localization.CoreLibrary.Database
 
         LocalizedString DatabaseTranslateConstant(string text, CultureInfo cultureInfo, string scope);
 
-        void CheckCultures();
+        void CheckCulturesInDatabase();
     }
 }

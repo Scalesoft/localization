@@ -8,6 +8,7 @@ namespace Localization.Database.EFCore.Dao.Impl
     {
         public CultureDao(DbSet<Culture> dbSet) : base(dbSet)
         {
+            //Should be empty.
         }
 
         public Culture FindByName(string name)
@@ -15,9 +16,9 @@ namespace Localization.Database.EFCore.Dao.Impl
             return DbSet.FirstOrDefault(c => c.Name == name);
         }
 
-        public bool CultureExist(Culture culture)
+        public bool CultureExist(string cultureName)
         {
-            return DbSet.Any(p => p.Name == culture.Name);
+            return DbSet.Any(p => p.Name == cultureName);
         }
     }
 }

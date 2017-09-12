@@ -147,7 +147,7 @@ namespace Localization.CoreLibrary
             else
             {
                 IDatabaseTranslateService dbTranslateService = databaseServiceFactory.CreateTranslateService(configuration, loggerFactory);
-                dbTranslateService.CheckCultures();
+                dbTranslateService.CheckCulturesInDatabase();
 
                 databaseLocalizationManager = new DatabaseLocalizationManager(configuration, dbTranslateService);                   
             }

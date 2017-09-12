@@ -23,9 +23,6 @@ namespace Localization.CoreLibrary.Tests
             configuration.DefaultCulture = defaultCulture;
             configuration.SupportedCultures = new List<string> { supportedCulture, "es" };
 
-            configuration.DbSource = @"Server=ENUMERATIO;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
             configuration.AutoLoadResources = true;
             configuration.FirstAutoTranslateResource = LocTranslationSource.File.ToString();
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);

@@ -30,5 +30,6 @@ namespace Localization.Database.EFCore.Dao.Impl
         {
             DbSet.Remove(t);
         }
+        
     }
 }

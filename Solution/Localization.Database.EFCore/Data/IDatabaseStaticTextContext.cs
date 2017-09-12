@@ -13,7 +13,5 @@ namespace Localization.Database.EFCore.Data
         DbSet<IntervalText> IntervalText { get; set; }
         DbSet<PluralizedStaticText> PluralizedStaticText { get; set; }
         DbSet<StaticText> StaticText { get; set; }
-
-
     }
 }
