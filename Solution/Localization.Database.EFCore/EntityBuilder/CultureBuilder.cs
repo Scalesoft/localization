@@ -52,7 +52,7 @@ namespace Localization.Database.EFCore.EntityBuilder
             {
                 new CultureInfo(cultureName);
             }
-            catch (CultureNotFoundException e)
+            catch (CultureNotFoundException)
             {
                 throw new BuilderException("Culture is not supported.");
             }

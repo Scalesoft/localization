@@ -89,7 +89,7 @@ namespace Localization.CoreLibrary.Tests.Manager
             {
                 LocalizedString sNope3 = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
             }
-            catch (TranslateException e)
+            catch (TranslateException)
             {
                 exceptionThrown = true;
             }

@@ -12,9 +12,9 @@ namespace Localization.AspNetCore.Service
     {
         private readonly IAutoDictionaryManager m_dictionaryManager;
 
-        public DictionaryService(IAutoDictionaryManager dictionaryManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public DictionaryService(/*IAutoDictionaryManager dictionaryManager,*/ IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
-            m_dictionaryManager = dictionaryManager;
+            m_dictionaryManager = Localization.CoreLibrary.Localization.Dictionary;
         }
 
         public Dictionary<string, LocalizedString> GetDictionary(string scope = null,

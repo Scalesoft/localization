@@ -59,7 +59,7 @@ namespace Localization.CoreLibrary.Tests.Pluralization
             {
                 PluralizationInterval pA = new PluralizationInterval(2, 0);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 exceptionThrown = true;
             }

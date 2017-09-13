@@ -10,10 +10,10 @@ namespace Localization.AspNetCore.Service
     {       
         private readonly IAutoLocalizationManager m_localizationManager;
 
-        public LocalizationService(IAutoLocalizationManager localizationManager, IHttpContextAccessor httpContextAccessor)
+        public LocalizationService(/*IAutoLocalizationManager localizationManager,*/ IHttpContextAccessor httpContextAccessor)
             : base(httpContextAccessor)
         {
-            m_localizationManager = localizationManager;
+            m_localizationManager = Localization.CoreLibrary.Localization.Translator;
         }
 
         private CultureInfo RequestCulture()

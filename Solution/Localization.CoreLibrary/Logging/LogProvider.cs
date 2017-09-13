@@ -15,7 +15,7 @@ namespace Localization.CoreLibrary.Logging
             m_loggerFactory = loggerFactory;
         }
 
-        [CLSCompliant(false)]
+        //[CLSCompliant(false)]
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static ILogger GetCurrentClassLogger()
         {

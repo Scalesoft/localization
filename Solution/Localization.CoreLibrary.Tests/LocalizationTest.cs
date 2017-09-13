@@ -54,7 +54,7 @@ namespace Localization.CoreLibrary.Tests
             {
                 Localization.Init(localizationConfiguration);
             }
-            catch (LocalizationLibraryException e)
+            catch (LocalizationLibraryException)
             {
                 exceptionThrown = true;
             }

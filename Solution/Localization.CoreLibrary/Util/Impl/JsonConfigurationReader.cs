@@ -29,7 +29,7 @@ namespace Localization.CoreLibrary.Util.Impl
             LocalizationConfiguration.Configuration configuration;
 
             using (Stream stream = new FileStream(m_configurationFilePath, FileMode.Open))
-            using (StreamReader streamReader = new StreamReader(stream, Encoding.Unicode))
+            using (StreamReader streamReader = new StreamReader(stream, Encoding.UTF8))
             using (JsonReader jsonReader = new JsonTextReader(streamReader))
             {
                 configuration = serializer.Deserialize<LocalizationConfiguration.Configuration>(jsonReader);

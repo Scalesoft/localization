@@ -19,9 +19,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.1.2" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Localization.AspNetCore.Service\Localization.AspNetCore.Service.csproj" />
     <ProjectReference Include="..\Localization.CoreLibrary\Localization.CoreLibrary.csproj" />
     <ProjectReference Include="..\Localization.Database.EFCore\Localization.Database.EFCore.csproj" />

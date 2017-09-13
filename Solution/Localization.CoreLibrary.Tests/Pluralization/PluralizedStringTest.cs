@@ -26,7 +26,7 @@ namespace Localization.CoreLibrary.Tests.Pluralization
             {
                 PluralizedString psA = new PluralizedString(null);
             }
-            catch (PluralizedDefaultStringException e)
+            catch (PluralizedDefaultStringException)
             {
                 exceptionThrown = true;
             }
@@ -90,7 +90,7 @@ namespace Localization.CoreLibrary.Tests.Pluralization
             {
                 psA.Add(new PluralizationInterval(1, 2), new LocalizedString("let", "rok"));
             }
-            catch (PluralizedStringIntervalOverlapException e)
+            catch (PluralizedStringIntervalOverlapException)
             {
                 exceptionThrown = true;
             }
