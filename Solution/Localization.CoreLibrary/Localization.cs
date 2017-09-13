@@ -43,6 +43,11 @@ namespace Localization.CoreLibrary
             return m_configuration.DefaultCulture();
         }
 
+        CultureInfo[] IAutoLocalizationManager.SupportedCultures()
+        {
+            return SupportedCultures();
+        }
+
         /// <summary>
         /// Returns Translator.
         /// </summary>

@@ -1,10 +1,12 @@
-﻿using Localization.CoreLibrary.Util;
+﻿using System.Globalization;
+using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
 {
     public interface ILocalization
     {
+        CultureInfo[] SupportedCultures();
 
         //Explicit calls
         LocalizedString Translate(string text, string scope, LocTranslationSource translationSource);

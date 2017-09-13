@@ -30,6 +30,11 @@ namespace Localization.AspNetCore.Service
         }
 
         //Explicit calls
+        public CultureInfo[] SupportedCultures()
+        {
+            return m_localizationManager.SupportedCultures();
+        }
+
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
         {
             CultureInfo requestCulture = RequestCulture();
