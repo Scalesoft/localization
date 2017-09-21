@@ -42,7 +42,7 @@ namespace Localization.AspNetCore.Service
             return m_localizationManager.Translate(translationSource, text, requestCulture, scope);
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters, string scope, LocTranslationSource translationSource)
+        public LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource)
         {
             CultureInfo requestCulture = RequestCulture();
 
@@ -69,7 +69,7 @@ namespace Localization.AspNetCore.Service
             return Translate(text, scope, LocTranslationSource.Auto);
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters, string scope)
+        public LocalizedString TranslateFormat(string text, object[] parameters, string scope)
         {
             return TranslateFormat(text, parameters, scope, LocTranslationSource.Auto);
         }
@@ -92,7 +92,7 @@ namespace Localization.AspNetCore.Service
             return Translate(text, null, LocTranslationSource.Auto);
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters, LocTranslationSource translationSource)
+        public LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource)
         {
             return TranslateFormat(text, parameters, null, LocTranslationSource.Auto);
         }
@@ -114,7 +114,7 @@ namespace Localization.AspNetCore.Service
             return Translate(text, null, LocTranslationSource.Auto);
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters)
+        public LocalizedString TranslateFormat(string text, object[] parameters)
         {
             return TranslateFormat(text, parameters, null, LocTranslationSource.Auto);
         }

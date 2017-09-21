@@ -44,7 +44,7 @@ namespace Localization.CoreLibrary.Pluralization
         /// <exception cref="NullReferenceException">Is thrown if obj is null.</exception>
         public bool IsOverlaping(PluralizationInterval obj)
         {
-            Guard.ArgumentNull(nameof(obj), obj, Logger);
+            Guard.ArgumentNotNull(nameof(obj), obj, Logger);
 
             return this.m_x <= obj.m_y && obj.m_x <= this.m_y;
         }

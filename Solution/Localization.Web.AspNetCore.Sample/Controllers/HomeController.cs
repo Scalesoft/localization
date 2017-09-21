@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Localization.AspNetCore.Service;
+using Localization.Web.AspNetCore.Sample.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : LoginController
     {
         private readonly ILocalization m_localizationManager;
         private readonly IDictionary m_dictionaryManager;
@@ -39,16 +42,29 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
             return View();
         }
 
+        //
+        // GET: /Account/Login
+        [AllowAnonymous]
+        //[RequireHttps]
+        public IActionResult Login(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
         public IActionResult About()
         {
 
             return View();
         }
 
+        
+
         public IActionResult Contact()
         {
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
-            return Json(m_dictionaryManager.GetDictionary("home"));
+            //return Json(m_dictionaryManager.GetDictionary("home"));
+            return View();
         }
 
         public IActionResult Error()
@@ -59,6 +75,8 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             RequestCulture requestCulture = new RequestCulture(culture);//TODO: Validation?
+            HttpContext.Request.
+
 
             HttpContext.Response.Cookies.Append(
                 "Localization.Culture",

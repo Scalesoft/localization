@@ -78,8 +78,9 @@ namespace Localization.CoreLibrary.Manager.Impl
 
             foreach (ILocalizationDictionary localizationDictionary in dictionaries)
             {
-                if (!localizationDictionary.CultureInfo().IsNeutralCulture)
+                if (!localizationDictionary.CultureInfo().IsNeutralCulture && localizationDictionary.CultureInfo().Name != m_configuration.DefaultCulture().Name)
                 {
+                    //Neni neutral a neni default;
                     m_dictionaries.Add(localizationDictionary);
                 }
             }

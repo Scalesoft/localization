@@ -70,5 +70,7 @@ namespace Localization.CoreLibrary.Dictionary
         /// </summary>
         /// <returns>True if this dictionary is leaf in hierarchy.</returns>
         bool IsLeaf();
+
+        bool IsRoot { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace Localization.CoreLibrary.Pluralization
         /// <exception cref="ArgumentNullException">If defaultLocalizedString is null.</exception>
         public PluralizedString(LocalizedString defaultLocalizedString)
         {
-            Guard.ArgumentNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
+            Guard.ArgumentNotNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
 
             m_defaultLocalizedString = defaultLocalizedString; 
             m_pluralized = new Dictionary<PluralizationInterval, LocalizedString>();
@@ -79,7 +79,7 @@ namespace Localization.CoreLibrary.Pluralization
         /// <returns>True if overlap was found.</returns>
         private bool CheckOverlaping(PluralizationInterval pluralizationInterval)
         {
-            Guard.ArgumentNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
+            Guard.ArgumentNotNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
 
             Dictionary<PluralizationInterval, LocalizedString>.KeyCollection pluralizedKeys = m_pluralized.Keys;
             foreach (PluralizationInterval pluralizedKey in pluralizedKeys)

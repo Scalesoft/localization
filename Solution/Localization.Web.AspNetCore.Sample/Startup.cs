@@ -1,6 +1,8 @@
 ﻿using System;
 using Localization.AspNetCore.Service.Extensions;
+using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
+using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Factory;
+using Microsoft.Extensions.Localization;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -45,9 +48,18 @@ namespace Localization.Web.AspNetCore.Sample
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
 
+            services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .AddDataAnnotationsLocalization(options =>
+            {
+                options.DataAnnotationLocalizerProvider = (type, factory) =>
+                {
+                    return factory
+                        .Create(type.Name, LocTranslationSource.File.ToString());
+                };
+            });
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

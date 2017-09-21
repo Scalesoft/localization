@@ -32,6 +32,8 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private JObject m_jsonDictionary;
         private JObject m_jsonPluralizedDictionary;
 
+        private bool m_root;
+
         private Dictionary<string, LocalizedString> m_dictionary;
         private Dictionary<string, PluralizedString> m_pluralizedDictionary;
         private Dictionary<string, LocalizedString> m_constnantsDictionary;
@@ -346,6 +348,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             return false;
         }
+
+        bool ILocalizationDictionary.IsRoot { get; set; }
+
 
         /// <summary>
         /// Returns true if json file was loaded.

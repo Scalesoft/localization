@@ -68,7 +68,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public bool IsLeaf()
         {
-            return true;
+            return false;
         }
+
+        bool ILocalizationDictionary.IsRoot { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             return null;
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null,
+        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null,
             string scope = null)
         {
             LogNotSet();

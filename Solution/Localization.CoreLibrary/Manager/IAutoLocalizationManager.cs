@@ -10,7 +10,7 @@ namespace Localization.CoreLibrary.Manager
             CultureInfo cultureInfo = null, string scope = null);
 
         LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, 
-            string[] parameters, CultureInfo cultureInfo = null, string scope = null);
+            object[] parameters, CultureInfo cultureInfo = null, string scope = null);
 
         LocalizedString TranslatePluralization(LocTranslationSource translationSource, string text, 
             int number, CultureInfo cultureInfo = null, string scope = null);

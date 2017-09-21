@@ -360,7 +360,7 @@ namespace Localization.CoreLibrary
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, string[] parameters,
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, object[] parameters,
             CultureInfo cultureInfo = null, string scope = null)
         {
             LocalizedString result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);

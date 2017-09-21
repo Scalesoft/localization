@@ -86,7 +86,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
         {
             LocalizedString unparametrizedTranslation = Translate(text, cultureInfo, scope);
             string parametrizedTranslationStrng = string.Format(unparametrizedTranslation.Value, parameters);

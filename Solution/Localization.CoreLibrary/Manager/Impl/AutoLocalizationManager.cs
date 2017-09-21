@@ -77,7 +77,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             return result;
         }
 
-        public LocalizedString TranslateFormat(string text, string[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
         {
             ILocalizationManager localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource());
 
