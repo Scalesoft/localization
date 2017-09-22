@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Localization.Database.EFCore.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,9 @@ namespace Localization.Database.EFCore.Dao.Impl
             return DbSet.FirstOrDefault(c => c.Name == name);
         }
 
-        public bool CultureExist(string cultureName)
+        public async Task<bool> CultureExist(string cultureName)
         {
-            return DbSet.Any(p => p.Name == cultureName);
+            return await DbSet.AnyAsync(p => p.Name == cultureName);
         }
     }
 }

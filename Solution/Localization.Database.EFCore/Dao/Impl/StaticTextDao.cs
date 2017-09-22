@@ -9,6 +9,7 @@ namespace Localization.Database.EFCore.Dao.Impl
     {
         public StaticTextDao(DbSet<StaticText> dbSet) : base(dbSet)
         {
+            //Should be empty.
         }
 
         public IStaticText FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope, DbSet<CultureHierarchy> cultureHierarchies)

@@ -8,6 +8,7 @@ namespace Localization.Database.EFCore.Dao.Impl
     {
         public DictionaryScopeDao(DbSet<DictionaryScope> dbSet) : base(dbSet)
         {
+            //Should be empty.
         }
 
         public DictionaryScope FindByName(string name)

@@ -8,6 +8,7 @@ namespace Localization.Database.EFCore.Dao.Impl
     {
         public PluralizedStaticTextDao(DbSet<PluralizedStaticText> dbSet) : base(dbSet)
         {
+            //Should be empty.
         }
 
         public PluralizedStaticText FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope)

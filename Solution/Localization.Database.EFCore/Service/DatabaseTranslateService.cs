@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Util;
 using Localization.Database.Abstractions.Entity;
@@ -27,16 +28,16 @@ namespace Localization.Database.EFCore.Service
         /// <summary>
         /// Checks if cultures from configuration file are in database.
         /// </summary>
-        public void CheckCulturesInDatabase()
+        public async void CheckCulturesInDatabase()
         {
             IImmutableList<CultureInfo> supportedCultures = Configuration.SupportedCultures();
             foreach (CultureInfo supportedCulture in supportedCultures)
             {
-                CreateCultureInDatabase(supportedCulture);
-                CreateCultureHierarchySelfReference(supportedCulture);
+                await CreateCultureInDatabase(supportedCulture);
+                await CreateCultureHierarchySelfReference(supportedCulture);
             }
             
-            CreateCultureHierarchy(supportedCultures, Configuration.DefaultCulture());
+            await CreateCultureHierarchy(supportedCultures, Configuration.DefaultCulture());
         }
 
         /// <summary>
@@ -44,13 +45,14 @@ namespace Localization.Database.EFCore.Service
         /// </summary>
         /// <param name="cultureInfo">Culture to create</param>
         /// <returns>False if culture is already in database.</returns>
-        private bool CreateCultureInDatabase(CultureInfo cultureInfo)
+        private async Task<bool> CreateCultureInDatabase(CultureInfo cultureInfo)
         {
             string cultureName = cultureInfo.Name;
 
             CultureDao cultureDao = new CultureDao(DbContext.Culture);
 
-            if (!cultureDao.CultureExist(cultureName))
+            bool cultureExist = await cultureDao.CultureExist(cultureName);
+            if (!cultureExist)
             {
                 Culture culture = new CultureBuilder().Name(cultureName).Build();
 
@@ -66,20 +68,22 @@ namespace Localization.Database.EFCore.Service
         /// Creates for given culture self reference in culture hierarchy tree with level 0 (if not already exists).
         /// </summary>
         /// <param name="cultureInfo">Culture</param>
-        private void CreateCultureHierarchySelfReference(CultureInfo cultureInfo)
+        private async Task CreateCultureHierarchySelfReference(CultureInfo cultureInfo)
         {
             CultureDao cultureDao = new CultureDao(DbContext.Culture);
             Culture culture = cultureDao.FindByName(cultureInfo.Name);
 
             CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(DbContext.CultureHierarchy);
-            if (!cultureHierarchyDao.IsCultureSelfReferencing(culture))
+
+            bool isCultureSelfReferencing = await cultureHierarchyDao.IsCultureSelfReferencing(culture);
+            if (!isCultureSelfReferencing)
             {
                 cultureHierarchyDao.MakeCultureSelfReferencing(culture);
                 ((DbContext)DbContext).SaveChanges();
             }
         }
 
-        private void CreateCultureHierarchy(IImmutableList<CultureInfo> supportedCultures, CultureInfo defaultCulture)
+        private async Task CreateCultureHierarchy(IImmutableList<CultureInfo> supportedCultures, CultureInfo defaultCulture)
         {
             CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(DbContext.CultureHierarchy);
             CultureDao cultureDao = new CultureDao(DbContext.Culture);
@@ -103,8 +107,10 @@ namespace Localization.Database.EFCore.Service
                     Culture cultureEntityB = cultureDao.FindByName(supportedCultureB.Name);
 
                     if (supportedCultureB.Parent.Equals(supportedCultureA))
-                    {                      
-                        if (!cultureHierarchyDao.IsCultureReferencing(cultureEntityB, cultureEntityA))
+                    {
+                        bool isCultureBReferencingA =
+                            await cultureHierarchyDao.IsCultureReferencing(cultureEntityB, cultureEntityA);
+                        if (!isCultureBReferencingA)
                         {
                             cultureHierarchyDao.MakeCultureReference(cultureEntityB, cultureEntityA, 1);
                             ((DbContext)DbContext).SaveChanges();
@@ -118,7 +124,10 @@ namespace Localization.Database.EFCore.Service
                 if (supportedCulture.IsNeutralCulture)
                 {
                     Culture cultureEntity = cultureDao.FindByName(supportedCulture.Name);
-                    if (!cultureHierarchyDao.IsCultureReferencing(cultureEntity, defaultCultureEntity))
+
+                    bool isCultureReferencingDefaultCulture =
+                        await cultureHierarchyDao.IsCultureReferencing(cultureEntity, defaultCultureEntity);
+                    if (!isCultureReferencingDefaultCulture)
                     {
                         cultureHierarchyDao.MakeCultureReference(cultureEntity, defaultCultureEntity, 1);
                         ((DbContext)DbContext).SaveChanges();
@@ -143,9 +152,14 @@ namespace Localization.Database.EFCore.Service
                     {
                         if (cultureEntityA.Name != defaultCultureEntity.Name)
                         {
-                            if (cultureHierarchyDao.IsCultureReferencing(cultureEntityA, defaultCultureEntity))
+
+                            bool isCultureAReferencingDefaultCulture =
+                                await cultureHierarchyDao.IsCultureReferencing(cultureEntityA, defaultCultureEntity);
+                            if(isCultureAReferencingDefaultCulture)
                             {
-                                if (!cultureHierarchyDao.IsCultureReferencing(cultureEntityB, defaultCultureEntity))
+                                bool isCultureBReferencingDefaultCulture =
+                                    await cultureHierarchyDao.IsCultureReferencing(cultureEntityB, defaultCultureEntity);
+                                if (!isCultureBReferencingDefaultCulture)
                                 {
                                     cultureHierarchyDao.MakeCultureReference(cultureEntityB, defaultCultureEntity, 2);
                                     ((DbContext)DbContext).SaveChanges();
