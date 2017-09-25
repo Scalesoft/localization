@@ -4,7 +4,7 @@ namespace Localization.AspNetCore.Service
 {
     public abstract class ServiceBase
     {
-        protected const string CultureCookieName = "Localization.Culture";
+        public const string CultureCookieName = "Localization.Culture";
 
         protected readonly IHttpContextAccessor HttpContextAccessor;
 

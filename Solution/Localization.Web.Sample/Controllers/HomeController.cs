@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Localization.Core;
 
+
 namespace Localization.Web.Sample.Controllers
 {
     public class HomeController : Controller

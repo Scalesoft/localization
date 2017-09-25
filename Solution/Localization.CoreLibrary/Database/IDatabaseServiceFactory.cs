@@ -8,5 +8,7 @@ namespace Localization.CoreLibrary.Database
         IDatabaseTranslateService CreateTranslateService(IConfiguration configuration, ILoggerFactory loggerFactory);
 
         IDatabaseDictionaryService CreateDictionaryService(IConfiguration configuration, ILoggerFactory loggerFactory);
+
+        IDatabaseDynamicTextService CreateDatabaseDynamicTextService(IConfiguration configuration, ILoggerFactory loggerFactory);
     }
 }

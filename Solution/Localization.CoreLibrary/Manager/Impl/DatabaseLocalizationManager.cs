@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Database;
+using Localization.CoreLibrary.Entity;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
@@ -9,15 +10,17 @@ using Microsoft.Extensions.Logging;
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class DatabaseLocalizationManager : LocalizationManager, ILocalizationManager
+    internal class DatabaseLocalizationManager : LocalizationManager, ILocalizationManager, IDatabaseDynamicTextService
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         
         private readonly IDatabaseTranslateService m_dbTranslateService;
+        private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
-        public DatabaseLocalizationManager(IConfiguration configuration, IDatabaseTranslateService dbTranslateService) : base(configuration)
+        public DatabaseLocalizationManager(IConfiguration configuration, IDatabaseTranslateService dbTranslateService, IDatabaseDynamicTextService databaseDynamicTextService) : base(configuration)
         {
             m_dbTranslateService = dbTranslateService;
+            m_databaseDynamicTextService = databaseDynamicTextService;
 
             Check();
         }
@@ -25,7 +28,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         //TODO: Check if default culture and supported cultures from json config file are in DB. If not, new are created.
         private void Check()
         {
-
+            
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
@@ -96,6 +99,14 @@ namespace Localization.CoreLibrary.Manager.Impl
         }
 
 
-        
+        public DynamicText GetDynamicText(string name, string scope, CultureInfo cultureInfo)
+        {
+            return m_databaseDynamicTextService.GetDynamicText(name, scope, cultureInfo);
+        }
+
+        public DynamicText SaveDynamicText(DynamicText dynamicText)
+        {
+            return m_databaseDynamicTextService.SaveDynamicText(dynamicText);
+        }
     }
 }

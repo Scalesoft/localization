@@ -1,5 +1,6 @@
-﻿using Localization.CoreLibrary.Manager;
+﻿using Localization.AspNetCore.Service.Factory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service.Extensions
 {
@@ -7,11 +8,11 @@ namespace Localization.AspNetCore.Service.Extensions
     {
         public static void AddLocalizationService(this IServiceCollection services)
         {
-            //services.AddSingleton<IAutoLocalizationManager>(Localization.CoreLibrary.Localization.Translator);
-            //services.AddSingleton<IAutoDictionaryManager>(Localization.CoreLibrary.Localization.Dictionary);
+            services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
 
             services.AddTransient<ILocalization, LocalizationService>();
             services.AddTransient<IDictionary, DictionaryService>();
+            services.AddTransient<IDynamicText, DynamicText>();
         }
     }
 }

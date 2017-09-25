@@ -29,5 +29,12 @@ namespace Localization.Database.EFCore.Factory
 
             return new DatabaseDictionaryService(m_databaseStaticTextContext, configuration);
         }
+
+        public IDatabaseDynamicTextService CreateDatabaseDynamicTextService(IConfiguration configuration, ILoggerFactory loggerFactory)
+        {
+            LogProvider.AttachLoggerFactory(loggerFactory);
+
+            return new DatabaseDynamicTextService(m_databaseStaticTextContext, configuration);
+        }
     }
 }

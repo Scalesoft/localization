@@ -32,6 +32,7 @@ namespace Localization.CoreLibrary
         private readonly Dictionary<LocTranslationSource, IDictionaryManager> m_dictionaryManagers
             = new Dictionary<LocTranslationSource, IDictionaryManager>();
 
+        private IDatabaseDynamicTextService ddts;
 
         public static CultureInfo[] SupportedCultures()
         {
@@ -63,6 +64,9 @@ namespace Localization.CoreLibrary
         /// Returns Dictionary.
         /// </summary>
         public static IAutoDictionaryManager Dictionary => Instance();
+
+        public static IDatabaseDynamicTextService DynamicText =>
+            m_instance.Value.ddts;
 
         public static IDictionaryManager FileDictionary =>
             m_instance.Value.GetDictonaryManager(LocTranslationSource.File);
@@ -150,6 +154,7 @@ namespace Localization.CoreLibrary
 
             //Db loc manager.
             ILocalizationManager databaseLocalizationManager;
+            IDatabaseDynamicTextService dbDynamicTextService = null;
             if (databaseServiceFactory == null)
             {
                 databaseLocalizationManager = new NullDatabaseLocalizationManager();
@@ -159,7 +164,10 @@ namespace Localization.CoreLibrary
                 IDatabaseTranslateService dbTranslateService = databaseServiceFactory.CreateTranslateService(configuration, loggerFactory);
                 dbTranslateService.CheckCulturesInDatabase();
 
-                databaseLocalizationManager = new DatabaseLocalizationManager(configuration, dbTranslateService);                   
+                dbDynamicTextService =
+                    databaseServiceFactory.CreateDatabaseDynamicTextService(configuration, loggerFactory);
+                
+                databaseLocalizationManager = new DatabaseLocalizationManager(configuration, dbTranslateService, dbDynamicTextService);                  
             }
 
             //Db dic manager.
@@ -174,7 +182,7 @@ namespace Localization.CoreLibrary
             }
 
 
-            m_instance = new Lazy<Localization>(() => new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalizationManager, databaseDictionaryManager));
+            m_instance = new Lazy<Localization>(() => new Localization(configuration, loggerFactory, dictionaryFactory, databaseLocalizationManager, databaseDictionaryManager, dbDynamicTextService));
         }
 
         /// <summary>
@@ -255,11 +263,13 @@ namespace Localization.CoreLibrary
         /// <param name="loggerFactory">Logger factory instance.</param>
         /// <param name="databaseLocalizationManager"></param>
         /// <param name="databaseDictionaryManager"></param>
+        /// <param name="databaseDynamicTextService"></param>
         private Localization(IConfiguration configuration, 
             ILoggerFactory loggerFactory, 
             IDictionaryFactory dictionaryFactory,
             ILocalizationManager databaseLocalizationManager,
-            IDictionaryManager databaseDictionaryManager)
+            IDictionaryManager databaseDictionaryManager,
+            IDatabaseDynamicTextService databaseDynamicTextService)
         {
             AttachLogger(loggerFactory);           
 
@@ -281,6 +291,8 @@ namespace Localization.CoreLibrary
 
             m_localizationManagers.Add(LocTranslationSource.Auto, autoLocalizationManager);
             m_dictionaryManagers.Add(LocTranslationSource.Auto, autoDictionaryManager);
+
+            ddts = databaseDynamicTextService;
         }
 
         /// <summary>
