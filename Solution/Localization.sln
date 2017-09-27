@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Web", "Localization.Web\Localization.Web.csproj", "{3AC20830-C385-4F64-AFD9-4BCF5723547E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Old.Localization.Web", "Old.Localization.Web\Old.Localization.Web.csproj", "{3AC20830-C385-4F64-AFD9-4BCF5723547E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Web.Sample", "Localization.Web.Sample\Localization.Web.Sample.csproj", "{86438A22-E1F7-4035-A9B1-69626957040E}"
 EndProject
@@ -21,7 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.AspNetCore.Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Database.EFCore", "Localization.Database.EFCore\Localization.Database.EFCore.csproj", "{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Database.EFCore.Tests", "Localization.Database.EFCore.Tests\Localization.Database.EFCore.Tests.csproj", "{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Database.EFCore.Tests", "Localization.Database.EFCore.Tests\Localization.Database.EFCore.Tests.csproj", "{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Web", "Localization.Web\Localization.Web.csproj", "{A2F5B39A-97F4-4FA3-B656-3E1CD887D45F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Web.Script", "Localization.Web.Script\Localization.Web.Script.csproj", "{95D34F8D-3B71-4380-8885-A8857CC225C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F5B39A-97F4-4FA3-B656-3E1CD887D45F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F5B39A-97F4-4FA3-B656-3E1CD887D45F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F5B39A-97F4-4FA3-B656-3E1CD887D45F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F5B39A-97F4-4FA3-B656-3E1CD887D45F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95D34F8D-3B71-4380-8885-A8857CC225C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95D34F8D-3B71-4380-8885-A8857CC225C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95D34F8D-3B71-4380-8885-A8857CC225C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95D34F8D-3B71-4380-8885-A8857CC225C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

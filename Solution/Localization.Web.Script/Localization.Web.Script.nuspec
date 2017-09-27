@@ -1,0 +1,19 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Scalesoft.Localization.Web.Script</id>
+    <version>1.0.0</version>
+    <title>Localization for Web</title>
+    <authors>Jan Minařík | Jiří Poláček</authors>
+    <owners>Scalesoft s.r.o.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Library for .NET web localization</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Localization Web Scalesoft</tags>
+  </metadata>
+  <files>
+    <file src="localization.ts" target="content\Scripts" />
+    <file src="getCookie.ts" target="content\Scripts" />
+  </files>
+</package>
