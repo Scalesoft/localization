@@ -176,15 +176,16 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return result;
             }
 
-            IEnumerable<JToken> parts = m_jsonDictionary.SelectTokens("dictionary").Children<JToken>();
-            IEnumerator<JToken> enumerable = parts.GetEnumerator();
-            while (enumerable.MoveNext())
+            JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("dictionary");
+            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+
+            while (keyValueEnumerator.MoveNext())
             {
-                JToken token = enumerable.Current;
-                LocalizedString ls = new LocalizedString(token.Path.Split('.').Last(), token.Last.ToString());
+                KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
+                LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
                 m_dictionary.Add(ls.Name, ls);
             }
-            enumerable.Dispose();
+            keyValueEnumerator.Dispose();
 
             return m_dictionary;
         }
@@ -289,15 +290,16 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return result;
             }
 
-            IEnumerable<JToken> parts = m_jsonDictionary.SelectTokens("constants").Children<JToken>();
-            IEnumerator<JToken> enumerable = parts.GetEnumerator();
-            while (enumerable.MoveNext())
+            JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("constants");
+            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+
+            while (keyValueEnumerator.MoveNext())
             {
-                JToken token = enumerable.Current;
-                LocalizedString ls = new LocalizedString(token.Path.Split('.').Last(), token.Last.ToString());
+                KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
+                LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
                 m_constnantsDictionary.Add(ls.Name, ls);
             }
-            enumerable.Dispose();
+            keyValueEnumerator.Dispose();
 
             return m_constnantsDictionary;
         }
