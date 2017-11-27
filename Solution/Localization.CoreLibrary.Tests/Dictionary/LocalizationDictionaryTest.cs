@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Impl;
+using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -64,6 +65,37 @@ namespace Localization.CoreLibrary.Tests.Dictionary
 
             Assert.AreEqual(4, dictionaries.Count);
         }
+
+        [TestMethod]
+        public void DottedKeysTest()
+        {
+            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\obrazky\obrazky.cs.json");
+            CultureInfo dictionaryCultureInfo = localizationDictionary.CultureInfo();
+            ILocalizationDictionary childLocalizationDictionary = localizationDictionary.ChildDictionary();
+            string localizationDictionaryExtension = localizationDictionary.Extension();
+            bool localizationDictionaryIsRoot = localizationDictionary.IsRoot;
+            bool localizationDictionaryIsLeaf = localizationDictionary.IsLeaf();
+            Dictionary<string, LocalizedString> localizedStrings = localizationDictionary.List();
+            Dictionary<string, LocalizedString> localizedConstants = localizationDictionary.ListConstants();
+            Dictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            ILocalizationDictionary parentLocalizationDictionary = localizationDictionary.ParentDictionary();
+            string localizationDictionaryScope = localizationDictionary.Scope();
+
+            Assert.AreEqual("cs", dictionaryCultureInfo.Name);
+            Assert.AreEqual(null, childLocalizationDictionary);
+            Assert.AreEqual("json", localizationDictionaryExtension);
+            Assert.AreEqual(false, localizationDictionaryIsRoot);
+            Assert.AreEqual(true, localizationDictionaryIsLeaf);
+            Assert.AreEqual(1, localizedStrings.Count);
+            Assert.AreEqual(0, localizedConstants.Count);
+            Assert.AreEqual(0, localizedPluralizedStrings.Count);
+            Assert.AreEqual(null, parentLocalizationDictionary);
+            Assert.AreEqual("obrazky", localizationDictionaryScope);
+
+            Assert.AreEqual(true, localizedStrings.ContainsKey("header.jpg"));
+            Assert.AreEqual("header.cs.jpg", localizedStrings["header.jpg"]);
+        }
+
 
     }
 }

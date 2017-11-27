@@ -166,19 +166,24 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
 
             m_dictionary = new Dictionary<string, LocalizedString>();
-            Dictionary<string, LocalizedString> result = new Dictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
                 if (Logger.IsWarningEnabled())
                 {
                     Logger.LogWarning(NotLoadedMsg);
                 }
-                return result;
+                return m_dictionary;
             }
+            
 
             JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("dictionary");
-            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+            if (keyValueObjects == null)
+            {
+                return m_dictionary;
+            }
 
+
+            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
             while (keyValueEnumerator.MoveNext())
             {
                 KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
@@ -197,61 +202,73 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return m_pluralizedDictionary;
             }
 
-            Dictionary<string, PluralizedString> result = new Dictionary<string, PluralizedString>();
+            m_pluralizedDictionary = new Dictionary<string, PluralizedString>();
             if (!IsPluralizationLoaded())
             {
                 if (Logger.IsWarningEnabled())
                 {
                     Logger.LogWarning(NotLoadedPluralizedMsg);
                 }
-                return result;
+                return m_pluralizedDictionary;
             }
-            m_pluralizedDictionary = new Dictionary<string, PluralizedString>();
 
-            IEnumerable<JToken> parts = m_jsonPluralizedDictionary.SelectTokens("dictionary").Children<JToken>();
-            IEnumerator<JToken> enumerable = parts.GetEnumerator();
-            while (enumerable.MoveNext())
+            JObject keyValueObjects = (JObject)m_jsonPluralizedDictionary.SelectToken("dictionary");
+            if (keyValueObjects == null)
             {
-                JToken token = enumerable.Current;
-                LocalizedString defaultLocalizedString = new LocalizedString(token.Path.Split('.').Last(), token.First.First.Path.Split('.').Last());
-                PluralizedString ps = new PluralizedString(defaultLocalizedString);
-                foreach (var VARIABLE in token.First.First.First)
-                {
-                    JToken xToken = VARIABLE[0];
-                    JToken yToken = VARIABLE[1];
+                return m_pluralizedDictionary;
+            }
 
-                    Int32 x;
-                    if (xToken == null || xToken.Value<string>() == null)
+            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+            while (keyValueEnumerator.MoveNext())
+            {
+                KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
+                string key = keyValuePair.Key;
+                JToken value = keyValuePair.Value.First;
+
+                string defaultValue = ((JProperty)keyValuePair.Value.First).Name;
+                LocalizedString defaultLocalizedString = new LocalizedString(key, defaultValue);
+                PluralizedString pluralizedString = new PluralizedString(defaultLocalizedString);
+                JToken pluralizationTriples = value.First;
+                JEnumerable<JToken> childrenTriples = pluralizationTriples.Children();
+                IEnumerator<JToken> childrenTriplesEnumerator = childrenTriples.GetEnumerator();
+                while (childrenTriplesEnumerator.MoveNext())
+                {
+                    JToken childrenTripleJToken = childrenTriplesEnumerator.Current;
+                    JToken leftInterval = childrenTripleJToken[0];
+                    JToken rigthInterval = childrenTripleJToken[1];
+                    JToken stringValue = childrenTripleJToken[2];
+
+                    Int32 leftIntervalInteger;
+                    if (leftInterval == null || leftInterval.Value<string>() == null)
                     {
-                        x = Int32.MinValue;
+                        leftIntervalInteger = Int32.MinValue;
                     }
                     else
                     {
-                        bool xParsed = int.TryParse(xToken.ToString(), out x);
+                        bool xParsed = int.TryParse(leftInterval.ToString(), out leftIntervalInteger);
                         if (!xParsed)
                         {
                             string errorMessage = string.Format(@"The x value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
-                                xToken.ToString(), m_scope, m_cultureInfo.Name);
+                                leftInterval.ToString(), m_scope, m_cultureInfo.Name);
                             if (Logger.IsErrorEnabled())
                             {
                                 Logger.LogError(errorMessage);
                             }
                             throw new DictionaryFormatException(errorMessage);
                         }
-
                     }
-                    Int32 y;
-                    if (yToken == null || yToken.Value<string>() == null)
+                    Int32 rightIntervalInteger;
+                    if (rigthInterval == null || rigthInterval.Value<string>() == null)
                     {
-                        y = Int32.MaxValue;
+                        rightIntervalInteger = Int32.MaxValue;
                     }
                     else
                     {
-                        bool yParsed = int.TryParse(yToken.ToString(), out y);
+                        bool yParsed = int.TryParse(rigthInterval.ToString(), out rightIntervalInteger);
                         if (!yParsed)
                         {
                             string errorMessage = string.Format(@"The y value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
-                                yToken.ToString(), m_scope, m_cultureInfo.Name);
+                                rigthInterval.ToString(), m_scope, m_cultureInfo.Name);
                             if (Logger.IsErrorEnabled())
                             {
                                 Logger.LogError(errorMessage);
@@ -260,13 +277,16 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                         }
                     }
 
-                    string value = (string)VARIABLE[2];
-                    ps.Add(new PluralizationInterval(x, y), new LocalizedString(token.Path.Split('.').Last(), value));  
-                }
+                    string stringValueString = (string) stringValue;
+                    pluralizedString.Add(new PluralizationInterval(leftIntervalInteger, rightIntervalInteger), new LocalizedString(key, stringValueString));
 
-                m_pluralizedDictionary.Add(token.Path.Split('.').Last(), ps);
+                    
+                }
+                childrenTriplesEnumerator.Dispose();
+                m_pluralizedDictionary.Add(key, pluralizedString);
+                
             }
-            enumerable.Dispose();
+            keyValueEnumerator.Dispose();
 
             return m_pluralizedDictionary;
 
@@ -291,6 +311,12 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
 
             JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("constants");
+            if (keyValueObjects == null)
+            {
+                return m_constnantsDictionary;
+            }
+
+
             IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
 
             while (keyValueEnumerator.MoveNext())
