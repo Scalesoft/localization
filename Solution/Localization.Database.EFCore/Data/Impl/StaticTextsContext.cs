@@ -34,21 +34,6 @@ namespace Localization.Database.EFCore.Data.Impl
             modelBuilder.Entity<CultureHierarchy>()
                 .HasIndex(cultureHierarchy => new {cultureHierarchy.CultureId, cultureHierarchy.ParentCultureId})
                 .IsUnique(true);
-            /*
-            modelBuilder.Entity<CultureHierarchy>()
-                .HasOne(c => c.Culture)
-                .WithMany(d => d.CultureHierarchies)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey(c => c.CultureId)
-                .HasConstraintName("FK_CultureHierarchy(Culture)_Culture(Id)");
-
-            modelBuilder.Entity<CultureHierarchy>()
-                .HasOne(c => c.ParentCulture)
-                .WithMany(d => d.CultureParentHierarchies)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey(c => c.ParentCultureId)
-                .HasConstraintName("FK_CultureHierarchy(ParentCulture)_Culture(Id)");
-*/
 
             modelBuilder.Entity<CultureHierarchy>()
                 .Property(p => p.CultureId).HasColumnName("Culture");
@@ -70,14 +55,6 @@ namespace Localization.Database.EFCore.Data.Impl
                 .ToTable("BaseText")
                 .HasKey(baseText => baseText.Id).HasName("PK_BaseText(Id)");
 
-            /*
-            modelBuilder.Entity<BaseText>()
-                .HasOne(b => b.Culture)
-                .WithMany(c => c.CultureTexts)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasForeignKey(f => f.CultureId)
-                .HasConstraintName("FK_BaseText(Culture)_Culture(Id)");
-                */
             modelBuilder.Entity<ConstantStaticText>()
                 .ToTable("ConstantStaticText");
 
@@ -97,7 +74,6 @@ namespace Localization.Database.EFCore.Data.Impl
 
             modelBuilder.Entity<PluralizedStaticText>()
                 .ToTable("PluralizedStaticText");
-
 
             modelBuilder.Entity<StaticText>()
                 .ToTable("StaticText");

@@ -8,11 +8,14 @@ using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.Service
 {
     public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         private readonly IDatabaseStaticTextContext m_dbContext;
         
 
@@ -30,8 +33,11 @@ namespace Localization.Database.EFCore.Service
             StaticText value =
                 new StaticTextDao(m_dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope, m_dbContext.CultureHierarchy);
 
+            value.Culture = new CultureDao(m_dbContext.Culture).FindById(value.CultureId);      
+
             return new DynamicText()
             {
+                FallBack = value.Culture.Name != cultureInfo.Name,
                 Culture = value.Culture.Name,
                 DictionaryScope = value.DictionaryScope.Name,
                 Format = value.Format,
@@ -49,10 +55,14 @@ namespace Localization.Database.EFCore.Service
             if (dictionaryScope == null)
             {
                 DictionaryScopeDao dsDao = new DictionaryScopeDao(m_dbContext.DictionaryScope);
-                dsDao.Create(new DictionaryScope(){Name = dynamicText.DictionaryScope});
+                dictionaryScope = dsDao.Create(new DictionaryScope(){Name = dynamicText.DictionaryScope});
             }          
-
             Culture culture = GetCulture(dynamicText.Culture);
+            if (culture == null)
+            {
+                CultureDao cultureDao = new CultureDao(m_dbContext.Culture);
+                culture = cultureDao.Create(new Culture(){ Name = dynamicText.Culture });
+            }            
 
             StaticText staticText = dao.FindByNameAndCultureAndScope(dynamicText.Name, culture, dictionaryScope, m_dbContext.CultureHierarchy);
             staticText.Format = dynamicText.Format;
@@ -60,20 +70,6 @@ namespace Localization.Database.EFCore.Service
             staticText.ModificationUser = dynamicText.ModificationUser;
             staticText.Name = dynamicText.Name;
             staticText.Text = dynamicText.Text;
-
-            //StaticText staticText = new StaticText()
-            //{
-            //    //Culture = culture,
-            //    //CultureId = culture.Id,
-            //    //DictionaryScope = dictionaryScope,
-            //    //DictionaryScopeId = dictionaryScope.Id,
-            //    Format = dynamicText.Format,
-            //    ModificationTime = DateTime.UtcNow,
-            //    ModificationUser = dynamicText.ModificationUser,
-            //    Name = dynamicText.Name,
-            //    Text = dynamicText.Text
-            //};
-
 
             dao.Update(staticText);
 

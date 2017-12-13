@@ -8,6 +8,8 @@ namespace Localization.CoreLibrary.Entity
 
         public short Format { get; set; }
 
+        public bool FallBack { get; set; }
+
         public DateTime ModificationTime { get; set; }
 
         public string ModificationUser { get; set; }

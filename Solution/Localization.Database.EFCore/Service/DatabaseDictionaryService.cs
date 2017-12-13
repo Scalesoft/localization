@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
@@ -10,11 +9,14 @@ using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.Logging;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.Service
 {
     public sealed class DatabaseDictionaryService : DatabaseServiceBase, IDatabaseDictionaryService
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         public DatabaseDictionaryService(IDatabaseStaticTextContext dbContext, IConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
@@ -27,9 +29,9 @@ namespace Localization.Database.EFCore.Service
             DictionaryScope dictionaryScope = GetDictionaryScope(scope);
 
             StaticTextDao staticTextDao = new StaticTextDao(DbContext.StaticText);
-            IStaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+            StaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
             Dictionary<string, LocalizedString> resultDictionary = new Dictionary<string, LocalizedString>();
-            foreach (IStaticText singleStaticText in result)
+            foreach (StaticText singleStaticText in result)
             {
                 resultDictionary.Add(singleStaticText.Name, new LocalizedString(singleStaticText.Name, singleStaticText.Text, false));
             }

@@ -19,6 +19,9 @@ INSERT INTO [CultureHierarchy] ([Id], [Culture], [ParentCulture], [LevelProperty
 INSERT INTO [CultureHierarchy] ([Id], [Culture], [ParentCulture], [LevelProperty])
 	VALUES (3, 2, 1, 1)
 
+	INSERT INTO [CultureHierarchy] ([Id], [Culture], [ParentCulture], [LevelProperty])
+    VALUES (4, 1, 1, 0);
+
 INSERT INTO [DatabaseVersion]
 	(DatabaseVersion)
 VALUES
