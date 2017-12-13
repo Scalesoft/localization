@@ -1,20 +1,47 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Localization.Database.EFCore.Entity;
+using Localization.Database.EFCore.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.Dao.Impl
 {
     public class CultureHierarchyDao : GenericDao<CultureHierarchy, int>
     {
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+
         public CultureHierarchyDao(DbSet<CultureHierarchy> dbSet) : base(dbSet)
         {
+            //Should be empty
         }
 
+        /// <summary>
+        /// Returns parent cultures for specified culture. 
+        /// </summary>
+        /// <param name="culture">Culture to which we want parents.</param>
+        /// <returns>Returns parent cultures for specified culture. If parent culture does not exist returns null.</returns>
         public IQueryable<Culture> FindParentCultures(Culture culture)
         {
-            return DbSet.Where(p => p.Culture.Id == culture.Id).OrderBy(p => p.LevelProperty).Select(p => p.ParentCulture);
+            IQueryable<Culture> result = null;
+            try
+            {
+                result = DbSet.Where(p => p.Culture.Id == culture.Id)
+                              .OrderBy(p => p.LevelProperty)
+                              .Select(p => p.ParentCulture);
+            }
+            catch (ArgumentNullException e)
+            {
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(new EventId(e.GetHashCode()), e, "ArgumentNullException in method FindParentCultures(Culture culture)");
+                }
+            }
+
+            return result;
         }
+
 
         public async Task<bool> IsCultureSelfReferencing(Culture culture)
         {

@@ -3,10 +3,9 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 namespace Localization.CoreLibrary.Logging
 {
-    internal static class LogProvider
+    public static class LogProvider
     {
         private static ILoggerFactory m_loggerFactory;
 
