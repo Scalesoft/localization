@@ -7,6 +7,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
 {
+    /// <summary>
+    /// IStringLocalizer implementation is required for supporting localization of the ViewModel attributes e.g. [Name("stringKey")].
+    /// </summary>
     public class AttributeStringLocalizer : IStringLocalizer
     {
         private const string CultureCookieName = "Localization.Culture";
@@ -47,6 +50,7 @@ namespace Localization.AspNetCore.Service
             //Should be empty
         }
 
+        
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             return m_dictionaryManager.GetDictionary(ParseLocation(m_location), RequestCulture(), m_baseName).Values;
@@ -73,6 +77,11 @@ namespace Localization.AspNetCore.Service
             return m_sourcesDictonary[locationName];
         }
 
+        /// <summary>
+        /// Culture filter method.
+        /// </summary>
+        /// <param name="cultureInfo">Culture info</param>
+        /// <returns>If cultureInfo param is not null, paramater value is returned. Else CultureInfo from cookie.</returns>
         private CultureInfo RequestCulture(CultureInfo cultureInfo = null)
         {
             if (cultureInfo != null)

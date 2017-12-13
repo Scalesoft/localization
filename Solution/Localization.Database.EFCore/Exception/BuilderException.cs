@@ -4,14 +4,17 @@
     {
         public BuilderException()
         {
+            //Should be empty
         }
 
         public BuilderException(string message) : base(message)
         {
+            //Should be empty
         }
 
         public BuilderException(string message, System.Exception innerException) : base(message, innerException)
         {
+            //Should be empty
         }
     }
 }

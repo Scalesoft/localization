@@ -12,7 +12,7 @@ namespace Localization.AspNetCore.Service
     {
         private readonly IAutoDictionaryManager m_dictionaryManager;
 
-        public DictionaryService(/*IAutoDictionaryManager dictionaryManager,*/ IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public DictionaryService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             m_dictionaryManager = Localization.CoreLibrary.Localization.Dictionary;
         }
@@ -41,6 +41,10 @@ namespace Localization.AspNetCore.Service
             return m_dictionaryManager.GetConstantsDictionary(translationSource, requestCulture, scope);
         }
 
+        /// <summary>
+        /// Gets and returns Culture from request httpContext culture cookie.
+        /// </summary>
+        /// <returns> Culture from request httpContext culture cookie.</returns>
         protected CultureInfo RequestCulture()
         {
             HttpRequest request = HttpContextAccessor.HttpContext.Request;

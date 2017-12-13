@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.AspNetCore.Service.Factory
 {
+    /// <summary>
+    /// AttributeStringLocalizerFactory for creating IStringLocalizer instances
+    /// </summary>
     public class AttributeStringLocalizerFactory : IStringLocalizerFactory
     {
         private readonly IAutoDictionaryManager m_dictionaryManager;
