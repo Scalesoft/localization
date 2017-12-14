@@ -52,31 +52,93 @@ namespace Localization.Database.EFCore.Service
         {
             StaticTextDao dao = new StaticTextDao(m_dbContext.StaticText);
             DictionaryScope dictionaryScope = GetDictionaryScope(dynamicText.DictionaryScope);
-            if (dictionaryScope == null)
+            if (dictionaryScope.Name != dynamicText.DictionaryScope)
             {
-                DictionaryScopeDao dsDao = new DictionaryScopeDao(m_dbContext.DictionaryScope);
-                dictionaryScope = dsDao.Create(new DictionaryScope(){Name = dynamicText.DictionaryScope});
+                dictionaryScope = CreateDictionaryScope(dynamicText.DictionaryScope);
             }          
             Culture culture = GetCulture(dynamicText.Culture);
-            if (culture == null)
+            bool existsInCulture = culture.Name == dynamicText.Culture;
+
+            if (!existsInCulture)
             {
-                CultureDao cultureDao = new CultureDao(m_dbContext.Culture);
-                culture = cultureDao.Create(new Culture(){ Name = dynamicText.Culture });
+                culture = CreateCulture(dynamicText.Culture);
+                CreateCultureHierarchy(culture);
             }            
 
             StaticText staticText = dao.FindByNameAndCultureAndScope(dynamicText.Name, culture, dictionaryScope, m_dbContext.CultureHierarchy);
-            staticText.Format = dynamicText.Format;
-            staticText.ModificationTime = DateTime.UtcNow;
-            staticText.ModificationUser = dynamicText.ModificationUser;
-            staticText.Name = dynamicText.Name;
-            staticText.Text = dynamicText.Text;
+            if (staticText == null || !existsInCulture || staticText.CultureId != culture.Id)
+            {
+                staticText = new StaticText();
+                staticText.Format = dynamicText.Format;
+                staticText.ModificationTime = DateTime.UtcNow;
+                staticText.ModificationUser = dynamicText.ModificationUser;
+                staticText.Name = dynamicText.Name;
+                staticText.Text = dynamicText.Text;
+                staticText.Culture = culture;
+                staticText.DictionaryScope = dictionaryScope;
 
-            dao.Update(staticText);
+                dao.Create(staticText);
+            }
+            else
+            {
+                staticText.Format = dynamicText.Format;
+                staticText.ModificationTime = DateTime.UtcNow;
+                staticText.ModificationUser = dynamicText.ModificationUser;
+                staticText.Name = dynamicText.Name;
+                staticText.Text = dynamicText.Text;
+
+                dao.Update(staticText);
+            }    
 
             DbContext dbContext = (DbContext) m_dbContext;
             dbContext.SaveChanges();
 
             return dynamicText;
         }
+
+        private Culture CreateCulture(string cultureName)
+        {
+            CultureDao cultureDao = new CultureDao(m_dbContext.Culture);
+            return cultureDao.Create(new Culture() { Id = 0, Name = cultureName });
+        }
+
+        private void CreateCultureHierarchy(Culture culture)
+        {
+            CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(m_dbContext.CultureHierarchy);
+            CultureDao cultureDao = new CultureDao(m_dbContext.Culture);
+
+            cultureHierarchyDao.MakeCultureSelfReferencing(culture);
+
+            string defaultCultureName = Configuration.DefaultCulture().Name;
+            Culture defaultCulture = cultureDao.FindByName(defaultCultureName);
+
+            CultureInfo cultureInfo = new CultureInfo(culture.Name);
+            if (cultureInfo.IsNeutralCulture) //Just reference to default culture
+            {                
+                cultureHierarchyDao.MakeCultureReference(culture, defaultCulture, 1);
+            }
+            else
+            {
+                string parentCultureName = cultureInfo.Parent.Name;
+                Culture parentCulture = cultureDao.FindByName(parentCultureName);
+                if (parentCulture == null)
+                {
+                    cultureHierarchyDao.MakeCultureReference(culture, defaultCulture, 1);
+                }
+                else
+                {
+                    cultureHierarchyDao.MakeCultureReference(culture, parentCulture, 1);
+                    cultureHierarchyDao.MakeCultureReference(culture, defaultCulture, 2);
+                }
+            }
+        }
+
+
+        private DictionaryScope CreateDictionaryScope(string dictionaryScopeName)
+        {
+            DictionaryScopeDao dsDao = new DictionaryScopeDao(m_dbContext.DictionaryScope);
+            return dsDao.Create(new DictionaryScope() { Name = dictionaryScopeName });
+        }
+
     }
 }
