@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>0.0.1</Version>
+    <Version>1.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
     <AssemblyVersion>0.0.1.0</AssemblyVersion>
     <FileVersion>0.0.1.0</FileVersion>
+    <PackageId>Scalesoft.Localization.AspNetCore.Service</PackageId>
+    <Product>Scalesoft.Localization.AspNetCore.Service</Product>
   </PropertyGroup>
 
   <ItemGroup>
