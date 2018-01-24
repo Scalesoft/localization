@@ -6,10 +6,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
-    <FileVersion>0.0.1.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PackageId>Scalesoft.Localization.AspNetCore.Service</PackageId>
     <Product>Scalesoft.Localization.AspNetCore.Service</Product>
+    <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
