@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Localization.CoreLibrary.Exception;
@@ -100,19 +99,21 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         {
             JObject dictionary;
 
-            using (StreamReader reader = new StreamReader(new FileStream(filePath, FileMode.Open), Encoding.UTF8, true))
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            using (var stringReader = new StreamReader(fileStream, Encoding.UTF8, true))
+            using (var jsonReader = new JsonTextReader(stringReader))
             {
                 try
                 {
-                    dictionary = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                    dictionary = (JObject)JToken.ReadFrom(jsonReader);
                 }
                 catch (JsonReaderException e)
                 {
-                    string message = string.Format(@"Resource file ""{0}"" is not well-formated. See library documentation.",filePath);
+                    string message = string.Format(@"Resource file ""{0}"" is not well-formated. See library documentation.", filePath);
                     Logger.LogError(message);
 
                     throw new LocalizationDictionaryException(string.Concat(message, "\nsrc: ", e.Message));
-                }              
+                }
             }
 
             return dictionary;

@@ -5,7 +5,6 @@ using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Entity;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -25,12 +24,12 @@ namespace Localization.Database.EFCore.Tests.Dao
                 List<string> sqlFiles = LookupSortedSqlFileNames();
                 foreach (string sqlFile in sqlFiles)
                 {
-                    using (Stream stream = new FileStream(sqlFile, FileMode.Open))
-                    using (StreamReader streamReader = new StreamReader(stream))
+                    using (var stream = new FileStream(sqlFile, FileMode.Open, FileAccess.Read))
+                    using (var streamReader = new StreamReader(stream))
                     {
                         string sqlStr = streamReader.ReadToEnd();
                 
-                        context.Database.ExecuteSqlCommand(sqlStr, new object[]{});
+                        context.Database.ExecuteSqlCommand(sqlStr);
                         context.SaveChanges();
                     }
                 }

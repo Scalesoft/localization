@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Entity;
@@ -24,12 +23,12 @@ namespace Localization.Database.EFCore.Tests.Dao
                 List<string> sqlFiles = LookupSortedSqlFileNames();
                 foreach (string sqlFile in sqlFiles)
                 {
-                    using (Stream stream = new FileStream(sqlFile, FileMode.Open))
-                    using (StreamReader streamReader = new StreamReader(stream))
+                    using (var stream = new FileStream(sqlFile, FileMode.Open, FileAccess.Read))
+                    using (var streamReader = new StreamReader(stream))
                     {
                         string sqlStr = streamReader.ReadToEnd();
 
-                        context.Database.ExecuteSqlCommand(sqlStr, new object[] { });
+                        context.Database.ExecuteSqlCommand(sqlStr);
                         context.SaveChanges();
                     }
                 }
@@ -42,7 +41,7 @@ namespace Localization.Database.EFCore.Tests.Dao
 
 
                 StaticTextDao staticTextDao = new StaticTextDao(context.StaticText);
-                IStaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                StaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
                 Assert.AreEqual(7, result.Length);
                 Assert.AreEqual("support", result[0].Name);
 
