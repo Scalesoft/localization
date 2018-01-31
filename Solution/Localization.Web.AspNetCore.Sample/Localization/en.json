@@ -1,0 +1,11 @@
+{
+	"culture":"en",
+	"scope":"global",
+	"dictionary": {
+		"UserAccount":"User account",
+		"Language":"Language",
+		"SingOut": "Sign out",
+		"SignIn":"Sign in",
+		"SignUp":"Sign up"
+	}
+}

@@ -33,7 +33,7 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string databaseConnectionString = @"Server=ENUMERATIO;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
+            string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
 
             services.AddDbContext<StaticTextsContext>(options => options
                 .UseSqlServer(databaseConnectionString));
@@ -41,7 +41,7 @@ namespace Localization.Web.AspNetCore.Sample
             IServiceProvider sp = services.BuildServiceProvider();
 
             Localization.CoreLibrary.Localization.Init(
-                @"C:\Pool\localization-ridics\Solution\Localization.AspNetCore.Service\bin\Debug\netstandard1.3\localization.json.config",
+                @"C:\Pool\localization-ridics\Solution\Localization.AspNetCore.Service\bin\Debug\netstandard1.4\localizationsettings.json",
                 new DatabaseServiceFactory(sp.GetService<StaticTextsContext>()),
                 new JsonDictionaryFactory());
 

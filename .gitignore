@@ -68,3 +68,6 @@ Solution/.vs/
 #Adds nuget.exe
 !NugetPackaging/nuget.exe
 Solution/Localization.Web.AspNetCore.Sample/Migrations/
+
+#Web dependencies
+**/wwwroot/lib/

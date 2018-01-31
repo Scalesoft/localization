@@ -1,0 +1,11 @@
+{
+	"culture":"cs-CZ",
+	"scope":"global",
+	"dictionary": {
+		"UserAccount":"Uživatelský účet",
+		"Language":"Jazyk",
+		"SingOut": "Odhlásit",
+		"SignIn":"Přihlášení",
+		"SignUp":"Registace"
+	}
+}
