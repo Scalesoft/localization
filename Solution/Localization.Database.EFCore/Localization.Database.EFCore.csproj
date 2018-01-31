@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>1.0.1</Version>
+    <TargetFrameworks>netstandard1.4;netstandard2.0</TargetFrameworks>
+    <Version>1.0.2</Version>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -13,15 +13,26 @@
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.4'">
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.2" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.4'">
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.1" />
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.5" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
+  </ItemGroup>
+    
   <ItemGroup>
     <ProjectReference Include="..\Localization.CoreLibrary\Localization.CoreLibrary.csproj" />
     <ProjectReference Include="..\Localization.Database\Localization.Database.Abstractions.csproj" />

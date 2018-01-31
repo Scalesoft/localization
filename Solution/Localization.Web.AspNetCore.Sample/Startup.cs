@@ -41,7 +41,7 @@ namespace Localization.Web.AspNetCore.Sample
             IServiceProvider sp = services.BuildServiceProvider();
 
             Localization.CoreLibrary.Localization.Init(
-                @"C:\Pool\localization-ridics\Solution\Localization.AspNetCore.Service\bin\Debug\netstandard1.4\localizationsettings.json",
+                @"localizationsettings.json",
                 new DatabaseServiceFactory(sp.GetService<StaticTextsContext>()),
                 new JsonDictionaryFactory());
 

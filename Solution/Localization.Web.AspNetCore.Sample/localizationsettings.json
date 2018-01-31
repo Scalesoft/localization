@@ -1,0 +1,8 @@
+{
+  "BasePath": "Localization",
+  "SupportedCultures": [ "cs-CZ", "en" ],
+  "DefaultCulture": "cs-CZ",
+  "FirstAutoTranslateResource": "File",
+  "AutoLoadResources": true,
+  "TranslationFallbackMode": "Exception"
+}
