@@ -16,7 +16,7 @@ namespace Localization.Database.EFCore.Tests.Dao
         public void FindAllByCultureAndScopeTest()
         {
             DbContextOptions<StaticTextsContext> builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
-                .UseSqlServer(@"Server=ENUMERATIO;Database=ITJakubWebDBLocalization;Trusted_Connection=True;").Options;
+                .UseSqlServer(Configuration.ConnectionString).Options;
 
             using (StaticTextsContext context = new StaticTextsContext(builderOptions))
             {
