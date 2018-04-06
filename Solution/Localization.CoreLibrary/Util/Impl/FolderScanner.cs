@@ -30,7 +30,7 @@ namespace Localization.CoreLibrary.Util.Impl
         /// <returns>array containing all scope folders.</returns>
         private static string[] ScanScopeDirectories(string basePath)
         {
-            return Directory.GetDirectories(basePath);
+            return Directory.GetDirectories(basePath, "*", SearchOption.AllDirectories);
         }
 
         private IEnumerable<string> CheckGlobalResourceFiles(IConfiguration libConfiguration)
