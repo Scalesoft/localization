@@ -10,7 +10,6 @@
     "UserName": "Username",
     "Login-text": "Login",
     "Login-submit": "Login",
-    "RegisterAccount": "Register Account",
-    "RememberMe": "Remember me"
+    "RegisterAccount": "Register Account"
   }
 }

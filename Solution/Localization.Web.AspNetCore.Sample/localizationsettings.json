@@ -4,5 +4,5 @@
   "DefaultCulture": "cs-CZ",
   "FirstAutoTranslateResource": "File",
   "AutoLoadResources": true,
-  "TranslationFallbackMode": "Exception"
+  "TranslationFallbackMode": "Key"
 }

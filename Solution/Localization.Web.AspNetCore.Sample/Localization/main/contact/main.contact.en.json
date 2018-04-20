@@ -1,16 +1,14 @@
-{
-	"culture":"en",
-	"scope":"global",
+﻿{
+  "culture": "en",
+  "scope": "main.contact",
   "dictionary": {
     "UserAccount": "User account",
     "Language": "Language",
     "SingOut": "Sign out",
     "SignIn": "Sign in",
     "SignUp": "Sign up",
-    "UserName": "Username",
     "Login-text": "Login",
     "Login-submit": "Login",
-    "RegisterAccount": "Register Account",
-    "RememberMe": "Remember me"
+    "RegisterAccount": "Register Account"
   }
 }

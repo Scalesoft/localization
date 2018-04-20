@@ -186,7 +186,7 @@ Dictionary<string, LocalizedString> dC = Translator.GetConstantsDictionary(new C
 ```
 ### Getting pluralized dictionary
 ```
-Dictionary<string, PluralizedString> dP Translator.GetPluralizedDictionary(new CultureInfo("cs"), "global");
+Dictionary<string, PluralizedString> dP = Translator.GetPluralizedDictionary(new CultureInfo("cs"), "global");
 ```
 
 Konfigurace v ASP.NET:

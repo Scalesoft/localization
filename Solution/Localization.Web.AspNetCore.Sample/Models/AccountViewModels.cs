@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Localization.AspNetCore.Service;
+using Localization.CoreLibrary.Translator;
+using Localization.CoreLibrary.Util;
 
 namespace Localization.Web.AspNetCore.Sample.Models
 {
@@ -18,7 +17,6 @@ namespace Localization.Web.AspNetCore.Sample.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "RememberMe")]
-        public bool RememberMe { get; set; }
+        [Display(Name = "RememberMe")] public bool RememberMe { get; set; }
     }
 }

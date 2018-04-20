@@ -1,6 +1,6 @@
-{
-	"culture":"cs-CZ",
-	"scope":"global",
+﻿{
+  "culture": "cs-CZ",
+  "scope": "main",
   "dictionary": {
     "UserAccount": "Uživatelský účet",
     "Language": "Jazyk",
@@ -13,7 +13,6 @@
     "RegisterAccount": "Zaregistrovat se",
     "Contact-title": "Kontakt",
     "HelloWorld": "Ahoj Světě",
-    "UserName": "Uživatelské jméno",
-    "RememberMe": "Zapamatovat si me"
+    "UserName": "Uživatelské jméno"
   }
 }

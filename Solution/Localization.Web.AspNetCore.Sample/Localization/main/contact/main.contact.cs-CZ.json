@@ -1,19 +1,17 @@
-{
-	"culture":"cs-CZ",
-	"scope":"global",
+﻿{
+  "culture": "cs-CZ",
+  "scope": "main.contact",
   "dictionary": {
     "UserAccount": "Uživatelský účet",
     "Language": "Jazyk",
     "SingOut": "Odhlásit",
-    "SignIn": "Přihlášení",
+    "SignIn": "Přihlášeni",
     "SignUp": "Registace",
-    "Password": "Heslo",
-    "Login-text": "Přihlášení",
+    "Login-text": "Přihláš",
     "Login-submit": "Přihlásit se",
     "RegisterAccount": "Zaregistrovat se",
     "Contact-title": "Kontakt",
-    "HelloWorld": "Ahoj Světě",
-    "UserName": "Uživatelské jméno",
-    "RememberMe": "Zapamatovat si me"
+    "HelloWorld": "Ahoj Světě"
   }
 }
+

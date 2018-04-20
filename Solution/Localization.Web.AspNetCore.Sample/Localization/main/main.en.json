@@ -1,6 +1,6 @@
-{
-	"culture":"en",
-	"scope":"global",
+﻿{
+  "culture": "en",
+  "scope": "main",
   "dictionary": {
     "UserAccount": "User account",
     "Language": "Language",
@@ -10,7 +10,6 @@
     "UserName": "Username",
     "Login-text": "Login",
     "Login-submit": "Login",
-    "RegisterAccount": "Register Account",
-    "RememberMe": "Remember me"
+    "RegisterAccount": "Register Account"
   }
 }

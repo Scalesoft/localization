@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Globalization;
 using Localization.AspNetCore.Service;
+using Localization.AspNetCore.Service.Factory;
+using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Localization;
+
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
@@ -54,17 +57,20 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult About()
         {
-
             return View();
         }
 
-        
 
         public IActionResult Contact()
         {
+            var translated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "UserName");
+            var passtr = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "Password");
+
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
             //return Json(m_dictionaryManager.GetDictionary("home"));
-            return View();
+            ViewData["username"] = translated;
+            ViewData["password"] = passtr;
+            return View(new LoginViewModel {UserName = translated, Password = passtr});
         }
 
         public IActionResult Error()
@@ -74,11 +80,8 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            RequestCulture requestCulture = new RequestCulture(culture);//TODO: Validation?
-            HttpContext.Request.
-
-
-            HttpContext.Response.Cookies.Append(
+            RequestCulture requestCulture = new RequestCulture(culture); //TODO: Validation?
+            HttpContext.Request.HttpContext.Response.Cookies.Append(
                 "Localization.Culture",
                 requestCulture.Culture.Name,
                 new CookieOptions
@@ -89,5 +92,6 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
     }
 }
