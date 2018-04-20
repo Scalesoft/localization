@@ -2,6 +2,9 @@
 	"culture":"cs-CZ",
 	"scope":"global",
   "dictionary": {
+    "Home": "Domů",
+    "About": "O nás",
+    "Contact": "Kontakt",
     "UserAccount": "Uživatelský účet",
     "Language": "Jazyk",
     "SingOut": "Odhlásit",
@@ -13,7 +16,6 @@
     "RegisterAccount": "Zaregistrovat se",
     "Contact-title": "Kontakt",
     "HelloWorld": "Ahoj Světě",
-    "UserName": "Uživatelské jméno",
-    "RememberMe": "Zapamatovat si me"
+    "text-1-odst": "Lokalizovany text-1-odst"
   }
 }

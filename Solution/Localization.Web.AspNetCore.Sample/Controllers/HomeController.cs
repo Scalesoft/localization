@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
+
 
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
@@ -63,7 +63,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult Contact()
         {
-            var translated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "UserName");
+            var translated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "UserName",null, "LoginViewModel");
             var passtr = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "Password");
 
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
