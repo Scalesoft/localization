@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Localization.AspNetCore.Service;
-using Localization.CoreLibrary.Translator;
-using Localization.CoreLibrary.Util;
 
 namespace Localization.Web.AspNetCore.Sample.Models
 {

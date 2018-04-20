@@ -53,11 +53,8 @@ namespace Localization.Web.AspNetCore.Sample
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
             {
-                options.DataAnnotationLocalizerProvider = (type, factory) =>
-                {
-                    return factory
-                        .Create(type.Name, LocTranslationSource.File.ToString());
-                };
+                options.DataAnnotationLocalizerProvider = (type, factory) => factory
+                    .Create(type.Name, LocTranslationSource.File.ToString());
             });
             }
 

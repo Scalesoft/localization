@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
 
-
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
     public class HomeController : LoginController
@@ -63,14 +62,14 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult Contact()
         {
-            var translated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "UserName",null, "LoginViewModel");
-            var passtr = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "Password");
+            var usernameTranslated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "UserName", null, "LoginViewModel");
+            var passwordTranslated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "Password");
 
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
             //return Json(m_dictionaryManager.GetDictionary("home"));
-            ViewData["username"] = translated;
-            ViewData["password"] = passtr;
-            return View(new LoginViewModel {UserName = translated, Password = passtr});
+            ViewData["username"] = usernameTranslated;
+            ViewData["password"] = passwordTranslated;
+            return View(new LoginViewModel {UserName = usernameTranslated, Password = passwordTranslated});
         }
 
         public IActionResult Error()
@@ -92,6 +91,5 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
             return LocalRedirect(returnUrl);
         }
-
     }
 }

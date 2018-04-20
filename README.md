@@ -189,6 +189,32 @@ Dictionary<string, LocalizedString> dC = Translator.GetConstantsDictionary(new C
 Dictionary<string, PluralizedString> dP = Translator.GetPluralizedDictionary(new CultureInfo("cs"), "global");
 ```
 
+## Translate Data annotations
+
+To translate data annotations you have to add json resource file in scope, which name is same as model class. 
+Values of data annotation attributes are used as keys in dictionaries.
+```
+public class LoginViewModel
+    {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "UserNameNotEmpty")]
+        [DataType(DataType.Text)]
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
+...
+```
+LoginViewModel.cs-CZ.json
+```
+{
+  "culture": "cs-CZ",
+  "scope": "LoginViewModel",
+  "dictionary": {
+    "RememberMe": "Zapamatovat si me",
+    "UserName": "Uživatelské jméno",
+    "Password": "Heslo"
+  }
+}
+```
+
 Konfigurace v ASP.NET:
 
 Startup.cs
