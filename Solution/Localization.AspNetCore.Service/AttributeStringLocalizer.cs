@@ -13,6 +13,11 @@ namespace Localization.AspNetCore.Service
     public class AttributeStringLocalizer : IStringLocalizer
     {
         private const string CultureCookieName = "Localization.Culture";
+
+        public const string SourceDictionaryFileKey = "File";
+        public const string SourceDictionaryDatabaseKey = "Database";
+        public const string SourceDictionaryAutoKey = "Auto";
+
         private readonly IHttpContextAccessor m_httpContextAccessor;
 
         private CultureInfo m_currentCultureInfo;
@@ -30,9 +35,9 @@ namespace Localization.AspNetCore.Service
                                         IAutoLocalizationManager autoLocalizationManager,
                                         string baseName, string location, CultureInfo cultureInfo)
         {
-            m_sourcesDictonary.Add("File", LocTranslationSource.File);
-            m_sourcesDictonary.Add("Database", LocTranslationSource.Database);
-            m_sourcesDictonary.Add("Auto", LocTranslationSource.Auto);
+            m_sourcesDictonary.Add(SourceDictionaryFileKey, LocTranslationSource.File);
+            m_sourcesDictonary.Add(SourceDictionaryDatabaseKey, LocTranslationSource.Database);
+            m_sourcesDictonary.Add(SourceDictionaryAutoKey, LocTranslationSource.Auto);
 
             m_dictionaryManager = dictionaryManager;
             m_baseName = baseName;

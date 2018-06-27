@@ -27,7 +27,7 @@ namespace Localization.AspNetCore.Service.Factory
         {
             Guard.ArgumentNotNull(nameof(resourceSource), resourceSource);
 
-            return new AttributeStringLocalizer(m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager, resourceSource.Name, "auto");
+            return new AttributeStringLocalizer(m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager, resourceSource.Name, AttributeStringLocalizer.SourceDictionaryAutoKey);
         }
 
         public IStringLocalizer Create(string baseName, string location)
