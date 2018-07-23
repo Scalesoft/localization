@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -44,6 +45,9 @@ namespace Localization.Web.AspNetCore.Sample
                 @"localizationsettings.json", null,
                 new JsonDictionaryFactory());
 
+            AddLocalizationDictionary("cs-CZ.json");
+            AddLocalizationDictionary("en.json");
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
 
@@ -84,6 +88,15 @@ namespace Localization.Web.AspNetCore.Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void AddLocalizationDictionary(string fileName)
+        {
+            var filePath = Path.Combine("OtherLocalization", fileName);
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                Localization.CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, fileStream);
+            }
         }
     }
 }

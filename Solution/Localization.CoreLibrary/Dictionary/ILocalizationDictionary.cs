@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 
@@ -7,6 +8,12 @@ namespace Localization.CoreLibrary.Dictionary
 {
     public interface ILocalizationDictionary
     {
+        /// <summary>
+        /// Loads dictionary from stream.
+        /// </summary>
+        /// <param name="resourceStream">Resource stream.</param>
+        /// <returns>This instance.</returns>
+        ILocalizationDictionary Load(Stream resourceStream);
         /// <summary>
         /// Loads dictionary from file.
         /// </summary>

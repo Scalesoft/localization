@@ -41,9 +41,12 @@
                             <input type="submit" value="@Localizer.Translate("Login-submit", "global")" class="btn btn-default" />
                         </div>
                     </div>
-                    <p>
-                        @Html.ActionLink(Localizer.Translate("RegisterAccount", "global"), "", "", new { returnUrl = ViewData["ReturnUrl"] }, new { })
-                    </p>
+        <p>
+            @Html.ActionLink(Localizer.Translate("RegisterAccount", "global"), "", "", new { returnUrl = ViewData["ReturnUrl"] }, new { })
+        </p>
+        <p>
+            @Localizer.Translate("General", "other")
+        </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality
                         <p>
                             @Html.ActionLink("Forgot your password?", "ForgotPassword")
