@@ -1,4 +1,6 @@
 ﻿@model Localization.Web.AspNetCore.Sample.Models.LoginViewModel
+@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
 
 @{
     ViewBag.Title = "title";
@@ -6,3 +8,13 @@
 }
 
 <h2>title</h2>
+@{
+
+    var userName = ViewData.Model.UserName;
+    <h4>@Localizer.TranslateFormat("loginUser", new[] {userName}, "ViewModel")</h4>
+    <p>Tento projekt je v provozu už dva @Localizer.TranslatePluralization("klic-stringu", 2).</p>
+
+    //constant date format
+    <p>@Localizer.TranslateConstant("const-date")</p>
+
+}

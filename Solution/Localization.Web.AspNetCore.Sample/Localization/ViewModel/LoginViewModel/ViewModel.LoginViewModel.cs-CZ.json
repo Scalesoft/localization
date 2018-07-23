@@ -1,0 +1,9 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "LoginViewModel",
+  "dictionary": {
+    "RememberMe": "Zapamatovat si me",
+    "UserName": "Uživatelské jméno",
+    "Password": "Heslo"
+  }
+}

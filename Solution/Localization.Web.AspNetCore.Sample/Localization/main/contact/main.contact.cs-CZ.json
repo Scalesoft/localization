@@ -1,24 +1,17 @@
-{
+﻿{
   "culture": "cs-CZ",
-  "scope": "global",
+  "scope": "main.contact",
   "dictionary": {
-    "Home": "Domů",
-    "About": "O nás",
-    "Contact": "Kontakt",
     "UserAccount": "Uživatelský účet",
     "Language": "Jazyk",
     "SingOut": "Odhlásit",
-    "SignIn": "Přihlášení",
+    "SignIn": "Přihlášeni",
     "SignUp": "Registace",
-    "Password": "Heslo",
     "Login-text": "Přihlášení",
     "Login-submit": "Přihlásit se",
     "RegisterAccount": "Zaregistrovat se",
     "Contact-title": "Kontakt",
-    "HelloWorld": "Ahoj Světě",
-    "text-1-odst": "Lokalizovany text-1-odst"
-  },"constants": {
-    "const-date": "MMMM dd, yyyy",
-    "const-time": "hh:mm:ss.f"
+    "HelloWorld": "Ahoj Světě"
   }
 }
+

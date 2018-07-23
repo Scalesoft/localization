@@ -1,10 +1,7 @@
 {
-  "culture": "cs-CZ",
-  "scope": "global",
+	"culture":"cs-CZ",
+	"scope":"global",
   "dictionary": {
-    "Home": "Domů",
-    "About": "O nás",
-    "Contact": "Kontakt",
     "UserAccount": "Uživatelský účet",
     "Language": "Jazyk",
     "SingOut": "Odhlásit",
@@ -16,9 +13,6 @@
     "RegisterAccount": "Zaregistrovat se",
     "Contact-title": "Kontakt",
     "HelloWorld": "Ahoj Světě",
-    "text-1-odst": "Lokalizovany text-1-odst"
-  },"constants": {
-    "const-date": "MMMM dd, yyyy",
-    "const-time": "hh:mm:ss.f"
+    "UserName": "Uživatelské jméno"
   }
 }

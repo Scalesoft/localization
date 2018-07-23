@@ -1,8 +1,7 @@
 ﻿@model Localization.Web.AspNetCore.Sample.Models.LoginViewModel
 @using Localization.AspNetCore.Service
-@using Localization.Web.AspNetCore.Sample.Models
 @{
-    ViewData["Title"] = "Contact";
+    ViewData["Title"] = Localizer.Translate("Contact-title", "global");
 }
 
 @inject ILocalization Localizer
@@ -13,7 +12,7 @@
 <section id="loginForm">
     @using (Html.BeginForm("About", "Login", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
     {
-        <h4>@Localizer.Translate("Login-text", "account")</h4>
+        <h4>@Localizer.Translate("Login-text","main.contact")</h4>
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
@@ -39,11 +38,11 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-3 col-md-9">
-                            <input type="submit" value="@Localizer.Translate("Login-submit", "account")" class="btn btn-default" />
+                            <input type="submit" value="@Localizer.Translate("Login-submit", "global")" class="btn btn-default" />
                         </div>
                     </div>
                     <p>
-                        @Html.ActionLink(Localizer.Translate("RegisterAccount", "account"), "", "", new { returnUrl = ViewData["ReturnUrl"] }, new { })
+                        @Html.ActionLink(Localizer.Translate("RegisterAccount", "global"), "", "", new { returnUrl = ViewData["ReturnUrl"] }, new { })
                     </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality
                         <p>

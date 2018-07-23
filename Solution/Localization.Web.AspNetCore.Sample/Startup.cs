@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Factory;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.Web.AspNetCore.Sample
@@ -35,14 +36,12 @@ namespace Localization.Web.AspNetCore.Sample
         {
             string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
 
-            services.AddDbContext<StaticTextsContext>(options => options
-                .UseSqlServer(databaseConnectionString));
+
 
             IServiceProvider sp = services.BuildServiceProvider();
 
             Localization.CoreLibrary.Localization.Init(
-                @"localizationsettings.json",
-                new DatabaseServiceFactory(sp.GetService<StaticTextsContext>()),
+                @"localizationsettings.json", null,
                 new JsonDictionaryFactory());
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -54,11 +53,8 @@ namespace Localization.Web.AspNetCore.Sample
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
             {
-                options.DataAnnotationLocalizerProvider = (type, factory) =>
-                {
-                    return factory
-                        .Create(type.Name, LocTranslationSource.File.ToString());
-                };
+                options.DataAnnotationLocalizerProvider = (type, factory) => factory
+                    .Create(type.Name, LocTranslationSource.File.ToString());
             });
             }
 

@@ -2,17 +2,14 @@
 	"culture":"en",
 	"scope":"global",
   "dictionary": {
-    "Home": "Home",
-    "About": "About",
-    "Contact": "Contact",
     "UserAccount": "User account",
     "Language": "Language",
     "SingOut": "Sign out",
     "SignIn": "Sign in",
     "SignUp": "Sign up",
+    "UserName": "Username",
     "Login-text": "Login",
     "Login-submit": "Login",
-    "RegisterAccount": "Register Account",
-    "text-1-odst": "Localized text-1-odst"
+    "RegisterAccount": "Register Account"
   }
 }
