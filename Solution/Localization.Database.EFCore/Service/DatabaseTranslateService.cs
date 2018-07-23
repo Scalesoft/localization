@@ -203,13 +203,13 @@ namespace Localization.Database.EFCore.Service
 
         public LocalizedString DatabaseTranslatePluralization(string text, int number, CultureInfo cultureInfo, string scope)
         {
-            //TODO!!!
+            //TODO translate pluralized text using database
             throw new NotImplementedException();
         }
 
         public LocalizedString DatabaseTranslateConstant(string text, CultureInfo cultureInfo, string scope)
         {
-            //TODO!!!
+            //TODO translate constants using database
             throw new NotImplementedException();
         }
 

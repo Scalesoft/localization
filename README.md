@@ -196,7 +196,7 @@ Values of data annotation attributes are used as keys in dictionaries.
 
 For example: 
 In attribute ```[Display(Name = "UserName")]``` UserName is a key for translation in json resource file.
-For validation attributes it works the same. ```UserNameNotEmpty``` can be a key for translation in json resource file. 
+For validation attributes it works the same. ```UserNameNotEmpty``` could be a key for translation in json resource file. 
 ```
 public class LoginViewModel
     {

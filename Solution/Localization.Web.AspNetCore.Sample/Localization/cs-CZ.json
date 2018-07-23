@@ -1,6 +1,6 @@
 {
-	"culture":"cs-CZ",
-	"scope":"global",
+  "culture": "cs-CZ",
+  "scope": "global",
   "dictionary": {
     "Home": "Domů",
     "About": "O nás",
@@ -17,5 +17,8 @@
     "Contact-title": "Kontakt",
     "HelloWorld": "Ahoj Světě",
     "text-1-odst": "Lokalizovany text-1-odst"
+  },"constants": {
+    "const-date": "MMMM dd, yyyy",
+    "const-time": "hh:mm:ss.f"
   }
 }

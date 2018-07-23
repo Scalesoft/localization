@@ -25,10 +25,9 @@ namespace Localization.CoreLibrary.Manager.Impl
             Check();
         }
 
-        //TODO: Check if default culture and supported cultures from json config file are in DB. If not, new are created.
         private void Check()
         {
-            
+            m_dbTranslateService.CheckCulturesInDatabase();
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)

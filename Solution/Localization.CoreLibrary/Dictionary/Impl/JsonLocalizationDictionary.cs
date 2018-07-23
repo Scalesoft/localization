@@ -105,15 +105,18 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             {
                 try
                 {
-                    dictionary = (JObject)JToken.ReadFrom(jsonReader);
+                    dictionary = (JObject) JToken.ReadFrom(jsonReader);
                 }
                 catch (JsonReaderException e)
                 {
-                    string message = string.Format(@"Resource file ""{0}"" is not well-formated. See library documentation.", filePath);
+                    string message =
+                        string.Format(@"Resource file ""{0}"" is not well-formated. See library documentation.",
+                            filePath);
                     Logger.LogError(message);
 
                     throw new LocalizationDictionaryException(string.Concat(message, "\nsrc: ", e.Message));
                 }
+               
             }
 
             return dictionary;

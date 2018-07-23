@@ -1,4 +1,5 @@
-﻿using Localization.Web.AspNetCore.Sample.Models;
+﻿using System;
+using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
@@ -7,7 +8,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
     {
         public IActionResult About(LoginViewModel model, string returnUrl = null)
         {
-            
+
             return View(model);
         }
     }

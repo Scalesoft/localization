@@ -2,6 +2,6 @@
   "culture": "cs-CZ",
   "scope": "ViewModel",
   "dictionary": {
-    
+    "loginUser" : "Vítej {0}!" 
   }
 }

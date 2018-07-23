@@ -2,12 +2,14 @@
 using System.Globalization;
 using Localization.AspNetCore.Service;
 using Localization.AspNetCore.Service.Factory;
+using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
@@ -16,6 +18,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
     {
         private readonly ILocalization m_localizationManager;
         private readonly IDictionary m_dictionaryManager;
+        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
         public HomeController(ILocalization localizationManager, IDictionary dictionaryManager)
         {
@@ -62,8 +65,8 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult Contact()
         {
-            var usernameTranslated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "UserName", null, "LoginViewModel");
-            var passwordTranslated = CoreLibrary.Localization.Translator.Translate(LocTranslationSource.Auto, "Password");
+            var usernameTranslated = m_localizationManager.Translate("UserName", "LoginViewModel");
+            var passwordTranslated = m_localizationManager.Translate("Password");
 
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
             //return Json(m_dictionaryManager.GetDictionary("home"));
@@ -79,7 +82,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            RequestCulture requestCulture = new RequestCulture(culture); //TODO: Validation?
+            RequestCulture requestCulture = new RequestCulture(culture); //TODO validation of unsupported culture name
             HttpContext.Request.HttpContext.Response.Cookies.Append(
                 "Localization.Culture",
                 requestCulture.Culture.Name,
