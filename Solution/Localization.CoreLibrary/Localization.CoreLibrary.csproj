@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <Authors>Scalesoft s.r.o.</Authors>
@@ -11,6 +11,8 @@
     <PackageId>Scalesoft.Localization.CoreLibrary</PackageId>
     <Product>Scalesoft.Localization.CoreLibrary</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
+    <Description>Main library for localization framework.</Description>
+    <RepositoryUrl>https://github.com/Scalesoft/localization/tree/master/Solution/Localization.CoreLibrary</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

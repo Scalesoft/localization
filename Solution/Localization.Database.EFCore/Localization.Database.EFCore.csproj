@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;netstandard2.0</TargetFrameworks>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -11,6 +11,8 @@
     <PackageId>Scalesoft.Localization.Database.EFCore</PackageId>
     <Product>Scalesoft.Localization.Database.EFCore</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
+    <Description>Library for localization using dictionaries from database.</Description>
+    <RepositoryUrl>https://github.com/Scalesoft/localization/tree/master/Solution/Localization.Database.EFCore</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.4'">
