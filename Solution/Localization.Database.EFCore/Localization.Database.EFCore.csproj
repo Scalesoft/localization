@@ -11,8 +11,8 @@
     <PackageId>Scalesoft.Localization.Database.EFCore</PackageId>
     <Product>Scalesoft.Localization.Database.EFCore</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
-    <Description>Library for localization using dictionaries from database.</Description>
-    <RepositoryUrl>https://github.com/Scalesoft/localization/tree/master/Solution/Localization.Database.EFCore</RepositoryUrl>
+    <Description>The implementation of storing localization data to the database using Entity Framework Core.</Description>
+    <RepositoryUrl>https://github.com/Scalesoft/localization</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.4'">

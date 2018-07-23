@@ -13,7 +13,8 @@
     <PackageId>Scalesoft.Localization.Database.Abstractions</PackageId>
     <Product>Scalesoft.Localization.Database.Abstractions</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
-    <Description>Library with localization framework entities.</Description>
+    <Description>The abstraction for storing localization data to the database.</Description>
+    <RepositoryUrl>https://github.com/Scalesoft/localization</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,8 +11,8 @@
     <PackageId>Scalesoft.Localization.CoreLibrary</PackageId>
     <Product>Scalesoft.Localization.CoreLibrary</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
-    <Description>Main library for localization framework.</Description>
-    <RepositoryUrl>https://github.com/Scalesoft/localization/tree/master/Solution/Localization.CoreLibrary</RepositoryUrl>
+    <Description>The main library of the localization framework. The library contains a localization engine and can be used stand-alone.</Description>
+    <RepositoryUrl>https://github.com/Scalesoft/localization</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

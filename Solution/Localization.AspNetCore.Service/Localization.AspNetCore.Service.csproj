@@ -11,8 +11,8 @@
     <PackageId>Scalesoft.Localization.AspNetCore.Service</PackageId>
     <Product>Scalesoft.Localization.AspNetCore.Service</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>
-    <Description>Library which contains helping classes for Core Library.</Description>
-    <RepositoryUrl>https://github.com/Scalesoft/localization/tree/master/Solution/Localization.AspNetCore.Service</RepositoryUrl>
+    <Description>The library for ASP.NET Core app localization.</Description>
+    <RepositoryUrl>https://github.com/Scalesoft/localization</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
