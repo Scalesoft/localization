@@ -39,6 +39,11 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">@Localizer.Translate("About")</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">@Localizer.Translate("Contact")</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a asp-controller="Login" asp-action="Login">@Localizer.Translate("nav-login")</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

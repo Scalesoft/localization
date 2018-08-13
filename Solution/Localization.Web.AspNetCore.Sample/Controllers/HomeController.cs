@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
-    public class HomeController : LoginController
+    public class HomeController : Controller
     {
         private readonly ILocalization m_localizationManager;
         private readonly IDictionary m_dictionaryManager;
@@ -47,23 +47,13 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/Login
-        [AllowAnonymous]
-        //[RequireHttps]
-        public IActionResult Login(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
         public IActionResult About()
         {
             return View();
         }
 
 
-        public IActionResult Contact()
+        public IActionResult Contact(LoginViewModel viewModel)
         {
             var usernameTranslated = m_localizationManager.Translate("UserName", "LoginViewModel");
             var passwordTranslated = m_localizationManager.Translate("Password");
@@ -72,7 +62,8 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
             //return Json(m_dictionaryManager.GetDictionary("home"));
             ViewData["username"] = usernameTranslated;
             ViewData["password"] = passwordTranslated;
-            return View(new LoginViewModel {UserName = usernameTranslated, Password = passwordTranslated});
+
+            return View(viewModel);
         }
 
         public IActionResult Error()

@@ -1,0 +1,57 @@
+﻿@using Localization.AspNetCore.Service
+@using Localization.Web.AspNetCore.Sample.Models
+@model LoginViewModel
+@inject ILocalization Localizer
+
+@{
+    ViewData["Title"] = Localizer.Translate("login-title");
+    Layout = "_Layout";
+}
+<div class="row login">
+    <h2>@Localizer.Translate("login-heading")</h2>
+    <partial name="_ValidationSummary" />
+    <form asp-route="Login">
+        <input type="hidden" asp-for="ReturnUrl" />
+        <input type="hidden" value="@Localizer.Translate("invalid-code")" id="wrong-code-message" />
+        <input type="hidden" value="@Localizer.Translate("invalid-username-password")" id="wrong-password-message" />
+        <fieldset>
+
+            <div class="form-group">
+                <label asp-for="Input.UserName"></label>
+                <input class="form-control" asp-for="Input.UserName" autofocus>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Input.Password"></label>
+                <input type="password" class="form-control" asp-for="Input.Password" autocomplete="off">
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <button class="link-button btn" value="reset-password">
+                    @Localizer.Translate("reset-password")
+                </button>
+            </div>
+
+            <div class="hidden-element">
+                <div class="form-group">
+                    <input asp-for="Input.RememberMe">
+                    <label asp-for="Input.RememberMe"></label>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <button class="btn btn-primary" name="buttonClicked" value="login" id="verify-button">@Localizer.Translate("login")</button>
+                <button class="btn btn-default" name="buttonClicked" value="cancel">@Localizer.Translate("cancel")</button>
+            </div>
+
+        </fieldset>
+    </form>
+    <div class="login-methods card">
+        <div class="card-header">
+            <span>@Localizer.Translate("login-methods-header")</span>
+            <button class="card-header-button">
+                <i class="fa fa-angle-double-up fa-lg"></i>
+            </button>
+        </div>
+    </div>
+</div>
