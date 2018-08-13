@@ -70,4 +70,4 @@ Solution/.vs/
 Solution/Localization.Web.AspNetCore.Sample/Migrations/
 
 #Web dependencies
-**/wwwroot/lib/
+**/wwwroot/node_modules/
