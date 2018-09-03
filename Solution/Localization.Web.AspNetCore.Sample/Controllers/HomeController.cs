@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using Localization.AspNetCore.Service;
-using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
@@ -18,7 +13,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
     {
         private readonly ILocalization m_localizationManager;
         private readonly IDictionary m_dictionaryManager;
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private static readonly ILogger m_logger = LogProvider.GetCurrentClassLogger();
 
         public HomeController(ILocalization localizationManager, IDictionary dictionaryManager)
         {
@@ -55,13 +50,13 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult Contact(LoginViewModel viewModel)
         {
-            var usernameTranslated = m_localizationManager.Translate("UserName", "LoginViewModel");
-            var passwordTranslated = m_localizationManager.Translate("Password");
+            var usernameLabel = m_localizationManager.Translate("UserName", "LoginViewModel");
+            var passwordLabel = m_localizationManager.Translate("Password");
 
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
             //return Json(m_dictionaryManager.GetDictionary("home"));
-            ViewData["username"] = usernameTranslated;
-            ViewData["password"] = passwordTranslated;
+            ViewData["username"] = usernameLabel;
+            ViewData["password"] = passwordLabel;
 
             return View(viewModel);
         }

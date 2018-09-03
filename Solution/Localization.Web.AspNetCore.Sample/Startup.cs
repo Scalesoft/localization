@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -10,10 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Localization.Database.EFCore.Data.Impl;
-using Localization.Database.EFCore.Factory;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.Web.AspNetCore.Sample
@@ -38,9 +33,6 @@ namespace Localization.Web.AspNetCore.Sample
             string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
 
 
-
-            IServiceProvider sp = services.BuildServiceProvider();
-
             Localization.CoreLibrary.Localization.Init(
                 @"localizationsettings.json", null,
                 new JsonDictionaryFactory());
@@ -56,10 +48,10 @@ namespace Localization.Web.AspNetCore.Sample
             // Add framework services.
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
-            {
-                options.DataAnnotationLocalizerProvider = (type, factory) => factory
-                    .Create(type.Name, LocTranslationSource.File.ToString());
-            });
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) => factory
+                        .Create(type.Name, LocTranslationSource.File.ToString());
+                });
             }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

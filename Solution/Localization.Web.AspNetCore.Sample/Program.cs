@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using NLog.Web;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -13,6 +14,7 @@ namespace Localization.Web.AspNetCore.Sample
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseNLog()
                 .Build();
 
             host.Run();

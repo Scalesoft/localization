@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
@@ -18,7 +16,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
                 var viewModel = new LoginViewModel
                 {
                     ReturnUrl = returnUrl
-                }; ;
+                };
 
                 return View(viewModel);
             }

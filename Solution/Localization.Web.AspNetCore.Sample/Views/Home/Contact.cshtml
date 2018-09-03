@@ -10,7 +10,7 @@
 <h3>@ViewData["Message"]</h3>
 
 <section id="loginForm">
-    @using (Html.BeginForm("About", "Login", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Login", "Login", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
     {
         <h4>@Localizer.Translate("Login-text","main.contact")</h4>
                     <hr />
@@ -45,6 +45,9 @@
             @Html.ActionLink(Localizer.Translate("RegisterAccount", "global"), "", "", new { returnUrl = ViewData["ReturnUrl"] }, new { })
         </p>
         <p>
+            @ViewData["username"]<br/>
+            @ViewData["password"]<br/>
+
             @Localizer.Translate("General", "other")
         </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality
