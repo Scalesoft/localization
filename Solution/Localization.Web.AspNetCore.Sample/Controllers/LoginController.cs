@@ -7,7 +7,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
     public class LoginController : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> Login(string returnUrl)
+        public IActionResult Login(string returnUrl)
         {
             if (User?.Identity.IsAuthenticated == true) return Redirect("~/");
 
