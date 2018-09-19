@@ -106,7 +106,7 @@
     }
 
     private getCurrentCultureCookie(): string {
-        return getCookie(this.mCultureCookieName);
+        return LocalizationUtils.getCookie(this.mCultureCookieName);
     }
 
     private markDownloading(downloading: boolean, scope: string, cultureName: string) {       
@@ -147,4 +147,22 @@ class LocalizationDictionary {
     private formatString(str, obj) {
         return str.replace(/\{\s*([^}\s]+)\s*\}/g, (m, p1, offset, string) => obj[p1]);
     }
+}
+
+class LocalizationUtils {
+    
+    static getCookie(name: string): string {
+        name = name + "=";
+        return document.cookie
+            .split(";")
+            .map(c => c.trim())
+            .filter(cookie => {
+                return cookie.indexOf(name) === 0;
+            })
+            .map(cookie => {
+                return decodeURIComponent(cookie.substring(name.length));
+            })[0] ||
+            null;
+    }
+
 }

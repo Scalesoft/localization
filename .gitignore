@@ -71,3 +71,6 @@ Solution/Localization.Web.AspNetCore.Sample/Migrations/
 
 #Web dependencies
 **/wwwroot/lib/
+
+#NPM
+node_modules/
