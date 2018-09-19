@@ -9,6 +9,12 @@ namespace Localization.AspNetCore.Service
         CultureInfo[] SupportedCultures();
 
         /// <summary>
+        /// Gets current culture.
+        /// </summary>
+        /// <returns></returns>
+        CultureInfo GetRequestCulture();
+
+        /// <summary>
         /// Changes language.
         /// </summary>
         /// <param name="culture"></param>

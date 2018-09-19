@@ -18,7 +18,7 @@ namespace Localization.AspNetCore.Service
             m_localizationManager = Localization.CoreLibrary.Localization.Translator;
         }
 
-        private CultureInfo RequestCulture()
+        public CultureInfo GetRequestCulture()
         {
             HttpRequest request = HttpContextAccessor.HttpContext.Request;
 
@@ -53,28 +53,28 @@ namespace Localization.AspNetCore.Service
 
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            CultureInfo requestCulture = GetRequestCulture();
 
             return m_localizationManager.Translate(translationSource, text, requestCulture, scope);
         }
 
         public LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            CultureInfo requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateFormat(translationSource, text, parameters, requestCulture, scope);
         }
 
         public LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            CultureInfo requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslatePluralization(translationSource, text, number, requestCulture, scope);
         }
 
         public LocalizedString TranslateConstant(string text, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            CultureInfo requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateConstant(translationSource, text, requestCulture, scope);
         }
