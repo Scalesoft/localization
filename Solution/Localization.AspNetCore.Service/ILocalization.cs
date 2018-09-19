@@ -8,6 +8,12 @@ namespace Localization.AspNetCore.Service
     {
         CultureInfo[] SupportedCultures();
 
+        /// <summary>
+        /// Changes language.
+        /// </summary>
+        /// <param name="culture"></param>
+        void SetCulture(string culture);
+
         //Explicit calls
         /// <summary>
         /// Translates text using a resource file (.json) or a database.
@@ -147,5 +153,6 @@ namespace Localization.AspNetCore.Service
         /// <param name="text">String key for translation in json resource file.</param>
         /// <returns>Localized constant string.</returns>
         LocalizedString TranslateConstant(string text);
+
     }
 }

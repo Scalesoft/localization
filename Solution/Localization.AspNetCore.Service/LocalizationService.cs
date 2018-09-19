@@ -1,7 +1,9 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
@@ -20,7 +22,7 @@ namespace Localization.AspNetCore.Service
         {
             HttpRequest request = HttpContextAccessor.HttpContext.Request;
 
-            string cultureCookie = request.Cookies[ServiceBase.CultureCookieName];
+            string cultureCookie = request.Cookies[CultureCookieName];
             if (cultureCookie == null)
             {
                 cultureCookie = m_localizationManager.DefaultCulture().Name;
@@ -33,6 +35,20 @@ namespace Localization.AspNetCore.Service
         public CultureInfo[] SupportedCultures()
         {
             return m_localizationManager.SupportedCultures();
+        }
+
+        public void SetCulture(string culture)
+        {
+            RequestCulture requestCulture = new RequestCulture(culture);
+            HttpResponse response = HttpContextAccessor.HttpContext.Response;
+            response.Cookies.Append(
+                CultureCookieName,
+                requestCulture.Culture.Name,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1)
+                }
+            );
         }
 
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
