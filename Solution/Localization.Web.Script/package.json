@@ -5,6 +5,7 @@
   "license": "LGPL-3.0",
   "author": "Scalesoft s.r.o.",
   "main": "dist/localization.js",
+  "types": "dist/localization.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Scalesoft/localization.git"
