@@ -7,8 +7,9 @@ declare class Localization {
     private mDownloadingScope;
     private mDictionary;
     private mSiteUrl;
-    translate(text: string, scope?: string, cultureName?: string): string;
-    translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): string;
+    translate(text: string, scope?: string, cultureName?: string): ILocalizedString;
+    translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString;
+    private getFallbackTranslation(text, scope, cultureName);
     configureSiteUrl(siteUrl: string): void;
     private getDictionary(scope?, cultureName?);
     private checkCultureName(cultureName?);
@@ -24,9 +25,14 @@ declare class Localization {
 declare class LocalizationDictionary {
     private mDictionary;
     constructor(dictionary: string);
-    translate(text: string): string;
-    translateFormat(text: string, parameters: string[]): string;
+    translate(text: string): ILocalizedString;
+    translateFormat(text: string, parameters: string[]): ILocalizedString;
     private formatString(str, obj);
+}
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value: string;
 }
 declare class LocalizationUtils {
     static getCookie(name: string): string;

@@ -6,11 +6,24 @@ var Localization = (function () {
     }
     Localization.prototype.translate = function (text, scope, cultureName) {
         var dictionary = this.getDictionary(scope, cultureName);
-        return dictionary.translate(text);
+        var result = dictionary.translate(text);
+        if (result == null) {
+            return this.getFallbackTranslation(text, scope, cultureName);
+        }
+        return result;
     };
     Localization.prototype.translateFormat = function (text, parameters, scope, cultureName) {
         var dictionary = this.getDictionary(scope, cultureName);
-        return dictionary.translateFormat(text, parameters);
+        var result = dictionary.translateFormat(text, parameters);
+        if (result == null) {
+            return this.getFallbackTranslation(text, scope, cultureName);
+        }
+        return result;
+    };
+    Localization.prototype.getFallbackTranslation = function (text, scope, cultureName) {
+        console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
+        var localizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
+        return localizedString;
     };
     Localization.prototype.configureSiteUrl = function (siteUrl) {
         this.mSiteUrl = siteUrl;
@@ -35,7 +48,7 @@ var Localization = (function () {
     Localization.prototype.getLocalizationDictionary = function (scope, cultureName) {
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         var dictionary = this.mDictionary[dictionaryKey];
-        if (dictionary === null) {
+        if (typeof dictionary === "undefined") {
             this.downloadDictionary(scope, cultureName);
             return this.mDictionary[dictionaryKey];
         }
@@ -104,10 +117,12 @@ var LocalizationDictionary = (function () {
     };
     LocalizationDictionary.prototype.translateFormat = function (text, parameters) {
         var translation = this.translate(text);
-        return !parameters ? translation : this.formatString(translation, parameters);
+        var formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
+        var localizedString = { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
+        return localizedString;
     };
     LocalizationDictionary.prototype.formatString = function (str, obj) {
-        return str.replace(/\{\s*([^}\s]+)\s*\}/g, function (m, p1, offset, string) { return obj[p1]; });
+        return str.value.replace(/\{\s*([^}\s]+)\s*\}/g, function (m, p1, offset, string) { return obj[p1]; });
     };
     return LocalizationDictionary;
 }());
