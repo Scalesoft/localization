@@ -12,16 +12,32 @@
 
     private mSiteUrl: string;
 
-    public translate(text: string, scope?: string, cultureName?: string): string {
+    public translate(text: string, scope?: string, cultureName?: string): ILocalizedString {
         let dictionary = this.getDictionary(scope, cultureName);
 
-        return dictionary.translate(text);
+        var result = dictionary.translate(text);
+        if (result == null) {
+            console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
+            var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
+
+            return localizedString;
+        }
+
+        return result;
     }
 
-    public translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): string {
+    public translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString {
         let dictionary = this.getDictionary(scope, cultureName);
 
-        return dictionary.translateFormat(text, parameters);
+        var result = dictionary.translateFormat(text, parameters);
+        if (result == null) {
+            console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
+            var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
+
+            return localizedString;
+        }
+
+        return result;
     }
 
     public configureSiteUrl(siteUrl: string) {
@@ -54,7 +70,7 @@
     private getLocalizationDictionary(scope: string, cultureName: string) : LocalizationDictionary {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mDictionary[dictionaryKey];
-        if (dictionary === null) {
+        if (typeof dictionary === "undefined") {
             this.downloadDictionary(scope, cultureName);
 
             return this.mDictionary[dictionaryKey];
@@ -123,13 +139,13 @@
 }
 
 class LocalizationDictionary {
-    private mDictionary;
+    private mDictionary: { [key: string]: ILocalizedString };
 
     constructor(dictionary: string) {
         this.mDictionary = JSON.parse(dictionary);
     }
 
-    public translate(text: string): string {
+    public translate(text: string): ILocalizedString {
         let result = this.mDictionary[text];
         if (typeof result === "undefined") {
             return null;
@@ -138,15 +154,24 @@ class LocalizationDictionary {
         return result;
     }
 
-    public translateFormat(text: string, parameters: string[]): string {
+    public translateFormat(text: string, parameters: string[]): ILocalizedString {
         let translation = this.translate(text);
 
-        return !parameters ? translation : this.formatString(translation, parameters);
+        var formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
+        var localizedString: ILocalizedString = { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
+
+        return localizedString;
     }
 
-    private formatString(str, obj) {
-        return str.replace(/\{\s*([^}\s]+)\s*\}/g, (m, p1, offset, string) => obj[p1]);
+    private formatString(str: ILocalizedString, obj: string[]): string {
+        return str.value.replace(/\{\s*([^}\s]+)\s*\}/g, (m, p1, offset, string) => obj[p1]);
     }
+}
+
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value: string;
 }
 
 class LocalizationUtils {
@@ -164,5 +189,4 @@ class LocalizationUtils {
             })[0] ||
             null;
     }
-
 }
