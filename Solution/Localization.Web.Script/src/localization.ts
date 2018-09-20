@@ -17,10 +17,7 @@
 
         var result = dictionary.translate(text);
         if (result == null) {
-            console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
-            var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
-
-            return localizedString;
+            return this.getFallbackTranslation(text, scope, cultureName);
         }
 
         return result;
@@ -31,13 +28,16 @@
 
         var result = dictionary.translateFormat(text, parameters);
         if (result == null) {
-            console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
-            var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
-
-            return localizedString;
+            return this.getFallbackTranslation(text, scope, cultureName);
         }
 
         return result;
+    }
+
+    private getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
+        console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
+        var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
+        return localizedString;
     }
 
     public configureSiteUrl(siteUrl: string) {
