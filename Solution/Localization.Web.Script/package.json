@@ -1,7 +1,7 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "scalesoft-localization-web",
-  "description": "A JavaScript library for localization JavaScript elements.",
+  "description": "A JavaScript client-side library for Scalesoft localization framework.",
   "license": "LGPL-3.0",
   "author": "Scalesoft s.r.o.",
   "main": "dist/localization.js",
