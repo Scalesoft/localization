@@ -39,14 +39,8 @@ namespace Localization.Web.AspNetCore.Sample
 
 
 
-            IServiceProvider sp = services.BuildServiceProvider();
-
-            Localization.CoreLibrary.Localization.Init(
-                @"localizationsettings.json", null,
-                new JsonDictionaryFactory());
-
-            AddLocalizationDictionary("cs-CZ.json");
-            AddLocalizationDictionary("en.json");
+            services.AddDbContext<StaticTextsContext>(options => options
+                .UseSqlServer(databaseConnectionString));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
@@ -79,7 +73,13 @@ namespace Localization.Web.AspNetCore.Sample
                 app.UseExceptionHandler("/Home/Error");
             }
 
-           
+            Localization.CoreLibrary.Localization.Init(
+                @"localizationsettings.json",
+                new DatabaseServiceFactory(app.ApplicationServices.GetService<StaticTextsContext>()),
+                new JsonDictionaryFactory());
+            AddLocalizationDictionary("cs-CZ.json");
+            AddLocalizationDictionary("en.json");
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

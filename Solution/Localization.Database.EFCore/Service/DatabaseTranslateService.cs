@@ -28,7 +28,12 @@ namespace Localization.Database.EFCore.Service
         /// <summary>
         /// Checks if cultures from configuration file are in database.
         /// </summary>
-        public async void CheckCulturesInDatabase()
+        public void CheckCulturesInDatabase()
+        {
+            CheckCulturesInDatabaseAsync().GetAwaiter().GetResult();
+        }
+
+        private async Task CheckCulturesInDatabaseAsync()
         {
             IImmutableList<CultureInfo> supportedCultures = Configuration.SupportedCultures();
             foreach (CultureInfo supportedCulture in supportedCultures)
