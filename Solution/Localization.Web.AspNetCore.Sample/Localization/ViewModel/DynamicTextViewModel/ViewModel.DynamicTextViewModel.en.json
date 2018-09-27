@@ -1,0 +1,8 @@
+﻿{
+  "culture": "en",
+  "scope": "DynamicTextViewModel",
+  "dictionary": {
+    "culture": "Culture",
+    "name": "Name"
+  }
+}

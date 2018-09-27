@@ -1,0 +1,32 @@
+﻿@using Localization.AspNetCore.Service
+@inject ILocalization Localizer
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+<section id="dynamicTextList">
+    <hr/>
+    <div class="panel panel-default">
+        <div class="panel-heading">@Localizer.Translate("result")</div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>@Localizer.Translate("name")</th>
+                <th>@Localizer.Translate("text")</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>@Model.Name</td>
+                <td>@Model.Text</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

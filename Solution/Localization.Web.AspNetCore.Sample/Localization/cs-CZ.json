@@ -16,7 +16,16 @@
     "RegisterAccount": "Zaregistrovat se",
     "Contact-title": "Kontakt",
     "HelloWorld": "Ahoj Světě",
-    "text-1-odst": "Lokalizovany text-1-odst"
+    "text-1-odst": "Lokalizovany text-1-odst",
+    "Database": "Databáze",
+    "Save": "Uložit",
+    "save-dynamic-text-title": "Uložit dynamický text",
+    "dynamic-text-list-title": "Zobrazit dynamický text",
+    "name": "Název",
+    "text": "Text",
+    "show": "Zobrazit",
+    "result": "Výsledek",
+    "scope": "Scope"
   },"constants": {
     "const-date": "MMMM dd, yyyy",
     "const-time": "hh:mm:ss.f"

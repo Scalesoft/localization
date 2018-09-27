@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using Localization.AspNetCore.Service;
-using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

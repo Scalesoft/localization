@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Localization.AspNetCore.Service;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -46,6 +47,7 @@ namespace Localization.Web.AspNetCore.Sample
             services.AddLocalizationService();
 
             services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
+            services.AddScoped<DynamicText>();
 
             // Add framework services.
             services.AddMvc()

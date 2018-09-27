@@ -38,6 +38,14 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">@Localizer.Translate("Home")</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">@Localizer.Translate("About")</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">@Localizer.Translate("Contact")</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" role="button" aria-expanded="False" href="#" data-toggle="dropdown">@Localizer.Translate("Database")<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a asp-controller="Database" asp-action="Index">@Localizer.Translate("dynamic-text-list-title")</a></li>
+                            <li><a asp-controller="Database" asp-action="AddDynamicText">@Localizer.Translate("save-dynamic-text-title")</a></li>
+                        </ul>
+                    </li>
+                   
                 </ul>
             </div>
         </div>

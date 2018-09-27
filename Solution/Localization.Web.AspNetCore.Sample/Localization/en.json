@@ -13,6 +13,15 @@
     "Login-text": "Login",
     "Login-submit": "Login",
     "RegisterAccount": "Register Account",
-    "text-1-odst": "Localized text-1-odst"
+    "text-1-odst": "Localized text-1-odst",
+    "Database": "Database",
+    "Save": "Save",
+    "save-dynamic-text-title": "Save Dynamic Text",
+    "dynamic-text-list-title": "Show Dynamic Text",
+    "name": "Name",
+    "text": "Text",
+    "show": "Show",
+    "result": "Result",
+    "scope": "Scope"
   }
 }
