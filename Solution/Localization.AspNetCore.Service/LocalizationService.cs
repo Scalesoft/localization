@@ -105,23 +105,23 @@ namespace Localization.AspNetCore.Service
         //Without scope
         public LocalizedString Translate(string text, LocTranslationSource translationSource)
         {
-            return Translate(text, null, LocTranslationSource.Auto);
+            return Translate(text, null, translationSource);
         }
 
         public LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource)
         {
-            return TranslateFormat(text, parameters, null, LocTranslationSource.Auto);
+            return TranslateFormat(text, parameters, null, translationSource);
         }
 
         public LocalizedString TranslatePluralization(string text, int number,
             LocTranslationSource translationSource)
         {
-            return TranslatePluralization(text, number, null, LocTranslationSource.Auto);
+            return TranslatePluralization(text, number, null, translationSource);
         }
 
         public LocalizedString TranslateConstant(string text, LocTranslationSource translationSource)
         {
-            return TranslateConstant(text, null, LocTranslationSource.Auto);
+            return TranslateConstant(text, null, translationSource);
         }
 
         //Without scope and translationSource = LocTranslationSource.Auto

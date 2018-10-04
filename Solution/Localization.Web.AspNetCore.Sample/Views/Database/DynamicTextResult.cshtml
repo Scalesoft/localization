@@ -1,4 +1,5 @@
 ﻿@using Localization.AspNetCore.Service
+@model Localization.Web.AspNetCore.Sample.Models.DynamicTextResult
 @inject ILocalization Localizer
 
 <!DOCTYPE html>
@@ -26,6 +27,10 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    
+    <div class="panel panel-default">
+        Direct translation: @Model.DirectTranslation
     </div>
 </section>
 </body>

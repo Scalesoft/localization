@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Localization.AspNetCore.Service;
+using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -66,7 +67,16 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
         public IActionResult GetDynamicText(string name, string scope)
         {
             var model = m_dynamicTextService.GetDynamicText(name, scope);
-            return View("DynamicTextResult", model);
+
+            var directTranslation = m_localization.Translate(name, scope, LocTranslationSource.Database);
+
+            var result = new DynamicTextResult
+            {
+                Name = model.Name,
+                Text = model.Text,
+                DirectTranslation = directTranslation,
+            };
+            return View("DynamicTextResult", result);
         }
     }
 }
