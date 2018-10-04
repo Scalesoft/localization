@@ -8,6 +8,7 @@
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\..\build\</PackageOutputPath>
     <PackageId>Scalesoft.Localization.CoreLibrary</PackageId>
     <Product>Scalesoft.Localization.CoreLibrary</Product>
     <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicenseUrl>

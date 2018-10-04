@@ -5,6 +5,7 @@
     <AssemblyName>Localization.Database.Abstractions</AssemblyName>
     <RootNamespace>Localization.Database.Abstractions</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>..\..\build\</PackageOutputPath>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
     <Version>1.0.6</Version>
