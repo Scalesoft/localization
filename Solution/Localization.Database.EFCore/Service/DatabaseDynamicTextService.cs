@@ -38,7 +38,7 @@ namespace Localization.Database.EFCore.Service
             {
                 FallBack = value.Culture.Name != cultureInfo.Name,
                 Culture = value.Culture.Name,
-                DictionaryScope = value.DictionaryScope.Name, // TODO check if value not null
+                DictionaryScope = value.DictionaryScope.Name,
                 Format = value.Format,
                 ModificationTime = value.ModificationTime,
                 ModificationUser = value.ModificationUser,
