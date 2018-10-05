@@ -70,11 +70,18 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
             var directTranslation = m_localization.Translate(name, scope, LocTranslationSource.Database);
 
+            var allDynamicTexts = m_dynamicTextService.GetAllDynamicText(name, scope);
+
             var result = new DynamicTextResult
             {
                 Name = model.Name,
                 Text = model.Text,
                 DirectTranslation = directTranslation,
+                AllDynamicTexts = allDynamicTexts.Select(x => new CultureAndTextResult
+                {
+                    Culture = x.Culture,
+                    Text = x.Text,
+                }).ToList(),
             };
             return View("DynamicTextResult", result);
         }

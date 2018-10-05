@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.Logging;
@@ -23,15 +24,16 @@ namespace Localization.Database.EFCore.Dao.Impl
             try
             {
                 IQueryable<CultureHierarchy> hierarchies = cultureHierarchies
-                    .Select(t => t);
+                    .Select(t => t)
+                    .Where(hierarchyCulture => hierarchyCulture.Culture.Id == culture.Id);
 
                 IQueryable<StaticText> result = DbSet
                     .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope)
-                    .Join(
-                        hierarchies
-                            .Where(hierarchyCulture => hierarchyCulture.Culture.Id == culture.Id)
-                        , text => text.Culture.Id, hierarchy => hierarchy.ParentCulture.Id
-                        , (text, hierarchy) => new {text, hierarchy})
+                    .Include(x => x.Culture)
+                    .Join(hierarchies,
+                        text => text.Culture.Id,
+                        hierarchy => hierarchy.ParentCulture.Id,
+                        (text, hierarchy) => new {text, hierarchy})
                     .OrderBy(r => r.hierarchy.LevelProperty)
                     .Take(4)
                     .Select(r => r.text);
@@ -46,9 +48,38 @@ namespace Localization.Database.EFCore.Dao.Impl
                 }
             }
 
-            if (resultValue != null)
+            return resultValue;
+        }
+
+        public IList<StaticText> FindByNameAndScope(string name, DictionaryScope dictionaryScope, DbSet<CultureHierarchy> cultureHierarchies)
+        {
+            List<StaticText> resultValue = null;
+            try
             {
-                resultValue.DictionaryScope = dictionaryScope;
+                IQueryable<CultureHierarchy> hierarchies = cultureHierarchies
+                    .Select(t => t);
+
+                IQueryable<StaticText> result = DbSet
+                    .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope)
+                    .Include(x => x.Culture)
+                    .Join(hierarchies,
+                        text => text.Culture.Id,
+                        hierarchy => hierarchy.ParentCulture.Id,
+                        (text, hierarchy) => new {text, hierarchy})
+                    .OrderBy(r => r.hierarchy.LevelProperty)
+                    //.Take(4) Why is this restriction used in FindByNameAndCultureAndScope method?
+                    .Select(r => r.text);
+
+                resultValue = result.ToList()
+                    .Distinct()
+                    .ToList();
+            }
+            catch (ArgumentNullException e)
+            {
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(new EventId(e.GetHashCode()), e, "ArgumentNullException in method FindByNameAndScope");
+                }
             }
 
             return resultValue;

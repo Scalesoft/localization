@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Entity;
@@ -33,19 +34,43 @@ namespace Localization.Database.EFCore.Service
             StaticText value =
                 new StaticTextDao(m_dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope, m_dbContext.CultureHierarchy);
 
-            value.Culture = new CultureDao(m_dbContext.Culture).FindById(value.CultureId);      
-
-            return new DynamicText()
+            return new DynamicText
             {
                 FallBack = value.Culture.Name != cultureInfo.Name,
                 Culture = value.Culture.Name,
-                DictionaryScope = value.DictionaryScope.Name,
+                DictionaryScope = value.DictionaryScope.Name, // TODO check if value not null
                 Format = value.Format,
                 ModificationTime = value.ModificationTime,
                 ModificationUser = value.ModificationUser,
                 Name = value.Name,
                 Text = value.Text
             };
+        }
+
+        public IList<DynamicText> GetAllDynamicText(string name, string scope)
+        {
+            DictionaryScope dictionaryScope = GetDictionaryScope(scope);
+            StaticTextDao staticTextDao = new StaticTextDao(m_dbContext.StaticText);
+            IList<StaticText> values = staticTextDao.FindByNameAndScope(name, dictionaryScope, m_dbContext.CultureHierarchy);
+
+            var resultList = new List<DynamicText>();
+            foreach (var value in values)
+            {
+                var dynamicText = new DynamicText
+                {
+                    FallBack = false,
+                    Culture = value.Culture.Name,
+                    DictionaryScope = value.DictionaryScope.Name,
+                    Format = value.Format,
+                    ModificationTime = value.ModificationTime,
+                    ModificationUser = value.ModificationUser,
+                    Name = value.Name,
+                    Text = value.Text
+                };
+                resultList.Add(dynamicText);
+            }
+            
+            return resultList;
         }
 
         public DynamicText SaveDynamicText(DynamicText dynamicText)

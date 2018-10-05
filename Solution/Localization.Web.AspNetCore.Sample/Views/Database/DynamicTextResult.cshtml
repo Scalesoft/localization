@@ -32,6 +32,27 @@
     <div class="panel panel-default">
         Direct translation: @Model.DirectTranslation
     </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">Loaded full localization for key</div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Culture</th>
+                <th>Text</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var cultureAndText in Model.AllDynamicTexts)
+            {
+                <tr>
+                    <td>@cultureAndText.Culture</td>
+                    <td>@cultureAndText.Text</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 </section>
 </body>
 </html>

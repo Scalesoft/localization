@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Entity;
@@ -101,6 +102,11 @@ namespace Localization.CoreLibrary.Manager.Impl
         public DynamicText GetDynamicText(string name, string scope, CultureInfo cultureInfo)
         {
             return m_databaseDynamicTextService.GetDynamicText(name, scope, cultureInfo);
+        }
+
+        public IList<DynamicText> GetAllDynamicText(string name, string scope)
+        {
+            return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
         public DynamicText SaveDynamicText(DynamicText dynamicText)

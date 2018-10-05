@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Microsoft.AspNetCore.Http;
 
@@ -21,6 +22,11 @@ namespace Localization.AspNetCore.Service
             return m_databaseDynamicTextService.GetDynamicText(name, scope, requestCulture);
         }
 
+        public IList<CoreLibrary.Entity.DynamicText> GetAllDynamicText(string name, string scope)
+        {
+            return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
+        }
+
         public CoreLibrary.Entity.DynamicText SaveDynamicText(CoreLibrary.Entity.DynamicText dynamicText)
         {
             return m_databaseDynamicTextService.SaveDynamicText(dynamicText);
@@ -38,6 +44,5 @@ namespace Localization.AspNetCore.Service
 
             return new CultureInfo(cultureCookie);
         }
-
     }
 }

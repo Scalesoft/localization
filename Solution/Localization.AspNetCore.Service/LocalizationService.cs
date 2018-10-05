@@ -18,6 +18,7 @@ namespace Localization.AspNetCore.Service
             m_localizationManager = Localization.CoreLibrary.Localization.Translator;
         }
 
+        // TODO there are almost duplicate definitions of this method (LocalizationService, DynamicText, DictionaryService, DatabaseDictionaryManager)
         public CultureInfo GetRequestCulture()
         {
             HttpRequest request = HttpContextAccessor.HttpContext.Request;
