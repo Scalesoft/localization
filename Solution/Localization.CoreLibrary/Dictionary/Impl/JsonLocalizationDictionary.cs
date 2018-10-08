@@ -20,6 +20,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
     internal class JsonLocalizationDictionary : ILocalizationDictionary
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private static readonly object m_initLock = new object();
 
         private const string CultureJPath = "culture";
         private const string ScopeJPath = "scope";
@@ -32,10 +33,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private JObject m_jsonDictionary;
         private JObject m_jsonPluralizedDictionary;
 
-        private Dictionary<string, LocalizedString> m_dictionary;
-        private Dictionary<string, PluralizedString> m_pluralizedDictionary;
-        private Dictionary<string, LocalizedString> m_constnantsDictionary;
-
+        private volatile Dictionary<string, LocalizedString> m_dictionary;
+        private volatile Dictionary<string, PluralizedString> m_pluralizedDictionary;
+        private volatile Dictionary<string, LocalizedString> m_constnantsDictionary;
+        
         private ILocalizationDictionary m_parentDictionary;
         private ILocalizationDictionary m_childDictionary;
 
@@ -194,7 +195,22 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return m_dictionary;
             }
 
-            m_dictionary = new Dictionary<string, LocalizedString>();
+            lock (m_initLock)
+            {
+                if (m_dictionary != null)
+                {
+                    return m_dictionary;
+                }
+
+                var dictionary = InitDictionary();
+                m_dictionary = dictionary;
+                return dictionary;
+            }
+        }
+
+        private Dictionary<string, LocalizedString> InitDictionary()
+        {
+            var dictionary = new Dictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
                 if (Logger.IsWarningEnabled())
@@ -202,14 +218,14 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                     Logger.LogWarning(NotLoadedMsg);
                 }
 
-                return m_dictionary;
+                return dictionary;
             }
 
 
-            JObject keyValueObjects = (JObject) m_jsonDictionary.SelectToken("dictionary");
+            JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("dictionary");
             if (keyValueObjects == null)
             {
-                return m_dictionary;
+                return dictionary;
             }
 
 
@@ -218,12 +234,12 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             {
                 KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
                 LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
-                m_dictionary.Add(ls.Name, ls);
+                dictionary.Add(ls.Name, ls);
             }
 
             keyValueEnumerator.Dispose();
 
-            return m_dictionary;
+            return dictionary;
         }
 
         public Dictionary<string, PluralizedString> ListPlurals()
@@ -233,7 +249,22 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return m_pluralizedDictionary;
             }
 
-            m_pluralizedDictionary = new Dictionary<string, PluralizedString>();
+            lock (m_initLock)
+            {
+                if (m_pluralizedDictionary != null)
+                {
+                    return m_pluralizedDictionary;
+                }
+
+                var pluralizedDictionary = InitPluralizedDictionary();
+                m_pluralizedDictionary = pluralizedDictionary;
+                return pluralizedDictionary;
+            }
+        }
+
+        private Dictionary<string, PluralizedString> InitPluralizedDictionary()
+        {
+            var pluralizedDictionary = new Dictionary<string, PluralizedString>();
             if (!IsPluralizationLoaded())
             {
                 if (Logger.IsWarningEnabled())
@@ -241,13 +272,13 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                     Logger.LogWarning(NotLoadedPluralizedMsg);
                 }
 
-                return m_pluralizedDictionary;
+                return pluralizedDictionary;
             }
 
-            JObject keyValueObjects = (JObject) m_jsonPluralizedDictionary.SelectToken("dictionary");
+            JObject keyValueObjects = (JObject)m_jsonPluralizedDictionary.SelectToken("dictionary");
             if (keyValueObjects == null)
             {
-                return m_pluralizedDictionary;
+                return pluralizedDictionary;
             }
 
             IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
@@ -257,7 +288,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 string key = keyValuePair.Key;
                 JToken value = keyValuePair.Value.First;
 
-                string defaultValue = ((JProperty) keyValuePair.Value.First).Name;
+                string defaultValue = ((JProperty)keyValuePair.Value.First).Name;
                 LocalizedString defaultLocalizedString = new LocalizedString(key, defaultValue);
                 PluralizedString pluralizedString = new PluralizedString(defaultLocalizedString);
                 JToken pluralizationTriples = value.First;
@@ -314,18 +345,18 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                         }
                     }
 
-                    string stringValueString = (string) stringValue;
+                    string stringValueString = (string)stringValue;
                     pluralizedString.Add(new PluralizationInterval(leftIntervalInteger, rightIntervalInteger),
                         new LocalizedString(key, stringValueString));
                 }
 
                 childrenTriplesEnumerator.Dispose();
-                m_pluralizedDictionary.Add(key, pluralizedString);
+                pluralizedDictionary.Add(key, pluralizedString);
             }
 
             keyValueEnumerator.Dispose();
 
-            return m_pluralizedDictionary;
+            return pluralizedDictionary;
         }
 
         public Dictionary<string, LocalizedString> ListConstants()
@@ -335,7 +366,22 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return m_constnantsDictionary;
             }
 
-            m_constnantsDictionary = new Dictionary<string, LocalizedString>();
+            lock (m_initLock)
+            {
+                if (m_constnantsDictionary != null)
+                {
+                    return m_constnantsDictionary;
+                }
+
+                var constantDictionary = InitConstantDictionary();
+                m_constnantsDictionary = constantDictionary;
+                return constantDictionary;
+            }
+        }
+
+        private Dictionary<string, LocalizedString> InitConstantDictionary()
+        {
+            var constnantsDictionary = new Dictionary<string, LocalizedString>();
             Dictionary<string, LocalizedString> result = new Dictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
@@ -347,10 +393,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return result;
             }
 
-            JObject keyValueObjects = (JObject) m_jsonDictionary.SelectToken("constants");
+            JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("constants");
             if (keyValueObjects == null)
             {
-                return m_constnantsDictionary;
+                return constnantsDictionary;
             }
 
 
@@ -360,12 +406,12 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             {
                 KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
                 LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
-                m_constnantsDictionary.Add(ls.Name, ls);
+                constnantsDictionary.Add(ls.Name, ls);
             }
 
             keyValueEnumerator.Dispose();
 
-            return m_constnantsDictionary;
+            return constnantsDictionary;
         }
 
 

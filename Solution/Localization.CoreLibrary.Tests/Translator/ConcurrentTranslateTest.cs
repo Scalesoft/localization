@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Manager.Impl;
@@ -48,10 +47,6 @@ namespace Localization.CoreLibrary.Tests.Translator
                 var key = availableKeys[iteration % availableKeys.Length];
                 fileLocalizationManager.Translate(key);
             });
-
-            var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new[] { "pondělí" }, new CultureInfo(configuration.DefaultCulture), "global");
-
-            Assert.AreEqual("Dnes je pondělí.", ls.Value);
         }
     }
 }
