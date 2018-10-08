@@ -1,0 +1,13 @@
+﻿{
+  "culture": "cs",
+  "scope": "global",
+  "dictionary": {
+    "cancel": "Zrušit",
+    "retry": "Opakovat",
+    "delete": "Smazat",
+    "close": "Zavřít",
+    "yes": "Ano",
+    "no": "Ne",
+    "ok": "OK"
+  }
+}
