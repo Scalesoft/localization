@@ -22,7 +22,7 @@ namespace Localization.Database.EFCore.Service
             //Should be empty.
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo, string scope)
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo, string scope)
         {
             Culture culture = GetCulture(cultureInfo.Name);
             DictionaryScope dictionaryScope = GetDictionaryScope(scope);
@@ -38,7 +38,7 @@ namespace Localization.Database.EFCore.Service
             return resultDictionary;
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope)
         {
             Culture culture = GetCulture(cultureInfo.Name);
             DictionaryScope dictionaryScope = GetDictionaryScope(scope);
@@ -62,7 +62,7 @@ namespace Localization.Database.EFCore.Service
             return resultDictionary;
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope)
         {
             Culture culture = GetCulture(cultureInfo.Name);
             DictionaryScope dictionaryScope = GetDictionaryScope(scope);

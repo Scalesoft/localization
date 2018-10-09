@@ -7,10 +7,10 @@ namespace Localization.CoreLibrary.Database
 {
     public interface IDatabaseDictionaryService
     {
-        Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo, string scope);
+        IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo, string scope);
 
-        Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope);
+        IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope);
 
-        Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope);
+        IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope);
     }
 }

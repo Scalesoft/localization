@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -33,9 +34,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private JObject m_jsonDictionary;
         private JObject m_jsonPluralizedDictionary;
 
-        private volatile Dictionary<string, LocalizedString> m_dictionary;
-        private volatile Dictionary<string, PluralizedString> m_pluralizedDictionary;
-        private volatile Dictionary<string, LocalizedString> m_constnantsDictionary;
+        private volatile ConcurrentDictionary<string, LocalizedString> m_dictionary;
+        private volatile ConcurrentDictionary<string, PluralizedString> m_pluralizedDictionary;
+        private volatile ConcurrentDictionary<string, LocalizedString> m_constnantsDictionary;
         
         private ILocalizationDictionary m_parentDictionary;
         private ILocalizationDictionary m_childDictionary;
@@ -208,9 +209,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
         }
 
-        private Dictionary<string, LocalizedString> InitDictionary()
+        private ConcurrentDictionary<string, LocalizedString> InitDictionary()
         {
-            var dictionary = new Dictionary<string, LocalizedString>();
+            var dictionary = new ConcurrentDictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
                 if (Logger.IsWarningEnabled())
@@ -234,7 +235,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             {
                 KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
                 LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
-                dictionary.Add(ls.Name, ls);
+                dictionary.TryAdd(ls.Name, ls);
             }
 
             keyValueEnumerator.Dispose();
@@ -262,9 +263,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
         }
 
-        private Dictionary<string, PluralizedString> InitPluralizedDictionary()
+        private ConcurrentDictionary<string, PluralizedString> InitPluralizedDictionary()
         {
-            var pluralizedDictionary = new Dictionary<string, PluralizedString>();
+            var pluralizedDictionary = new ConcurrentDictionary<string, PluralizedString>();
             if (!IsPluralizationLoaded())
             {
                 if (Logger.IsWarningEnabled())
@@ -351,7 +352,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 }
 
                 childrenTriplesEnumerator.Dispose();
-                pluralizedDictionary.Add(key, pluralizedString);
+                pluralizedDictionary.TryAdd(key, pluralizedString);
             }
 
             keyValueEnumerator.Dispose();
@@ -379,10 +380,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
         }
 
-        private Dictionary<string, LocalizedString> InitConstantDictionary()
+        private ConcurrentDictionary<string, LocalizedString> InitConstantDictionary()
         {
-            var constnantsDictionary = new Dictionary<string, LocalizedString>();
-            Dictionary<string, LocalizedString> result = new Dictionary<string, LocalizedString>();
+            var constnantsDictionary = new ConcurrentDictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
                 if (Logger.IsWarningEnabled())
@@ -390,7 +390,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                     Logger.LogWarning(NotLoadedMsg);
                 }
 
-                return result;
+                return constnantsDictionary;
             }
 
             JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("constants");
@@ -406,7 +406,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             {
                 KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
                 LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
-                constnantsDictionary.Add(ls.Name, ls);
+                constnantsDictionary.TryAdd(ls.Name, ls);
             }
 
             keyValueEnumerator.Dispose();
