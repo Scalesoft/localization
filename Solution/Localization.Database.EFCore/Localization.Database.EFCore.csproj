@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;netstandard2.0</TargetFrameworks>
-    <Version>1.0.7</Version>
+    <Version>1.1.0</Version>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
