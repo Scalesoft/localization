@@ -36,7 +36,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         private volatile ConcurrentDictionary<string, LocalizedString> m_dictionary;
         private volatile ConcurrentDictionary<string, PluralizedString> m_pluralizedDictionary;
-        private volatile ConcurrentDictionary<string, LocalizedString> m_constnantsDictionary;
+        private volatile ConcurrentDictionary<string, LocalizedString> m_constantsDictionary;
         
         private ILocalizationDictionary m_parentDictionary;
         private ILocalizationDictionary m_childDictionary;
@@ -362,20 +362,20 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public IDictionary<string, LocalizedString> ListConstants()
         {
-            if (m_constnantsDictionary != null)
+            if (m_constantsDictionary != null)
             {
-                return m_constnantsDictionary;
+                return m_constantsDictionary;
             }
 
             lock (m_initLock)
             {
-                if (m_constnantsDictionary != null)
+                if (m_constantsDictionary != null)
                 {
-                    return m_constnantsDictionary;
+                    return m_constantsDictionary;
                 }
 
                 var constantDictionary = InitConstantDictionary();
-                m_constnantsDictionary = constantDictionary;
+                m_constantsDictionary = constantDictionary;
                 return constantDictionary;
             }
         }
