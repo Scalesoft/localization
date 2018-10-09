@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using Localization.CoreLibrary.Common;
@@ -13,7 +14,7 @@ namespace Localization.CoreLibrary.Pluralization
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
-        private readonly Dictionary<PluralizationInterval, LocalizedString> m_pluralized;
+        private readonly ConcurrentDictionary<PluralizationInterval, LocalizedString> m_pluralized;
         private readonly LocalizedString m_defaultLocalizedString;
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Localization.CoreLibrary.Pluralization
             Guard.ArgumentNotNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
 
             m_defaultLocalizedString = defaultLocalizedString; 
-            m_pluralized = new Dictionary<PluralizationInterval, LocalizedString>();
+            m_pluralized = new ConcurrentDictionary<PluralizationInterval, LocalizedString>();
         }
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace Localization.CoreLibrary.Pluralization
                 throw new PluralizedStringIntervalOverlapException(overlapErrorMsg);
             }        
 
-            m_pluralized.Add(pluralizationInterval, localizedString);
+            m_pluralized.TryAdd(pluralizationInterval, localizedString);
         }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace Localization.CoreLibrary.Pluralization
         {
             Guard.ArgumentNotNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
 
-            Dictionary<PluralizationInterval, LocalizedString>.KeyCollection pluralizedKeys = m_pluralized.Keys;
+            var pluralizedKeys = m_pluralized.Keys;
             foreach (PluralizationInterval pluralizedKey in pluralizedKeys)
             {
                 if (pluralizedKey.IsOverlaping(pluralizationInterval))

@@ -188,7 +188,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return JsonExtension;
         }
 
-        public Dictionary<string, LocalizedString> List()
+        public IDictionary<string, LocalizedString> List()
         {
             if (m_dictionary != null)
             {
@@ -242,7 +242,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return dictionary;
         }
 
-        public Dictionary<string, PluralizedString> ListPlurals()
+        public IDictionary<string, PluralizedString> ListPlurals()
         {
             if (m_pluralizedDictionary != null)
             {
@@ -359,7 +359,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return pluralizedDictionary;
         }
 
-        public Dictionary<string, LocalizedString> ListConstants()
+        public IDictionary<string, LocalizedString> ListConstants()
         {
             if (m_constnantsDictionary != null)
             {

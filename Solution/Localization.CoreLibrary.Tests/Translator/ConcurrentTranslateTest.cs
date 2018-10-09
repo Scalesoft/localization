@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Manager.Impl;

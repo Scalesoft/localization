@@ -41,7 +41,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetDefaultDictionaryTest()
         {
-            Dictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File);
+            IDictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File);
             LocalizedString q0; LocalizedString q1; LocalizedString q2; LocalizedString q3; LocalizedString q4;
             dictionary.TryGetValue("text-1-odst", out q0);
             dictionary.TryGetValue("text-2-odst", out q1);
@@ -62,7 +62,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetManuallyDefaultDictionaryTest()
         {
-            Dictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(defaultCulture));
+            IDictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(defaultCulture));
             LocalizedString q0; LocalizedString q1; LocalizedString q2; LocalizedString q3; LocalizedString q4;
             dictionary.TryGetValue("text-1-odst", out q0);
             dictionary.TryGetValue("text-2-odst", out q1);
@@ -80,7 +80,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetManuallyScopedDictionaryTest()
         {
-            Dictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(defaultCulture), testDictionaryScope);
+            IDictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(defaultCulture), testDictionaryScope);
             LocalizedString q0; LocalizedString q1; LocalizedString q2; LocalizedString q3; LocalizedString q4;
             dictionary.TryGetValue("informace-1-odst", out q0);
             dictionary.TryGetValue("informace-2-odst", out q1);
@@ -103,7 +103,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetSupportedNoScopedDictionaryTest()
         {
-            Dictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(supportedCulture));
+            IDictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(supportedCulture));
             LocalizedString q0; LocalizedString q1; LocalizedString q2; LocalizedString q3; LocalizedString q4;
             dictionary.TryGetValue("text-1-odst", out q0);
             dictionary.TryGetValue("text-2-odst", out q1);
@@ -121,7 +121,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetSupportedScopedDictionaryTest()
         {
-            Dictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(supportedCulture), testDictionaryScope);
+            IDictionary<string, LocalizedString> dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(supportedCulture), testDictionaryScope);
             LocalizedString q0;
             dictionary.TryGetValue("informace-1-odst", out q0);
 

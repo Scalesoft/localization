@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -104,17 +103,17 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
         }
 
-        public Dictionary<string,LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).List();
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
         }

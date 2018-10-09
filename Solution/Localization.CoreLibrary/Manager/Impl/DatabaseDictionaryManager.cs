@@ -23,7 +23,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             m_dbDictionaryService = dbDictionaryService;
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
@@ -31,7 +31,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             return m_dbDictionaryService.GetDictionary(cultureInfo, scope);
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
@@ -39,9 +39,9 @@ namespace Localization.CoreLibrary.Manager.Impl
             return m_dbDictionaryService.GetPluralizedDictionary(cultureInfo, scope);
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-           cultureInfo = CultureInfoNullCheck(cultureInfo);
+            cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
             return m_dbDictionaryService.GetConstantsDictionary(cultureInfo, scope);

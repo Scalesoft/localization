@@ -105,7 +105,7 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         public void PluralizedDictionaryDottedKeyTest()
         {
             ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
-            Dictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            IDictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
             Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč.stringu"));
 
             PluralizedString pluralizedString = localizedPluralizedStrings["klíč.stringu"];
@@ -163,7 +163,7 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         public void PluralizedDictionaryLoadTest()
         {
             ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
-            Dictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            IDictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
             Assert.AreEqual(2, localizedPluralizedStrings.Count);
 
             Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč-stringu"));

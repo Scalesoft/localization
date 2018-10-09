@@ -29,9 +29,9 @@ namespace Localization.CoreLibrary.Translator
             return Localization.Translator.TranslateConstant(LocTranslationSource.Auto, text, cultureInfo, scope);
         }
 
-        public static Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public static IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            Dictionary<string, LocalizedString> result = Localization.Dictionary.GetDictionary(LocTranslationSource.Auto, cultureInfo, scope);
+            IDictionary<string, LocalizedString> result = Localization.Dictionary.GetDictionary(LocTranslationSource.Auto, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -40,10 +40,10 @@ namespace Localization.CoreLibrary.Translator
             return result;
         }
 
-        public static Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
+        public static IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            Dictionary<string, LocalizedString> result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.Auto, cultureInfo, scope);
+            IDictionary<string, LocalizedString> result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.Auto, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -52,10 +52,10 @@ namespace Localization.CoreLibrary.Translator
             return result;
         }
 
-        public static Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
+        public static IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            Dictionary<string, PluralizedString> result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.Auto, cultureInfo, scope);
+            IDictionary<string, PluralizedString> result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.Auto, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, PluralizedString>();

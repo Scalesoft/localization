@@ -3,7 +3,6 @@ using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
-using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;

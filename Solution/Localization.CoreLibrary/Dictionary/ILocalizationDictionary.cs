@@ -39,17 +39,17 @@ namespace Localization.CoreLibrary.Dictionary
         /// Dictionary.
         /// </summary>
         /// <returns>All key-value strings.</returns>
-        Dictionary<string, LocalizedString> List();
+        IDictionary<string, LocalizedString> List();
         /// <summary>
         /// Dictionary.
         /// </summary>
         /// <returns>All pluralized strings.</returns>
-        Dictionary<string, PluralizedString> ListPlurals();
+        IDictionary<string, PluralizedString> ListPlurals();
         /// <summary>
         /// Dictionary
         /// </summary>
         /// <returns>All special constant strings.</returns>
-        Dictionary<string, LocalizedString> ListConstants();
+        IDictionary<string, LocalizedString> ListConstants();
             /// <summary>
         /// Parent dictionary based on culture hierarchy.
         /// </summary>

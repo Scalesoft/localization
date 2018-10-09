@@ -433,28 +433,28 @@ namespace Localization.CoreLibrary
             return m_configuration.DefaultCulture();
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(LocTranslationSource translationSource,
+        public IDictionary<string, LocalizedString> GetDictionary(LocTranslationSource translationSource,
             CultureInfo cultureInfo = null, string scope = null)
         {
-            Dictionary<string, LocalizedString> result =
+            IDictionary<string, LocalizedString> result =
                 GetDictonaryManager(translationSource).GetDictionary(cultureInfo, scope);
 
             return result;
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(LocTranslationSource translationSource,
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(LocTranslationSource translationSource,
             CultureInfo cultureInfo = null, string scope = null)
         {
-            Dictionary<string, PluralizedString> result =
+            IDictionary<string, PluralizedString> result =
                 GetDictonaryManager(translationSource).GetPluralizedDictionary(cultureInfo, scope);
 
             return result;
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(LocTranslationSource translationSource,
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(LocTranslationSource translationSource,
             CultureInfo cultureInfo = null, string scope = null)
         {
-            Dictionary<string, LocalizedString> result =
+            IDictionary<string, LocalizedString> result =
                 GetDictonaryManager(translationSource).GetConstantsDictionary(cultureInfo, scope);
 
             return result;

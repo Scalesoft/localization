@@ -3,6 +3,6 @@
   "scope": "global",
   "dictionary": {
     "text-1-odst": "global cs [text-1-odst]",
-    "extra-cs-key": "extra string in CS culture",
+    "extra-cs-key": "extra string in CS culture"
   }
 }

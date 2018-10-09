@@ -21,21 +21,21 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             LogNotSet();
 
             return new Dictionary<string, LocalizedString>();
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             LogNotSet();
 
             return new Dictionary<string, PluralizedString>();
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             LogNotSet();
 

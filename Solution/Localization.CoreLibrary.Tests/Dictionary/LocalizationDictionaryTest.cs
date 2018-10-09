@@ -20,7 +20,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             Assert.AreEqual(new CultureInfo("cs"), localizationDictionary.CultureInfo());
             Assert.AreEqual("slovniky", localizationDictionary.Scope());
 
-            Dictionary<string,LocalizedString> list = localizationDictionary.List();        
+            IDictionary<string,LocalizedString> list = localizationDictionary.List();        
             Assert.AreEqual(8, list.Count);
         }
 
@@ -75,9 +75,9 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             string localizationDictionaryExtension = localizationDictionary.Extension();
             bool localizationDictionaryIsRoot = localizationDictionary.IsRoot;
             bool localizationDictionaryIsLeaf = localizationDictionary.IsLeaf();
-            Dictionary<string, LocalizedString> localizedStrings = localizationDictionary.List();
-            Dictionary<string, LocalizedString> localizedConstants = localizationDictionary.ListConstants();
-            Dictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            IDictionary<string, LocalizedString> localizedStrings = localizationDictionary.List();
+            IDictionary<string, LocalizedString> localizedConstants = localizationDictionary.ListConstants();
+            IDictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
             ILocalizationDictionary parentLocalizationDictionary = localizationDictionary.ParentDictionary();
             string localizationDictionaryScope = localizationDictionary.Scope();
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -37,19 +38,19 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return string.Empty;
         }
 
-        public Dictionary<string, LocalizedString> List()
+        public IDictionary<string, LocalizedString> List()
         {
-            return new Dictionary<string, LocalizedString>();
+            return new ConcurrentDictionary<string, LocalizedString>();
         }
 
-        public Dictionary<string, PluralizedString> ListPlurals()
+        public IDictionary<string, PluralizedString> ListPlurals()
         {
-            return new Dictionary<string, PluralizedString>();
+            return new ConcurrentDictionary<string, PluralizedString>();
         }
 
-        public Dictionary<string, LocalizedString> ListConstants()
+        public IDictionary<string, LocalizedString> ListConstants()
         {
-            return new Dictionary<string, LocalizedString>();
+            return new ConcurrentDictionary<string, LocalizedString>();
         }
 
         public ILocalizationDictionary ParentDictionary()

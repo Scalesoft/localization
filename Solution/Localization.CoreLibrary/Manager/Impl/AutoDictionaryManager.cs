@@ -65,11 +65,11 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             IDictionaryManager localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource());
 
-            Dictionary<string, LocalizedString> result = localizationManager.GetDictionary(cultureInfo, scope);
+            IDictionary<string, LocalizedString> result = localizationManager.GetDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
                 localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource());
@@ -91,11 +91,11 @@ namespace Localization.CoreLibrary.Manager.Impl
             return result;
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             IDictionaryManager localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource());
 
-            Dictionary<string, PluralizedString> result =
+            IDictionary<string, PluralizedString> result =
                 localizationManager.GetPluralizedDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
@@ -118,11 +118,11 @@ namespace Localization.CoreLibrary.Manager.Impl
             return result;
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             IDictionaryManager localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource());
 
-            Dictionary<string, LocalizedString> result =
+            IDictionary<string, LocalizedString> result =
                 localizationManager.GetConstantsDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {

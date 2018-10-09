@@ -13,7 +13,7 @@ namespace Localization.CoreLibrary.Manager
         /// <param name="cultureInfo">Culture info includes names, calendars, date formatting etc. Default values is configured in localization config file.</param>
         /// <param name="scope">String name of a scope. Dictionary of this scope will be returned. Default value is global.</param>
         /// <returns>Dictionary with keys and localized values.</returns>
-        Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null);
+        IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null);
 
         /// <summary>
         /// Gets pluralized dictionary with keys and localized values.
@@ -21,7 +21,7 @@ namespace Localization.CoreLibrary.Manager
         /// <param name="cultureInfo">Culture info includes names, calendars, date formatting etc. Default values is configured in localization config file.</param>
         /// <param name="scope">String name of a scope. Dictionary of this scope will be returned. Default value is global.</param>
         /// <returns>Pluralized dictionary with keys and localized values.</returns>
-        Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
+        IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null);
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Localization.CoreLibrary.Manager
         /// <param name="cultureInfo">Culture info includes names, calendars, date formatting etc. Default values is configured in localization config file.</param>
         /// <param name="scope">String name of a scope. Dictionary of this scope will be returned. Default value is global.</param>
         /// <returns>Dictionary with keys and localized constant values.</returns>
-        Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null);
+        IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null);
 
         CultureInfo DefaultCulture();
 

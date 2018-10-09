@@ -17,7 +17,7 @@ namespace Localization.AspNetCore.Service
             m_dictionaryManager = Localization.CoreLibrary.Localization.Dictionary;
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(string scope = null,
+        public IDictionary<string, LocalizedString> GetDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
             CultureInfo requestCulture = RequestCulture();
@@ -25,7 +25,7 @@ namespace Localization.AspNetCore.Service
             return m_dictionaryManager.GetDictionary(translationSource, requestCulture, scope);
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(string scope = null,
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
             CultureInfo requestCulture = RequestCulture();
@@ -33,7 +33,7 @@ namespace Localization.AspNetCore.Service
             return m_dictionaryManager.GetPluralizedDictionary(translationSource, requestCulture, scope);
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(string scope = null,
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
             CultureInfo requestCulture = RequestCulture();
