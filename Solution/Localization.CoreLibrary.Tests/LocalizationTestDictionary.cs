@@ -21,7 +21,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = defaultCulture;
-            configuration.SupportedCultures = new List<string> { supportedCulture, "es" };
+            configuration.SupportedCultures = new List<string> { supportedCulture, "es", defaultCulture };
 
             configuration.AutoLoadResources = true;
             configuration.FirstAutoTranslateResource = LocTranslationSource.File.ToString();

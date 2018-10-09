@@ -3,9 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,7 +25,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> {"en", "es"};
+            configuration.SupportedCultures = new List<string> {"en", "es", "cs"};
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -43,7 +41,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es" };
+            configuration.SupportedCultures = new List<string> { "en", "es", "cs" };
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -70,7 +68,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es" };
+            configuration.SupportedCultures = new List<string> { "en", "es", "cs" };
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
@@ -93,7 +91,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es" };
+            configuration.SupportedCultures = new List<string> { "en", "es", "cs" };
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
             configuration.AutoLoadResources = true;
 
@@ -126,7 +124,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh" };
+            configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh", "cs" };
             configuration.AutoLoadResources = true;
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
 
@@ -165,7 +163,7 @@ namespace Localization.CoreLibrary.Tests
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh" };
+            configuration.SupportedCultures = new List<string> { "en", "es", "hu", "zh", "cs" };
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
             configuration.AutoLoadResources = false;
             configuration.FirstAutoTranslateResource = LocTranslationSource.File.ToString();

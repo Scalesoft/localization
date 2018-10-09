@@ -6,10 +6,14 @@
 
   <ItemGroup>
     <None Remove="Localization\**" />
+    <None Remove="LocalizationTree\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Localization\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LocalizationTree\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

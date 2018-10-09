@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
-using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,7 +14,7 @@ namespace Localization.CoreLibrary.Tests.Translator
             LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = "cs";
-            configuration.SupportedCultures = new List<string>() {"en", "hu", "zh"};
+            configuration.SupportedCultures = new List<string>() {"en", "hu", "zh", "cs"};
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString();
             configuration.AutoLoadResources = true;
             configuration.FirstAutoTranslateResource = LocLocalizationResource.File.ToString();
