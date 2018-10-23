@@ -128,7 +128,7 @@ namespace Localization.CoreLibrary
         /// is <see cref="EmptyDictionaryFactory"/></param>
         /// <param name="loggerFactory">Logger factory.
         /// Default is <see cref="NullLoggerFactory"/></param>
-        /// <exception cref="LocalizationLibraryException">Thrown if libary is already initialized.</exception>
+        /// <exception cref="LocalizationLibraryException">Thrown if library is already initialized.</exception>
         public static void Init(IConfiguration configuration,
             IDatabaseServiceFactory databaseServiceFactory = null,
             IDictionaryFactory dictionaryFactory = null,
@@ -239,7 +239,7 @@ namespace Localization.CoreLibrary
         /// Default is <see cref="JsonDictionaryFactory"/></param>
         /// <param name="loggerFactory">Logger factory.
         /// Default is <see cref="NullLoggerFactory"/></param>
-        /// <exception cref="LocalizationLibraryException">Thrown if libary is already initialized.</exception>
+        /// <exception cref="LocalizationLibraryException">Thrown if library is already initialized.</exception>
         public static void Init(string configFilePath,
             IDatabaseServiceFactory databaseServiceFactory = null,
             IDictionaryFactory dictionaryFactory = null,

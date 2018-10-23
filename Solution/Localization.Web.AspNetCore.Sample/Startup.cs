@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Localization.AspNetCore.Service;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
@@ -12,9 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Factory;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.Web.AspNetCore.Sample
@@ -36,13 +33,6 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
-
-
-
-            services.AddDbContext<StaticTextsContext>(options => options
-                .UseSqlServer(databaseConnectionString));
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
 
@@ -61,6 +51,8 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);         
@@ -77,7 +69,7 @@ namespace Localization.Web.AspNetCore.Sample
 
             Localization.CoreLibrary.Localization.Init(
                 @"localizationsettings.json",
-                new DatabaseServiceFactory(app.ApplicationServices.GetService<StaticTextsContext>()),
+                new DatabaseServiceFactory(options => { options.UseSqlServer(databaseConnectionString); }),
                 new JsonDictionaryFactory());
             AddLocalizationDictionary("cs-CZ.json");
             AddLocalizationDictionary("en.json");

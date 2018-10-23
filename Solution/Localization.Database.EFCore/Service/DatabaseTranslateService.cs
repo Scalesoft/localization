@@ -13,13 +13,12 @@ using Microsoft.Extensions.Localization;
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.EntityBuilder;
 using Localization.Database.EFCore.Logging;
-using Microsoft.EntityFrameworkCore;
 
 namespace Localization.Database.EFCore.Service
 {
     public sealed class DatabaseTranslateService : DatabaseServiceBase, IDatabaseTranslateService
     {     
-        public DatabaseTranslateService(IDatabaseStaticTextContext dbContext, IConfiguration configuration) 
+        public DatabaseTranslateService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration) 
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
             //Should be empty.
@@ -35,14 +34,14 @@ namespace Localization.Database.EFCore.Service
 
         private async Task CheckCulturesInDatabaseAsync()
         {
-            IImmutableList<CultureInfo> supportedCultures = Configuration.SupportedCultures();
+            IImmutableList<CultureInfo> supportedCultures = m_configuration.SupportedCultures();
             foreach (CultureInfo supportedCulture in supportedCultures)
             {
                 await CreateCultureInDatabase(supportedCulture);
                 await CreateCultureHierarchySelfReference(supportedCulture);
             }
             
-            await CreateCultureHierarchy(supportedCultures, Configuration.DefaultCulture());
+            await CreateCultureHierarchy(supportedCultures, m_configuration.DefaultCulture());
         }
 
         /// <summary>
@@ -54,18 +53,21 @@ namespace Localization.Database.EFCore.Service
         {
             string cultureName = cultureInfo.Name;
 
-            CultureDao cultureDao = new CultureDao(DbContext.Culture);
-
-            bool cultureExist = await cultureDao.CultureExist(cultureName);
-            if (!cultureExist)
+            using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = new CultureBuilder().Name(cultureName).Build();
+                CultureDao cultureDao = new CultureDao(dbContext.Culture);
 
-                cultureDao.Create(culture);
-                ((DbContext)DbContext).SaveChanges();
-                return true;
+                bool cultureExist = await cultureDao.CultureExist(cultureName);
+                if (!cultureExist)
+                {
+                    Culture culture = new CultureBuilder().Name(cultureName).Build();
+
+                    cultureDao.Create(culture);
+                    dbContext.SaveChanges();
+                    return true;
+                }
             }
-
+            
             return false;
         }
 
@@ -75,101 +77,107 @@ namespace Localization.Database.EFCore.Service
         /// <param name="cultureInfo">Culture</param>
         private async Task CreateCultureHierarchySelfReference(CultureInfo cultureInfo)
         {
-            CultureDao cultureDao = new CultureDao(DbContext.Culture);
-            Culture culture = cultureDao.FindByName(cultureInfo.Name);
-
-            CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(DbContext.CultureHierarchy);
-
-            bool isCultureSelfReferencing = await cultureHierarchyDao.IsCultureSelfReferencing(culture);
-            if (!isCultureSelfReferencing)
+            using (var dbContext = m_dbContextFunc.Invoke())
             {
-                cultureHierarchyDao.MakeCultureSelfReferencing(culture);
-                ((DbContext)DbContext).SaveChanges();
+                CultureDao cultureDao = new CultureDao(dbContext.Culture);
+                Culture culture = cultureDao.FindByName(cultureInfo.Name);
+
+                CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(dbContext.CultureHierarchy);
+
+                bool isCultureSelfReferencing = await cultureHierarchyDao.IsCultureSelfReferencing(culture);
+                if (!isCultureSelfReferencing)
+                {
+                    cultureHierarchyDao.MakeCultureSelfReferencing(culture);
+                    dbContext.SaveChanges();
+                }
             }
         }
 
         private async Task CreateCultureHierarchy(IImmutableList<CultureInfo> supportedCultures, CultureInfo defaultCulture)
         {
-            CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(DbContext.CultureHierarchy);
-            CultureDao cultureDao = new CultureDao(DbContext.Culture);
-
-            Culture defaultCultureEntity = cultureDao.FindByName(defaultCulture.Name);
-
-            IList<CultureInfo> supportedCulturesWithoutDefault = supportedCultures.ToList();
-            supportedCulturesWithoutDefault.Remove(defaultCulture);
-
-            foreach (CultureInfo supportedCultureA in supportedCulturesWithoutDefault)
+            using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture cultureEntityA = cultureDao.FindByName(supportedCultureA.Name);
+                CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(dbContext.CultureHierarchy);
+                CultureDao cultureDao = new CultureDao(dbContext.Culture);
 
-                foreach (CultureInfo supportedCultureB in supportedCultures)
+                Culture defaultCultureEntity = cultureDao.FindByName(defaultCulture.Name);
+
+                IList<CultureInfo> supportedCulturesWithoutDefault = supportedCultures.ToList();
+                supportedCulturesWithoutDefault.Remove(defaultCulture);
+
+                foreach (CultureInfo supportedCultureA in supportedCulturesWithoutDefault)
                 {
-                    if (supportedCultureA.Name == supportedCultureB.Name)
-                    {
-                        continue;
-                    }
+                    Culture cultureEntityA = cultureDao.FindByName(supportedCultureA.Name);
 
-                    Culture cultureEntityB = cultureDao.FindByName(supportedCultureB.Name);
-
-                    if (supportedCultureB.Parent.Equals(supportedCultureA))
+                    foreach (CultureInfo supportedCultureB in supportedCultures)
                     {
-                        bool isCultureBReferencingA =
-                            await cultureHierarchyDao.IsCultureReferencing(cultureEntityB, cultureEntityA);
-                        if (!isCultureBReferencingA)
+                        if (supportedCultureA.Name == supportedCultureB.Name)
                         {
-                            cultureHierarchyDao.MakeCultureReference(cultureEntityB, cultureEntityA, 1);
-                            ((DbContext)DbContext).SaveChanges();
+                            continue;
+                        }
+
+                        Culture cultureEntityB = cultureDao.FindByName(supportedCultureB.Name);
+
+                        if (supportedCultureB.Parent.Equals(supportedCultureA))
+                        {
+                            bool isCultureBReferencingA =
+                                await cultureHierarchyDao.IsCultureReferencing(cultureEntityB, cultureEntityA);
+                            if (!isCultureBReferencingA)
+                            {
+                                cultureHierarchyDao.MakeCultureReference(cultureEntityB, cultureEntityA, 1);
+                                dbContext.SaveChanges();
+                            }
                         }
                     }
                 }
-            }
 
-            foreach (CultureInfo supportedCulture in supportedCulturesWithoutDefault)
-            {
-                if (supportedCulture.IsNeutralCulture)
+                foreach (CultureInfo supportedCulture in supportedCulturesWithoutDefault)
                 {
-                    Culture cultureEntity = cultureDao.FindByName(supportedCulture.Name);
-
-                    bool isCultureReferencingDefaultCulture =
-                        await cultureHierarchyDao.IsCultureReferencing(cultureEntity, defaultCultureEntity);
-                    if (!isCultureReferencingDefaultCulture)
+                    if (supportedCulture.IsNeutralCulture)
                     {
-                        cultureHierarchyDao.MakeCultureReference(cultureEntity, defaultCultureEntity, 1);
-                        ((DbContext)DbContext).SaveChanges();
+                        Culture cultureEntity = cultureDao.FindByName(supportedCulture.Name);
+
+                        bool isCultureReferencingDefaultCulture =
+                            await cultureHierarchyDao.IsCultureReferencing(cultureEntity, defaultCultureEntity);
+                        if (!isCultureReferencingDefaultCulture)
+                        {
+                            cultureHierarchyDao.MakeCultureReference(cultureEntity, defaultCultureEntity, 1);
+                            dbContext.SaveChanges();
+                        }
                     }
                 }
-            }
 
-            //
-            foreach (CultureInfo supportedCultureA in supportedCultures)
-            {
-                Culture cultureEntityA = cultureDao.FindByName(supportedCultureA.Name);
-
-                foreach (CultureInfo supportedCultureB in supportedCultures)
+                //
+                foreach (CultureInfo supportedCultureA in supportedCultures)
                 {
-                    if (supportedCultureA.Name == supportedCultureB.Name || supportedCultureB.Name == defaultCultureEntity.Name)
-                    {
-                        continue;
-                    }
+                    Culture cultureEntityA = cultureDao.FindByName(supportedCultureA.Name);
 
-                    Culture cultureEntityB = cultureDao.FindByName(supportedCultureB.Name);
-                    if (supportedCultureB.Parent.Equals(supportedCultureA))
+                    foreach (CultureInfo supportedCultureB in supportedCultures)
                     {
-                        if (cultureEntityA.Name != defaultCultureEntity.Name)
+                        if (supportedCultureA.Name == supportedCultureB.Name || supportedCultureB.Name == defaultCultureEntity.Name)
                         {
+                            continue;
+                        }
 
-                            bool isCultureAReferencingDefaultCulture =
-                                await cultureHierarchyDao.IsCultureReferencing(cultureEntityA, defaultCultureEntity);
-                            if(isCultureAReferencingDefaultCulture)
+                        Culture cultureEntityB = cultureDao.FindByName(supportedCultureB.Name);
+                        if (supportedCultureB.Parent.Equals(supportedCultureA))
+                        {
+                            if (cultureEntityA.Name != defaultCultureEntity.Name)
                             {
-                                bool isCultureBReferencingDefaultCulture =
-                                    await cultureHierarchyDao.IsCultureReferencing(cultureEntityB, defaultCultureEntity);
-                                if (!isCultureBReferencingDefaultCulture)
+
+                                bool isCultureAReferencingDefaultCulture =
+                                    await cultureHierarchyDao.IsCultureReferencing(cultureEntityA, defaultCultureEntity);
+                                if (isCultureAReferencingDefaultCulture)
                                 {
-                                    cultureHierarchyDao.MakeCultureReference(cultureEntityB, defaultCultureEntity, 2);
-                                    ((DbContext)DbContext).SaveChanges();
-                                }                               
-                            }                        
+                                    bool isCultureBReferencingDefaultCulture =
+                                        await cultureHierarchyDao.IsCultureReferencing(cultureEntityB, defaultCultureEntity);
+                                    if (!isCultureBReferencingDefaultCulture)
+                                    {
+                                        cultureHierarchyDao.MakeCultureReference(cultureEntityB, defaultCultureEntity, 2);
+                                        dbContext.SaveChanges();
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -179,31 +187,37 @@ namespace Localization.Database.EFCore.Service
 
         public LocalizedString DatabaseTranslate(string text, CultureInfo cultureInfo, string scope)
         {
-            Culture culture = GetCulture(cultureInfo.Name);
-            DictionaryScope dictionaryScope = GetDictionaryScope(scope);
-
-            StaticTextDao staticTextDao = new StaticTextDao(DbContext.StaticText);
-            IStaticText dbResult = staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, DbContext.CultureHierarchy);
-
-            if (dbResult == null)
+            using (var dbContext = m_dbContextFunc.Invoke())
             {
-                return null;
+                Culture culture = GetCulture(dbContext, cultureInfo.Name);
+                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
+
+                StaticTextDao staticTextDao = new StaticTextDao(dbContext.StaticText);
+                IStaticText dbResult = staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, dbContext.CultureHierarchy);
+
+                if (dbResult == null)
+                {
+                    return null;
+                }
+                return new LocalizedString(text, dbResult.Text, false);
             }
-            return new LocalizedString(text, dbResult.Text, false);
         }
 
         public LocalizedString DatabaseTranslateFormat(string text, object[] parameters, CultureInfo cultureInfo, string scope)
         {
-            CultureDao cultureDao = new CultureDao(DbContext.Culture);
-            Culture culture = cultureDao.FindByName(cultureInfo.Name);
+            using (var dbContext = m_dbContextFunc.Invoke())
+            {
+                CultureDao cultureDao = new CultureDao(dbContext.Culture);
+                Culture culture = cultureDao.FindByName(cultureInfo.Name);
 
-            DictionaryScopeDao dictionaryScopeDao = new DictionaryScopeDao(DbContext.DictionaryScope);
-            DictionaryScope dictionaryScope = dictionaryScopeDao.FindByName(scope);
+                DictionaryScopeDao dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
+                DictionaryScope dictionaryScope = dictionaryScopeDao.FindByName(scope);
 
-            StaticTextDao staticTextDao = new StaticTextDao(DbContext.StaticText);
-            IStaticText dbResult = staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, DbContext.CultureHierarchy);
+                StaticTextDao staticTextDao = new StaticTextDao(dbContext.StaticText);
+                IStaticText dbResult = staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, dbContext.CultureHierarchy);
 
-            return new LocalizedString(text, dbResult.Text, false);
+                return new LocalizedString(text, dbResult.Text, false);
+            }
         }
 
         public LocalizedString DatabaseTranslatePluralization(string text, int number, CultureInfo cultureInfo, string scope)

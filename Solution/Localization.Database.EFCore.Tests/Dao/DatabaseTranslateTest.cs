@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Localization.CoreLibrary;
 using Localization.CoreLibrary.Manager.Impl;
 using Localization.CoreLibrary.Util;
+using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Data.Impl;
 using Localization.Database.EFCore.Service;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ namespace Localization.Database.EFCore.Tests.Dao
     public class DatabaseTranslateTest
     {
         private DatabaseLocalizationManager m_databaseLocalizationManager;
+        private DbContextOptions<StaticTextsContext> m_builderOptions;
 
         [TestInitialize]
         public void InitTest()
@@ -28,15 +30,18 @@ namespace Localization.Database.EFCore.Tests.Dao
 
             var localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            var builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
+            m_builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
                 .UseSqlServer(Configuration.ConnectionString).Options;
 
-            var staticTextContext = new StaticTextsContext(builderOptions);
-
-            var dbTranslateService = new DatabaseTranslateService(staticTextContext, localizationConfiguration);
-            var dbDynamicTextService = new DatabaseDynamicTextService(staticTextContext, localizationConfiguration);
+            var dbTranslateService = new DatabaseTranslateService(CreateStaticTextContext, localizationConfiguration);
+            var dbDynamicTextService = new DatabaseDynamicTextService(CreateStaticTextContext, localizationConfiguration);
 
             m_databaseLocalizationManager = new DatabaseLocalizationManager(localizationConfiguration, dbTranslateService, dbDynamicTextService);
+        }
+
+        private IDatabaseStaticTextContext CreateStaticTextContext()
+        {
+            return new StaticTextsContext(m_builderOptions);
         }
 
         [TestMethod]
