@@ -9,6 +9,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+[assembly: InternalsVisibleTo("Localization.Database.EFCore.Tests")]
 namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class DatabaseLocalizationManager : LocalizationManager, ILocalizationManager, IDatabaseDynamicTextService
