@@ -13,13 +13,15 @@ namespace Localization.Database.EFCore.Tests.Dao
     [TestClass]
     public class StaticTextDaoTest
     {
-        [TestMethod]
-        public void FindByNameAndCultureAndScopeTest()
+        private DbContextOptions<StaticTextsContext> m_builderOptions;
+
+        [TestInitialize]
+        public void InitContext()
         {
-            DbContextOptions<StaticTextsContext> builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
+            m_builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
                 .UseSqlServer(Configuration.ConnectionString).Options;
 
-            using (StaticTextsContext context = new StaticTextsContext(builderOptions))
+            using (StaticTextsContext context = new StaticTextsContext(m_builderOptions))
             {
                 List<string> sqlFiles = LookupSortedSqlFileNames();
                 foreach (string sqlFile in sqlFiles)
@@ -28,14 +30,28 @@ namespace Localization.Database.EFCore.Tests.Dao
                     using (var streamReader = new StreamReader(stream))
                     {
                         string sqlStr = streamReader.ReadToEnd();
-                
+
                         context.Database.ExecuteSqlCommand(sqlStr);
                         context.SaveChanges();
                     }
                 }
             }
+        }
 
-            using (StaticTextsContext context = new StaticTextsContext(builderOptions))
+        private List<string> LookupSortedSqlFileNames()
+        {
+            string[] sqlFiles = Directory.GetFiles("Resources");
+
+            List<string> result = sqlFiles.ToList();
+            result.Sort();
+
+            return result;
+        }
+        
+        [TestMethod]
+        public void FindByNameAndCultureAndScopeTest()
+        {
+            using (StaticTextsContext context = new StaticTextsContext(m_builderOptions))
             {
                 Culture culture = context.Culture.First(t => t.Id == 1);
                 DictionaryScope dictionaryScope = context.DictionaryScope.First(t => t.Id == 2);
@@ -49,15 +65,36 @@ namespace Localization.Database.EFCore.Tests.Dao
             }
         }
 
-        private List<string> LookupSortedSqlFileNames()
-        {        
-            string[] sqlFiles = Directory.GetFiles("Resources");
+        [TestMethod]
+        public void FindAllByCultureAndScopeTest()
+        {
+            using (StaticTextsContext context = new StaticTextsContext(m_builderOptions))
+            {
+                Culture culture = context.Culture.First(t => t.Id == 1);
+                DictionaryScope dictionaryScope = context.DictionaryScope.First(t => t.Id == 2);
 
-            List<string> result = sqlFiles.ToList();
-            result.Sort();
 
-            return result;
+                StaticTextDao staticTextDao = new StaticTextDao(context.StaticText);
+                StaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                Assert.AreEqual(7, result.Length);
+                Assert.AreEqual("support", result[0].Name);
+            }
         }
 
+        [TestMethod]
+        public void FindAllConstantByCultureAndScopeTest()
+        {
+            using (StaticTextsContext context = new StaticTextsContext(m_builderOptions))
+            {
+                Culture culture = context.Culture.First(t => t.Id == 1);
+                DictionaryScope dictionaryScope = context.DictionaryScope.First(t => t.Id == 2);
+
+
+                ConstantStaticTextDao staticTextDao = new ConstantStaticTextDao(context.ConstantStaticText);
+                ConstantStaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                Assert.AreEqual(1, result.Length);
+                Assert.AreEqual("Pondělí", result[0].Text);
+            }
+        }
     }
 }
