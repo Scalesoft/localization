@@ -9,5 +9,7 @@ namespace Localization.CoreLibrary.Database
         DynamicText GetDynamicText(string name, string scope, CultureInfo cultureInfo);
         IList<DynamicText> GetAllDynamicText(string name, string scope);
         DynamicText SaveDynamicText(DynamicText dynamicText);
+        void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo);
+        void DeleteAllDynamicText(string name, string scope);
     }
 }

@@ -15,7 +15,7 @@ namespace Localization.Database.EFCore.Service
     public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
-        
+
 
         public DatabaseDynamicTextService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
@@ -30,7 +30,8 @@ namespace Localization.Database.EFCore.Service
                 Culture culture = GetCulture(dbContext, cultureInfo.Name);
 
                 StaticText value =
-                    new StaticTextDao(dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope, dbContext.CultureHierarchy);
+                    new StaticTextDao(dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope,
+                        dbContext.CultureHierarchy);
 
                 return new DynamicText
                 {
@@ -85,6 +86,7 @@ namespace Localization.Database.EFCore.Service
                 {
                     dictionaryScope = CreateDictionaryScope(dbContext, dynamicText.DictionaryScope);
                 }
+
                 Culture culture = GetCulture(dbContext, dynamicText.Culture);
                 bool existsInCulture = culture.Name == dynamicText.Culture;
 
@@ -94,7 +96,8 @@ namespace Localization.Database.EFCore.Service
                     CreateCultureHierarchy(dbContext, culture);
                 }
 
-                StaticText staticText = dao.FindByNameAndCultureAndScope(dynamicText.Name, culture, dictionaryScope, dbContext.CultureHierarchy);
+                StaticText staticText =
+                    dao.FindByNameAndCultureAndScope(dynamicText.Name, culture, dictionaryScope, dbContext.CultureHierarchy);
                 if (staticText == null || !existsInCulture || staticText.CultureId != culture.Id)
                 {
                     staticText = new StaticText();
@@ -125,10 +128,52 @@ namespace Localization.Database.EFCore.Service
             }
         }
 
+        public void DeleteAllDynamicText(string name, string scope)
+        {
+            using (var dbContext = m_dbContextFunc.Invoke())
+            {
+                var dao = new StaticTextDao(dbContext.StaticText);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var staticTextList = dao.FindByNameAndScope(name, dictionaryScope, dbContext.CultureHierarchy);
+
+                if (staticTextList.Count == 0)
+                {
+                    return;
+                }
+
+                foreach (var staticText in staticTextList)
+                {
+                    dao.Delete(staticText);
+                }
+
+                dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo)
+        {
+            using (var dbContext = m_dbContextFunc.Invoke())
+            {
+                var culture = GetCulture(dbContext, cultureInfo.Name);
+                var dao = new StaticTextDao(dbContext.StaticText);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var staticText = dao.FindByNameAndCultureAndScope(name, culture, dictionaryScope, dbContext.CultureHierarchy);
+
+                if (staticText == null)
+                {
+                    return;
+                }
+
+                dao.Delete(staticText);
+
+                dbContext.SaveChanges();
+            }
+        }
+
         private Culture CreateCulture(IDatabaseStaticTextContext dbContext, string cultureName)
         {
             CultureDao cultureDao = new CultureDao(dbContext.Culture);
-            return cultureDao.Create(new Culture() { Id = 0, Name = cultureName });
+            return cultureDao.Create(new Culture() {Id = 0, Name = cultureName});
         }
 
         private void CreateCultureHierarchy(IDatabaseStaticTextContext dbContext, Culture culture)
@@ -143,7 +188,7 @@ namespace Localization.Database.EFCore.Service
 
             CultureInfo cultureInfo = new CultureInfo(culture.Name);
             if (cultureInfo.IsNeutralCulture) //Just reference to default culture
-            {                
+            {
                 cultureHierarchyDao.MakeCultureReference(culture, defaultCulture, 1);
             }
             else
@@ -166,8 +211,7 @@ namespace Localization.Database.EFCore.Service
         private DictionaryScope CreateDictionaryScope(IDatabaseStaticTextContext dbContext, string dictionaryScopeName)
         {
             DictionaryScopeDao dsDao = new DictionaryScopeDao(dbContext.DictionaryScope);
-            return dsDao.Create(new DictionaryScope() { Name = dictionaryScopeName });
+            return dsDao.Create(new DictionaryScope() {Name = dictionaryScopeName});
         }
-
     }
 }

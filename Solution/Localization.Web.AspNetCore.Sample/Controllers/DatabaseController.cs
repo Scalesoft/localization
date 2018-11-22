@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Localization.AspNetCore.Service;
 using Localization.CoreLibrary.Util;
@@ -84,6 +85,39 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
                 }).ToList(),
             };
             return View("DynamicTextResult", result);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteAllDynamicText()
+        {
+            return View("DeleteAllDynamicText");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteAllDynamicText(string name, string scope)
+        {
+            m_dynamicTextService.DeleteAllDynamicText(name, scope);
+
+            return View("Index");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteDynamicText()
+        {
+            var model = new DynamicTextViewModel
+            {
+                SupportedCultures = GetSupportedCultures()
+            };
+
+            return View("DeleteDynamicText", model);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteDynamicText(DynamicTextViewModel dynamicTextViewModel)
+        {
+            m_dynamicTextService.DeleteDynamicText(dynamicTextViewModel.Name, dynamicTextViewModel.Scope, dynamicTextViewModel.Culture);
+
+            return View("Index");
         }
     }
 }

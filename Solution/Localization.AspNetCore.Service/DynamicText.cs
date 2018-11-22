@@ -32,6 +32,16 @@ namespace Localization.AspNetCore.Service
             return m_databaseDynamicTextService.SaveDynamicText(dynamicText);
         }
 
+        public void DeleteAllDynamicText(string name, string scope)
+        {
+            m_databaseDynamicTextService.DeleteAllDynamicText(name, scope);
+        }
+
+        public void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo)
+        {
+            m_databaseDynamicTextService.DeleteDynamicText(name, scope, cultureInfo);
+        }
+
         private CultureInfo RequestCulture()
         {
             HttpRequest request = HttpContextAccessor.HttpContext.Request;
