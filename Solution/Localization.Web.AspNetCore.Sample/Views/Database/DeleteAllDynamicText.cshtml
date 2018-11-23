@@ -1,13 +1,6 @@
 ﻿@using Localization.AspNetCore.Service
 @inject ILocalization Localizer
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
     <section id="saveDynamicTextForm">
         @using (Html.BeginForm("DeleteAllDynamicText", "Database", new {returnUrl = ViewData["ReturnUrl"]}, FormMethod.Post, true, new {@class = "form-horizontal", role = "form"}))
     {
@@ -33,5 +26,3 @@
         </div>
     }
     </section>
-</body>
-</html>
