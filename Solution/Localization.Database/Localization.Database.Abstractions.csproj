@@ -8,7 +8,7 @@
     <PackageOutputPath>..\..\build\</PackageOutputPath>
     <Authors>Scalesoft s.r.o.</Authors>
     <Company>Scalesoft s.r.o.</Company>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <PackageId>Scalesoft.Localization.Database.Abstractions</PackageId>
