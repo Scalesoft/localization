@@ -23,7 +23,7 @@ namespace Localization.CoreLibrary.Tests
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "es", "cs"}
             };
@@ -41,7 +41,7 @@ namespace Localization.CoreLibrary.Tests
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "es", "cs"}
             };
@@ -71,7 +71,7 @@ namespace Localization.CoreLibrary.Tests
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "es", "cs"}
             };
@@ -96,7 +96,7 @@ namespace Localization.CoreLibrary.Tests
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "es", "cs"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString(),
@@ -126,12 +126,11 @@ namespace Localization.CoreLibrary.Tests
         }
 
         [TestMethod]
-        [Ignore]
         public void PerformanceTest()
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string>
                 {
@@ -179,7 +178,7 @@ namespace Localization.CoreLibrary.Tests
 
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string>
                 {

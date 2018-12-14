@@ -1,0 +1,17 @@
+﻿{
+  "culture":"cs",
+  "scope":"global",
+  "dictionary": {
+    "klíč-stringu": {
+      "let": [
+        [null, -5, "let"],
+        [-4, -2, "roky"],
+        [-1, -1, "rok"],
+        [0, 0, "let"],
+        [1, 1, "rok"],
+        [2, 4, "roky"],
+        [5, null, "let"]
+      ]
+    }
+  }
+}

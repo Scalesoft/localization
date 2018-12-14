@@ -18,7 +18,7 @@ namespace Localization.CoreLibrary.Tests.Translator
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "cs"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()

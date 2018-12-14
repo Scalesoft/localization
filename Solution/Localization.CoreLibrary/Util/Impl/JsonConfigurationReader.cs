@@ -24,8 +24,10 @@ namespace Localization.CoreLibrary.Util.Impl
 
         public IConfiguration ReadConfiguration()
         {
-            var serializer = new JsonSerializer();
-            serializer.NullValueHandling = NullValueHandling.Ignore;
+            var serializer = new JsonSerializer
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            };
 
             LocalizationConfiguration.Configuration configuration;
 
@@ -43,7 +45,7 @@ namespace Localization.CoreLibrary.Util.Impl
         {
             if (!File.Exists(configurationFilePath))
             {
-                var errorMsg = string.Format("Configuration file \"{0}\" does not exist or you don't have permisson to read.",
+                var errorMsg = string.Format("Configuration file \"{0}\" does not exist or you don't have permission to read.",
                     configurationFilePath);
                 if (Logger.IsErrorEnabled())
                 {

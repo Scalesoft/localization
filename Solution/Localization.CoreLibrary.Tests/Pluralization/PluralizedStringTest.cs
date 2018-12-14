@@ -28,7 +28,7 @@ namespace Localization.CoreLibrary.Tests.Pluralization
             {
                 var psA = new PluralizedString(null);
             }
-            catch (PluralizedDefaultStringException)
+            catch (ArgumentNullException)
             {
                 exceptionThrown = true;
             }
@@ -103,14 +103,14 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void PluralizedDictionaryDottedKeyTest()
         {
-            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
+            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"Localization\slovniky\slovniky.cs.json");
             var localizedPluralizedStrings = localizationDictionary.ListPlurals();
-            Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč.stringu"));
+            Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč-stringu"));
 
-            var pluralizedString = localizedPluralizedStrings["klíč.stringu"];
+            var pluralizedString = localizedPluralizedStrings["klíč-stringu"];
 
-            var min = pluralizedString.GetPluralizedLocalizedString(Int32.MinValue);
-            var max = pluralizedString.GetPluralizedLocalizedString(Int32.MaxValue);
+            var min = pluralizedString.GetPluralizedLocalizedString(int.MinValue);
+            var max = pluralizedString.GetPluralizedLocalizedString(int.MaxValue);
             var zero = pluralizedString.GetPluralizedLocalizedString(0);
             var one = pluralizedString.GetPluralizedLocalizedString(1);
             var two = pluralizedString.GetPluralizedLocalizedString(2);
@@ -121,55 +121,55 @@ namespace Localization.CoreLibrary.Tests.Pluralization
 
             Assert.AreEqual("let", min.Value);
             Assert.AreEqual(false, min.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", min.Name);
+            Assert.AreEqual("klíč-stringu", min.Name);
 
             Assert.AreEqual("let", max.Value);
             Assert.AreEqual(false, max.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", max.Name);
+            Assert.AreEqual("klíč-stringu", max.Name);
 
             Assert.AreEqual("let", zero.Value);
             Assert.AreEqual(false, zero.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", zero.Name);
+            Assert.AreEqual("klíč-stringu", zero.Name);
 
             Assert.AreEqual("rok", one.Value);
             Assert.AreEqual(false, zero.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", zero.Name);
+            Assert.AreEqual("klíč-stringu", zero.Name);
 
             Assert.AreEqual("roky", two.Value);
             Assert.AreEqual(false, two.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", two.Name);
+            Assert.AreEqual("klíč-stringu", two.Name);
 
             Assert.AreEqual("roky", three.Value);
             Assert.AreEqual(false, three.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", three.Name);
+            Assert.AreEqual("klíč-stringu", three.Name);
 
             Assert.AreEqual("roky", four.Value);
             Assert.AreEqual(false, four.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", four.Name);
+            Assert.AreEqual("klíč-stringu", four.Name);
 
             Assert.AreEqual("let", five.Value);
             Assert.AreEqual(false, five.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", five.Name);
+            Assert.AreEqual("klíč-stringu", five.Name);
 
             Assert.AreEqual("let", six.Value);
             Assert.AreEqual(false, six.ResourceNotFound);
-            Assert.AreEqual("klíč.stringu", six.Name);
+            Assert.AreEqual("klíč-stringu", six.Name);
         }
 
 
         [TestMethod]
         public void PluralizedDictionaryLoadTest()
         {
-            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
+            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"Localization\slovniky\slovniky.cs.json");
             var localizedPluralizedStrings = localizationDictionary.ListPlurals();
-            Assert.AreEqual(2, localizedPluralizedStrings.Count);
+            Assert.AreEqual(1, localizedPluralizedStrings.Count);
 
             Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč-stringu"));
 
             var pluralizedString = localizedPluralizedStrings["klíč-stringu"];
 
-            var min = pluralizedString.GetPluralizedLocalizedString(Int32.MinValue);
-            var max = pluralizedString.GetPluralizedLocalizedString(Int32.MaxValue);
+            var min = pluralizedString.GetPluralizedLocalizedString(int.MinValue);
+            var max = pluralizedString.GetPluralizedLocalizedString(int.MaxValue);
             var zero = pluralizedString.GetPluralizedLocalizedString(0);
             var one = pluralizedString.GetPluralizedLocalizedString(1);
             var two = pluralizedString.GetPluralizedLocalizedString(2);

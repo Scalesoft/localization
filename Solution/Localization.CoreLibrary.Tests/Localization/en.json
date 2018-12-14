@@ -8,6 +8,11 @@
         "close": "Close",
         "yes": "Yes",
         "no": "No",
-        "ok": "Ok"
+        "ok": "Ok",
+        "text-1-odst": "The first paragraph in global dictionary",
+        "text-2-odst": "The second paragraph in global dictionary",
+        "text-3-odst": "The third paragraph in global dictionary",
+        "text-4-odst": "The fourth paragraph in global dictionary",
+        "text-5-odst": "The fifth paragraph in global dictionary"
     }
 }

@@ -21,7 +21,7 @@ namespace Localization.CoreLibrary.Tests.Manager
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "es"}
             };
@@ -47,7 +47,7 @@ namespace Localization.CoreLibrary.Tests.Manager
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localizationTree",
+                BasePath = "LocalizationTree",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string>
                 {

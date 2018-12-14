@@ -289,8 +289,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 var defaultLocalizedString = new LocalizedString(key, defaultValue);
                 var pluralizedString = new PluralizedString(defaultLocalizedString);
                 var pluralizationTriples = value.First;
-                var childrenTriples = pluralizationTriples.Children();
-                var childrenTriplesEnumerator = childrenTriples.GetEnumerator();
+
+                var childrenTriplesEnumerator = pluralizationTriples.Children().GetEnumerator();
+
                 while (childrenTriplesEnumerator.MoveNext())
                 {
                     var childrenTripleJToken = childrenTriplesEnumerator.Current;

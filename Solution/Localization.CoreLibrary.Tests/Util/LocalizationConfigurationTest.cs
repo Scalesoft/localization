@@ -10,13 +10,14 @@ namespace Localization.CoreLibrary.Tests.Util
         [TestMethod]
         public void CheckConfData()
         {
-            var supportedCultures = new string[3];
-            supportedCultures[0] = "cs";
-            supportedCultures[1] = "en";
-            supportedCultures[2] = "es";
+            var supportedCultures = new[]
+            {
+                "cs",
+                "en",
+                "es"
+            };
 
             var defaultCulture = new CultureInfo("cs");
-
 
             var localizationConfiguration =
                 new LocalizationConfiguration()

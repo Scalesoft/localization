@@ -21,7 +21,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             Assert.AreEqual("slovniky", localizationDictionary.Scope());
 
             var list = localizationDictionary.List();
-            Assert.AreEqual(8, list.Count);
+            Assert.AreEqual(13, list.Count);
         }
 
         [TestMethod]
@@ -33,11 +33,13 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             ILocalizationDictionary localizationDictionary3 = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
 
 
-            var dictionaries = new HashSet<ILocalizationDictionary>();
-            dictionaries.Add(localizationDictionary0);
-            dictionaries.Add(localizationDictionary1);
-            dictionaries.Add(localizationDictionary2);
-            dictionaries.Add(localizationDictionary3);
+            var dictionaries = new HashSet<ILocalizationDictionary>
+            {
+                localizationDictionary0,
+                localizationDictionary1,
+                localizationDictionary2,
+                localizationDictionary3
+            };
 
             Assert.AreEqual(1, dictionaries.Count);
 
@@ -46,7 +48,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
 
             Assert.AreEqual(new CultureInfo("cs"), dic.CultureInfo());
             Assert.AreEqual("slovniky", dic.Scope());
-            Assert.AreEqual(8, dic.List().Count);
+            Assert.AreEqual(13, dic.List().Count);
         }
 
         [TestMethod]
@@ -57,11 +59,13 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             ILocalizationDictionary localizationDictionary2 = new JsonLocalizationDictionary(@"localization\cs.json");
             ILocalizationDictionary localizationDictionary3 = new JsonLocalizationDictionary(@"localization\en.json");
 
-            var dictionaries = new HashSet<ILocalizationDictionary>();
-            dictionaries.Add(localizationDictionary0);
-            dictionaries.Add(localizationDictionary1);
-            dictionaries.Add(localizationDictionary2);
-            dictionaries.Add(localizationDictionary3);
+            var dictionaries = new HashSet<ILocalizationDictionary>
+            {
+                localizationDictionary0,
+                localizationDictionary1,
+                localizationDictionary2,
+                localizationDictionary3
+            };
 
             Assert.AreEqual(4, dictionaries.Count);
         }

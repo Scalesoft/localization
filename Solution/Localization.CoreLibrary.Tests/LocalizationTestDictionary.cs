@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,13 +14,14 @@ namespace Localization.CoreLibrary.Tests
         private const string TestDictionaryScope = "slovniky";
         private const string TestPartName = "popisky";
 
+        private IAutoDictionaryManager m_dictionaryManager;
 
         [TestInitialize]
         public void SetUp()
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = "localization",
+                BasePath = "Localization",
                 DefaultCulture = DefaultCulture,
                 SupportedCultures = new List<string> {SupportedCulture, "es", DefaultCulture},
                 AutoLoadResources = true,
@@ -29,25 +31,21 @@ namespace Localization.CoreLibrary.Tests
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             Localization.Init(localizationConfiguration);
-        }
 
-        [TestCleanup]
-        public void SetDown()
-        {
+            m_dictionaryManager = Localization.Dictionary;
+
             Localization.LibDeinit();
         }
-
 
         [TestMethod]
         public void GetDefaultDictionaryTest()
         {
-            var dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File);
+            var dictionary = m_dictionaryManager.GetDictionary(LocTranslationSource.File);
             dictionary.TryGetValue("text-1-odst", out var q0);
             dictionary.TryGetValue("text-2-odst", out var q1);
             dictionary.TryGetValue("text-3-odst", out var q2);
             dictionary.TryGetValue("text-4-odst", out var q3);
             dictionary.TryGetValue("text-5-odst", out var q4);
-
 
             Assert.AreEqual("První odstavec v globálním slovníku", q0);
             Assert.AreEqual("Druhý odstavec v globálním slovníku", q1);
@@ -59,7 +57,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetManuallyDefaultDictionaryTest()
         {
-            var dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(DefaultCulture));
+            var dictionary = m_dictionaryManager.GetDictionary(LocTranslationSource.File, new CultureInfo(DefaultCulture));
             dictionary.TryGetValue("text-1-odst", out var q0);
             dictionary.TryGetValue("text-2-odst", out var q1);
             dictionary.TryGetValue("text-3-odst", out var q2);
@@ -76,8 +74,9 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetManuallyScopedDictionaryTest()
         {
-            var dictionary =
-                Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(DefaultCulture), TestDictionaryScope);
+            var dictionary = m_dictionaryManager.GetDictionary(
+                LocTranslationSource.File, new CultureInfo(DefaultCulture), TestDictionaryScope
+            );
             dictionary.TryGetValue("informace-1-odst", out var q0);
             dictionary.TryGetValue("informace-2-odst", out var q1);
             dictionary.TryGetValue("informace-3-odst", out var q2);
@@ -85,7 +84,7 @@ namespace Localization.CoreLibrary.Tests
             dictionary.TryGetValue("informace-5-odst", out var q4);
 
             Assert.AreEqual(
-                "V oddílu Slovníky Vokabuláře webového poskytujeme zájemcům o historickou češtinu informace o její slovní zásobě. Tvoří jej různorodé lexikální zdroje, které umožňují jednotné <a href=\"http://censeo2.felk.cvut.cz/Dictionaries/Dictionaries/Search\">vyhledávání</a> a <a href=\"http://censeo2.felk.cvut.cz/Dictionaries/Dictionaries/Listing\">listování</a>, tj. procházení slovníkovými zdroji „po listech“. Poučení o způsobech, jakými lze dotaz formulovat, najde uživatel v <a href=\"http://censeo2.felk.cvut.cz/Dictionaries/Dictionaries/Help\">Nápovědě</a>."
+                "V oddílu Slovníky Vokabuláře webového poskytujeme zájemcům o historickou češtinu informace o její slovní zásobě. Tvoří jej různorodé lexikální zdroje, které umožňují jednotné <a href=\"http://domena/Dictionaries/Dictionaries/Search\">vyhledávání</a> a <a href=\"http://domena/Dictionaries/Dictionaries/Listing\">listování</a>, tj. procházení slovníkovými zdroji „po listech“. Poučení o způsobech, jakými lze dotaz formulovat, najde uživatel v <a href=\"http://domena/Dictionaries/Dictionaries/Help\">Nápovědě</a>."
                 , q0);
             Assert.AreEqual(
                 "Základ oddílu tvoří tato novodobá lexikografická díla pojednávající zejména o staročeské slovní zásobě: Elektronický slovník staré češtiny (ESSČ), Malý staročeský slovník (MSS), pracovní heslář k lístkové kartotéce Staročeského slovníku (HesStčS), Slovník staročeský Jana Gebauera (GbSlov), Staročeský slovník (StčS), Slovníček staré češtiny Františka Šimka (ŠimekSlov) a Index Slovníku staročeských osobních jmen Jana Svobody (IndexSvob)."
@@ -104,7 +103,7 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetSupportedNoScopedDictionaryTest()
         {
-            var dictionary = Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(SupportedCulture));
+            var dictionary = m_dictionaryManager.GetDictionary(LocTranslationSource.File, new CultureInfo(SupportedCulture));
             dictionary.TryGetValue("text-1-odst", out var q0);
             dictionary.TryGetValue("text-2-odst", out var q1);
             dictionary.TryGetValue("text-3-odst", out var q2);
@@ -121,8 +120,9 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void GetSupportedScopedDictionaryTest()
         {
-            var dictionary =
-                Localization.Dictionary.GetDictionary(LocTranslationSource.File, new CultureInfo(SupportedCulture), TestDictionaryScope);
+            var dictionary = m_dictionaryManager.GetDictionary(
+                LocTranslationSource.File, new CultureInfo(SupportedCulture), TestDictionaryScope
+            );
             dictionary.TryGetValue("informace-1-odst", out var q0);
 
             Assert.AreEqual(

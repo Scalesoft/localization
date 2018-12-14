@@ -18,7 +18,7 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
             var product =
                 new LocalizationConfiguration.Configuration
                 {
-                    BasePath = "localization",
+                    BasePath = "Localization",
                     DefaultCulture = "cs",
                     SupportedCultures = new List<string> {"cs", "en", "es"},
                 };
@@ -34,24 +34,24 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void ConstructResourceFileName()
         {
-            var product =
-                new LocalizationConfiguration.Configuration
-                {
-                    BasePath = "localization",
-                    DefaultCulture = "cs",
-                    SupportedCultures = new List<string> {"cs", "en", "es"},
-                };
+            var product = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "Localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"cs", "en", "es"},
+            };
 
             Localization.AttachLogger(new LoggerFactory());
 
             IConfiguration configuration = new LocalizationConfiguration(product);
 
             var folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
-            var fileName =
-                folderScanner.ConstructResourceFileName(configuration, Path.Combine("localization", "slovniky"), new CultureInfo("cs"));
+            var fileName = folderScanner.ConstructResourceFileName(
+                configuration, Path.Combine("Localization", "slovniky"), new CultureInfo("cs")
+            );
 
 
-            Assert.AreEqual(@"localization\slovniky\slovniky.cs.json", fileName);
+            Assert.AreEqual(@"Localization\slovniky\slovniky.cs.json", fileName);
         }
     }
 }

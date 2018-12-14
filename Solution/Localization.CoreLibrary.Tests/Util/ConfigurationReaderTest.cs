@@ -10,10 +10,10 @@ namespace Localization.CoreLibrary.Tests.Util
         [TestMethod]
         public void TestConfigurationReader()
         {
-            var configurationReader = new JsonConfigurationReader("localization.json.config");
+            var configurationReader = new JsonConfigurationReader("localization.config.json");
             var configuration = configurationReader.ReadConfiguration();
 
-            Assert.AreEqual("localization", configuration.BasePath());
+            Assert.AreEqual("Localization", configuration.BasePath());
 
             Assert.AreEqual(3, configuration.SupportedCultures().Count);
             Assert.AreEqual(new CultureInfo("cs"), configuration.SupportedCultures()[0]);
