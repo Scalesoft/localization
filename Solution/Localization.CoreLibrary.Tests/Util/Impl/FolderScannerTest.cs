@@ -18,7 +18,7 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
             var product =
                 new LocalizationConfiguration.Configuration
                 {
-                    BasePath = @"localization",
+                    BasePath = "localization",
                     DefaultCulture = "cs",
                     SupportedCultures = new List<string> {"cs", "en", "es"},
                 };
@@ -37,7 +37,7 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
             var product =
                 new LocalizationConfiguration.Configuration
                 {
-                    BasePath = @"localization",
+                    BasePath = "localization",
                     DefaultCulture = "cs",
                     SupportedCultures = new List<string> {"cs", "en", "es"},
                 };

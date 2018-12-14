@@ -18,8 +18,8 @@ namespace Localization.CoreLibrary.Tests.Translator
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = @"localization",
-                DefaultCulture = @"cs",
+                BasePath = "localization",
+                DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "cs"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
             };

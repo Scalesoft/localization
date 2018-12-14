@@ -15,7 +15,7 @@ namespace Localization.CoreLibrary.Tests.Manager
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = @"localization",
+                BasePath = "localization",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en", "es"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
@@ -41,7 +41,7 @@ namespace Localization.CoreLibrary.Tests.Manager
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = @"localizationTree",
+                BasePath = "localizationTree",
                 DefaultCulture = "cs",
                 SupportedCultures = new List<string> {"en"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()

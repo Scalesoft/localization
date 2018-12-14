@@ -10,13 +10,15 @@ namespace Localization.CoreLibrary.Tests.Translator
         [TestInitialize]
         public void LibInit()
         {
-            var configuration = new LocalizationConfiguration.Configuration();
-            configuration.BasePath = @"localization";
-            configuration.DefaultCulture = "cs";
-            configuration.SupportedCultures = new List<string>() {"en", "hu", "zh", "cs"};
-            configuration.TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString();
-            configuration.AutoLoadResources = true;
-            configuration.FirstAutoTranslateResource = LocLocalizationResource.File.ToString();
+            var configuration = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string>() {"en", "hu", "zh", "cs"},
+                TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString(),
+                AutoLoadResources = true,
+                FirstAutoTranslateResource = LocLocalizationResource.File.ToString()
+            };
 
             IConfiguration libConfiguration = new LocalizationConfiguration(configuration);
 
