@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Localization.CoreLibrary.Util;
-using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Localization.CoreLibrary.Tests.Translator
@@ -11,18 +10,18 @@ namespace Localization.CoreLibrary.Tests.Translator
         [TestInitialize]
         public void LibInit()
         {
-            LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
+            var configuration = new LocalizationConfiguration.Configuration();
             configuration.BasePath = @"localization";
             configuration.DefaultCulture = "cs";
             configuration.SupportedCultures = new List<string>() {"en", "hu", "zh", "cs"};
             configuration.TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString();
             configuration.AutoLoadResources = true;
             configuration.FirstAutoTranslateResource = LocLocalizationResource.File.ToString();
-            
+
             IConfiguration libConfiguration = new LocalizationConfiguration(configuration);
-            
-            
-            Localization.Init(libConfiguration);            
+
+
+            Localization.Init(libConfiguration);
         }
 
         [TestCleanup]
@@ -59,15 +58,13 @@ namespace Localization.CoreLibrary.Tests.Translator
                 "let", //10
             };
 
-            for (int i = 0; i < 21; i++)
+            for (var i = 0; i < 21; i++)
             {
-                int pluralizationNum = i - 10;
-                LocalizedString lsA = CoreLibrary.Translator.Translator.TranslatePluralization("klíč-stringu", pluralizationNum);
+                var pluralizationNum = i - 10;
+                var lsA = CoreLibrary.Translator.Translator.TranslatePluralization("klíč-stringu", pluralizationNum);
 
                 Assert.AreEqual(expectedStrings[i], lsA);
-
             }
         }
-
     }
 }

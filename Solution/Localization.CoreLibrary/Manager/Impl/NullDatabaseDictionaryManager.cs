@@ -12,7 +12,7 @@ namespace Localization.CoreLibrary.Manager.Impl
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private const string NotSetMessage = "Database dictionary manager is not set.";
-        
+
         private void LogNotSet()
         {
             if (Logger.IsInformationEnabled())
@@ -45,12 +45,14 @@ namespace Localization.CoreLibrary.Manager.Impl
         public CultureInfo DefaultCulture()
         {
             LogNotSet();
+
             return null;
         }
 
         public string DefaultScope()
         {
             LogNotSet();
+
             return null;
         }
     }

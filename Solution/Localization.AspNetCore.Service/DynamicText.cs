@@ -12,12 +12,12 @@ namespace Localization.AspNetCore.Service
         public DynamicText(IHttpContextAccessor httpContextAccessor)
             : base(httpContextAccessor)
         {
-            m_databaseDynamicTextService = Localization.CoreLibrary.Localization.DynamicText;
+            m_databaseDynamicTextService = CoreLibrary.Localization.DynamicText;
         }
 
         public CoreLibrary.Entity.DynamicText GetDynamicText(string name, string scope)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = RequestCulture();
 
             return m_databaseDynamicTextService.GetDynamicText(name, scope, requestCulture);
         }
@@ -44,13 +44,9 @@ namespace Localization.AspNetCore.Service
 
         private CultureInfo RequestCulture()
         {
-            HttpRequest request = HttpContextAccessor.HttpContext.Request;
+            var request = HttpContextAccessor.HttpContext.Request;
 
-            string cultureCookie = request.Cookies[ServiceBase.CultureCookieName];
-            if (cultureCookie == null)
-            {
-                cultureCookie = Localization.CoreLibrary.Localization.DatabaseDictionary.DefaultCulture().Name;
-            }
+            var cultureCookie = request.Cookies[CultureCookieName] ?? CoreLibrary.Localization.DatabaseDictionary.DefaultCulture().Name;
 
             return new CultureInfo(cultureCookie);
         }

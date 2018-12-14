@@ -9,6 +9,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class DatabaseDictionaryManager : ManagerBase, IDictionaryManager

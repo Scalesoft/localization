@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Util;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class ManagerBase

@@ -20,7 +20,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             Assert.AreEqual(new CultureInfo("cs"), localizationDictionary.CultureInfo());
             Assert.AreEqual("slovniky", localizationDictionary.Scope());
 
-            IDictionary<string,LocalizedString> list = localizationDictionary.List();        
+            var list = localizationDictionary.List();
             Assert.AreEqual(8, list.Count);
         }
 
@@ -33,7 +33,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             ILocalizationDictionary localizationDictionary3 = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
 
 
-            HashSet<ILocalizationDictionary> dictionaries = new HashSet<ILocalizationDictionary>();
+            var dictionaries = new HashSet<ILocalizationDictionary>();
             dictionaries.Add(localizationDictionary0);
             dictionaries.Add(localizationDictionary1);
             dictionaries.Add(localizationDictionary2);
@@ -41,8 +41,8 @@ namespace Localization.CoreLibrary.Tests.Dictionary
 
             Assert.AreEqual(1, dictionaries.Count);
 
-            ILocalizationDictionary dic = dictionaries.Last(w => w.CultureInfo()
-                .Equals(new CultureInfo("cs")) && w.Scope().Equals("slovniky"));
+            var dic = dictionaries.Last(w => w.CultureInfo()
+                                                 .Equals(new CultureInfo("cs")) && w.Scope().Equals("slovniky"));
 
             Assert.AreEqual(new CultureInfo("cs"), dic.CultureInfo());
             Assert.AreEqual("slovniky", dic.Scope());
@@ -57,7 +57,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             ILocalizationDictionary localizationDictionary2 = new JsonLocalizationDictionary(@"localization\cs.json");
             ILocalizationDictionary localizationDictionary3 = new JsonLocalizationDictionary(@"localization\en.json");
 
-            HashSet<ILocalizationDictionary> dictionaries = new HashSet<ILocalizationDictionary>();
+            var dictionaries = new HashSet<ILocalizationDictionary>();
             dictionaries.Add(localizationDictionary0);
             dictionaries.Add(localizationDictionary1);
             dictionaries.Add(localizationDictionary2);
@@ -70,16 +70,16 @@ namespace Localization.CoreLibrary.Tests.Dictionary
         public void DottedKeysTest()
         {
             ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\obrazky\obrazky.cs.json");
-            CultureInfo dictionaryCultureInfo = localizationDictionary.CultureInfo();
-            ILocalizationDictionary childLocalizationDictionary = localizationDictionary.ChildDictionary();
-            string localizationDictionaryExtension = localizationDictionary.Extension();
-            bool localizationDictionaryIsRoot = localizationDictionary.IsRoot;
-            bool localizationDictionaryIsLeaf = localizationDictionary.IsLeaf();
-            IDictionary<string, LocalizedString> localizedStrings = localizationDictionary.List();
-            IDictionary<string, LocalizedString> localizedConstants = localizationDictionary.ListConstants();
-            IDictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
-            ILocalizationDictionary parentLocalizationDictionary = localizationDictionary.ParentDictionary();
-            string localizationDictionaryScope = localizationDictionary.Scope();
+            var dictionaryCultureInfo = localizationDictionary.CultureInfo();
+            var childLocalizationDictionary = localizationDictionary.ChildDictionary();
+            var localizationDictionaryExtension = localizationDictionary.Extension();
+            var localizationDictionaryIsRoot = localizationDictionary.IsRoot;
+            var localizationDictionaryIsLeaf = localizationDictionary.IsLeaf();
+            var localizedStrings = localizationDictionary.List();
+            var localizedConstants = localizationDictionary.ListConstants();
+            var localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            var parentLocalizationDictionary = localizationDictionary.ParentDictionary();
+            var localizationDictionaryScope = localizationDictionary.Scope();
 
             Assert.AreEqual("cs", dictionaryCultureInfo.Name);
             Assert.AreEqual(null, childLocalizationDictionary);
@@ -95,7 +95,5 @@ namespace Localization.CoreLibrary.Tests.Dictionary
             Assert.AreEqual(true, localizedStrings.ContainsKey("header.jpg"));
             Assert.AreEqual("header.cs.jpg", localizedStrings["header.jpg"]);
         }
-
-
     }
 }

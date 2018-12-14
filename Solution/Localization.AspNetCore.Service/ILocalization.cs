@@ -159,6 +159,5 @@ namespace Localization.AspNetCore.Service
         /// <param name="text">String key for translation in json resource file.</param>
         /// <returns>Localized constant string.</returns>
         LocalizedString TranslateConstant(string text);
-
     }
 }

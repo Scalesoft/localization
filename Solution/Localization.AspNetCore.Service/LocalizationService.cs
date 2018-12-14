@@ -9,25 +9,21 @@ using Microsoft.Extensions.Localization;
 namespace Localization.AspNetCore.Service
 {
     public sealed class LocalizationService : ServiceBase, ILocalization
-    {       
+    {
         private readonly IAutoLocalizationManager m_localizationManager;
 
         public LocalizationService(IHttpContextAccessor httpContextAccessor)
             : base(httpContextAccessor)
         {
-            m_localizationManager = Localization.CoreLibrary.Localization.Translator;
+            m_localizationManager = CoreLibrary.Localization.Translator;
         }
 
         // TODO there are almost duplicate definitions of this method (LocalizationService, DynamicText, DictionaryService, DatabaseDictionaryManager)
         public CultureInfo GetRequestCulture()
         {
-            HttpRequest request = HttpContextAccessor.HttpContext.Request;
+            var request = HttpContextAccessor.HttpContext.Request;
 
-            string cultureCookie = request.Cookies[CultureCookieName];
-            if (cultureCookie == null)
-            {
-                cultureCookie = m_localizationManager.DefaultCulture().Name;
-            }
+            var cultureCookie = request.Cookies[CultureCookieName] ?? m_localizationManager.DefaultCulture().Name;
 
             return new CultureInfo(cultureCookie);
         }
@@ -40,8 +36,8 @@ namespace Localization.AspNetCore.Service
 
         public void SetCulture(string culture)
         {
-            RequestCulture requestCulture = new RequestCulture(culture);
-            HttpResponse response = HttpContextAccessor.HttpContext.Response;
+            var requestCulture = new RequestCulture(culture);
+            var response = HttpContextAccessor.HttpContext.Response;
             response.Cookies.Append(
                 CultureCookieName,
                 requestCulture.Culture.Name,
@@ -54,28 +50,28 @@ namespace Localization.AspNetCore.Service
 
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = GetRequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.Translate(translationSource, text, requestCulture, scope);
         }
 
         public LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = GetRequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateFormat(translationSource, text, parameters, requestCulture, scope);
         }
 
         public LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = GetRequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslatePluralization(translationSource, text, number, requestCulture, scope);
         }
 
         public LocalizedString TranslateConstant(string text, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = GetRequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateConstant(translationSource, text, requestCulture, scope);
         }

@@ -5,7 +5,6 @@ using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 
 namespace Localization.CoreLibrary.Tests.Pluralization
 {
@@ -15,8 +14,8 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void BuildSimplePluralizedStringTest()
         {
-            LocalizedString defaultLocalizedString = new LocalizedString("let", "let");
-            PluralizedString psA = new PluralizedString(defaultLocalizedString);
+            var defaultLocalizedString = new LocalizedString("let", "let");
+            var psA = new PluralizedString(defaultLocalizedString);
 
             Assert.AreEqual(defaultLocalizedString, psA.GetPluralizedLocalizedString(0));
         }
@@ -24,24 +23,24 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void ConstructorDefaultStringNullTest()
         {
-            bool exceptionThrown = false;
+            var exceptionThrown = false;
             try
             {
-                PluralizedString psA = new PluralizedString(null);
+                var psA = new PluralizedString(null);
             }
             catch (PluralizedDefaultStringException)
             {
                 exceptionThrown = true;
             }
-            
+
             Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
         public void IntervalCompletePluralizedStringTest()
         {
-            LocalizedString defaultLocalizedString = new LocalizedString("let", "let");
-            PluralizedString psA = new PluralizedString(defaultLocalizedString);
+            var defaultLocalizedString = new LocalizedString("let", "let");
+            var psA = new PluralizedString(defaultLocalizedString);
             psA.Add(new PluralizationInterval(int.MinValue, -5), new LocalizedString("let", "let"));
             psA.Add(new PluralizationInterval(-4, -2), new LocalizedString("let", "roky"));
             psA.Add(new PluralizationInterval(-1, -1), new LocalizedString("let", "rok"));
@@ -77,10 +76,10 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void OverlapExceptionTest()
         {
-            bool exceptionThrown = false;
+            var exceptionThrown = false;
 
-            LocalizedString defaultLocalizedString = new LocalizedString("let", "let");
-            PluralizedString psA = new PluralizedString(defaultLocalizedString);
+            var defaultLocalizedString = new LocalizedString("let", "let");
+            var psA = new PluralizedString(defaultLocalizedString);
             psA.Add(new PluralizationInterval(int.MinValue, -5), new LocalizedString("let", "let"));
             psA.Add(new PluralizationInterval(-4, -2), new LocalizedString("let", "roky"));
             psA.Add(new PluralizationInterval(-1, -1), new LocalizedString("let", "rok"));
@@ -105,20 +104,20 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         public void PluralizedDictionaryDottedKeyTest()
         {
             ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
-            IDictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            var localizedPluralizedStrings = localizationDictionary.ListPlurals();
             Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč.stringu"));
 
-            PluralizedString pluralizedString = localizedPluralizedStrings["klíč.stringu"];
+            var pluralizedString = localizedPluralizedStrings["klíč.stringu"];
 
-            LocalizedString min = pluralizedString.GetPluralizedLocalizedString(Int32.MinValue);
-            LocalizedString max = pluralizedString.GetPluralizedLocalizedString(Int32.MaxValue);
-            LocalizedString zero = pluralizedString.GetPluralizedLocalizedString(0);
-            LocalizedString one = pluralizedString.GetPluralizedLocalizedString(1);
-            LocalizedString two = pluralizedString.GetPluralizedLocalizedString(2);
-            LocalizedString three = pluralizedString.GetPluralizedLocalizedString(3);
-            LocalizedString four = pluralizedString.GetPluralizedLocalizedString(4);
-            LocalizedString five = pluralizedString.GetPluralizedLocalizedString(5);
-            LocalizedString six = pluralizedString.GetPluralizedLocalizedString(6);
+            var min = pluralizedString.GetPluralizedLocalizedString(Int32.MinValue);
+            var max = pluralizedString.GetPluralizedLocalizedString(Int32.MaxValue);
+            var zero = pluralizedString.GetPluralizedLocalizedString(0);
+            var one = pluralizedString.GetPluralizedLocalizedString(1);
+            var two = pluralizedString.GetPluralizedLocalizedString(2);
+            var three = pluralizedString.GetPluralizedLocalizedString(3);
+            var four = pluralizedString.GetPluralizedLocalizedString(4);
+            var five = pluralizedString.GetPluralizedLocalizedString(5);
+            var six = pluralizedString.GetPluralizedLocalizedString(6);
 
             Assert.AreEqual("let", min.Value);
             Assert.AreEqual(false, min.ResourceNotFound);
@@ -155,7 +154,6 @@ namespace Localization.CoreLibrary.Tests.Pluralization
             Assert.AreEqual("let", six.Value);
             Assert.AreEqual(false, six.ResourceNotFound);
             Assert.AreEqual("klíč.stringu", six.Name);
-
         }
 
 
@@ -163,22 +161,22 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         public void PluralizedDictionaryLoadTest()
         {
             ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"localization\slovniky\slovniky.cs.json");
-            IDictionary<string, PluralizedString> localizedPluralizedStrings = localizationDictionary.ListPlurals();
+            var localizedPluralizedStrings = localizationDictionary.ListPlurals();
             Assert.AreEqual(2, localizedPluralizedStrings.Count);
 
             Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč-stringu"));
-            
-            PluralizedString pluralizedString = localizedPluralizedStrings["klíč-stringu"];
 
-            LocalizedString min = pluralizedString.GetPluralizedLocalizedString(Int32.MinValue);
-            LocalizedString max = pluralizedString.GetPluralizedLocalizedString(Int32.MaxValue);
-            LocalizedString zero = pluralizedString.GetPluralizedLocalizedString(0);
-            LocalizedString one = pluralizedString.GetPluralizedLocalizedString(1);
-            LocalizedString two = pluralizedString.GetPluralizedLocalizedString(2);
-            LocalizedString three = pluralizedString.GetPluralizedLocalizedString(3);
-            LocalizedString four = pluralizedString.GetPluralizedLocalizedString(4);
-            LocalizedString five = pluralizedString.GetPluralizedLocalizedString(5);
-            LocalizedString six = pluralizedString.GetPluralizedLocalizedString(6);
+            var pluralizedString = localizedPluralizedStrings["klíč-stringu"];
+
+            var min = pluralizedString.GetPluralizedLocalizedString(Int32.MinValue);
+            var max = pluralizedString.GetPluralizedLocalizedString(Int32.MaxValue);
+            var zero = pluralizedString.GetPluralizedLocalizedString(0);
+            var one = pluralizedString.GetPluralizedLocalizedString(1);
+            var two = pluralizedString.GetPluralizedLocalizedString(2);
+            var three = pluralizedString.GetPluralizedLocalizedString(3);
+            var four = pluralizedString.GetPluralizedLocalizedString(4);
+            var five = pluralizedString.GetPluralizedLocalizedString(5);
+            var six = pluralizedString.GetPluralizedLocalizedString(6);
 
             Assert.AreEqual("let", min.Value);
             Assert.AreEqual(false, min.ResourceNotFound);
@@ -216,8 +214,5 @@ namespace Localization.CoreLibrary.Tests.Pluralization
             Assert.AreEqual(false, six.ResourceNotFound);
             Assert.AreEqual("klíč-stringu", six.Name);
         }
-
-
-
     }
 }

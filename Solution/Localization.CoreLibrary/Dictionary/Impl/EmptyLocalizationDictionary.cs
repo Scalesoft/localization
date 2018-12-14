@@ -7,6 +7,7 @@ using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Dictionary.Impl
 {
     internal class EmptyLocalizationDictionary : ILocalizationDictionary

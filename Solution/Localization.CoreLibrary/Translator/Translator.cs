@@ -31,7 +31,7 @@ namespace Localization.CoreLibrary.Translator
 
         public static IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            IDictionary<string, LocalizedString> result = Localization.Dictionary.GetDictionary(LocTranslationSource.Auto, cultureInfo, scope);
+            var result = Localization.Dictionary.GetDictionary(LocTranslationSource.Auto, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -43,7 +43,7 @@ namespace Localization.CoreLibrary.Translator
         public static IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            IDictionary<string, LocalizedString> result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.Auto, cultureInfo, scope);
+            var result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.Auto, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -55,7 +55,7 @@ namespace Localization.CoreLibrary.Translator
         public static IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            IDictionary<string, PluralizedString> result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.Auto, cultureInfo, scope);
+            var result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.Auto, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, PluralizedString>();

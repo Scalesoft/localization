@@ -1,14 +1,14 @@
 ﻿{
-  "culture": "cs",
-  "scope": "slovniky",
-  "dictionary": {
-    "key1": "klíč-1",
-    "key2": "klíč-2",
-    "key3": "klíč-3",
-    "key4": "klíč-4",
-    "key5": "klíč-5",
-    "key6": "klíč-6",
-    "key7": "klíč-7",
-    "key8": "klíč-8"
-  }
+    "culture": "cs",
+    "scope": "slovniky",
+    "dictionary": {
+        "key1": "klíč-1",
+        "key2": "klíč-2",
+        "key3": "klíč-3",
+        "key4": "klíč-4",
+        "key5": "klíč-5",
+        "key6": "klíč-6",
+        "key7": "klíč-7",
+        "key8": "klíč-8"
+    }
 }

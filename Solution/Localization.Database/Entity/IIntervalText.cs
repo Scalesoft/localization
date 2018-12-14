@@ -4,7 +4,7 @@
     {
         int Id { get; }
         int IntervalStart { get; }
-        int IntervalEnd { get; } 
+        int IntervalEnd { get; }
         string Text { get; }
         int PluralizedStaticTextId { get; }
         IPluralizedStaticText PluralizedStaticText { get; set; }

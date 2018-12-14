@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Localization;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Util.Impl
 {
     internal class LocalizedStringComparer : IEqualityComparer<LocalizedString>
@@ -34,7 +35,7 @@ namespace Localization.CoreLibrary.Util.Impl
 
             return false;
         }
-        
+
         public int GetHashCode(LocalizedString obj)
         {
             return obj.Name.GetHashCode();

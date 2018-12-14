@@ -20,7 +20,7 @@ namespace Localization.CoreLibrary.Tests.Translator
             {
                 BasePath = @"localization",
                 DefaultCulture = @"cs",
-                SupportedCultures = new List<string> { "en", "cs" },
+                SupportedCultures = new List<string> {"en", "cs"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
             };
 

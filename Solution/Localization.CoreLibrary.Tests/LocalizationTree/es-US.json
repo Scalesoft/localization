@@ -1,8 +1,7 @@
 ﻿{
-  "culture": "es-US",
-  "scope": "global",
-  "dictionary": {
-    "text-1-odst": "global es-US [text-1-odst]"
-  }
+    "culture": "es-US",
+    "scope": "global",
+    "dictionary": {
+        "text-1-odst": "global es-US [text-1-odst]"
+    }
 }
-

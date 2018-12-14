@@ -3,9 +3,9 @@
     public interface IDictionaryFactory
     {
         /// <summary>
-        /// Creates new instnace of ILocalizationDictionary.
+        /// Creates new instance of ILocalizationDictionary.
         /// </summary>
-        /// <returns>New instnace of ILocalizationDictionar</returns>
+        /// <returns>New instance of ILocalizationDictionary</returns>
         ILocalizationDictionary CreateDictionary();
 
         /// <summary>

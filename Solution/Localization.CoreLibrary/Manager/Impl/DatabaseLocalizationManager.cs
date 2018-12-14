@@ -10,16 +10,18 @@ using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 [assembly: InternalsVisibleTo("Localization.Database.EFCore.Tests")]
+
 namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class DatabaseLocalizationManager : LocalizationManager, ILocalizationManager, IDatabaseDynamicTextService
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
-        
+
         private readonly IDatabaseTranslateService m_dbTranslateService;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
-        public DatabaseLocalizationManager(IConfiguration configuration, IDatabaseTranslateService dbTranslateService, IDatabaseDynamicTextService databaseDynamicTextService) : base(configuration)
+        public DatabaseLocalizationManager(IConfiguration configuration, IDatabaseTranslateService dbTranslateService,
+            IDatabaseDynamicTextService databaseDynamicTextService) : base(configuration)
         {
             m_dbTranslateService = dbTranslateService;
             m_databaseDynamicTextService = databaseDynamicTextService;
@@ -37,7 +39,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-            LocalizedString resultLocalizedString = m_dbTranslateService.DatabaseTranslate(text, cultureInfo, scope);
+            var resultLocalizedString = m_dbTranslateService.DatabaseTranslate(text, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);
@@ -52,7 +54,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             scope = ScopeNullCheck(scope);
 
 
-            LocalizedString resultLocalizedString = m_dbTranslateService.DatabaseTranslateFormat(text, parameters, cultureInfo, scope);
+            var resultLocalizedString = m_dbTranslateService.DatabaseTranslateFormat(text, parameters, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);
@@ -66,7 +68,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-            LocalizedString resultLocalizedString = m_dbTranslateService.DatabaseTranslatePluralization(text, number, cultureInfo, scope);
+            var resultLocalizedString = m_dbTranslateService.DatabaseTranslatePluralization(text, number, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);
@@ -80,7 +82,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-            LocalizedString resultLocalizedString = m_dbTranslateService.DatabaseTranslateConstant(text, cultureInfo, scope);
+            var resultLocalizedString = m_dbTranslateService.DatabaseTranslateConstant(text, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);

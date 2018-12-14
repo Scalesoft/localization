@@ -30,7 +30,7 @@ namespace Localization.CoreLibrary.Translator
 
         public static IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            IDictionary<string, LocalizedString> result = Localization.Dictionary.GetDictionary(LocTranslationSource.File, cultureInfo, scope);
+            var result = Localization.Dictionary.GetDictionary(LocTranslationSource.File, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -42,7 +42,7 @@ namespace Localization.CoreLibrary.Translator
         public static IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            IDictionary<string, LocalizedString> result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.File, cultureInfo, scope);
+            var result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.File, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -54,13 +54,13 @@ namespace Localization.CoreLibrary.Translator
         public static IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            IDictionary<string, PluralizedString> result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.File, cultureInfo, scope);
+            var result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.File, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, PluralizedString>();
             }
 
             return result;
-        }       
+        }
     }
 }

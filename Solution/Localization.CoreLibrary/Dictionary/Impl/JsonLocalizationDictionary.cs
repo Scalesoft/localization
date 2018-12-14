@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,7 +7,6 @@ using System.Text;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -36,8 +34,8 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         private volatile ConcurrentDictionary<string, LocalizedString> m_dictionary;
         private volatile ConcurrentDictionary<string, PluralizedString> m_pluralizedDictionary;
-        private volatile ConcurrentDictionary<string, LocalizedString> m_constantsDictionary;
-        
+        private volatile ConcurrentDictionary<string, LocalizedString> m_constantDictionaries;
+
         private ILocalizationDictionary m_parentDictionary;
         private ILocalizationDictionary m_childDictionary;
 
@@ -68,7 +66,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
 
 
-            string cultureString = (string) m_jsonDictionary[CultureJPath];
+            var cultureString = (string) m_jsonDictionary[CultureJPath];
             m_cultureInfo = new CultureInfo(cultureString);
 
             m_scope = (string) m_jsonDictionary[ScopeJPath];
@@ -88,7 +86,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             m_jsonDictionary = LoadDictionaryJObject(resourceStream);
 
-            string cultureString = (string) m_jsonDictionary[CultureJPath];
+            var cultureString = (string) m_jsonDictionary[CultureJPath];
             m_cultureInfo = new CultureInfo(cultureString);
 
             m_scope = (string) m_jsonDictionary[ScopeJPath];
@@ -98,8 +96,8 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         private void TryLoadPluralized(string filePath)
         {
-            string filePathWithoutExtension = Path.ChangeExtension(filePath, "");
-            string newFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
+            var filePathWithoutExtension = Path.ChangeExtension(filePath, "");
+            var newFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
 
             if (!File.Exists(newFilePath))
             {
@@ -110,13 +108,13 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             {
                 m_jsonPluralizedDictionary = LoadDictionaryJObject(fileStream, newFilePath);
             }
-            
-            string cultureString = (string) m_jsonPluralizedDictionary[CultureJPath];
+
+            var cultureString = (string) m_jsonPluralizedDictionary[CultureJPath];
             if (!m_cultureInfo.Equals(new CultureInfo(cultureString)))
             {
-                string message = string.Format(
-                    @"Culture in pluralized version of dictionary ""{0}"" does not match expected value.
-                                                    Expected value is ""{1}""", filePath, m_cultureInfo.Name);
+                var message = string.Format(
+                    @"Culture in pluralized version of dictionary ""{0}"" does not match expected value. Expected value is ""{1}""",
+                    filePath, m_cultureInfo.Name);
                 if (Logger.IsErrorEnabled())
                 {
                     Logger.LogError(message);
@@ -138,9 +136,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 }
                 catch (JsonReaderException e)
                 {
-                    string message =
-                        string.Format(@"Resource file ""{0}"" is not well-formated. See library documentation.",
-                            fileName ?? "(stream)");
+                    var message = $@"Resource file ""{fileName ?? "(stream)"}"" is not well-formatted. See library documentation.";
                     Logger.LogError(message);
 
                     throw new LocalizationDictionaryException(string.Concat(message, "\nsrc: ", e.Message));
@@ -223,18 +219,18 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             }
 
 
-            JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("dictionary");
+            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken("dictionary");
             if (keyValueObjects == null)
             {
                 return dictionary;
             }
 
 
-            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+            var keyValueEnumerator = keyValueObjects.GetEnumerator();
             while (keyValueEnumerator.MoveNext())
             {
-                KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
-                LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
+                var keyValuePair = keyValueEnumerator.Current;
+                var ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
                 dictionary.TryAdd(ls.Name, ls);
             }
 
@@ -276,45 +272,45 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return pluralizedDictionary;
             }
 
-            JObject keyValueObjects = (JObject)m_jsonPluralizedDictionary.SelectToken("dictionary");
+            var keyValueObjects = (JObject) m_jsonPluralizedDictionary.SelectToken("dictionary");
             if (keyValueObjects == null)
             {
                 return pluralizedDictionary;
             }
 
-            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+            var keyValueEnumerator = keyValueObjects.GetEnumerator();
             while (keyValueEnumerator.MoveNext())
             {
-                KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
-                string key = keyValuePair.Key;
-                JToken value = keyValuePair.Value.First;
+                var keyValuePair = keyValueEnumerator.Current;
+                var key = keyValuePair.Key;
+                var value = keyValuePair.Value.First;
 
-                string defaultValue = ((JProperty)keyValuePair.Value.First).Name;
-                LocalizedString defaultLocalizedString = new LocalizedString(key, defaultValue);
-                PluralizedString pluralizedString = new PluralizedString(defaultLocalizedString);
-                JToken pluralizationTriples = value.First;
-                JEnumerable<JToken> childrenTriples = pluralizationTriples.Children();
-                IEnumerator<JToken> childrenTriplesEnumerator = childrenTriples.GetEnumerator();
+                var defaultValue = ((JProperty) keyValuePair.Value.First).Name;
+                var defaultLocalizedString = new LocalizedString(key, defaultValue);
+                var pluralizedString = new PluralizedString(defaultLocalizedString);
+                var pluralizationTriples = value.First;
+                var childrenTriples = pluralizationTriples.Children();
+                var childrenTriplesEnumerator = childrenTriples.GetEnumerator();
                 while (childrenTriplesEnumerator.MoveNext())
                 {
-                    JToken childrenTripleJToken = childrenTriplesEnumerator.Current;
-                    JToken leftInterval = childrenTripleJToken[0];
-                    JToken rigthInterval = childrenTripleJToken[1];
-                    JToken stringValue = childrenTripleJToken[2];
+                    var childrenTripleJToken = childrenTriplesEnumerator.Current;
+                    var leftInterval = childrenTripleJToken[0];
+                    var rightInterval = childrenTripleJToken[1];
+                    var stringValue = childrenTripleJToken[2];
 
-                    Int32 leftIntervalInteger;
-                    if (leftInterval == null || leftInterval.Value<string>() == null)
+                    int leftIntervalInteger;
+                    if (leftInterval?.Value<string>() == null)
                     {
-                        leftIntervalInteger = Int32.MinValue;
+                        leftIntervalInteger = int.MinValue;
                     }
                     else
                     {
-                        bool xParsed = int.TryParse(leftInterval.ToString(), out leftIntervalInteger);
+                        var xParsed = int.TryParse(leftInterval.ToString(), out leftIntervalInteger);
                         if (!xParsed)
                         {
-                            string errorMessage = string.Format(
+                            var errorMessage = string.Format(
                                 @"The x value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
-                                leftInterval.ToString(), m_scope, m_cultureInfo.Name);
+                                leftInterval, m_scope, m_cultureInfo.Name);
                             if (Logger.IsErrorEnabled())
                             {
                                 Logger.LogError(errorMessage);
@@ -324,19 +320,19 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                         }
                     }
 
-                    Int32 rightIntervalInteger;
-                    if (rigthInterval == null || rigthInterval.Value<string>() == null)
+                    int rightIntervalInteger;
+                    if (rightInterval?.Value<string>() == null)
                     {
-                        rightIntervalInteger = Int32.MaxValue;
+                        rightIntervalInteger = int.MaxValue;
                     }
                     else
                     {
-                        bool yParsed = int.TryParse(rigthInterval.ToString(), out rightIntervalInteger);
+                        var yParsed = int.TryParse(rightInterval.ToString(), out rightIntervalInteger);
                         if (!yParsed)
                         {
-                            string errorMessage = string.Format(
+                            var errorMessage = string.Format(
                                 @"The y value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
-                                rigthInterval.ToString(), m_scope, m_cultureInfo.Name);
+                                rightInterval.ToString(), m_scope, m_cultureInfo.Name);
                             if (Logger.IsErrorEnabled())
                             {
                                 Logger.LogError(errorMessage);
@@ -346,7 +342,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                         }
                     }
 
-                    string stringValueString = (string)stringValue;
+                    var stringValueString = (string) stringValue;
                     pluralizedString.Add(new PluralizationInterval(leftIntervalInteger, rightIntervalInteger),
                         new LocalizedString(key, stringValueString));
                 }
@@ -362,27 +358,27 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public IDictionary<string, LocalizedString> ListConstants()
         {
-            if (m_constantsDictionary != null)
+            if (m_constantDictionaries != null)
             {
-                return m_constantsDictionary;
+                return m_constantDictionaries;
             }
 
             lock (m_initLock)
             {
-                if (m_constantsDictionary != null)
+                if (m_constantDictionaries != null)
                 {
-                    return m_constantsDictionary;
+                    return m_constantDictionaries;
                 }
 
-                var constantDictionary = InitConstantDictionary();
-                m_constantsDictionary = constantDictionary;
-                return constantDictionary;
+                var constantDictionaries = InitConstantDictionaries();
+                m_constantDictionaries = constantDictionaries;
+                return constantDictionaries;
             }
         }
 
-        private ConcurrentDictionary<string, LocalizedString> InitConstantDictionary()
+        private ConcurrentDictionary<string, LocalizedString> InitConstantDictionaries()
         {
-            var constnantsDictionary = new ConcurrentDictionary<string, LocalizedString>();
+            var constantsDictionary = new ConcurrentDictionary<string, LocalizedString>();
             if (!IsLoaded())
             {
                 if (Logger.IsWarningEnabled())
@@ -390,28 +386,28 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                     Logger.LogWarning(NotLoadedMsg);
                 }
 
-                return constnantsDictionary;
+                return constantsDictionary;
             }
 
-            JObject keyValueObjects = (JObject)m_jsonDictionary.SelectToken("constants");
+            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken("constants");
             if (keyValueObjects == null)
             {
-                return constnantsDictionary;
+                return constantsDictionary;
             }
 
 
-            IEnumerator<KeyValuePair<string, JToken>> keyValueEnumerator = keyValueObjects.GetEnumerator();
+            var keyValueEnumerator = keyValueObjects.GetEnumerator();
 
             while (keyValueEnumerator.MoveNext())
             {
-                KeyValuePair<string, JToken> keyValuePair = keyValueEnumerator.Current;
-                LocalizedString ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
-                constnantsDictionary.TryAdd(ls.Name, ls);
+                var keyValuePair = keyValueEnumerator.Current;
+                var ls = new LocalizedString(keyValuePair.Key, keyValuePair.Value.ToString());
+                constantsDictionary.TryAdd(ls.Name, ls);
             }
 
             keyValueEnumerator.Dispose();
 
-            return constnantsDictionary;
+            return constantsDictionary;
         }
 
 
@@ -438,7 +434,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public bool SetChildDictionary(ILocalizationDictionary childDictionary)
         {
-            bool result = false;
+            var result = false;
             if (m_childDictionary == null)
             {
                 result = true;
@@ -496,7 +492,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 return false;
             }
 
-            ILocalizationDictionary comparer = (ILocalizationDictionary) obj;
+            var comparer = (ILocalizationDictionary) obj;
 
 
             if (this.Scope().Equals(comparer.Scope()))
@@ -512,7 +508,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public override int GetHashCode()
         {
-            int hashCode = CultureInfo().GetHashCode() ^ Scope().GetHashCode();
+            var hashCode = CultureInfo().GetHashCode() ^ Scope().GetHashCode();
             return hashCode;
         }
     }

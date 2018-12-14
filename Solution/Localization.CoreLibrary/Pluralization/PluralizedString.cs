@@ -26,7 +26,7 @@ namespace Localization.CoreLibrary.Pluralization
         {
             Guard.ArgumentNotNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
 
-            m_defaultLocalizedString = defaultLocalizedString; 
+            m_defaultLocalizedString = defaultLocalizedString;
             m_pluralized = new ConcurrentDictionary<PluralizationInterval, LocalizedString>();
         }
 
@@ -37,16 +37,16 @@ namespace Localization.CoreLibrary.Pluralization
         /// <returns>Pluralized string or default string if not found.</returns>
         public LocalizedString GetPluralizedLocalizedString(int number)
         {
-            PluralizationInterval pluralizationKey = new PluralizationInterval(number, number);
+            var pluralizationKey = new PluralizationInterval(number, number);
 
-            foreach (KeyValuePair<PluralizationInterval, LocalizedString> pluralizedLocalizedString in m_pluralized)
+            foreach (var pluralizedLocalizedString in m_pluralized)
             {
                 if (pluralizedLocalizedString.Key.Equals(pluralizationKey))
                 {
                     return pluralizedLocalizedString.Value;
                 }
             }
-           
+
             return m_defaultLocalizedString;
         }
 
@@ -61,14 +61,14 @@ namespace Localization.CoreLibrary.Pluralization
         {
             if (CheckOverlaping(pluralizationInterval))
             {
-                string overlapErrorMsg = "Intervals are overlaping in the Pluralized string.";
+                var overlapErrorMsg = "Intervals are overlaping in the Pluralized string.";
                 if (Logger.IsErrorEnabled())
                 {
                     Logger.LogError(overlapErrorMsg);
                 }
 
                 throw new PluralizedStringIntervalOverlapException(overlapErrorMsg);
-            }        
+            }
 
             m_pluralized.TryAdd(pluralizationInterval, localizedString);
         }
@@ -83,7 +83,7 @@ namespace Localization.CoreLibrary.Pluralization
             Guard.ArgumentNotNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
 
             var pluralizedKeys = m_pluralized.Keys;
-            foreach (PluralizationInterval pluralizedKey in pluralizedKeys)
+            foreach (var pluralizedKey in pluralizedKeys)
             {
                 if (pluralizedKey.IsOverlaping(pluralizationInterval))
                 {
@@ -93,6 +93,5 @@ namespace Localization.CoreLibrary.Pluralization
 
             return false;
         }
-
     }
 }

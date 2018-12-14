@@ -10,10 +10,10 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void IsOverlapingEqualsTest()
         {
-            PluralizationInterval pA = new PluralizationInterval(0, 1);
-            PluralizationInterval pB = new PluralizationInterval(0, 1);
+            var pA = new PluralizationInterval(0, 1);
+            var pB = new PluralizationInterval(0, 1);
 
-            bool result = pA.IsOverlaping(pB);
+            var result = pA.IsOverlaping(pB);
 
             Assert.IsTrue(result);
         }
@@ -21,10 +21,10 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void IsOvelapingEqualsOneTest()
         {
-            PluralizationInterval pA = new PluralizationInterval(0, 0);
-            PluralizationInterval pB = new PluralizationInterval(0, 0);
+            var pA = new PluralizationInterval(0, 0);
+            var pB = new PluralizationInterval(0, 0);
 
-            bool result = pA.IsOverlaping(pB);
+            var result = pA.IsOverlaping(pB);
 
             Assert.IsTrue(result);
         }
@@ -32,10 +32,10 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void IsOvelapingNotEqualsTest()
         {
-            PluralizationInterval pA = new PluralizationInterval(0, 0);
-            PluralizationInterval pB = new PluralizationInterval(1, 2);
+            var pA = new PluralizationInterval(0, 0);
+            var pB = new PluralizationInterval(1, 2);
 
-            bool result = pA.IsOverlaping(pB);
+            var result = pA.IsOverlaping(pB);
 
             Assert.IsFalse(result);
         }
@@ -43,10 +43,10 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void IsOvelapingOverlapsTest()
         {
-            PluralizationInterval pA = new PluralizationInterval(int.MinValue, int.MaxValue);
-            PluralizationInterval pB = new PluralizationInterval(-2, 2);
+            var pA = new PluralizationInterval(int.MinValue, int.MaxValue);
+            var pB = new PluralizationInterval(-2, 2);
 
-            bool result = pA.IsOverlaping(pB);
+            var result = pA.IsOverlaping(pB);
 
             Assert.IsTrue(result);
         }
@@ -54,10 +54,10 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void IsOvelapingTestConstructorException()
         {
-            bool exceptionThrown = false;
+            var exceptionThrown = false;
             try
             {
-                PluralizationInterval pA = new PluralizationInterval(2, 0);
+                var pA = new PluralizationInterval(2, 0);
             }
             catch (ArgumentException)
             {

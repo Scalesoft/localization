@@ -14,13 +14,13 @@ namespace Localization.AspNetCore.Service
 
         public DictionaryService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
-            m_dictionaryManager = Localization.CoreLibrary.Localization.Dictionary;
+            m_dictionaryManager = CoreLibrary.Localization.Dictionary;
         }
 
         public IDictionary<string, LocalizedString> GetDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = RequestCulture();
 
             return m_dictionaryManager.GetDictionary(translationSource, requestCulture, scope);
         }
@@ -28,7 +28,7 @@ namespace Localization.AspNetCore.Service
         public IDictionary<string, PluralizedString> GetPluralizedDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = RequestCulture();
 
             return m_dictionaryManager.GetPluralizedDictionary(translationSource, requestCulture, scope);
         }
@@ -36,7 +36,7 @@ namespace Localization.AspNetCore.Service
         public IDictionary<string, LocalizedString> GetConstantsDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = RequestCulture();
 
             return m_dictionaryManager.GetConstantsDictionary(translationSource, requestCulture, scope);
         }
@@ -47,17 +47,11 @@ namespace Localization.AspNetCore.Service
         /// <returns> Culture from request httpContext culture cookie.</returns>
         protected CultureInfo RequestCulture()
         {
-            HttpRequest request = HttpContextAccessor.HttpContext.Request;
+            var request = HttpContextAccessor.HttpContext.Request;
 
-            string cultureCookie = request.Cookies[ServiceBase.CultureCookieName];
-            if (cultureCookie == null)
-            {
-                cultureCookie = m_dictionaryManager.DefaultCulture().Name;
-            }
+            var cultureCookie = request.Cookies[CultureCookieName] ?? m_dictionaryManager.DefaultCulture().Name;
 
             return new CultureInfo(cultureCookie);
         }
-
-        
     }
 }

@@ -1,14 +1,13 @@
 ﻿{
-  "culture": "en",
-  "scope": "global",
-  "dictionary": {
-    "cancel": "Cancel",
-    "retry": "Retry",
-    "delete": "Delete",
-    "close": "Close",
-    "yes": "Yes",
-    "no": "No",
-    "ok": "Ok"
-  }
+    "culture": "en",
+    "scope": "global",
+    "dictionary": {
+        "cancel": "Cancel",
+        "retry": "Retry",
+        "delete": "Delete",
+        "close": "Close",
+        "yes": "Yes",
+        "no": "No",
+        "ok": "Ok"
+    }
 }
-
