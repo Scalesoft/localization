@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Entity;
 using Localization.CoreLibrary.Logging;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -112,9 +113,9 @@ namespace Localization.CoreLibrary.Manager.Impl
             return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
-        public DynamicText SaveDynamicText(DynamicText dynamicText)
+        public DynamicText SaveDynamicText(DynamicText dynamicText, DefaultCultureAction actionOnSave = DefaultCultureAction.Nothing)
         {
-            return m_databaseDynamicTextService.SaveDynamicText(dynamicText);
+            return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionOnSave);
         }
 
         public void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo)

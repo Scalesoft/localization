@@ -21,15 +21,29 @@ namespace Localization.Database.EFCore.Service
             m_configuration = configuration;
         }
 
-        protected Culture GetCulture(IDatabaseStaticTextContext dbContext, string cultureName)
+        protected Culture GetCultureByNameOrDefaultCulture(IDatabaseStaticTextContext dbContext, string cultureName)
         {
-            CultureDao cultureDao = new CultureDao(dbContext.Culture);
+            var cultureDao = new CultureDao(dbContext.Culture);
 
-            Culture resultCulture = cultureDao.FindByName(cultureName);
+            var resultCulture = cultureDao.FindByName(cultureName) ?? cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+
             if (resultCulture == null)
             {
-                resultCulture = cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+                if (m_logger.IsErrorEnabled())
+                {
+                    m_logger.LogError("Default culture from library configuration is not in database.");
+                }
             }
+
+            return resultCulture;
+        }
+
+        protected Culture GetDefaultCulture(IDatabaseStaticTextContext dbContext)
+        {
+            var cultureDao = new CultureDao(dbContext.Culture);
+
+            var resultCulture = cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+
             if (resultCulture == null)
             {
                 if (m_logger.IsErrorEnabled())

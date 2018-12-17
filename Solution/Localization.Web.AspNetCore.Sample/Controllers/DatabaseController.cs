@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Localization.AspNetCore.Service;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult AddDynamicText()
         {
-            var model = new DynamicTextViewModel
+            var model = new DynamicTextSaveViewModel
             {
                 SupportedCultures = GetSupportedCultures()
             };
@@ -39,7 +40,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         private IEnumerable<SelectListItem> GetSupportedCultures()
         {
-            IEnumerable<SelectListItem> result = m_localization.SupportedCultures().Select(i =>
+            var result = m_localization.SupportedCultures().Select(i =>
                 new SelectListItem()
                 {
                     Text = i.DisplayName,
@@ -48,18 +49,18 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
             return result;
         }
 
-        public IActionResult SaveDynamicText(DynamicTextViewModel dynamicText)
+        public IActionResult SaveDynamicText(DynamicTextSaveViewModel dynamicText)
         {
             if (ModelState.IsValid)
             {
-                m_dynamicTextService.SaveDynamicText(new DynamicTextEntity()
+                m_dynamicTextService.SaveDynamicText(new DynamicTextEntity
                 {
                     Culture = dynamicText.Culture.Name,
-                    DictionaryScope = "global",
+                    DictionaryScope = dynamicText.Scope ?? "global",
                     FallBack = false,
                     Text = dynamicText.Text,
                     Name = dynamicText.Name
-                });
+                }, dynamicText.DefaultCultureAction);
             }
 
             return View("Index");

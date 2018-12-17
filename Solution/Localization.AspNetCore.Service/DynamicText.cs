@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
+using Localization.CoreLibrary.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace Localization.AspNetCore.Service
@@ -27,9 +28,9 @@ namespace Localization.AspNetCore.Service
             return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
-        public CoreLibrary.Entity.DynamicText SaveDynamicText(CoreLibrary.Entity.DynamicText dynamicText)
+        public CoreLibrary.Entity.DynamicText SaveDynamicText(CoreLibrary.Entity.DynamicText dynamicText, DefaultCultureAction actionOnSave = DefaultCultureAction.Nothing)
         {
-            return m_databaseDynamicTextService.SaveDynamicText(dynamicText);
+            return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionOnSave);
         }
 
         public void DeleteAllDynamicText(string name, string scope)

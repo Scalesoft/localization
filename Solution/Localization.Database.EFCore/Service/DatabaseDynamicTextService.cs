@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Entity;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
@@ -27,7 +28,7 @@ namespace Localization.Database.EFCore.Service
             using (var dbContext = m_dbContextFunc.Invoke())
             {
                 DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
-                Culture culture = GetCulture(dbContext, cultureInfo.Name);
+                Culture culture = GetCultureByNameOrDefaultCulture(dbContext, cultureInfo.Name);
 
                 StaticText value =
                     new StaticTextDao(dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope,
@@ -76,19 +77,19 @@ namespace Localization.Database.EFCore.Service
             }
         }
 
-        public DynamicText SaveDynamicText(DynamicText dynamicText)
+        public DynamicText SaveDynamicText(DynamicText dynamicText, DefaultCultureAction actionOnSave = DefaultCultureAction.Nothing)
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                StaticTextDao dao = new StaticTextDao(dbContext.StaticText);
-                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, dynamicText.DictionaryScope);
+                var dao = new StaticTextDao(dbContext.StaticText);
+                var dictionaryScope = GetDictionaryScope(dbContext, dynamicText.DictionaryScope);
                 if (dictionaryScope.Name != dynamicText.DictionaryScope)
                 {
                     dictionaryScope = CreateDictionaryScope(dbContext, dynamicText.DictionaryScope);
                 }
 
-                Culture culture = GetCulture(dbContext, dynamicText.Culture);
-                bool existsInCulture = culture.Name == dynamicText.Culture;
+                var culture = GetCultureByNameOrDefaultCulture(dbContext, dynamicText.Culture);
+                var existsInCulture = culture.Name == dynamicText.Culture;
 
                 if (!existsInCulture)
                 {
@@ -96,18 +97,20 @@ namespace Localization.Database.EFCore.Service
                     CreateCultureHierarchy(dbContext, culture);
                 }
 
-                StaticText staticText =
+                var staticText =
                     dao.FindByNameAndCultureAndScope(dynamicText.Name, culture, dictionaryScope, dbContext.CultureHierarchy);
                 if (staticText == null || !existsInCulture || staticText.CultureId != culture.Id)
                 {
-                    staticText = new StaticText();
-                    staticText.Format = dynamicText.Format;
-                    staticText.ModificationTime = DateTime.UtcNow;
-                    staticText.ModificationUser = dynamicText.ModificationUser;
-                    staticText.Name = dynamicText.Name;
-                    staticText.Text = dynamicText.Text;
-                    staticText.Culture = culture;
-                    staticText.DictionaryScope = dictionaryScope;
+                    staticText = new StaticText
+                    {
+                        Format = dynamicText.Format,
+                        ModificationTime = DateTime.UtcNow,
+                        ModificationUser = dynamicText.ModificationUser,
+                        Name = dynamicText.Name,
+                        Text = dynamicText.Text,
+                        Culture = culture,
+                        DictionaryScope = dictionaryScope
+                    };
 
                     dao.Create(staticText);
                 }
@@ -122,9 +125,64 @@ namespace Localization.Database.EFCore.Service
                     dao.Update(staticText);
                 }
 
+                ExecuteDefaultCultureAction(actionOnSave, dynamicText, culture, dictionaryScope, dbContext, dao);
+
                 dbContext.SaveChanges();
 
                 return dynamicText;
+            }
+        }
+
+        /// <summary>
+        /// Executes an action on default culture text if it does not exist. Actions include - nothing, create empty string, copy current culture text
+        /// </summary>
+        /// <param name="actionOnSave">Specific action</param>
+        /// <param name="dynamicText">Current dynamic text entity</param>
+        /// <param name="currentCulture">Current culture entity</param>
+        /// <param name="dictionaryScope">Current dictionary scope entity</param>
+        /// <param name="dbContext">Database context</param>
+        /// <param name="dao">DAO of static text entity</param>
+        private void ExecuteDefaultCultureAction(DefaultCultureAction actionOnSave, DynamicText dynamicText, Culture currentCulture,
+            DictionaryScope dictionaryScope, IDatabaseStaticTextContext dbContext, StaticTextDao dao)
+        {
+            var defaultCulture = GetDefaultCulture(dbContext);
+            if (currentCulture == defaultCulture)
+            {
+                return;
+            }
+
+            var defaultText =
+                dao.FindByNameAndCultureAndScope(dynamicText.Name, defaultCulture, dictionaryScope, dbContext.CultureHierarchy);
+
+            if (defaultText != null)
+            {
+                return;
+            }
+
+            defaultText = new StaticText
+            {
+                Format = dynamicText.Format,
+                ModificationTime = DateTime.UtcNow,
+                ModificationUser = dynamicText.ModificationUser,
+                Name = dynamicText.Name,
+                Culture = defaultCulture,
+                DictionaryScope = dictionaryScope
+            };
+
+            switch (actionOnSave)
+            {
+                case DefaultCultureAction.Nothing:
+                    return;
+                case DefaultCultureAction.CreateEmpty:
+                    defaultText.Text = string.Empty;
+                    dao.Create(defaultText);
+                    break;
+                case DefaultCultureAction.Copy:
+                    defaultText.Text = dynamicText.Text;
+                    dao.Create(defaultText);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(actionOnSave), actionOnSave, "Invalid default language save action");
             }
         }
 
@@ -154,7 +212,7 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                var culture = GetCulture(dbContext, cultureInfo.Name);
+                var culture = GetCultureByNameOrDefaultCulture(dbContext, cultureInfo.Name);
                 var dao = new StaticTextDao(dbContext.StaticText);
                 var dictionaryScope = GetDictionaryScope(dbContext, scope);
                 var staticText = dao.FindByNameAndCultureAndScope(name, culture, dictionaryScope, dbContext.CultureHierarchy);
