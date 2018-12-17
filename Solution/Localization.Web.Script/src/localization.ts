@@ -108,7 +108,7 @@
         xmlHttpRequest.send();
     }
 
-    private  getCurrentCulture(): string {
+    public getCurrentCulture(): string {
         if (this.mCurrentCulture === "") {
             const currentCulture = this.getCurrentCultureCookie();
             this.setCurrentCulture(currentCulture);

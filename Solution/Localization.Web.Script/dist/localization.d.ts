@@ -17,7 +17,7 @@ declare class Localization {
     private getLocalizationDictionary(scope, cultureName);
     private dictionaryKey(scope, cultureName);
     private downloadDictionary(scope, cultureName);
-    private getCurrentCulture();
+    public getCurrentCulture();
     private setCurrentCulture(culture);
     private getCurrentCultureCookie();
     private markDownloading(downloading, scope, cultureName);
