@@ -113,9 +113,9 @@ namespace Localization.CoreLibrary.Manager.Impl
             return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
-        public DynamicText SaveDynamicText(DynamicText dynamicText, DefaultCultureAction actionOnSave = DefaultCultureAction.Nothing)
+        public DynamicText SaveDynamicText(DynamicText dynamicText, IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
         {
-            return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionOnSave);
+            return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionForDefaultCulture);
         }
 
         public void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo)

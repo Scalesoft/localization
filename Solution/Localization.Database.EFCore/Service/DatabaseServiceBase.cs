@@ -21,7 +21,7 @@ namespace Localization.Database.EFCore.Service
             m_configuration = configuration;
         }
 
-        protected Culture GetCultureByNameOrDefaultCulture(IDatabaseStaticTextContext dbContext, string cultureName)
+        protected Culture GetCultureByNameOrGetDefault(IDatabaseStaticTextContext dbContext, string cultureName)
         {
             var cultureDao = new CultureDao(dbContext.Culture);
 
@@ -31,7 +31,7 @@ namespace Localization.Database.EFCore.Service
             {
                 if (m_logger.IsErrorEnabled())
                 {
-                    m_logger.LogError("Default culture from library configuration is not in database.");
+                    m_logger.LogError($"Culture {cultureName} and default culture from library configuration is not in database.");
                 }
             }
 

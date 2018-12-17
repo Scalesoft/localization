@@ -27,7 +27,7 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = GetCultureByNameOrDefaultCulture(dbContext, cultureInfo.Name);
+                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
                 DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
 
                 StaticTextDao staticTextDao = new StaticTextDao(dbContext.StaticText);
@@ -46,7 +46,7 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = GetCultureByNameOrDefaultCulture(dbContext, cultureInfo.Name);
+                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
                 DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
 
                 PluralizedStaticTextDao pluralizedStaticTextDao = new PluralizedStaticTextDao(dbContext.PluralizedStaticText);
@@ -73,7 +73,7 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = GetCultureByNameOrDefaultCulture(dbContext, cultureInfo.Name);
+                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
                 DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
 
                 ConstantStaticTextDao constantStaticTextDao = new ConstantStaticTextDao(dbContext.ConstantStaticText);

@@ -60,7 +60,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
                     FallBack = false,
                     Text = dynamicText.Text,
                     Name = dynamicText.Name
-                }, dynamicText.DefaultCultureAction);
+                }, dynamicText.IfDefaultNotExistAction);
             }
 
             return View("Index");

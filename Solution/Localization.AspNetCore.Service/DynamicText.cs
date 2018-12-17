@@ -28,9 +28,9 @@ namespace Localization.AspNetCore.Service
             return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
-        public CoreLibrary.Entity.DynamicText SaveDynamicText(CoreLibrary.Entity.DynamicText dynamicText, DefaultCultureAction actionOnSave = DefaultCultureAction.Nothing)
+        public CoreLibrary.Entity.DynamicText SaveDynamicText(CoreLibrary.Entity.DynamicText dynamicText, IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
         {
-            return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionOnSave);
+            return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionForDefaultCulture);
         }
 
         public void DeleteAllDynamicText(string name, string scope)

@@ -35,9 +35,9 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.DefaultCultureAction, new {@class = "col-md-3 control-label"})
+            @Html.LabelFor(m => m.IfDefaultNotExistAction, new {@class = "col-md-3 control-label"})
             <div class="col-md-8">
-                @Html.DropDownListFor(m => m.DefaultCultureAction, Html.GetEnumSelectList<DefaultCultureAction>(), new {@class = "form-control"})
+                @Html.DropDownListFor(m => m.IfDefaultNotExistAction, Html.GetEnumSelectList<IfDefaultNotExistAction>(), new {@class = "form-control"})
             </div>
         </div>
         <div class="form-group">
