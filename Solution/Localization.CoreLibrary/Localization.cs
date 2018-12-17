@@ -366,10 +366,8 @@ namespace Localization.CoreLibrary
             {
                 throw new LocalizationLibraryException("LoggerFactory cannot be null.");
             }
-            else
-            {
-                LogProvider.AttachLoggerFactory(loggerFactory);
-            }
+
+            LogProvider.AttachLoggerFactory(loggerFactory);
         }
 
         private ILocalizationManager GetLocalizationManager(LocTranslationSource translationSource)

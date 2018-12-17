@@ -32,12 +32,6 @@ namespace Localization.CoreLibrary.Tests.Translator
             Localization.LibDeinit();
         }
 
-        [TestCleanup]
-        public void LibDeInit()
-        {
-            //FileLocalization.LibDeinit();
-        }
-
         [TestMethod]
         public void TranslatePluralizationTest()
         {

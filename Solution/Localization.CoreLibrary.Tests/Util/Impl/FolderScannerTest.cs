@@ -15,13 +15,12 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void CheckScopeResourceFilesTest()
         {
-            var product =
-                new LocalizationConfiguration.Configuration
-                {
-                    BasePath = "Localization",
-                    DefaultCulture = "cs",
-                    SupportedCultures = new List<string> {"cs", "en", "es"},
-                };
+            var product = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "Localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"cs", "en", "es"},
+            };
 
             Localization.AttachLogger(new LoggerFactory());
 

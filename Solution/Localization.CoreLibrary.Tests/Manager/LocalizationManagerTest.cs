@@ -30,7 +30,7 @@ namespace Localization.CoreLibrary.Tests.Manager
             var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
             fileLocalizationManager.AddDictionaryManager(dictionaryManager);
 
-            var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new[] {"pondělí"},
+            var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new object[] {"pondělí"},
                 new CultureInfo(configuration.DefaultCulture), "global");
 
             Assert.AreEqual("Dnes je pondělí.", ls.Value);

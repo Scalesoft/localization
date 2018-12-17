@@ -22,10 +22,8 @@ namespace Localization.CoreLibrary.Util.Impl
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
 
             if (objA.Name == objB.Name)
