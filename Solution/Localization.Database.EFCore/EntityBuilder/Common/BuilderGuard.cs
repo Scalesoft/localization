@@ -18,8 +18,8 @@ namespace Localization.Database.EFCore.EntityBuilder.Common
         {
             if (isSet)
             {
-                string errorMessage = string.Format("{0} is already set.", argumentName);
-                BuilderException builderException = new BuilderException(errorMessage);
+                var errorMessage = string.Format("{0} is already set.", argumentName);
+                var builderException = new BuilderException(errorMessage);
 
                 if (logger != null && logger.IsErrorEnabled())
                 {

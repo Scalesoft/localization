@@ -62,16 +62,16 @@ namespace Localization.Database.EFCore.Logging
         /// <returns></returns>
         private static string GetClassFullName()
         {
-            int framesToSkip = 2;
+            var framesToSkip = 2;
 
-            string className = string.Empty;
+            var className = string.Empty;
 
             var stackTrace = Environment.StackTrace;
             var stackTraceLines = stackTrace.Replace("\r", "").Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < stackTraceLines.Length; ++i)
+            for (var i = 0; i < stackTraceLines.Length; ++i)
             {
                 var callingClassAndMethod = stackTraceLines[i].Split(new[] { " ", "<>", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
-                int methodStartIndex = callingClassAndMethod.LastIndexOf(".", StringComparison.Ordinal);
+                var methodStartIndex = callingClassAndMethod.LastIndexOf(".", StringComparison.Ordinal);
                 if (methodStartIndex > 0)
                 {
                     // Trim method name. 

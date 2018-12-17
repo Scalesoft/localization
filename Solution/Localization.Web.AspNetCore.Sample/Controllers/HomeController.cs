@@ -79,7 +79,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            RequestCulture requestCulture = new RequestCulture(culture); //TODO validation of unsupported culture name
+            var requestCulture = new RequestCulture(culture); //TODO validation of unsupported culture name
             HttpContext.Request.HttpContext.Response.Cookies.Append(
                 "Localization.Culture",
                 requestCulture.Culture.Name,

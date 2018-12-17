@@ -57,9 +57,9 @@ namespace Localization.Database.EFCore.Service
 
         protected DictionaryScope GetDictionaryScope(IDatabaseStaticTextContext dbContext, string scopeName)
         {
-            DictionaryScopeDao dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
+            var dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
 
-            DictionaryScope resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
+            var resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
             if (resultDictionaryScope == null)
             {
                 resultDictionaryScope = dictionaryScopeDao.FindByName(CoreLibrary.Localization.DefaultScope);

@@ -27,13 +27,13 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
-                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
 
-                StaticTextDao staticTextDao = new StaticTextDao(dbContext.StaticText);
-                StaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-                Dictionary<string, LocalizedString> resultDictionary = new Dictionary<string, LocalizedString>();
-                foreach (StaticText singleStaticText in result)
+                var staticTextDao = new StaticTextDao(dbContext.StaticText);
+                var result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultDictionary = new Dictionary<string, LocalizedString>();
+                foreach (var singleStaticText in result)
                 {
                     resultDictionary.Add(singleStaticText.Name, new LocalizedString(singleStaticText.Name, singleStaticText.Text, false));
                 }
@@ -46,17 +46,17 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
-                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
 
-                PluralizedStaticTextDao pluralizedStaticTextDao = new PluralizedStaticTextDao(dbContext.PluralizedStaticText);
-                PluralizedStaticText[] result = pluralizedStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-                Dictionary<string, PluralizedString> resultDictionary = new Dictionary<string, PluralizedString>();
-                foreach (PluralizedStaticText singleplPluralizedStaticText in result)
+                var pluralizedStaticTextDao = new PluralizedStaticTextDao(dbContext.PluralizedStaticText);
+                var result = pluralizedStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultDictionary = new Dictionary<string, PluralizedString>();
+                foreach (var singleplPluralizedStaticText in result)
                 {
-                    PluralizedString pluralizedString = new PluralizedString(new LocalizedString(singleplPluralizedStaticText.Name,
+                    var pluralizedString = new PluralizedString(new LocalizedString(singleplPluralizedStaticText.Name,
                         singleplPluralizedStaticText.Text, false));
-                    foreach (IntervalText intervalText in singleplPluralizedStaticText.IntervalTexts)
+                    foreach (var intervalText in singleplPluralizedStaticText.IntervalTexts)
                     {
                         pluralizedString.Add(new PluralizationInterval(intervalText.IntervalStart, intervalText.IntervalEnd)
                             , new LocalizedString(singleplPluralizedStaticText.Name, intervalText.Text));
@@ -73,13 +73,13 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
-                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
 
-                ConstantStaticTextDao constantStaticTextDao = new ConstantStaticTextDao(dbContext.ConstantStaticText);
-                ConstantStaticText[] result = constantStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-                Dictionary<string, LocalizedString> resultDictionary = new Dictionary<string, LocalizedString>();
-                foreach (ConstantStaticText singleConstantStaticText in result)
+                var constantStaticTextDao = new ConstantStaticTextDao(dbContext.ConstantStaticText);
+                var result = constantStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultDictionary = new Dictionary<string, LocalizedString>();
+                foreach (var singleConstantStaticText in result)
                 {
                     resultDictionary.Add(singleConstantStaticText.Name, new LocalizedString(singleConstantStaticText.Name, singleConstantStaticText.Text, false));
                 }

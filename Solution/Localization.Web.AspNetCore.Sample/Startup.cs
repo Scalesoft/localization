@@ -42,20 +42,22 @@ namespace Localization.Web.AspNetCore.Sample
             // Add framework services.
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
-            {
-                options.DataAnnotationLocalizerProvider = (type, factory) => factory
-                    .Create(type.Name, LocTranslationSource.File.ToString());
-            });
-            }
+                {
+                    options.DataAnnotationLocalizerProvider = (type, factory) => factory
+                        .Create(type.Name, LocTranslationSource.File.ToString());
+                });
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
+            var databaseConnectionString =
+                @"Server=localhost;Database=LocalizationDatabaseEFCore;Trusted_Connection=True;";
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);         
+
+            CoreLibrary.Localization.AttachLogger(loggerFactory);
 
             if (env.IsDevelopment())
             {
@@ -67,7 +69,7 @@ namespace Localization.Web.AspNetCore.Sample
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            Localization.CoreLibrary.Localization.Init(
+            CoreLibrary.Localization.Init(
                 @"localizationsettings.json",
                 new DatabaseServiceFactory(options => { options.UseSqlServer(databaseConnectionString); }),
                 new JsonDictionaryFactory());
@@ -87,9 +89,9 @@ namespace Localization.Web.AspNetCore.Sample
         private void AddLocalizationDictionary(string fileName)
         {
             var filePath = Path.Combine("OtherLocalization", fileName);
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
-                Localization.CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, fileStream);
+                CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, fileStream);
             }
         }
     }

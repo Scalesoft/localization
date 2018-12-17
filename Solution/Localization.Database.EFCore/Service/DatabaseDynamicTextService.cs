@@ -27,10 +27,10 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
-                Culture culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
 
-                StaticText value =
+                var value =
                     new StaticTextDao(dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope,
                         dbContext.CultureHierarchy);
 
@@ -52,9 +52,9 @@ namespace Localization.Database.EFCore.Service
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
-                DictionaryScope dictionaryScope = GetDictionaryScope(dbContext, scope);
-                StaticTextDao staticTextDao = new StaticTextDao(dbContext.StaticText);
-                IList<StaticText> values = staticTextDao.FindByNameAndScope(name, dictionaryScope, dbContext.CultureHierarchy);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
+                var staticTextDao = new StaticTextDao(dbContext.StaticText);
+                var values = staticTextDao.FindByNameAndScope(name, dictionaryScope, dbContext.CultureHierarchy);
 
                 var resultList = new List<DynamicText>();
                 foreach (var value in values)
@@ -230,29 +230,29 @@ namespace Localization.Database.EFCore.Service
 
         private Culture CreateCulture(IDatabaseStaticTextContext dbContext, string cultureName)
         {
-            CultureDao cultureDao = new CultureDao(dbContext.Culture);
+            var cultureDao = new CultureDao(dbContext.Culture);
             return cultureDao.Create(new Culture() {Id = 0, Name = cultureName});
         }
 
         private void CreateCultureHierarchy(IDatabaseStaticTextContext dbContext, Culture culture)
         {
-            CultureHierarchyDao cultureHierarchyDao = new CultureHierarchyDao(dbContext.CultureHierarchy);
-            CultureDao cultureDao = new CultureDao(dbContext.Culture);
+            var cultureHierarchyDao = new CultureHierarchyDao(dbContext.CultureHierarchy);
+            var cultureDao = new CultureDao(dbContext.Culture);
 
             cultureHierarchyDao.MakeCultureSelfReferencing(culture);
 
-            string defaultCultureName = m_configuration.DefaultCulture().Name;
-            Culture defaultCulture = cultureDao.FindByName(defaultCultureName);
+            var defaultCultureName = m_configuration.DefaultCulture().Name;
+            var defaultCulture = cultureDao.FindByName(defaultCultureName);
 
-            CultureInfo cultureInfo = new CultureInfo(culture.Name);
+            var cultureInfo = new CultureInfo(culture.Name);
             if (cultureInfo.IsNeutralCulture) //Just reference to default culture
             {
                 cultureHierarchyDao.MakeCultureReference(culture, defaultCulture, 1);
             }
             else
             {
-                string parentCultureName = cultureInfo.Parent.Name;
-                Culture parentCulture = cultureDao.FindByName(parentCultureName);
+                var parentCultureName = cultureInfo.Parent.Name;
+                var parentCulture = cultureDao.FindByName(parentCultureName);
                 if (parentCulture == null)
                 {
                     cultureHierarchyDao.MakeCultureReference(culture, defaultCulture, 1);
@@ -268,7 +268,7 @@ namespace Localization.Database.EFCore.Service
 
         private DictionaryScope CreateDictionaryScope(IDatabaseStaticTextContext dbContext, string dictionaryScopeName)
         {
-            DictionaryScopeDao dsDao = new DictionaryScopeDao(dbContext.DictionaryScope);
+            var dsDao = new DictionaryScopeDao(dbContext.DictionaryScope);
             return dsDao.Create(new DictionaryScope() {Name = dictionaryScopeName});
         }
     }

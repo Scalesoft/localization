@@ -22,9 +22,9 @@ namespace Localization.Database.EFCore.Tests.Dao
         {
             var configuration = new LocalizationConfiguration.Configuration
             {
-                BasePath = @"localization",
-                DefaultCulture = @"cs",
-                SupportedCultures = new List<string> { "en", "cs" },
+                BasePath = "localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"en", "cs"},
                 TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
             };
 
@@ -34,9 +34,11 @@ namespace Localization.Database.EFCore.Tests.Dao
                 .UseSqlServer(Configuration.ConnectionString).Options;
 
             var dbTranslateService = new DatabaseTranslateService(CreateStaticTextContext, localizationConfiguration);
-            var dbDynamicTextService = new DatabaseDynamicTextService(CreateStaticTextContext, localizationConfiguration);
+            var dbDynamicTextService =
+                new DatabaseDynamicTextService(CreateStaticTextContext, localizationConfiguration);
 
-            m_databaseLocalizationManager = new DatabaseLocalizationManager(localizationConfiguration, dbTranslateService, dbDynamicTextService);
+            m_databaseLocalizationManager =
+                new DatabaseLocalizationManager(localizationConfiguration, dbTranslateService, dbDynamicTextService);
         }
 
         private IDatabaseStaticTextContext CreateStaticTextContext()
@@ -47,7 +49,7 @@ namespace Localization.Database.EFCore.Tests.Dao
         [TestMethod]
         public void TranslateConcurrentlyTest()
         {
-            var scope = "home";
+            const string scope = "home";
             var keysFromScope = new[]
             {
                 "support",

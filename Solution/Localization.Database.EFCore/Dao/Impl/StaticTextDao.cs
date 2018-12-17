@@ -23,11 +23,11 @@ namespace Localization.Database.EFCore.Dao.Impl
             StaticText resultValue = null;
             try
             {
-                IQueryable<CultureHierarchy> hierarchies = cultureHierarchies
+                var hierarchies = cultureHierarchies
                     .Select(t => t)
                     .Where(hierarchyCulture => hierarchyCulture.Culture.Id == culture.Id);
 
-                IQueryable<StaticText> result = DbSet
+                var result = DbSet
                     .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope)
                     .Include(x => x.Culture)
                     .Join(hierarchies,
@@ -56,10 +56,10 @@ namespace Localization.Database.EFCore.Dao.Impl
             List<StaticText> resultValue = null;
             try
             {
-                IQueryable<CultureHierarchy> hierarchies = cultureHierarchies
+                var hierarchies = cultureHierarchies
                     .Select(t => t);
 
-                IQueryable<StaticText> result = DbSet
+                var result = DbSet
                     .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope)
                     .Include(x => x.Culture)
                     .Join(hierarchies,

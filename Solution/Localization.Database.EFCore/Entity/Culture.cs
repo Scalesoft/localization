@@ -13,18 +13,7 @@ namespace Localization.Database.EFCore.Entity
         [Column(TypeName = "varchar(5)")]
         public string Name { get; set; }
 
-    
+
         public ICollection<BaseText> BaseTexts { get; set; }
-
-        //public ICollection<CultureHierarchy> CultureHierarchies { get; set; }
-       // public ICollection<CultureHierarchy> CultureParentHierarchies { get; set; }
-       // public ICollection<BaseText> CultureTexts { get; set; }
-
-        public Culture()
-        {
-            //CultureHierarchies = new List<CultureHierarchy>();
-            //CultureParentHierarchies = new List<CultureHierarchy>();
-           // CultureTexts = new List<BaseText>();
-        }
     }
 }
