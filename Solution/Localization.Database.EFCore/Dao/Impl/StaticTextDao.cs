@@ -39,7 +39,7 @@ namespace Localization.Database.EFCore.Dao.Impl
                     .Select(r => r.text);
 
                 resultValue = result.DefaultIfEmpty().First();
-            }            
+            }
             catch (ArgumentNullException e)
             {
                 if (Logger.IsWarningEnabled())

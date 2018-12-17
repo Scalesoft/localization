@@ -97,8 +97,9 @@ namespace Localization.Database.EFCore.Service
                     CreateCultureHierarchy(dbContext, culture);
                 }
 
-                var staticText =
-                    dao.FindByNameAndCultureAndScope(dynamicText.Name, culture, dictionaryScope, dbContext.CultureHierarchy);
+                var staticText = dao.FindByNameAndCultureAndScope(
+                    dynamicText.Name, culture, dictionaryScope, dbContext.CultureHierarchy
+                );
                 if (staticText == null || !existsInCulture || staticText.CultureId != culture.Id)
                 {
                     staticText = new StaticText
@@ -215,7 +216,9 @@ namespace Localization.Database.EFCore.Service
                 var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
                 var dao = new StaticTextDao(dbContext.StaticText);
                 var dictionaryScope = GetDictionaryScope(dbContext, scope);
-                var staticText = dao.FindByNameAndCultureAndScope(name, culture, dictionaryScope, dbContext.CultureHierarchy);
+                var staticText = dao.FindByNameAndCultureAndScope(
+                    name, culture, dictionaryScope, dbContext.CultureHierarchy
+                );
 
                 if (staticText == null)
                 {
