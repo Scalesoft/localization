@@ -24,11 +24,9 @@ namespace Localization.CoreLibrary.Tests.Manager
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            var loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-            dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
+            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
 
-            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
-            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
+            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
 
             var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new object[] {"pondělí"},
                 new CultureInfo(configuration.DefaultCulture), "global");
@@ -50,11 +48,9 @@ namespace Localization.CoreLibrary.Tests.Manager
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            var loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-            dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
+            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
 
-            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
-            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
+            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
 
             var ls = fileLocalizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
 

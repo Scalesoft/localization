@@ -41,6 +41,11 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return string.Empty;
         }
 
+        public string GetParentScopeName()
+        {
+            return string.Empty;
+        }
+
         public string Extension()
         {
             return string.Empty;

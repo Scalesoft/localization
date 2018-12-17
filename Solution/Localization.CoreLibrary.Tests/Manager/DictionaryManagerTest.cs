@@ -64,12 +64,9 @@ namespace Localization.CoreLibrary.Tests.Manager
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            dictionaryManager.BuildDictionaryHierarchyTrees(dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance));
+            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
 
-            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
-
-            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
-
+            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
 
             var s1 = fileLocalizationManager.Translate("text-1-odst", new CultureInfo("cs"));
             Assert.AreEqual("global cs [text-1-odst]", s1);

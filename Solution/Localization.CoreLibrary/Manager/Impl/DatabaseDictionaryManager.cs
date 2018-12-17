@@ -2,11 +2,9 @@
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
@@ -14,8 +12,6 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class DatabaseDictionaryManager : ManagerBase, IDictionaryManager
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
-
         private readonly IDatabaseDictionaryService m_dbDictionaryService;
 
         public DatabaseDictionaryManager(IConfiguration configuration, IDatabaseDictionaryService dbDictionaryService)
@@ -46,16 +42,6 @@ namespace Localization.CoreLibrary.Manager.Impl
             scope = ScopeNullCheck(scope);
 
             return m_dbDictionaryService.GetConstantsDictionary(cultureInfo, scope);
-        }
-
-        public CultureInfo DefaultCulture()
-        {
-            return Configuration.DefaultCulture();
-        }
-
-        public string DefaultScope()
-        {
-            return Localization.DefaultScope;
         }
     }
 }

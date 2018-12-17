@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
@@ -10,67 +11,55 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class FileLocalizationManager : LocalizationManager, ILocalizationManager
     {
-        private FileDictionaryManager m_dictionaryManager;
+        private readonly FileDictionaryManager m_dictionaryManager;
 
-        public FileLocalizationManager(IConfiguration configuration) : base(configuration)
+        public FileLocalizationManager(
+            IConfiguration configuration,
+            FileDictionaryManager fileDictionaryManager
+        ) : base(configuration)
         {
-            //Should be empty
-        }
-
-        public void AddDictionaryManager(IDictionaryManager dictionaryManager)
-        {
-            m_dictionaryManager = (FileDictionaryManager) dictionaryManager;
+            m_dictionaryManager = fileDictionaryManager;
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
         {
-            var ls = m_dictionaryManager.GetLocalizationDictionary(cultureInfo, scope);
-            ls.List().TryGetValue(text, out var result);
-
-            if (result == null)
-            {
-                result = TranslateInParent(ls, text, cultureInfo, scope);
-            }
-
-            return result;
-        }
-
-        private LocalizedString TranslateInParent(
-            ILocalizationDictionary localizationDictionary, string text, CultureInfo cultureInfo = null, string scope = null
-        )
-        {
             while (true)
             {
-                if (localizationDictionary.ParentDictionary() == null)
-                {
-                    return TranslateFallback(text);
-                }
-
-                localizationDictionary = localizationDictionary.ParentDictionary();
-
+                var localizationDictionary = m_dictionaryManager.GetLocalizationDictionary(cultureInfo, scope);
                 localizationDictionary.List().TryGetValue(text, out var result);
+
+                if (result == null)
+                {
+                    result = TranslateInParent(localizationDictionary, text);
+                }
 
                 if (result != null)
                 {
                     return result;
                 }
+
+                cultureInfo = cultureInfo == null ? null : m_dictionaryManager.FallbackCulture(cultureInfo);
+                if (cultureInfo != null)
+                {
+                    continue;
+                }
+
+                return TranslateFallback(text);
             }
         }
 
-        private LocalizedString TranslateConstantInParent(
-            ILocalizationDictionary localizationDictionary, string text, CultureInfo cultureInfo = null, string scope = null
-        )
+        private LocalizedString TranslateInParent(ILocalizationDictionary localizationDictionary, string text)
         {
             while (true)
             {
                 if (localizationDictionary.ParentDictionary() == null)
                 {
-                    return TranslateFallback(text);
+                    return null;
                 }
 
                 localizationDictionary = localizationDictionary.ParentDictionary();
 
-                localizationDictionary.ListConstants().TryGetValue(text, out var result);
+                localizationDictionary.List().TryGetValue(text, out var result);
 
                 if (result != null)
                 {
@@ -89,26 +78,38 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null)
         {
-            var ls = m_dictionaryManager.GetLocalizationDictionary(cultureInfo, scope);
-            ls.ListPlurals().TryGetValue(text, out var resultPluralizedString);
-
-            if (resultPluralizedString == null)
+            while (true)
             {
-                return TranslatePluralizedInParent(ls, text, number, cultureInfo, scope);
-            }
+                var localizationDictionary = m_dictionaryManager.GetLocalizationDictionary(cultureInfo, scope);
+                localizationDictionary.ListPlurals().TryGetValue(text, out var result);
 
-            return resultPluralizedString.GetPluralizedLocalizedString(number);
+                if (result == null)
+                {
+                    result = TranslatePluralizedInParent(localizationDictionary, text);
+                }
+
+                if (result != null)
+                {
+                    return result.GetPluralizedLocalizedString(number);
+                }
+
+                cultureInfo = cultureInfo == null ? null : m_dictionaryManager.FallbackCulture(cultureInfo);
+                if (cultureInfo != null)
+                {
+                    continue;
+                }
+
+                return TranslateFallback(text);
+            }
         }
 
-        private LocalizedString TranslatePluralizedInParent(
-            ILocalizationDictionary localizationDictionary, string text, int number, CultureInfo cultureInfo = null, string scope = null
-        )
+        private PluralizedString TranslatePluralizedInParent(ILocalizationDictionary localizationDictionary, string text)
         {
             while (true)
             {
                 if (localizationDictionary.ParentDictionary() == null)
                 {
-                    return TranslateFallback(text);
+                    return null;
                 }
 
                 localizationDictionary = localizationDictionary.ParentDictionary();
@@ -117,32 +118,56 @@ namespace Localization.CoreLibrary.Manager.Impl
 
                 if (result != null)
                 {
-                    return result.GetPluralizedLocalizedString(number);
+                    return result;
                 }
             }
         }
 
         public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationDictionary = m_dictionaryManager.GetLocalizationDictionary(cultureInfo, scope);
-            localizationDictionary.ListConstants().TryGetValue(text, out var result);
-
-            if (result == null)
+            while (true)
             {
-                result = TranslateConstantInParent(localizationDictionary, text, cultureInfo, scope);
+                var localizationDictionary = m_dictionaryManager.GetLocalizationDictionary(cultureInfo, scope);
+                localizationDictionary.ListConstants().TryGetValue(text, out var result);
+
+                if (result == null)
+                {
+                    result = TranslateConstantInParent(localizationDictionary, text);
+                }
+
+                if (result != null)
+                {
+                    return result;
+                }
+
+                cultureInfo = cultureInfo == null ? null : m_dictionaryManager.FallbackCulture(cultureInfo);
+                if (cultureInfo != null)
+                {
+                    continue;
+                }
+
+                return TranslateFallback(text);
             }
-
-            return result;
         }
 
-        public CultureInfo DefaultCulture()
+        private LocalizedString TranslateConstantInParent(ILocalizationDictionary localizationDictionary, string text)
         {
-            return Configuration.DefaultCulture();
-        }
+            while (true)
+            {
+                if (localizationDictionary.ParentDictionary() == null)
+                {
+                    return null;
+                }
 
-        public string DefaultScope()
-        {
-            return Localization.DefaultScope;
+                localizationDictionary = localizationDictionary.ParentDictionary();
+
+                localizationDictionary.ListConstants().TryGetValue(text, out var result);
+
+                if (result != null)
+                {
+                    return result;
+                }
+            }
         }
     }
 }

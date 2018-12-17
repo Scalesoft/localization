@@ -19,7 +19,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         {
             if (cultureInfo == null)
             {
-                return Configuration.DefaultCulture();
+                return DefaultCulture();
             }
 
             return cultureInfo;
@@ -29,10 +29,20 @@ namespace Localization.CoreLibrary.Manager.Impl
         {
             if (string.IsNullOrEmpty(scope))
             {
-                return Localization.DefaultScope;
+                return DefaultScope();
             }
 
             return scope;
+        }
+
+        public CultureInfo DefaultCulture()
+        {
+            return Configuration.DefaultCulture();
+        }
+
+        public string DefaultScope()
+        {
+            return Localization.DefaultScope;
         }
     }
 }

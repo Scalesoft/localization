@@ -27,11 +27,9 @@ namespace Localization.CoreLibrary.Tests.Translator
             var localizationConfiguration = new LocalizationConfiguration(configuration);
 
             m_dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            var loadedDictionaries = m_dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-            m_dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
+            m_dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
 
-            m_fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
-            m_fileLocalizationManager.AddDictionaryManager(m_dictionaryManager);
+            m_fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, m_dictionaryManager);
         }
 
         [TestMethod]

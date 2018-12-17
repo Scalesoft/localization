@@ -1,6 +1,5 @@
 ﻿using System;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Dictionary.Impl;
+using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
@@ -103,7 +102,8 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void PluralizedDictionaryDottedKeyTest()
         {
-            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"Localization\slovniky\slovniky.cs.json");
+            var dictionaryFactory = new JsonDictionaryFactory();
+            var localizationDictionary = dictionaryFactory.CreateDictionary(@"Localization\slovniky\slovniky.cs.json");
             var localizedPluralizedStrings = localizationDictionary.ListPlurals();
             Assert.AreEqual(true, localizedPluralizedStrings.ContainsKey("klíč-stringu"));
 
@@ -160,7 +160,8 @@ namespace Localization.CoreLibrary.Tests.Pluralization
         [TestMethod]
         public void PluralizedDictionaryLoadTest()
         {
-            ILocalizationDictionary localizationDictionary = new JsonLocalizationDictionary(@"Localization\slovniky\slovniky.cs.json");
+            var dictionaryFactory = new JsonDictionaryFactory();
+            var localizationDictionary = dictionaryFactory.CreateDictionary(@"Localization\slovniky\slovniky.cs.json");
             var localizedPluralizedStrings = localizationDictionary.ListPlurals();
             Assert.AreEqual(1, localizedPluralizedStrings.Count);
 

@@ -18,6 +18,8 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 {
     internal class JsonLocalizationDictionary : ILocalizationDictionary
     {
+        private const string NotLoadedPluralizedMsg = "Pluralized dictionary is not loaded.";
+
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private static readonly object m_initLock = new object();
 
@@ -25,12 +27,13 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private const string ScopeJPath = "scope";
         public const string JsonExtension = "json";
         private const string PluralJPath = "plural";
-
-        private const string DictionaryKey = "dictionary";
-        private const string ConstantKey = "constants";
+        private const string DictionaryJPath = "dictionary";
+        private const string ConstantJPath = "constants";
+        private const string ParentScopeJPath = "parentScope";
 
         private readonly CultureInfo m_cultureInfo;
         private readonly string m_scope;
+        private readonly string m_parentScopeName;
 
         private readonly JObject m_jsonDictionary;
         private readonly JObject m_jsonPluralizedDictionary;
@@ -55,21 +58,22 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             m_cultureInfo = new CultureInfo(cultureString);
 
             m_scope = (string) m_jsonDictionary[ScopeJPath];
+            m_parentScopeName = (string) m_jsonDictionary[ParentScopeJPath];
         }
 
         public JsonLocalizationDictionary(Stream resourceStream, string filePath) : this(resourceStream)
         {
             var filePathWithoutExtension = Path.ChangeExtension(filePath, "");
-            var newFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
+            var pluralizedFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
 
-            if (!File.Exists(newFilePath))
+            if (!File.Exists(pluralizedFilePath))
             {
                 return;
             }
 
-            using (var fileStream = new FileStream(newFilePath, FileMode.Open, FileAccess.Read))
+            using (var fileStream = new FileStream(pluralizedFilePath, FileMode.Open, FileAccess.Read))
             {
-                m_jsonPluralizedDictionary = LoadDictionaryJObject(fileStream, newFilePath);
+                m_jsonPluralizedDictionary = LoadDictionaryJObject(fileStream, pluralizedFilePath);
             }
 
             var cultureString = (string) m_jsonPluralizedDictionary[CultureJPath];
@@ -119,6 +123,11 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return m_scope;
         }
 
+        public string GetParentScopeName()
+        {
+            return m_parentScopeName;
+        }
+
         public string Extension()
         {
             return JsonExtension;
@@ -148,7 +157,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             var dictionary = new ConcurrentDictionary<string, LocalizedString>();
 
-            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken(DictionaryKey);
+            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken(DictionaryJPath);
             if (keyValueObjects == null)
             {
                 m_dictionary = dictionary;
@@ -193,7 +202,19 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             var pluralizedDictionary = new ConcurrentDictionary<string, PluralizedString>();
 
-            var keyValueObjects = (JObject) m_jsonPluralizedDictionary.SelectToken(DictionaryKey);
+            if (!IsPluralizationLoaded())
+            {
+                if (Logger.IsWarningEnabled())
+                {
+                    Logger.LogWarning(NotLoadedPluralizedMsg);
+                }
+
+                m_pluralizedDictionary = pluralizedDictionary;
+
+                return;
+            }
+
+            var keyValueObjects = (JObject) m_jsonPluralizedDictionary.SelectToken(DictionaryJPath);
             if (keyValueObjects == null)
             {
                 m_pluralizedDictionary = pluralizedDictionary;
@@ -303,7 +324,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             var constantsDictionary = new ConcurrentDictionary<string, LocalizedString>();
 
-            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken(ConstantKey);
+            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken(ConstantJPath);
             if (keyValueObjects == null)
             {
                 m_constantDictionaries = constantsDictionary;
@@ -323,6 +344,15 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             keyValueEnumerator.Dispose();
 
             m_constantDictionaries = constantsDictionary;
+        }
+
+        /// <summary>
+        /// Return true if json file containing pluralized strings was loaded.
+        /// </summary>
+        /// <returns>True if pluralized json file was loaded.</returns>
+        private bool IsPluralizationLoaded()
+        {
+            return m_jsonPluralizedDictionary != null;
         }
 
 

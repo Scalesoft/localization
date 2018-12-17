@@ -20,6 +20,8 @@ namespace Localization.CoreLibrary.Dictionary
         /// <returns>Dictionary scope.</returns>
         string Scope();
 
+        string GetParentScopeName();
+
         /// <summary>
         /// Dictionary resource file extension. e.g "json", "xml".
         /// </summary>
@@ -71,7 +73,7 @@ namespace Localization.CoreLibrary.Dictionary
         void SetChildDictionary(ILocalizationDictionary childDictionary);
 
         /// <summary>
-        /// Dictionary is leaf if it hasn't any child dictionaries in dictionary hieararchy.
+        /// Dictionary is leaf if it hasn't any child dictionaries in dictionary hierarchy.
         /// </summary>
         /// <returns>True if this dictionary is leaf in hierarchy.</returns>
         bool IsLeaf();

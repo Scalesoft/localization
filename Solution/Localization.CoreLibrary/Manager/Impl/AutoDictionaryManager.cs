@@ -14,21 +14,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class AutoDictionaryManager : IDictionaryManager
+    internal class AutoDictionaryManager : ManagerBase, IDictionaryManager
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
         private readonly IDictionaryManager m_fileDictionaryManager;
         private readonly IDictionaryManager m_databaseDictionaryManager;
 
-        private readonly IConfiguration m_configuration;
-
-        public AutoDictionaryManager(IDictionaryManager fileDictionaryManager, IDictionaryManager databaseDictionaryManager,
-            IConfiguration configuration)
+        public AutoDictionaryManager(
+            IDictionaryManager fileDictionaryManager, IDictionaryManager databaseDictionaryManager, IConfiguration configuration
+        ) : base(configuration)
         {
             m_fileDictionaryManager = fileDictionaryManager;
             m_databaseDictionaryManager = databaseDictionaryManager;
-            m_configuration = configuration;
         }
 
         private IDictionaryManager GetDictionaryManager(LocLocalizationResource localizationResource)
@@ -71,12 +69,12 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource());
+            var localizationManager = GetDictionaryManager(Configuration.FirstAutoTranslateResource());
 
             var result = localizationManager.GetDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
-                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource());
+                localizationManager = GetOtherDictionaryManager(Configuration.FirstAutoTranslateResource());
                 try
                 {
                     result = localizationManager.GetDictionary(cultureInfo, scope);
@@ -97,12 +95,12 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource());
+            var localizationManager = GetDictionaryManager(Configuration.FirstAutoTranslateResource());
 
             var result = localizationManager.GetPluralizedDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
-                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource());
+                localizationManager = GetOtherDictionaryManager(Configuration.FirstAutoTranslateResource());
                 try
                 {
                     result = localizationManager.GetPluralizedDictionary(cultureInfo, scope);
@@ -124,12 +122,12 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource());
+            var localizationManager = GetDictionaryManager(Configuration.FirstAutoTranslateResource());
 
             var result = localizationManager.GetConstantsDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
-                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource());
+                localizationManager = GetOtherDictionaryManager(Configuration.FirstAutoTranslateResource());
                 try
                 {
                     result = localizationManager.GetConstantsDictionary(cultureInfo, scope);
@@ -147,16 +145,6 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
 
             return result;
-        }
-
-        public CultureInfo DefaultCulture()
-        {
-            return m_configuration.DefaultCulture();
-        }
-
-        public string DefaultScope()
-        {
-            return Localization.DefaultScope;
         }
     }
 }

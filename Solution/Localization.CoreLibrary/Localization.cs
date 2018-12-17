@@ -153,15 +153,12 @@ namespace Localization.CoreLibrary
             }
             else
             {
-                var dbTranslateService =
-                    databaseServiceFactory.CreateTranslateService(configuration, loggerFactory);
+                var dbTranslateService = databaseServiceFactory.CreateTranslateService(configuration, loggerFactory);
                 dbTranslateService.CheckCulturesInDatabase();
 
-                dbDynamicTextService =
-                    databaseServiceFactory.CreateDatabaseDynamicTextService(configuration, loggerFactory);
+                dbDynamicTextService = databaseServiceFactory.CreateDatabaseDynamicTextService(configuration, loggerFactory);
 
-                databaseLocalizationManager =
-                    new DatabaseLocalizationManager(configuration, dbTranslateService, dbDynamicTextService);
+                databaseLocalizationManager = new DatabaseLocalizationManager(configuration, dbTranslateService, dbDynamicTextService);
             }
 
             //Db dic manager.
@@ -172,13 +169,17 @@ namespace Localization.CoreLibrary
             }
             else
             {
-                databaseDictionaryManager = new DatabaseDictionaryManager(configuration,
-                    databaseServiceFactory.CreateDictionaryService(configuration, loggerFactory));
+                databaseDictionaryManager = new DatabaseDictionaryManager(
+                    configuration,
+                    databaseServiceFactory.CreateDictionaryService(configuration, loggerFactory)
+                );
             }
 
 
-            m_instance = new Lazy<Localization>(() => new Localization(configuration, loggerFactory, dictionaryFactory,
-                databaseLocalizationManager, databaseDictionaryManager, dbDynamicTextService));
+            m_instance = new Lazy<Localization>(() => new Localization(
+                configuration, loggerFactory, dictionaryFactory,
+                databaseLocalizationManager, databaseDictionaryManager, dbDynamicTextService
+            ));
         }
 
         /// <summary>
@@ -213,9 +214,7 @@ namespace Localization.CoreLibrary
 
             var dictionaryManager = (FileDictionaryManager) Instance().m_dictionaryManagers[LocTranslationSource.File];
 
-            dictionaryManager.Dictionaries.Add(dictionaryFactory.CreateDictionary(resourceStream));
-
-            dictionaryManager.BuildDictionaryHierarchyTrees(dictionaryManager.Dictionaries.ToArray());
+            dictionaryManager.AddDictionaryToHierarchyTrees(dictionaryFactory.CreateDictionary(resourceStream));
         }
 
         /// <summary>
@@ -321,8 +320,7 @@ namespace Localization.CoreLibrary
 
             if (configuration.AutoLoadResources())
             {
-                var d = dictionaryManager.AutoLoadDictionaries(dictionaryFactory);
-                dictionaryManager.BuildDictionaryHierarchyTrees(d);
+                dictionaryManager.AutoLoadDictionaries(dictionaryFactory);
             }
 
             m_dictionaryManagers[LocTranslationSource.File] = dictionaryManager;
@@ -335,13 +333,15 @@ namespace Localization.CoreLibrary
         /// <exception cref="LocalizationLibraryException">Throws if dictionary manager is not already loaded.</exception>
         private void InitLocalizationManager(IConfiguration configuration)
         {
-            var fileLocalizationManager = new FileLocalizationManager(configuration);
             if (m_dictionaryManagers[LocTranslationSource.File] == null)
             {
                 throw new LocalizationLibraryException("You must initialize the Dictionary manager before FileLocalization manager");
             }
 
-            fileLocalizationManager.AddDictionaryManager(m_dictionaryManagers[LocTranslationSource.File]);
+            var fileLocalizationManager = new FileLocalizationManager(
+                configuration,
+                (FileDictionaryManager) m_dictionaryManagers[LocTranslationSource.File]
+            );
 
             m_localizationManagers.Add(LocTranslationSource.File, fileLocalizationManager);
         }
