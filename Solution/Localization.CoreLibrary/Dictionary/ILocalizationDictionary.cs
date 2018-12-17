@@ -9,20 +9,6 @@ namespace Localization.CoreLibrary.Dictionary
     public interface ILocalizationDictionary
     {
         /// <summary>
-        /// Loads dictionary from stream.
-        /// </summary>
-        /// <param name="resourceStream">Resource stream.</param>
-        /// <returns>This instance.</returns>
-        ILocalizationDictionary Load(Stream resourceStream);
-
-        /// <summary>
-        /// Loads dictionary from file.
-        /// </summary>
-        /// <param name="filePath">Resource file path.</param>
-        /// <returns>This instance.</returns>
-        ILocalizationDictionary Load(string filePath);
-
-        /// <summary>
         /// Dictionary culture info.
         /// </summary>
         /// <returns>Dictionary culture info.</returns>
@@ -59,16 +45,16 @@ namespace Localization.CoreLibrary.Dictionary
         IDictionary<string, LocalizedString> ListConstants();
 
         /// <summary>
-        /// Parent dictionary based on culture hierarchy.
+        /// Parent dictionary based on culture.
         /// </summary>
         /// <returns>Parent dictionary.</returns>
         ILocalizationDictionary ParentDictionary();
 
         /// <summary>
-        /// Child dictionary based on culture hierarchy.
+        /// Child dictionary based on culture.
         /// </summary>
         /// <returns>Child dictionary.</returns>
-        ILocalizationDictionary ChildDictionary();
+        IList<ILocalizationDictionary> ChildDictionaries { get; }
 
         /// <summary>
         /// Sets parent dictionary for this.
@@ -82,7 +68,7 @@ namespace Localization.CoreLibrary.Dictionary
         /// </summary>
         /// <param name="childDictionary">Child dictionary.</param>
         /// <returns>False if child dictionary is already set.</returns>
-        bool SetChildDictionary(ILocalizationDictionary childDictionary);
+        void SetChildDictionary(ILocalizationDictionary childDictionary);
 
         /// <summary>
         /// Dictionary is leaf if it hasn't any child dictionaries in dictionary hieararchy.
@@ -90,6 +76,6 @@ namespace Localization.CoreLibrary.Dictionary
         /// <returns>True if this dictionary is leaf in hierarchy.</returns>
         bool IsLeaf();
 
-        bool IsRoot { get; set; }
+        bool IsRoot { get; }
     }
 }

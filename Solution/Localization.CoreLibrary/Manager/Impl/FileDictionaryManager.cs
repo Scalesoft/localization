@@ -43,7 +43,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             var loadedDictionaries = new ILocalizationDictionary[localizationFilesToLoad.Count];
             for (var i = 0; i < loadedDictionaries.Length; i++)
             {
-                loadedDictionaries[i] = dictionaryFactory.CreateDictionary().Load(localizationFilesToLoad[i]);
+                loadedDictionaries[i] = dictionaryFactory.CreateDictionary(localizationFilesToLoad[i]);
             }
 
             return loadedDictionaries;
@@ -65,7 +65,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// From provided dictionary instances builds hierarchical trees.
         /// </summary>
         /// <param name="dictionaries">Loaded dictionaries.</param>
-        public void BuildDictionaryHierarchyTrees(ILocalizationDictionary[] dictionaries)
+        public void BuildDictionaryHierarchyTrees(IList<ILocalizationDictionary> dictionaries)
         {
             Dictionaries = new HashSet<ILocalizationDictionary>();
 
@@ -153,7 +153,9 @@ namespace Localization.CoreLibrary.Manager.Impl
             {
                 //return scoped dictionary in default culture
                 result = Dictionaries.FirstOrDefault(w =>
-                    w.CultureInfo().Equals(m_configuration.DefaultCulture()) && w.Scope().Equals(scope));
+                    w.CultureInfo().Equals(m_configuration.DefaultCulture())
+                    && w.Scope().Equals(scope)
+                );
             }
 
             return result ?? new EmptyLocalizationDictionary();

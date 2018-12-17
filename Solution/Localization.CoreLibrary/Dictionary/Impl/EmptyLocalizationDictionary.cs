@@ -14,14 +14,21 @@ namespace Localization.CoreLibrary.Dictionary.Impl
     {
         public const string EmptyExtension = ""; //Should be empty.
 
-        public ILocalizationDictionary Load(Stream resourceStream)
+        public bool IsRoot => false;
+
+        public IList<ILocalizationDictionary> ChildDictionaries { get; }
+
+        public EmptyLocalizationDictionary()
         {
-            return this;
+            ChildDictionaries = new List<ILocalizationDictionary>();
         }
 
-        public ILocalizationDictionary Load(string filePath)
+        public EmptyLocalizationDictionary(Stream resourceStream) : this()
         {
-            return this;
+        }
+
+        public EmptyLocalizationDictionary(Stream resourceStream, string filePath) : this(resourceStream)
+        {
         }
 
         public CultureInfo CultureInfo()
@@ -59,26 +66,18 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return null;
         }
 
-        public ILocalizationDictionary ChildDictionary()
-        {
-            return null;
-        }
-
         public bool SetParentDictionary(ILocalizationDictionary parentDictionary)
         {
             return false;
         }
 
-        public bool SetChildDictionary(ILocalizationDictionary childDictionary)
+        public void SetChildDictionary(ILocalizationDictionary childDictionary)
         {
-            return false;
         }
 
         public bool IsLeaf()
         {
-            return false;
+            return ChildDictionaries.Count == 0;
         }
-
-        bool ILocalizationDictionary.IsRoot { get; set; }
     }
 }

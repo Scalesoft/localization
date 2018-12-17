@@ -35,19 +35,14 @@ namespace Localization.CoreLibrary
 
         private IDatabaseDynamicTextService ddts;
 
-        public static CultureInfo[] SupportedCultures()
+        public CultureInfo[] SupportedCultures()
         {
             return m_configuration.SupportedCultures().ToArray();
         }
 
-        public static CultureInfo DefaultCulture()
+        public CultureInfo DefaultCulture()
         {
             return m_configuration.DefaultCulture();
-        }
-
-        CultureInfo[] IAutoLocalizationManager.SupportedCultures()
-        {
-            return SupportedCultures();
         }
 
         /// <summary>
@@ -55,25 +50,20 @@ namespace Localization.CoreLibrary
         /// </summary>
         public static IAutoLocalizationManager Translator => Instance();
 
-        public static ILocalizationManager FileTranslator =>
-            m_instance.Value.GetLocalizationManager(LocTranslationSource.File);
+        public static ILocalizationManager FileTranslator => Instance().GetLocalizationManager(LocTranslationSource.File);
 
-        public static ILocalizationManager DatabaseTranslator =>
-            m_instance.Value.GetLocalizationManager(LocTranslationSource.Database);
+        public static ILocalizationManager DatabaseTranslator => Instance().GetLocalizationManager(LocTranslationSource.Database);
 
         /// <summary>
         /// Returns Dictionary.
         /// </summary>
         public static IAutoDictionaryManager Dictionary => Instance();
 
-        public static IDatabaseDynamicTextService DynamicText =>
-            m_instance.Value.ddts;
+        public static IDatabaseDynamicTextService DynamicText => Instance().ddts;
 
-        public static IDictionaryManager FileDictionary =>
-            m_instance.Value.GetDictonaryManager(LocTranslationSource.File);
+        public static IDictionaryManager FileDictionary => Instance().GetDictionaryManager(LocTranslationSource.File);
 
-        public static IDictionaryManager DatabaseDictionary =>
-            m_instance.Value.GetDictonaryManager(LocTranslationSource.Database);
+        public static IDictionaryManager DatabaseDictionary => Instance().GetDictionaryManager(LocTranslationSource.Database);
 
 
         /// <summary>
@@ -100,8 +90,9 @@ namespace Localization.CoreLibrary
             m_instance = null;
         }
 
-        private static IDictionaryFactory InitDictionaryFactory(IDictionaryFactory dictionaryFactory,
-            IConfiguration configuration)
+        private static IDictionaryFactory InitDictionaryFactory(
+            IDictionaryFactory dictionaryFactory, IConfiguration configuration
+        )
         {
             if (dictionaryFactory == null)
             {
@@ -123,7 +114,7 @@ namespace Localization.CoreLibrary
         /// </summary>
         /// <param name="configuration">Library configuration.</param>
         /// <param name="databaseServiceFactory"></param>
-        /// <param name="dictionaryFactory">Dictionary factory. 
+        /// <param name="dictionaryFactory">Dictionary factory.
         /// Default is <see cref="JsonDictionaryFactory"/> if AutoLoadProperties in library config is set to true. Else Default
         /// is <see cref="EmptyDictionaryFactory"/></param>
         /// <param name="loggerFactory">Logger factory.
@@ -141,7 +132,7 @@ namespace Localization.CoreLibrary
 
             if (IsInstantinated())
             {
-                var libraryAlreadyInitMsg = "Localization library is already initialized.";
+                const string libraryAlreadyInitMsg = "Localization library is already initialized.";
                 if (Logger.IsErrorEnabled())
                 {
                     Logger.LogError(libraryAlreadyInitMsg);
@@ -220,12 +211,9 @@ namespace Localization.CoreLibrary
                 throw new LocalizationLibraryException("Localization library is not initialized.");
             }
 
-            var localizationDictionary = dictionaryFactory.CreateDictionary();
+            var dictionaryManager = (FileDictionaryManager) Instance().m_dictionaryManagers[LocTranslationSource.File];
 
-            var dictionaryManager
-                = (FileDictionaryManager) Instance().m_dictionaryManagers[LocTranslationSource.File];
-
-            dictionaryManager.Dictionaries.Add(localizationDictionary.Load(resourceStream));
+            dictionaryManager.Dictionaries.Add(dictionaryFactory.CreateDictionary(resourceStream));
 
             dictionaryManager.BuildDictionaryHierarchyTrees(dictionaryManager.Dictionaries.ToArray());
         }
@@ -267,7 +255,7 @@ namespace Localization.CoreLibrary
         {
             if (!configuration.SupportedCultures().Contains(configuration.DefaultCulture()))
             {
-                var defaultCultureErrorMsg = "Default language in configuration is not in supported languages.";
+                const string defaultCultureErrorMsg = "Default language in configuration is not in supported languages.";
                 var localizationLibraryException =
                     new LocalizationLibraryException(defaultCultureErrorMsg);
                 if (Logger.IsErrorEnabled())
@@ -306,14 +294,15 @@ namespace Localization.CoreLibrary
             CheckConfiguration(configuration);
             m_configuration = configuration;
 
-            ILocalizationManager autoLocalizationManager
-                = new AutoLocalizationManager(m_localizationManagers[LocTranslationSource.File],
-                    databaseLocalizationManager, configuration);
+            ILocalizationManager autoLocalizationManager = new AutoLocalizationManager(
+                m_localizationManagers[LocTranslationSource.File],
+                databaseLocalizationManager, configuration
+            );
 
             IDictionaryManager autoDictionaryManager = new AutoDictionaryManager(
                 m_dictionaryManagers[LocTranslationSource.File],
-                databaseDictionaryManager, configuration);
-
+                databaseDictionaryManager, configuration
+            );
 
             m_localizationManagers.Add(LocTranslationSource.Auto, autoLocalizationManager);
             m_dictionaryManagers.Add(LocTranslationSource.Auto, autoDictionaryManager);
@@ -336,7 +325,6 @@ namespace Localization.CoreLibrary
                 dictionaryManager.BuildDictionaryHierarchyTrees(d);
             }
 
-
             m_dictionaryManagers[LocTranslationSource.File] = dictionaryManager;
         }
 
@@ -350,12 +338,10 @@ namespace Localization.CoreLibrary
             var fileLocalizationManager = new FileLocalizationManager(configuration);
             if (m_dictionaryManagers[LocTranslationSource.File] == null)
             {
-                throw new LocalizationLibraryException(
-                    "You must initialize the Dictionary manager before FileLocalization manager");
+                throw new LocalizationLibraryException("You must initialize the Dictionary manager before FileLocalization manager");
             }
 
             fileLocalizationManager.AddDictionaryManager(m_dictionaryManagers[LocTranslationSource.File]);
-
 
             m_localizationManagers.Add(LocTranslationSource.File, fileLocalizationManager);
         }
@@ -375,7 +361,7 @@ namespace Localization.CoreLibrary
             return m_localizationManagers[translationSource];
         }
 
-        private IDictionaryManager GetDictonaryManager(LocTranslationSource translationSource)
+        private IDictionaryManager GetDictionaryManager(LocTranslationSource translationSource)
         {
             return m_dictionaryManagers[translationSource];
         }
@@ -390,16 +376,18 @@ namespace Localization.CoreLibrary
             return stringToFilter;
         }
 
-        public LocalizedString Translate(LocTranslationSource translationSource, string text,
-            CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString Translate(
+            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
+        )
         {
             var result = GetLocalizationManager(translationSource).Translate(text, cultureInfo, scope);
 
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, object[] parameters,
-            CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(
+            LocTranslationSource translationSource, string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null
+        )
         {
             var result = GetLocalizationManager(translationSource)
                 .TranslateFormat(text, parameters, cultureInfo, scope);
@@ -408,8 +396,9 @@ namespace Localization.CoreLibrary
         }
 
 
-        public LocalizedString TranslatePluralization(LocTranslationSource translationSource, string text, int number,
-            CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslatePluralization(
+            LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null
+        )
         {
             var result = GetLocalizationManager(translationSource)
                 .TranslatePluralization(text, number, cultureInfo, scope);
@@ -417,8 +406,9 @@ namespace Localization.CoreLibrary
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateConstant(LocTranslationSource translationSource, string text,
-            CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateConstant(
+            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
+        )
         {
             var result =
                 GetLocalizationManager(translationSource).TranslateConstant(text, cultureInfo, scope);
@@ -426,41 +416,31 @@ namespace Localization.CoreLibrary
             return FallbackFilter(text, result);
         }
 
-        CultureInfo IAutoLocalizationManager.DefaultCulture()
+        public IDictionary<string, LocalizedString> GetDictionary(
+            LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
+        )
         {
-            return m_configuration.DefaultCulture();
-        }
-
-        public IDictionary<string, LocalizedString> GetDictionary(LocTranslationSource translationSource,
-            CultureInfo cultureInfo = null, string scope = null)
-        {
-            var result =
-                GetDictonaryManager(translationSource).GetDictionary(cultureInfo, scope);
+            var result = GetDictionaryManager(translationSource).GetDictionary(cultureInfo, scope);
 
             return result;
         }
 
-        public IDictionary<string, PluralizedString> GetPluralizedDictionary(LocTranslationSource translationSource,
-            CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(
+            LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
+        )
         {
-            var result =
-                GetDictonaryManager(translationSource).GetPluralizedDictionary(cultureInfo, scope);
+            var result = GetDictionaryManager(translationSource).GetPluralizedDictionary(cultureInfo, scope);
 
             return result;
         }
 
-        public IDictionary<string, LocalizedString> GetConstantsDictionary(LocTranslationSource translationSource,
-            CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(
+            LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
+        )
         {
-            var result =
-                GetDictonaryManager(translationSource).GetConstantsDictionary(cultureInfo, scope);
+            var result = GetDictionaryManager(translationSource).GetConstantsDictionary(cultureInfo, scope);
 
             return result;
-        }
-
-        CultureInfo IAutoDictionaryManager.DefaultCulture()
-        {
-            return DefaultCulture();
         }
 
         private LocalizedString TranslateFallback(string text, LocTranslateFallbackMode translateFallbackMode)
