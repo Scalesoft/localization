@@ -8,8 +8,10 @@ namespace Localization.Database.NHibernate.IoC
     {
         public static void RegisterLocalizationDataEntitiesComponents(this IServiceCollection services)
         {
+            services.AddSingleton<CultureHierarchyRepository>();
             services.AddSingleton<CultureRepository>();
 
+            services.AddSingleton<CultureHierarchyUoW>();
             services.AddSingleton<CultureUoW>();
         }
     }

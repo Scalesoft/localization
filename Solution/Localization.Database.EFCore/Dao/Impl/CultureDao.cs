@@ -21,7 +21,7 @@ namespace Localization.Database.EFCore.Dao.Impl
         /// Finds Culture in dbSet
         /// </summary>
         /// <param name="name">Culture name e.g. en, en-US, cs, cs-CZ</param>
-        /// <returns>Instnace of the culture in database. If culture is not in database returns null.</returns>
+        /// <returns>Instance of the culture in database. If culture is not in database returns null.</returns>
         public Culture FindByName(string name)
         {
             Culture result = null;
@@ -44,7 +44,7 @@ namespace Localization.Database.EFCore.Dao.Impl
         /// Finds Culture in dbSet
         /// </summary>
         /// <param name="id">Culture database id</param>
-        /// <returns>Instnace of the culture in database. If Culture is not in database returns null.</returns>
+        /// <returns>Instance of the culture in database. If Culture is not in database returns null.</returns>
         public Culture FindById(int id)
         {
             Culture result = null;

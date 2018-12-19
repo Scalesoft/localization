@@ -17,8 +17,11 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly IDatabaseTranslateService m_dbTranslateService;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
-        public DatabaseLocalizationManager(IConfiguration configuration, IDatabaseTranslateService dbTranslateService,
-            IDatabaseDynamicTextService databaseDynamicTextService) : base(configuration)
+        public DatabaseLocalizationManager(
+            IConfiguration configuration,
+            IDatabaseTranslateService dbTranslateService,
+            IDatabaseDynamicTextService databaseDynamicTextService
+        ) : base(configuration)
         {
             m_dbTranslateService = dbTranslateService;
             m_databaseDynamicTextService = databaseDynamicTextService;
@@ -45,13 +48,15 @@ namespace Localization.CoreLibrary.Manager.Impl
             return resultLocalizedString;
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null,
+            string scope = null)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
 
-            var resultLocalizedString = m_dbTranslateService.DatabaseTranslateFormat(text, parameters, cultureInfo, scope);
+            var resultLocalizedString =
+                m_dbTranslateService.DatabaseTranslateFormat(text, parameters, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);
@@ -60,12 +65,14 @@ namespace Localization.CoreLibrary.Manager.Impl
             return resultLocalizedString;
         }
 
-        public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null,
+            string scope = null)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-            var resultLocalizedString = m_dbTranslateService.DatabaseTranslatePluralization(text, number, cultureInfo, scope);
+            var resultLocalizedString =
+                m_dbTranslateService.DatabaseTranslatePluralization(text, number, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);
@@ -98,7 +105,8 @@ namespace Localization.CoreLibrary.Manager.Impl
             return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
-        public DynamicText SaveDynamicText(DynamicText dynamicText, IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
+        public DynamicText SaveDynamicText(DynamicText dynamicText,
+            IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
         {
             return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionForDefaultCulture);
         }

@@ -3,7 +3,6 @@ using DryIoc.Facilities.NHibernate;
 using DryIoc.Transactions;
 using Localization.Database.NHibernate.Entity;
 using Localization.Database.NHibernate.Repository;
-using NHibernate;
 
 namespace Localization.Database.NHibernate.UnitOfWork
 {
@@ -31,7 +30,23 @@ namespace Localization.Database.NHibernate.UnitOfWork
 
             return result;
         }
-        
+
+        [Transaction]
+        public virtual CultureEntity GetCultureById(int id)
+        {
+            var resultList = m_cultureRepository.GetCultureById(id);
+
+            return resultList;
+        }
+
+        [Transaction]
+        public virtual CultureEntity GetCultureByName(string cultureName)
+        {
+            var resultList = m_cultureRepository.GetCultureByName(cultureName);
+
+            return resultList;
+        }
+
         [Transaction]
         public virtual IList<CultureEntity> FindAllCultures()
         {

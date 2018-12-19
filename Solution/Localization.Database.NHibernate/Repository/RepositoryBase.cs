@@ -26,7 +26,8 @@ namespace Localization.Database.NHibernate.Repository
             return query;
         }
 
-        protected T GetSingleValue<T>(Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null) where T : class
+        protected T GetSingleValue<T>(Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null)
+            where T : class
         {
             var session = GetSession();
 
@@ -37,26 +38,39 @@ namespace Localization.Database.NHibernate.Repository
             return result.Value;
         }
 
-        protected IList<T> GetValuesList<T>(Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null) where T : class
+        protected IList<T> GetValuesList<T>(
+            Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null,
+            Func<IQueryOver<T, T>, IQueryOver<T, T>> resultQueryModifier = null
+        )
+            where T : class
         {
             var session = GetSession();
 
-            var result = CreateBaseQuery<T>(session, criterion).Future<T>();
+            var result = CreateBaseQuery<T>(session, criterion);
 
             fetchMethod?.Invoke(session, criterion);
 
-            return result.ToList();
+            return resultQueryModifier != null
+                ? resultQueryModifier.Invoke(result).Future<T>().ToList()
+                : result.Future<T>().ToList();
         }
 
         protected IList<T> GetValuesList<T>(
             int start, int count,
-            Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null
+            Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null,
+            Func<IQueryOver<T, T>, IQueryOver<T, T>> resultQueryModifier = null
         ) where T : class
         {
             var session = GetSession();
 
-            var result = CreateBaseQuery<T>(session, criterion)
-                .Skip(start)
+            var query = CreateBaseQuery<T>(session, criterion);
+
+            if (resultQueryModifier != null)
+            {
+                query = resultQueryModifier.Invoke(query);
+            }
+
+            var result = query.Skip(start)
                 .Take(count)
                 .Future<T>();
 

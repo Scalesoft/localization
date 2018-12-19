@@ -33,7 +33,7 @@ namespace Localization.CoreLibrary
         private readonly Dictionary<LocTranslationSource, IDictionaryManager> m_dictionaryManagers
             = new Dictionary<LocTranslationSource, IDictionaryManager>();
 
-        private IDatabaseDynamicTextService ddts;
+        private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
         public CultureInfo[] SupportedCultures()
         {
@@ -59,7 +59,7 @@ namespace Localization.CoreLibrary
         /// </summary>
         public static IAutoDictionaryManager Dictionary => Instance();
 
-        public static IDatabaseDynamicTextService DynamicText => Instance().ddts;
+        public static IDatabaseDynamicTextService DynamicText => Instance().m_databaseDynamicTextService;
 
         public static IDictionaryManager FileDictionary => Instance().GetDictionaryManager(LocTranslationSource.File);
 
@@ -174,7 +174,6 @@ namespace Localization.CoreLibrary
                     databaseServiceFactory.CreateDictionaryService(configuration, loggerFactory)
                 );
             }
-
 
             m_instance = new Lazy<Localization>(() => new Localization(
                 configuration, loggerFactory, dictionaryFactory,
@@ -306,7 +305,7 @@ namespace Localization.CoreLibrary
             m_localizationManagers.Add(LocTranslationSource.Auto, autoLocalizationManager);
             m_dictionaryManagers.Add(LocTranslationSource.Auto, autoDictionaryManager);
 
-            ddts = databaseDynamicTextService;
+            m_databaseDynamicTextService = databaseDynamicTextService;
         }
 
         /// <summary>

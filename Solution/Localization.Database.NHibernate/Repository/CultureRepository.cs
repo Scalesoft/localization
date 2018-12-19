@@ -22,6 +22,34 @@ namespace Localization.Database.NHibernate.Repository
                 .Future<CultureEntity>();
         }
 
+        public CultureEntity GetCultureById(int id)
+        {
+            try
+            {
+                var criteria = Restrictions.Where<CultureEntity>(x => x.Id == id);
+
+                return GetSingleValue<CultureEntity>(FetchCollections, criteria);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("GetCultureById operation failed", ex);
+            }
+        }
+
+        public CultureEntity GetCultureByName(string cultureName)
+        {
+            try
+            {
+                var criteria = Restrictions.Where<CultureEntity>(x => x.Name == cultureName);
+
+                return GetSingleValue<CultureEntity>(FetchCollections, criteria);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("GetByName operation failed", ex);
+            }
+        }
+
         public IList<CultureEntity> FindAllCultures()
         {
             try

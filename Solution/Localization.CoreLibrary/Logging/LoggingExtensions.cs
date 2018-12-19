@@ -1,11 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Logging;
-
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+﻿using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Logging
 {
-    internal static class LoggingExtensions
+    public static class LoggingExtensions
     {
         public static bool IsCriticalEnabled(this ILogger logger)
         {
