@@ -13,17 +13,19 @@ namespace Localization.Database.NHibernate.Tests.Helper
 {
     public static class NHibernateConfigurator
     {
-        private const string ConnectionString = "Data Source=:memory:;Version=3;New=True;";
+        private const string ConnectionString = "Data Source=db-{0}.db;Version=3";
 
-        public static Configuration GetNHibernateConfigurator()
+        public static Configuration GetNHibernateConfigurator(string databaseFileName)
         {
             var configuration = new Configuration()
                 .DataBaseIntegration(db =>
                 {
+                    db.LogSqlInConsole = true;
+                    db.LogFormattedSql = true;
                     db.Dialect<SQLiteDialect>();
                     db.Driver<SQLite20Driver>();
                     db.ConnectionProvider<DriverConnectionProvider>();
-                    db.ConnectionString = ConnectionString;
+                    db.ConnectionString = string.Format(ConnectionString, databaseFileName);
                 })
                 .SetProperty(Environment.CurrentSessionContextClass, "thread_static");
 
@@ -48,13 +50,13 @@ namespace Localization.Database.NHibernate.Tests.Helper
         private static void BuildSchema(Configuration configuration)
         {
             var schemaExport = new SchemaExport(configuration);
-            schemaExport.SetOutputFile("create.sql");
-            schemaExport.Create(true, true);
+            schemaExport.Drop(false, true);
+            schemaExport.Create(false, true);
         }
 
-        public static ISessionFactory GetSessionFactory()
+        public static ISessionFactory GetSessionFactory(string databaseFileName)
         {
-            var sessionFactory = GetSessionFactory(GetNHibernateConfigurator());
+            var sessionFactory = GetSessionFactory(GetNHibernateConfigurator(databaseFileName));
 
             return sessionFactory;
         }

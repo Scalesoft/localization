@@ -5,17 +5,18 @@ namespace Localization.Database.NHibernate.Tests.Helper
 {
     public class SessionManager : ISessionManager
     {
-        private readonly ISessionFactory m_sessionFactory;
+        private readonly ISessionFactory m_session;
 
         public SessionManager(
-            ISessionFactory sessionFactory)
+            ISessionFactory session
+        )
         {
-            m_sessionFactory = sessionFactory;
+            m_session = session;
         }
 
         public ISession OpenSession()
         {
-            return m_sessionFactory.OpenSession();
+            return m_session.OpenSession();
         }
     }
 }

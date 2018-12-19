@@ -1,3 +1,4 @@
+using System.Linq;
 using Localization.Database.NHibernate.Repository;
 using Localization.Database.NHibernate.Tests.Helper;
 using Localization.Database.NHibernate.UnitOfWork;
@@ -15,7 +16,7 @@ namespace Localization.Database.NHibernate.Tests.UnitOfWork
         [TestInitialize]
         public void InitTest()
         {
-            m_nHibernateConfigurator = NHibernateConfigurator.GetNHibernateConfigurator();
+            m_nHibernateConfigurator = NHibernateConfigurator.GetNHibernateConfigurator(nameof(CultureUoWTest));
             m_sessionManager = new SessionManager(NHibernateConfigurator.GetSessionFactory(m_nHibernateConfigurator));
         }
 
@@ -27,7 +28,9 @@ namespace Localization.Database.NHibernate.Tests.UnitOfWork
 
             cultureUoW.AddCulture("es");
 
-            Assert.AreEqual(1, cultureUoW.FindAllCultures().Count);
+            var allCultures = cultureUoW.FindAllCultures();
+            Assert.AreEqual(1, allCultures.Count);
+            Assert.AreEqual("es", allCultures.First().Name);
         }
     }
 }
