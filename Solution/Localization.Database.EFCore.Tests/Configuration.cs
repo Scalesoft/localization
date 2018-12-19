@@ -2,6 +2,7 @@
 {
     public static class Configuration
     {
-        public const string ConnectionString = @"Server=localhost;Database=LocalizationDatabaseEFCore;Trusted_Connection=True;";
+        public const string ConnectionString =
+            "Server=localhost;Database=LocalizationDatabaseEFCoreTest;Trusted_Connection=True;";
     }
 }

@@ -44,14 +44,18 @@ namespace Localization.Database.EFCore.Dao.Impl
             {
                 if (Logger.IsWarningEnabled())
                 {
-                    Logger.LogWarning(new EventId(e.GetHashCode()), e, "ArgumentNullException in method FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope, DbSet < CultureHierarchy > cultureHierarchies)");
+                    Logger.LogWarning(
+                        new EventId(e.GetHashCode()), e,
+                        "ArgumentNullException in method FindByNameAndCultureAndScope(string name, Culture culture, DictionaryScope dictionaryScope, DbSet < CultureHierarchy > cultureHierarchies)"
+                    );
                 }
             }
 
             return resultValue;
         }
 
-        public IList<StaticText> FindByNameAndScope(string name, DictionaryScope dictionaryScope, DbSet<CultureHierarchy> cultureHierarchies)
+        public IList<StaticText> FindByNameAndScope(string name, DictionaryScope dictionaryScope,
+            DbSet<CultureHierarchy> cultureHierarchies)
         {
             List<StaticText> resultValue = null;
             try
@@ -60,25 +64,24 @@ namespace Localization.Database.EFCore.Dao.Impl
                     .Select(t => t);
 
                 var result = DbSet
-                    .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope)
-                    .Include(x => x.Culture)
-                    .Join(hierarchies,
-                        text => text.Culture.Id,
-                        hierarchy => hierarchy.ParentCulture.Id,
-                        (text, hierarchy) => new {text, hierarchy})
-                    .OrderBy(r => r.hierarchy.LevelProperty)
-                    //.Take(4) Why is this restriction used in FindByNameAndCultureAndScope method?
-                    .Select(r => r.text);
+                    .Where(w => w.Name == name && w.DictionaryScope == dictionaryScope);
+                //.Include(x => x.Culture)
+                //.Join(hierarchies,
+                //    text => text.Culture.Id,
+                //    hierarchy => hierarchy.ParentCulture.Id,
+                //    (text, hierarchy) => new {text, hierarchy})
+                //.OrderBy(r => r.hierarchy.LevelProperty)
+                //.Take(4) Why is this restriction used in FindByNameAndCultureAndScope method?
+                //.Select(r => r.text);
 
-                resultValue = result.ToList()
-                    .Distinct()
-                    .ToList();
+                resultValue = result.Distinct().ToList();
             }
             catch (ArgumentNullException e)
             {
                 if (Logger.IsWarningEnabled())
                 {
-                    Logger.LogWarning(new EventId(e.GetHashCode()), e, "ArgumentNullException in method FindByNameAndScope");
+                    Logger.LogWarning(new EventId(e.GetHashCode()), e,
+                        "ArgumentNullException in method FindByNameAndScope");
                 }
             }
 
@@ -87,7 +90,6 @@ namespace Localization.Database.EFCore.Dao.Impl
 
         public StaticText[] FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)
         {
-
             StaticText[] result = null;
             try
             {
@@ -99,7 +101,8 @@ namespace Localization.Database.EFCore.Dao.Impl
             {
                 if (Logger.IsWarningEnabled())
                 {
-                    Logger.LogWarning(new EventId(e.GetHashCode()), e, "ArgumentNullException in method FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)");
+                    Logger.LogWarning(new EventId(e.GetHashCode()), e,
+                        "ArgumentNullException in method FindAllByCultureAndScope(Culture culture, DictionaryScope dictionaryScope)");
                 }
             }
 

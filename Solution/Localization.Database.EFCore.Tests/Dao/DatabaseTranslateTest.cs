@@ -31,7 +31,7 @@ namespace Localization.Database.EFCore.Tests.Dao
             var localizationConfiguration = new LocalizationConfiguration(configuration);
 
             m_builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
-                .UseSqlServer(Configuration.ConnectionString).Options;
+                .UseInMemoryDatabase("DatabaseTranslateTest").Options;
 
             var dbTranslateService = new DatabaseTranslateService(CreateStaticTextContext, localizationConfiguration);
             var dbDynamicTextService =

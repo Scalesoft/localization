@@ -9,15 +9,11 @@ using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.Logging;
-using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.EFCore.Service
 {
     public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
-
-
         public DatabaseDynamicTextService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
@@ -30,9 +26,9 @@ namespace Localization.Database.EFCore.Service
                 var dictionaryScope = GetDictionaryScope(dbContext, scope);
                 var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
 
-                var value =
-                    new StaticTextDao(dbContext.StaticText).FindByNameAndCultureAndScope(name, culture, dictionaryScope,
-                        dbContext.CultureHierarchy);
+                var value = new StaticTextDao(dbContext.StaticText).FindByNameAndCultureAndScope(
+                    name, culture, dictionaryScope, dbContext.CultureHierarchy
+                );
 
                 return new DynamicText
                 {
@@ -77,7 +73,8 @@ namespace Localization.Database.EFCore.Service
             }
         }
 
-        public DynamicText SaveDynamicText(DynamicText dynamicText, IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
+        public DynamicText SaveDynamicText(DynamicText dynamicText,
+            IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {
@@ -126,7 +123,8 @@ namespace Localization.Database.EFCore.Service
                     dao.Update(staticText);
                 }
 
-                ExecuteDefaultCultureAction(actionForDefaultCulture, dynamicText, culture, dictionaryScope, dbContext, dao);
+                ExecuteDefaultCultureAction(actionForDefaultCulture, dynamicText, culture, dictionaryScope, dbContext,
+                    dao);
 
                 dbContext.SaveChanges();
 
@@ -143,7 +141,8 @@ namespace Localization.Database.EFCore.Service
         /// <param name="dictionaryScope">Current dictionary scope entity</param>
         /// <param name="dbContext">Database context</param>
         /// <param name="dao">DAO of static text entity</param>
-        private void ExecuteDefaultCultureAction(IfDefaultNotExistAction actionForDefaultCulture, DynamicText dynamicText, Culture currentCulture,
+        private void ExecuteDefaultCultureAction(IfDefaultNotExistAction actionForDefaultCulture,
+            DynamicText dynamicText, Culture currentCulture,
             DictionaryScope dictionaryScope, IDatabaseStaticTextContext dbContext, StaticTextDao dao)
         {
             var defaultCulture = GetDefaultCulture(dbContext);
@@ -152,8 +151,9 @@ namespace Localization.Database.EFCore.Service
                 return;
             }
 
-            var defaultText =
-                dao.FindByNameAndCultureAndScope(dynamicText.Name, defaultCulture, dictionaryScope, dbContext.CultureHierarchy);
+            var defaultText = dao.FindByNameAndCultureAndScope(
+                dynamicText.Name, defaultCulture, dictionaryScope, dbContext.CultureHierarchy
+            );
 
             if (defaultText != null)
             {
@@ -183,7 +183,8 @@ namespace Localization.Database.EFCore.Service
                     dao.Create(defaultText);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(actionForDefaultCulture), actionForDefaultCulture, "Invalid default language save action");
+                    throw new ArgumentOutOfRangeException(nameof(actionForDefaultCulture), actionForDefaultCulture,
+                        "Invalid default language save action");
             }
         }
 

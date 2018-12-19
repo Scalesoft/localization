@@ -51,7 +51,7 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var databaseConnectionString =
+            const string databaseConnectionString =
                 @"Server=localhost;Database=LocalizationDatabaseEFCore;Trusted_Connection=True;";
 
             CoreLibrary.Localization.AttachLogger(loggerFactory);
@@ -67,9 +67,10 @@ namespace Localization.Web.AspNetCore.Sample
             }
 
             CoreLibrary.Localization.Init(
-                @"localizationsettings.json",
+                "localizationsettings.json",
                 new DatabaseServiceFactory(options => { options.UseSqlServer(databaseConnectionString); }),
-                new JsonDictionaryFactory());
+                new JsonDictionaryFactory()
+            );
             AddLocalizationDictionary("cs-CZ.json");
             AddLocalizationDictionary("en.json");
 

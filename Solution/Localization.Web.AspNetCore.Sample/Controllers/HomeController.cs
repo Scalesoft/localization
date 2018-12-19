@@ -23,22 +23,6 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult Index()
         {
-            //m_staticTextsContext.Culture.Add(new Culture() { Name = "en-US" });
-            //m_staticTextsContext.DictionaryScope.Add(new DictionaryScope() { Name = "global" });
-
-            //DictionaryScope dictionaryScope = m_staticTextsContext.DictionaryScope.Single(ds => ds.Name == "global");
-            //Culture culture = m_staticTextsContext.Culture.Single(c => c.Name == "en-US");
-            //StaticTextBuilder stb = new StaticTextBuilder();
-            //stb.DictionaryScope(dictionaryScope)
-            //    .Culture(culture)
-            //    .Format(0)
-            //    .Name("name-key")
-            //    .Text("englidh text")
-            //    .ModificationUser("Jiri");
-
-            //m_staticTextsContext.StaticText.Add(stb.Build());
-            //m_staticTextsContext.SaveChanges();
-
             return View();
         }
 
@@ -46,7 +30,6 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
         {
             return View();
         }
-
 
         public IActionResult Contact(LoginViewModel viewModel)
         {
