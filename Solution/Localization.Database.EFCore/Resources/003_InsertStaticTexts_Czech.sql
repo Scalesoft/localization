@@ -1,20 +1,20 @@
 ﻿BEGIN TRAN
 
-SET IDENTITY_INSERT [dbo].[BaseText] ON 
+SET IDENTITY_INSERT [dbo].[BaseText] ON
 
 --DictionaryScope = home
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (1, 1, 2, 'support', 1, N'StaticText', N'# Podpora
-Podpora Vokabuláře webového: 
+Podpora Vokabuláře webového:
 
-2012–2015 projekt MK ČR č. DF12P01OVV028 *Informační technologie ve službách jazykového kulturního bohatství (IT JAKUB)*  
-2010–2015 projekt MŠMT LINDAT-CLARIN č. LM2010013 *Vybudování a provoz českého uzlu pan-evropské infrastruktury pro výzkum*  
-2010–2014 projekt GA ČR č. P406/10/1140 *Výzkum historické češtiny (na základě nových materiálových bází)*  
-2010–2014 projekt GA ČR č. P406/10/1153 *Slovní zásoba staré češtiny a její lexikografické zpracování*  
-2005–2011 projekt MŠMT ČR LC 546 *Výzkumné centrum vývoje staré a střední češtiny (od praslovanských kořenů po současný stav)*  
+2012–2015 projekt MK ČR č. DF12P01OVV028 *Informační technologie ve službách jazykového kulturního bohatství (IT JAKUB)*
+2010–2015 projekt MŠMT LINDAT-CLARIN č. LM2010013 *Vybudování a provoz českého uzlu pan-evropské infrastruktury pro výzkum*
+2010–2014 projekt GA ČR č. P406/10/1140 *Výzkum historické češtiny (na základě nových materiálových bází)*
+2010–2014 projekt GA ČR č. P406/10/1153 *Slovní zásoba staré češtiny a její lexikografické zpracování*
+2005–2011 projekt MŠMT ČR LC 546 *Výzkumné centrum vývoje staré a střední češtiny (od praslovanských kořenů po současný stav)*
 ', N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (2, 1, 2, 'about', 1, N'StaticText', N'# O Vokabuláři webovém
 *Vokabulář webový* jsou internetové stránky, které od listopadu 2006 postupně zpřístupňují textové, obrazové a zvukové zdroje k poznání historické češtiny. Tvůrcem a provozovatelem *Vokabuláře webového* je [oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.](http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/) (dále ÚJČ). *Vokabulář webový* je autorské dílo chráněné ve smyslu aktuálního znění zákona č. 121/2000 Sb., o právu autorském, a je určen pouze k nekomerčnímu využití. Veškeré materiály poskytujeme se souhlasem nositelů autorských a reprodukčních práv.
 
@@ -37,29 +37,29 @@ Přístup ke stránkám *Vokabuláře webového* je bezplatný. Pokud budete už
 Tvorba *Vokabuláře webového* je [podporována](/Home/Support) z různých zdrojů.'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (3, 1, 2, 'copyright', 1, N'StaticText', N'# Copyright
 Copyright © 2006–2015, oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i.
 
-*Podmínky užití*  
+*Podmínky užití*
 *Vokabulář webový* je autorské dílo chráněné ve smyslu aktuálního znění zákona č. 121/2000 Sb., o právu autorském, a slouží výhradně k nekomerčnímu využití. Bez předchozí konzultace s oddělením vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i., je zakázáno rozšiřovat jakoukoliv jeho část, ať již samostatně, či v rámci jiného projektu. Při [citaci](/Home/HowToCite) *Vokabuláře webového* či jeho součástí je nutné postupovat podle obecně uznávaných citačních pravidel.'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (4, 1, 2, 'contacts', 1, N'StaticText', N'# Kontakty
-*adresa:*  
-oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.  
-Valentinská 1  
-116 46 Praha 1  
+*adresa:*
+oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.
+Valentinská 1
+116 46 Praha 1
 [http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/](http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/)
 
-*e-mail:*  
+*e-mail:*
 [vokabular@ujc.cas.cz](mailto:vokabular@ujc.cas.cz)
 
-*telefon:*  
+*telefon:*
 +420 225 391 452
 
-*mapa:*  
+*mapa:*
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <div style="overflow: hidden; height: 500px; width: 600px;">
     <div id="gmap_canvas" style="height: 500px; width: 600px;"></div>
@@ -93,34 +93,34 @@ Valentinská 1
 </script>'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (5, 1, 2, 'links', 1, N'StaticText', N'# Odkazy
 Ústav pro jazyk český AV ČR, v. v. i., Letenská 4, Praha 1, 118 51 [http://www.ujc.cas.cz](http://www.ujc.cas.cz)
 
-Manuscriptorium, virtuální badatelské prostředí pro oblast historických fondů [http://www.manuscriptorium.com/](http://www.manuscriptorium.com/)  
-Centrum medievistických studií (digitalizované edice a jiné zdroje k českým středověkým dějinám) [http://cms.flu.cas.cz/](http://cms.flu.cas.cz/)  
-Virtuální archiv listin střední Evropy [http://monasterium.net/mom/home?_lang=ces](http://monasterium.net/mom/home?_lang=ces)  
-Český národní korpus [http://ucnk.ff.cuni.cz](http://ucnk.ff.cuni.cz)  
-Elektronická verze Příručního slovníku jazyka českého a naskenovaný lístkový archiv k PSJČ [http://psjc.ujc.cas.cz](http://psjc.ujc.cas.cz)  
-Elektronická verze Slovníku spisovného jazyka českého [http://ssjc.ujc.cas.cz](http://ssjc.ujc.cas.cz)  
-Lexikální databáze humanistické a barokní češtiny, dostupná po registraci z adresy [http://madla.ujc.cas.cz](http://madla.ujc.cas.cz)  
-LEXIKO – webové hnízdo o novodobé české slovní zásobě a výkladových slovnících [http://lexiko.ujc.cas.cz/](http://lexiko.ujc.cas.cz/)  
-Latinsko-české slovníky mistra Klareta (elektronická edice knihy Klaret a jeho družina) [http://titus.uni-frankfurt.de/texte/etcs/slav/acech/klaret/klare.htm](http://titus.uni-frankfurt.de/texte/etcs/slav/acech/klaret/klare.htm)  
-Elektroniczny słownik języka polskiego XVII i XVIII wieku [http://sxvii.pl/](http://sxvii.pl/)  
-Historický slovník slovenského jazyka V (R—Š), Bratislava 2000 [http://slovnik.juls.savba.sk/?d=hssjV](http://slovnik.juls.savba.sk/?d=hssjV)  
-Staročeská sbírka (lístkový katalog) Ústavu pro českou literaturu AV ČR, v. v. i. [http://starocech.ucl.cas.cz](http://starocech.ucl.cas.cz)  
+Manuscriptorium, virtuální badatelské prostředí pro oblast historických fondů [http://www.manuscriptorium.com/](http://www.manuscriptorium.com/)
+Centrum medievistických studií (digitalizované edice a jiné zdroje k českým středověkým dějinám) [http://cms.flu.cas.cz/](http://cms.flu.cas.cz/)
+Virtuální archiv listin střední Evropy [http://monasterium.net/mom/home?_lang=ces](http://monasterium.net/mom/home?_lang=ces)
+Český národní korpus [http://ucnk.ff.cuni.cz](http://ucnk.ff.cuni.cz)
+Elektronická verze Příručního slovníku jazyka českého a naskenovaný lístkový archiv k PSJČ [http://psjc.ujc.cas.cz](http://psjc.ujc.cas.cz)
+Elektronická verze Slovníku spisovného jazyka českého [http://ssjc.ujc.cas.cz](http://ssjc.ujc.cas.cz)
+Lexikální databáze humanistické a barokní češtiny, dostupná po registraci z adresy [http://madla.ujc.cas.cz](http://madla.ujc.cas.cz)
+LEXIKO – webové hnízdo o novodobé české slovní zásobě a výkladových slovnících [http://lexiko.ujc.cas.cz/](http://lexiko.ujc.cas.cz/)
+Latinsko-české slovníky mistra Klareta (elektronická edice knihy Klaret a jeho družina) [http://titus.uni-frankfurt.de/texte/etcs/slav/acech/klaret/klare.htm](http://titus.uni-frankfurt.de/texte/etcs/slav/acech/klaret/klare.htm)
+Elektroniczny słownik języka polskiego XVII i XVIII wieku [http://sxvii.pl/](http://sxvii.pl/)
+Historický slovník slovenského jazyka V (R—Š), Bratislava 2000 [http://slovnik.juls.savba.sk/?d=hssjV](http://slovnik.juls.savba.sk/?d=hssjV)
+Staročeská sbírka (lístkový katalog) Ústavu pro českou literaturu AV ČR, v. v. i. [http://starocech.ucl.cas.cz](http://starocech.ucl.cas.cz)
 
-Moravská zemská knihovna v Brně [http://www.mzk.cz](http://www.mzk.cz)  
-Národní knihovna České republiky v Praze [http://www.nkp.cz](http://www.nkp.cz)  
-Vědecká knihovna v Olomouci [http://www.vkol.cz](http://www.vkol.cz)  
-Knihovna Strahovského kláštera v Praze [http://www.strahovskyklaster.cz/webmagazine/page.asp?idk=282](http://www.strahovskyklaster.cz/webmagazine/page.asp?idk=282)  
-Knihovna Národního muzea v Praze [http://www.nm.cz/Knihovna-NM/](http://www.nm.cz/Knihovna-NM/)  
-Archiv Pražského hradu (knihovna Metropolitní kapituly u sv. Víta) [http://old.hrad.cz/castle/archiv/index.html](http://old.hrad.cz/castle/archiv/index.html)  
-Městská knihovna v Praze [http://www.mlp.cz](http://www.mlp.cz)  
-Knihovna Akademie věd ČR [http://www.lib.cas.cz](http://www.lib.cas.cz)  
+Moravská zemská knihovna v Brně [http://www.mzk.cz](http://www.mzk.cz)
+Národní knihovna České republiky v Praze [http://www.nkp.cz](http://www.nkp.cz)
+Vědecká knihovna v Olomouci [http://www.vkol.cz](http://www.vkol.cz)
+Knihovna Strahovského kláštera v Praze [http://www.strahovskyklaster.cz/webmagazine/page.asp?idk=282](http://www.strahovskyklaster.cz/webmagazine/page.asp?idk=282)
+Knihovna Národního muzea v Praze [http://www.nm.cz/Knihovna-NM/](http://www.nm.cz/Knihovna-NM/)
+Archiv Pražského hradu (knihovna Metropolitní kapituly u sv. Víta) [http://old.hrad.cz/castle/archiv/index.html](http://old.hrad.cz/castle/archiv/index.html)
+Městská knihovna v Praze [http://www.mlp.cz](http://www.mlp.cz)
+Knihovna Akademie věd ČR [http://www.lib.cas.cz](http://www.lib.cas.cz)
 ', N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (6, 1, 2, 'howtocite', 1, N'StaticText', N'# Jak citovat
 *Vokabulář webový* je médium proměnlivé. Jednak postupně zpřístupňujeme další zdroje, jednak u děl nedokončených (jako je například *Elektronický slovník staré češtiny*) informace doplňujeme a v neposlední řadě také opravujeme chyby, které se ve zdrojích zpřístupněných prostřednictvím *Vokabuláře webového* podaří najít. Také z těchto důvodů nemají publikované korpusy povahu referenčních korpusů.
 
@@ -133,19 +133,19 @@ Bibliografická citace jednotlivých děl podle normy ČSN ISO 690 je dostupná 
 
 #### Při odkazování na webové stránky jako celek:
 
-Vokabulář webový. *Vokabulář webový* [online]. Praha: oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i., 2015 [cit. 2015-06-21]. Dostupné z: http://vokabular.ujc.cas.cz 
+Vokabulář webový. *Vokabulář webový* [online]. Praha: oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i., 2015 [cit. 2015-06-21]. Dostupné z: http://vokabular.ujc.cas.cz
 
 #### Při odkazování na konkrétní zdroj (slovník, edici, mluvnici, odbornou literaturu aj.):
 
-BĚLIČ, Jaromír, Adolf KAMIŠ a Karel KUČERA. *Malý staročeský slovník* [online]. 1. vyd. Praha: Státní pedagogické nakladatelství, 1978, 2014-03-12, 707 s. 
-[cit. 2015-06-21]. Dostupné z: http://vokabular.ujc.cas.cz/slovniky/mss 
+BĚLIČ, Jaromír, Adolf KAMIŠ a Karel KUČERA. *Malý staročeský slovník* [online]. 1. vyd. Praha: Státní pedagogické nakladatelství, 1978, 2014-03-12, 707 s.
+[cit. 2015-06-21]. Dostupné z: http://vokabular.ujc.cas.cz/slovniky/mss
 
 #### Při odkazování na korpus:
 
 Staročeský korpus. *Staročeský korpus* [on-line]. Praha: oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i., 2015-03-12 [cit. 2015-06-21]. Dostupné z: \<http://vokabular.ujc.cas.cz/banka.aspx\>. '
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (7, 1, 2, 'feedback', 1, N'StaticText', N'# Připomínky
 Na této stránce nám můžete napsat své připomínky k provozu či k informacím *Vokabuláře webového*. Pro připomínky ke konkrétním částem *Vokabuláře webového* (např. slovníkům, edicím, mluvnicím, korpusu atd.) používejte laskavě *Připomínek* na stranách jednotlivých typů informačních zdrojů.
 
@@ -155,7 +155,7 @@ Pokud si přejete, abychom na Vaši připomínku odpověděli, uveďte tuto skut
 , N'Admin')
 
 --DictionaryScope = dict
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (8, 1, 3, 'info', 1, N'StaticText', N'# Informace
 V oddílu *Slovníky* Vokabuláře webového poskytujeme zájemcům o historickou češtinu informace o její slovní zásobě. Tvoří jej různorodé lexikální zdroje, které umožňují jednotné [vyhledávání](/Dictionaries/Dictionaries/Search) a [listování](/Dictionaries/Dictionaries/Listing), tj. procházení slovníkovými zdroji „po listech“. Poučení o způsobech, jakými lze dotaz formulovat, najde uživatel v [Nápovědě](/Dictionaries/Dictionaries/Help).
 
@@ -178,11 +178,11 @@ Elektronický slovník staré češtiny, Staročeský slovník i heslář ke kar
 Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese [vokabular@ujc.cas.cz](mailto:vokabular@ujc.cas.cz?subject=zajem) nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (9, 1, 3, 'help', 1, N'StaticText', N'# Nápověda', N'Admin')
 
 --DictionaryScope = edition
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (10, 1, 4, 'info', 1, N'StaticText', N'# Informace
 V tomto oddílu představujeme zájemcům elektronické edice česky psaných textů z období 13.–18. století, s přesahem do začátku 19. století v případech, kdy se jedná o opis staršího textu. Výchozím textem (pramenem) pro elektronickou edici je rukopis, prvotisk či starý tisk. Jen výjimečně používáme jako pramen novodobou edici, a to tehdy, je-li originální pramen nedostupný či obtížně dostupný nebo je-li novodobá edice jen těžko překonatelná (mj. vzhledem k jejímu rozsahu, jako je tomu např. u edice V. Kyase a kol., *Staročeská Bible drážďanská a olomoucká*).
 
@@ -197,10 +197,10 @@ Pro připomínky k elektronickým edicím lze užít nabídku [Připomínky](/Ed
 Edice jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese [vokabular@ujc.cas.cz](mailto:vokabular@ujc.cas.cz?subject=zajem) nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (11, 1, 4, 'help', 1, N'StaticText', N'# Nápověda', N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (12, 1, 4, 'principles', 1, N'StaticText', N'# Obecné ediční zásady
 Při vytváření elektronických edic je uplatňován kritický přístup k vydávanému textu. Texty jsou transkribovány, tj. převedeny do novočeského pravopisného systému, s tím, že jsou respektovány specifické rysy soudobého jazyka. Elektronické edice vznikají na akademickém pracovišti zabývajícím se lingvistickým výzkumem, proto je kladen mimořádný důraz na interpretaci a spolehlivý záznam jazyka pramenného textu.
 
@@ -231,23 +231,23 @@ Tučným písmem v horním indexu v hranatých závorkách jsou v edici signaliz
 
 V elektronické edici je dále použito těchto typů závorek a dalšího grafického značení:
 
-* závorky; při umístění kurzoru nad textem v níže uvedených závorkách se objeví tzv. bublinková nápověda, která objasní jejich funkci (viz níže) 
+* závorky; při umístění kurzoru nad textem v níže uvedených závorkách se objeví tzv. bublinková nápověda, která objasní jejich funkci (viz níže)
   - {} ve složených závorkách je zaznamenán text, který má charakter přípisku. Rozlišujeme přípisky co do umístění v textu (marginální a interlineární) a přípisky co do stáří vzhledem k základnímu textu (soudobou rukou a mladší rukou, dále textové orientátory a tištěné marginální přípisky.
   - [] v hranatých závorkách je zaznamenán text, který není součástí předlohového textu, ale který lze na základě pravděpodobnosti či jiného textu do edice doplnit; text v hranatých závorkách může být doplněn i o poznámku (značenou arabskou číslicí v horním indexu) s údajem, odkud je text doplněn. V hranatých závorkách jsou rovněž umístěna čísla a údaje určující strukturu textu (např. foliace, paginace, značka pro obrázek nebo jiný grafický prvek).
-* odlišné písmo 
+* odlišné písmo
   - kurziva označuje text, který byl editorem interpretován jako text nečeský; dále nerozlišujeme, o jaký jazyk se jedná, avšak nejfrekventovanější je latina
   - větším písmem tmavězelené barvy jsou označeny nadpisy a podnadpisy
   - velké tučné písmeno v základním textu znamená, že v pramenném textu je (iluminovaná) iniciála
   - červené písmo je vyhrazeno pro variantní biblický překlad; zelené písmo pro adresáta textu (listu) a modré písmo pro tiskařské impresum (a informace s ním spojené)
-* grafické znaky 
+* grafické znaky
   - [#]– tzv. ležatý křížek v dvojitých lomených závorkách zastupuje obrázky, schémata či tabulky, které se nacházejí v předlohovém textu a které nelze z technických důvodů jednoduše převést do elektronické podoby. Zároveň se jedná o obsah, který nemá na interpretaci textu závažný dopad, a lze je proto vynechat. Znak [#] může být doplněn poznámkou (značenou arabskou číslicí v horním indexu), v níž je stručně popsána vynechaná pasáž
-* bublinková nápověda 
+* bublinková nápověda
   - při umístění kurzoru na text odlišující se podtečkováním, barvou, velikostí či řezem od základního textu (tučné, kurziva) se zobrazí bližší informace o důvodu užití odlišného písma. Bublinková nápověda je k dispozici i u textu v závorkách ({}, []) a u trojtečky (…), pokud se jedná o torzovité, doplněné či rekonstruované slovo
   - nápověda je k dispozici také u emendací a poznámek a slouží k rychlému zobrazení informace, která je uvedena v poznámkovém aparátu na konci stránky. Tato nápověda se však zobrazuje pouze v případě, že komentovaný úsek netvoří součást jiného delšího úseku, který je sám o sobě vybaven bublinkovou nápovědou (tj. nejde např. o emendační poznámku v rámci cizojazyčného textu nebo přípisku)'
   , N'Admin')
 
 --DictionaryScope = textbank
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (13, 1, 5, 'info', 1, N'StaticText', N'# Informace
 *Staročeský a středněčeský korpus* (dříve staročeská a středněčeská textová banka) vznikají v rámci textologické a ediční činnosti oddělení vývoje jazyka. Jsou budovány od roku 2006, odkdy jsou texty psané historickou češtinou, jejichž transkribované edice v oddělení vznikají, formálně upravovány rovněž s ohledem na korpusové zpřístupnění prostřednictvím *Vokabuláře webového*. Zprvu se hlavní důraz kladl na staročeské období – *staročeský korpus* je k dipozici veřejnosti již od r. 2008; od roku 2015 zpřístupňujeme též *středněčeský korpus*.
 
@@ -260,12 +260,12 @@ Korpusy nejsou anotované; až na výjimky neobsahují lemmatizaci ani morfologi
 Pro připomínky ke korpusům lze užít nabídku [Připomínky](/BohemianTextBank/BohemianTextBank/Feedback).'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (14, 1, 5, 'help', 1, N'StaticText', N'# Nápověda'
 , N'Admin')
 
 --DictionaryScope = grammar
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (15, 1, 6, 'info', 1, N'StaticText', N'# Informace
 V oddílu Mluvnic *Vokabuláře webového* (dříve též *modul digitalizovaných mluvnic, MDM*) poskytujeme zájemcům digitalizované verze historických mluvnic a podobných jazykových příruček z období 16. až 19. století. Tuto část *Vokabuláře webového* jsme uvedli v užívání mj. na počest stého výročí založení *Kanceláře Slovníku jazyka českého*, která dala základy dnešnímu *Ústavu pro jazyk český*. V roce 2011 byl *MDM* spuštěn v testovacím provozu s několika mluvnicemi na ukázku, v roce 2012 jsme zahájili plný provoz. Zvýšil se nejen počet prezentovaných mluvnic, ale podstatně jsme též upravili a rozšířili informace o těchto významných památkách české jazykovědy.
 
@@ -289,13 +289,13 @@ Digitalizované mluvnice, které zpřístupňujeme veřejnosti, pocházejí pře
 Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze je bez souhlasu oddělení vývoje jazyka publikovat v žádných dalších textech. V případě zájmu nás kontaktujte elektronicky na adrese [vokabular@ujc.cas.cz](mailto:vokabular@ujc.cas.cz?subject=zajem) nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46 Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (16, 1, 6, 'help', 1, N'StaticText', N'# Nápověda
 Oddíl *Mluvnice* umožňuje prohlížet knihy dvěma způsoby: prvním způsobem je tzv. listování v digitalizované mluvnici vyhledané v seznamu zveřejněných mluvnic. Potřebné informace je možné získat i vyhledáváním napříč všemi mluvnicemi; pro tento způsob byly digitalizované mluvnice tzv. anotovány, tj. jednotlivé obrazy (většinou dvoustran) byly orientačně označeny lingvistickými termíny, o nichž se na příslušné (dvou)stránce pojednává. Tyto termíny vycházejí z novočeského mluvnického pojetí a v některých případech neodpovídají přesně stavu v historické gramatice (např. jako „hláska měkká“ označujeme pojednání o hlásce „c“, přestože v dobovém pojetí byla chápána jako hláska tvrdá atp.). Snažili jsme se, aby vyhledávání bylo maximálně vstřícné k uživateli: do vyhledávání lze tedy zadávat jak termíny české (např. *jméno podstatné*), tak běžně užívané termíny internacionální (např. *substantivum*). Vyhledávat lze nejen podle termínů, nýbrž také podle jiných údajů (slov z názvu mluvnice a jména autora); tyto údaje lze ve složitém modu vyhledávání kombinovat. Výsledkem vyhledávání je seznam všech mluvnic, které odpovídají zadaným kritériím. Každá mluvnice se zobrazuje vždy ve zvláštním panelu, přičemž strany proznačené požadovanými lingvistickými termíny se zobrazují zvýrazněné. Pod aktuálně zobrazenou (dvou)stranou mluvnice je uveden seznam všech lingvistických termínů, které jsou ke (dvou)straně přiřazeny.'
 , N'Admin')
 
 --DictionaryScope = professional
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (17, 1, 7, 'info', 1, N'StaticText', N'# Informace
 V oddílu *Odborná literatura* (dále též *OL*) poskytujeme uživatelům digitalizované verze odborných textů, které se věnují problematice historické češtiny.
 
@@ -310,18 +310,18 @@ Kromě vyhledávání na základě obsahu a rejstříku je možné prohlížet t
 Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese [vokabular@ujc.cas.cz](mailto:vokabular@ujc.cas.cz?subject=zajem) nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (18, 1, 7, 'help', 1, N'StaticText', N'# Nápověda'
 , N'Admin')
 
 --DictionaryScope = bibliographies
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (19, 1, 8, 'info', 1, N'StaticText', N'# Informace
 Zde budou informace k Bibliografickemu modulu'
 , N'Admin')
 
 --DictionaryScope = cardfiles
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (20, 1, 9, 'info', 1, N'StaticText', N'# Informace
 V části *Kartotéky* zpřístupňujme digitalizovanou podobu dvou kartoték Jana Gebauera: kartotéky excerpce ze staročeské literatury a kartotéky pramenů k této excerpci.
 
@@ -343,7 +343,7 @@ Pro obecné připomínky ke zveřejnění Gebauerovy excerpce je možné využí
 , N'Admin')
 
 --DictionaryScope = audio
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (21, 1, 10, 'info', 1, N'StaticText', N'# Informace
 V této části *Vokabuláře webového* poskytujeme zájemcům zvukové nahrávky starších českých děl. V současnosti představujeme dvě díla – *Výbor ze staročeské prózy* a *Frantovy práva* z roku 1518.
 
@@ -355,7 +355,7 @@ Nahrávky jsou vystaveny pouze pro nekomerční využití, pro studijní a badat
 , N'Admin')
 
 --DictionaryScope = tools
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (22, 1, 11, 'info', 1, N'StaticText', N'# Informace
 V této části *Vokabuláře webového* najdete počítačové nástroje a další pomůcky určené pro badatele, které vznikly v oddělení vývoje jazyka Ústavu pro jazyk český. Obvykle jsou k dispozici zdarma, a to včetně zdrojových kódů a ukázkových dat. Vedle základních informací o účelu a fungování jednotlivých nástrojů uvádíme také detailnější nápovědu pod záložkou *Nápověda* a text licence, pod níž je daný nástroj k dispozici.
 
@@ -364,9 +364,11 @@ Zároveň se snažíme upozornit na další počítačové technologie, nástroj
 V případě jakýchkoli dotazů můžete využít kontaktní formulář [Připomínek](/Tools/Tools/Feedback) nebo se obrátit na správce stránky prostřednictvím e-mailové adresy [vokabular@ujc.cas.cz](mailto:vokabular@ujc.cas.cz).'
 , N'Admin')
 
-INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser]) 
+INSERT INTO [dbo].[BaseText] ([Id], [Culture], [DictionaryScope], [Name], [Format], [Discriminator], [Text], [ModificationUser])
 	VALUES (23, 1, 11, 'list', 1, N'StaticText', N'# Seznam'
 , N'Admin')
+
+SET IDENTITY_INSERT [dbo].[BaseText] OFF
 
 INSERT INTO [dbo].[DatabaseVersion]
 	(DatabaseVersion)
