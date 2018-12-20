@@ -30,7 +30,9 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// <param name="dictionaryFactory"></param>
         /// <param name="logger"></param>
         public FileDictionaryManager(
-            ILocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory, ILogger logger = null
+            ILocalizationConfiguration configuration,
+            IDictionaryFactory dictionaryFactory,
+            ILogger logger = null
         ) : base(configuration, logger)
         {
             m_configuration = configuration;

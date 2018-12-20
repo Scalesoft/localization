@@ -13,12 +13,12 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     public class FileLocalizationManager : LocalizationManager, IFileLocalizationManager
     {
-        private readonly FileDictionaryManager m_dictionaryManager;
+        private readonly IFileDictionaryManager m_dictionaryManager;
         private readonly FallbackCultureResolver m_fallbackCultureResolver;
 
         public FileLocalizationManager(
             ILocalizationConfiguration configuration,
-            FileDictionaryManager fileDictionaryManager,
+            IFileDictionaryManager fileDictionaryManager,
             FallbackCultureResolver fallbackCultureResolver
         ) : base(configuration)
         {
