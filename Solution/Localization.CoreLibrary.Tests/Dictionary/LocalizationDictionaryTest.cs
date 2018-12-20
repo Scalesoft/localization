@@ -14,7 +14,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
         public void ListTest()
         {
             var dictionaryFactory = new JsonDictionaryFactory();
-            var localizationDictionary = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.cs.json");
+            var localizationDictionary = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.cs.json");
 
             Assert.AreEqual(new CultureInfo("cs"), localizationDictionary.CultureInfo());
             Assert.AreEqual("slovniky", localizationDictionary.Scope());
@@ -27,10 +27,10 @@ namespace Localization.CoreLibrary.Tests.Dictionary
         public void SameListTestInHashSet()
         {
             var dictionaryFactory = new JsonDictionaryFactory();
-            var localizationDictionary0 = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.cs.json");
-            var localizationDictionary1 = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.cs.json");
-            var localizationDictionary2 = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.cs.json");
-            var localizationDictionary3 = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.cs.json");
+            var localizationDictionary0 = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.cs.json");
+            var localizationDictionary1 = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.cs.json");
+            var localizationDictionary2 = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.cs.json");
+            var localizationDictionary3 = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.cs.json");
 
 
             var dictionaries = new HashSet<ILocalizationDictionary>
@@ -55,10 +55,10 @@ namespace Localization.CoreLibrary.Tests.Dictionary
         public void MultipleListTestInHashSet()
         {
             var dictionaryFactory = new JsonDictionaryFactory();
-            var localizationDictionary0 = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.cs.json");
-            var localizationDictionary1 = dictionaryFactory.CreateDictionary(@"localization\slovniky\slovniky.en.json");
-            var localizationDictionary2 = dictionaryFactory.CreateDictionary(@"localization\cs.json");
-            var localizationDictionary3 = dictionaryFactory.CreateDictionary(@"localization\en.json");
+            var localizationDictionary0 = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.cs.json");
+            var localizationDictionary1 = dictionaryFactory.CreateDictionary("Localization/slovniky/slovniky.en.json");
+            var localizationDictionary2 = dictionaryFactory.CreateDictionary("Localization/cs.json");
+            var localizationDictionary3 = dictionaryFactory.CreateDictionary("Localization/en.json");
 
             var dictionaries = new HashSet<ILocalizationDictionary>
             {
@@ -75,7 +75,7 @@ namespace Localization.CoreLibrary.Tests.Dictionary
         public void DottedKeysTest()
         {
             var dictionaryFactory = new JsonDictionaryFactory();
-            var localizationDictionary = dictionaryFactory.CreateDictionary(@"localization\obrazky\obrazky.cs.json");
+            var localizationDictionary = dictionaryFactory.CreateDictionary("Localization/obrazky/obrazky.cs.json");
             var dictionaryCultureInfo = localizationDictionary.CultureInfo();
             var childLocalizationDictionary = localizationDictionary.ChildDictionaries;
             var localizationDictionaryExtension = localizationDictionary.Extension();

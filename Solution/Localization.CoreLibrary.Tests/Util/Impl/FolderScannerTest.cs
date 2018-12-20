@@ -54,7 +54,7 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
                 configuration, Path.Combine("Localization", "slovniky"), new CultureInfo("cs")
             );
 
-            Assert.AreEqual(@"Localization\slovniky\slovniky.cs.json", fileName);
+            Assert.AreEqual("Localization/slovniky/slovniky.cs.json", fileName);
         }
     }
 }
