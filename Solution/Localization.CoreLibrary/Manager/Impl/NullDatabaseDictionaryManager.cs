@@ -8,16 +8,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class NullDatabaseDictionaryManager : IDictionaryManager
+    public class NullDatabaseDictionaryManager : IDatabaseDictionaryManager
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger m_logger;
         private const string NotSetMessage = "Database dictionary manager is not set.";
+
+        public NullDatabaseDictionaryManager(ILogger logger = null)
+        {
+            m_logger = logger;
+        }
 
         private void LogNotSet()
         {
-            if (Logger.IsInformationEnabled())
+            if (m_logger != null && m_logger.IsInformationEnabled())
             {
-                Logger.LogInformation(NotSetMessage);
+                m_logger.LogInformation(NotSetMessage);
             }
         }
 

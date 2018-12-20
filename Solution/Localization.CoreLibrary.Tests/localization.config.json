@@ -6,7 +6,7 @@
     "es"
   ],
   "DefaultCulture": "cs",
-  "TranslationFallbackMode": "",
+  "TranslationFallbackMode": "Exception",
   "AutoLoadResources": true,
-  "FirstAutoTranslateResource": ""
+  "FirstAutoTranslateResource": "File"
 }

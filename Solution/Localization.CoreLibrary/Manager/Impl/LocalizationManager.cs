@@ -3,21 +3,20 @@ using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
-
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal abstract class LocalizationManager : ManagerBase
+    public abstract class LocalizationManager : ManagerBase
     {
-        protected LocalizationManager(IConfiguration configuration) : base(configuration)
+        protected LocalizationManager(ILocalizationConfiguration configuration, ILogger logger = null) : base(configuration, logger)
         {
             //Should be empty.
         }
 
         protected LocalizedString TranslateFallback(string text)
         {
-            switch (Configuration.TranslateFallbackMode())
+            switch (Configuration.TranslateFallbackMode)
             {
                 case LocTranslateFallbackMode.Null:
                     return null;

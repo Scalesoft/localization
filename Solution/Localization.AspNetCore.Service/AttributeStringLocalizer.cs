@@ -24,10 +24,14 @@ namespace Localization.AspNetCore.Service
 
         private CultureInfo m_currentCultureInfo;
 
-        private AttributeStringLocalizer(IAutoDictionaryManager dictionaryManager,
+        private AttributeStringLocalizer(
+            IAutoDictionaryManager dictionaryManager,
             IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
-            string baseName, LocTranslationSource location, CultureInfo cultureInfo)
+            string baseName,
+            LocTranslationSource location,
+            CultureInfo cultureInfo
+        )
         {
             m_dictionaryManager = dictionaryManager;
             m_baseName = baseName;
@@ -37,11 +41,13 @@ namespace Localization.AspNetCore.Service
             m_currentCultureInfo = cultureInfo;
         }
 
-        public AttributeStringLocalizer(IAutoDictionaryManager dictionaryManager,
+        public AttributeStringLocalizer(
+            IAutoDictionaryManager dictionaryManager,
             IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
-            string baseName, LocTranslationSource location) : this(dictionaryManager, httpContextAccessor,
-            autoLocalizationManager, baseName, location, null)
+            string baseName,
+            LocTranslationSource location
+        ) : this(dictionaryManager, httpContextAccessor, autoLocalizationManager, baseName, location, null)
         {
             //Should be empty
         }
@@ -53,8 +59,9 @@ namespace Localization.AspNetCore.Service
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            return new AttributeStringLocalizer(m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager,
-                m_baseName, m_location, culture);
+            return new AttributeStringLocalizer(
+                m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager, m_baseName, m_location, culture
+            );
         }
 
         LocalizedString IStringLocalizer.this[string name] =>

@@ -5,17 +5,19 @@ using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class DatabaseDictionaryManager : ManagerBase, IDictionaryManager
+    internal class DatabaseDictionaryManager : ManagerBase, IDatabaseDictionaryManager
     {
         private readonly IDatabaseDictionaryService m_dbDictionaryService;
 
-        public DatabaseDictionaryManager(IConfiguration configuration, IDatabaseDictionaryService dbDictionaryService)
-            : base(configuration)
+        public DatabaseDictionaryManager(
+            ILocalizationConfiguration configuration, IDatabaseDictionaryService dbDictionaryService, ILogger logger = null
+        ) : base(configuration, logger)
         {
             m_dbDictionaryService = dbDictionaryService;
         }

@@ -18,7 +18,7 @@ namespace Localization.Database.NHibernate.Factory
         }
 
         public IDatabaseTranslateService CreateTranslateService(
-            IConfiguration configuration, ILoggerFactory loggerFactory
+            ILocalizationConfiguration configuration, ILoggerFactory loggerFactory
         )
         {
             return new DatabaseTranslateService(
@@ -29,7 +29,7 @@ namespace Localization.Database.NHibernate.Factory
         }
 
         public IDatabaseDictionaryService CreateDictionaryService(
-            IConfiguration configuration, ILoggerFactory loggerFactory
+            ILocalizationConfiguration configuration, ILoggerFactory loggerFactory
         )
         {
             return new DatabaseDictionaryService(
@@ -40,7 +40,7 @@ namespace Localization.Database.NHibernate.Factory
         }
 
         public IDatabaseDynamicTextService CreateDatabaseDynamicTextService(
-            IConfiguration configuration, ILoggerFactory loggerFactory
+            ILocalizationConfiguration configuration, ILoggerFactory loggerFactory
         )
         {
             return new DatabaseDynamicTextService(

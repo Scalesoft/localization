@@ -2,7 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 using Localization.CoreLibrary.Exception;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -12,48 +14,47 @@ namespace Localization.CoreLibrary.Util.Impl
 {
     internal class JsonConfigurationReader
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger m_logger;
         private readonly string m_configurationFilePath;
 
-        public JsonConfigurationReader(string configurationFilePath)
+        public JsonConfigurationReader(string configurationFilePath, ILogger logger = null)
         {
             CheckFileExists(configurationFilePath);
 
             m_configurationFilePath = configurationFilePath;
+            m_logger = logger;
         }
 
-        public IConfiguration ReadConfiguration()
+        public ILocalizationConfiguration ReadConfiguration()
         {
-            var serializer = new JsonSerializer
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
+            ILocalizationConfiguration configuration = new LocalizationConfiguration();
 
-            LocalizationConfiguration.Configuration configuration;
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(m_configurationFilePath, optional: false);
 
-            using (var stream = new FileStream(m_configurationFilePath, FileMode.Open, FileAccess.Read))
-            using (var streamReader = new StreamReader(stream, Encoding.UTF8))
-            using (var jsonReader = new JsonTextReader(streamReader))
-            {
-                configuration = serializer.Deserialize<LocalizationConfiguration.Configuration>(jsonReader);
-            }
+            configurationBuilder.Build()
+                .Bind(configuration);
 
-            return new LocalizationConfiguration(configuration);
+            return configuration;
         }
 
         private void CheckFileExists(string configurationFilePath)
         {
-            if (!File.Exists(configurationFilePath))
+            if (File.Exists(configurationFilePath))
             {
-                var errorMsg = string.Format("Configuration file \"{0}\" does not exist or you don't have permission to read.",
-                    configurationFilePath);
-                if (Logger.IsErrorEnabled())
-                {
-                    Logger.LogError(errorMsg);
-                }
-
-                throw new LibraryConfigurationException(errorMsg);
+                return;
             }
+
+            var errorMsg = string.Format("Configuration file \"{0}\" does not exist or you don't have permission to read.",
+                configurationFilePath);
+
+            if (m_logger != null && m_logger.IsErrorEnabled())
+            {
+                m_logger.LogError(errorMsg);
+            }
+
+            throw new LibraryConfigurationException(errorMsg);
         }
     }
 }

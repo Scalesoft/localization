@@ -2,45 +2,60 @@ using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Entity;
+using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Models;
-using Localization.CoreLibrary.Util;
-using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Logging;
 
-namespace Localization.Database.NHibernate.Service
+namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
+    public class NullDatabaseDynamicTextService : IDatabaseDynamicTextService
     {
-        public DatabaseDynamicTextService(
-            ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration
-        ) : base(logger, cultureUoW, configuration)
+        private readonly ILogger m_logger;
+        private const string NotSetMessage = "Database dynamic text service is not set.";
+
+        public NullDatabaseDynamicTextService(ILogger logger = null)
         {
+            m_logger = logger;
+        }
+
+        private void LogNotSet()
+        {
+            if (m_logger != null && m_logger.IsInformationEnabled())
+            {
+                m_logger.LogInformation(NotSetMessage);
+            }
         }
 
         public DynamicText GetDynamicText(string name, string scope, CultureInfo cultureInfo)
         {
-            throw new System.NotImplementedException();
+            LogNotSet();
+
+            return null;
         }
 
         public IList<DynamicText> GetAllDynamicText(string name, string scope)
         {
-            throw new System.NotImplementedException();
+            LogNotSet();
+
+            return new List<DynamicText>();
         }
 
         public DynamicText SaveDynamicText(DynamicText dynamicText,
             IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
         {
-            throw new System.NotImplementedException();
+            LogNotSet();
+
+            return null;
         }
 
         public void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo)
         {
-            throw new System.NotImplementedException();
+            LogNotSet();
         }
 
         public void DeleteAllDynamicText(string name, string scope)
         {
-            throw new System.NotImplementedException();
+            LogNotSet();
         }
     }
 }

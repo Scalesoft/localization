@@ -11,7 +11,7 @@ namespace Localization.Database.NHibernate.Service
     public class DatabaseTranslateService : DatabaseServiceBase, IDatabaseTranslateService
     {
         public DatabaseTranslateService(
-            ILogger logger, CultureUoW cultureUoW, IConfiguration configuration
+            ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration
         ) : base(logger, cultureUoW, configuration)
         {
         }
@@ -43,7 +43,7 @@ namespace Localization.Database.NHibernate.Service
         /// </summary>
         public void CheckCulturesInDatabase()
         {
-            var supportedCultures = m_configuration.SupportedCultures();
+            var supportedCultures = m_configuration.SupportedCultures;
             var availableCultures = m_cultureUoW.FindAllCultures();
 
             foreach (var supportedCulture in supportedCultures)

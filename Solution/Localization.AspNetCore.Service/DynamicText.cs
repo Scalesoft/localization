@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
+using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -8,12 +9,18 @@ namespace Localization.AspNetCore.Service
 {
     public class DynamicText : ServiceBase, IDynamicText
     {
+        private readonly IDatabaseDictionaryManager m_databaseDictionaryManager;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
-        public DynamicText(IHttpContextAccessor httpContextAccessor)
+        public DynamicText(
+            IHttpContextAccessor httpContextAccessor,
+            IDatabaseDictionaryManager databaseDictionaryManager,
+            IDatabaseDynamicTextService databaseDynamicTextService
+            )
             : base(httpContextAccessor)
         {
-            m_databaseDynamicTextService = CoreLibrary.Localization.DynamicText;
+            m_databaseDictionaryManager = databaseDictionaryManager;
+            m_databaseDynamicTextService = databaseDynamicTextService;
         }
 
         public CoreLibrary.Entity.DynamicText GetDynamicText(string name, string scope)
@@ -28,7 +35,10 @@ namespace Localization.AspNetCore.Service
             return m_databaseDynamicTextService.GetAllDynamicText(name, scope);
         }
 
-        public CoreLibrary.Entity.DynamicText SaveDynamicText(CoreLibrary.Entity.DynamicText dynamicText, IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing)
+        public CoreLibrary.Entity.DynamicText SaveDynamicText(
+            CoreLibrary.Entity.DynamicText dynamicText,
+            IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing
+        )
         {
             return m_databaseDynamicTextService.SaveDynamicText(dynamicText, actionForDefaultCulture);
         }
@@ -47,7 +57,8 @@ namespace Localization.AspNetCore.Service
         {
             var request = HttpContextAccessor.HttpContext.Request;
 
-            var cultureCookie = request.Cookies[CultureCookieName] ?? CoreLibrary.Localization.DatabaseDictionary.DefaultCulture().Name;
+            var cultureCookie = request.Cookies[CultureCookieName] ??
+                                m_databaseDictionaryManager.DefaultCulture().Name;
 
             return new CultureInfo(cultureCookie);
         }

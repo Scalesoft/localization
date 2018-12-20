@@ -5,20 +5,23 @@ using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
-
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class NullDatabaseLocalizationManager : ILocalizationManager
+    public class NullDatabaseLocalizationManager : IDatabaseLocalizationManager
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger m_logger;
         private const string NotSetMessage = "Database localization manager is not set.";
+
+        public NullDatabaseLocalizationManager(ILogger logger = null)
+        {
+            m_logger = logger;
+        }
 
         private void LogNotSet()
         {
-            if (Logger.IsInformationEnabled())
+            if (m_logger != null && m_logger.IsInformationEnabled())
             {
-                Logger.LogInformation(NotSetMessage);
+                m_logger.LogInformation(NotSetMessage);
             }
         }
 

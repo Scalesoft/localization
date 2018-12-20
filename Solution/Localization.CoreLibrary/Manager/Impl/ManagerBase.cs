@@ -1,18 +1,18 @@
 ﻿using System.Globalization;
-using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Util;
-
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class ManagerBase
+    public class ManagerBase
     {
-        protected readonly IConfiguration Configuration;
+        protected readonly ILocalizationConfiguration Configuration;
+        protected readonly ILogger Logger;
 
-        protected ManagerBase(IConfiguration configuration)
+        protected ManagerBase(ILocalizationConfiguration configuration, ILogger logger = null)
         {
             Configuration = configuration;
+            Logger = logger;
         }
 
         protected CultureInfo CultureInfoNullCheck(CultureInfo cultureInfo)
@@ -37,7 +37,7 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public CultureInfo DefaultCulture()
         {
-            return Configuration.DefaultCulture();
+            return Configuration.DefaultCulture;
         }
 
         public string DefaultScope()

@@ -2,7 +2,7 @@
 {
     public enum LocLocalizationResource
     {
-        Database,
-        File
+        Database = 0,
+        File = 1,
     }
 }

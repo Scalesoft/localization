@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Exception;
@@ -9,36 +8,40 @@ using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
-
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class FileDictionaryManager : ManagerBase, IDictionaryManager
+    public class FileDictionaryManager : ManagerBase, IFileDictionaryManager
     {
         private const string UnknownCultureException = "Unknown culture {0} with scope {1}";
 
         private const string GlobalScope = "global";
 
-        private readonly IConfiguration m_configuration;
+        private readonly ILocalizationConfiguration m_configuration;
 
         private readonly ISet<ILocalizationDictionary> m_dictionaries;
         private readonly IDictionary<CultureInfo, ISet<ILocalizationDictionary>> m_dictionariesPerCulture;
-        private readonly IDictionary<CultureInfo, CultureInfo> m_cultureFallback;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="configuration">Library configuration.</param>
-        public FileDictionaryManager(IConfiguration configuration) : base(configuration)
+        /// <param name="dictionaryFactory"></param>
+        /// <param name="logger"></param>
+        public FileDictionaryManager(
+            ILocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory, ILogger logger = null
+        ) : base(configuration, logger)
         {
             m_configuration = configuration;
-            m_dictionaries = new HashSet<ILocalizationDictionary>();
-            m_dictionariesPerCulture = new Dictionary<CultureInfo, ISet<ILocalizationDictionary>>();
-            m_cultureFallback = new Dictionary<CultureInfo, CultureInfo>();
 
-            m_dictionariesPerCulture.Add(DefaultCulture(), new HashSet<ILocalizationDictionary>());
-            foreach (var supportedCulture in m_configuration.SupportedCultures())
+            m_dictionaries = new HashSet<ILocalizationDictionary>();
+            m_dictionariesPerCulture = new Dictionary<CultureInfo, ISet<ILocalizationDictionary>>
+            {
+                {DefaultCulture(), new HashSet<ILocalizationDictionary>()}
+            };
+
+            foreach (var supportedCulture in m_configuration.SupportedCultures)
             {
                 if (!m_dictionariesPerCulture.ContainsKey(supportedCulture))
                 {
@@ -46,22 +49,9 @@ namespace Localization.CoreLibrary.Manager.Impl
                 }
             }
 
-            foreach (var cultureInfo in m_dictionariesPerCulture.Keys)
+            if (configuration.AutoLoadResources)
             {
-                var parentCulture = cultureInfo.Parent;
-
-                if (
-                    parentCulture.Equals(CultureInfo.InvariantCulture)
-                    || !m_dictionariesPerCulture.Keys.Contains(parentCulture)
-                )
-                {
-                    parentCulture = DefaultCulture();
-                }
-
-                if (!cultureInfo.Equals(parentCulture))
-                {
-                    m_cultureFallback.Add(cultureInfo, parentCulture);
-                }
+                AutoLoadDictionaries(dictionaryFactory);
             }
         }
 
@@ -69,7 +59,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// Automatically loads dictionary files based on folder structure in basePath (specified in library config).
         /// </summary>
         /// <param name="dictionaryFactory">Dictionary factory.</param>
-        public void AutoLoadDictionaries(IDictionaryFactory dictionaryFactory)
+        private void AutoLoadDictionaries(IDictionaryFactory dictionaryFactory)
         {
             var localizationFilesToLoad = CheckResourceFiles(m_configuration, dictionaryFactory);
 
@@ -87,7 +77,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// <param name="configuration">Library configuration.</param>
         /// <param name="dictionaryFactory"></param>
         /// <returns>List of resource files to load.</returns>
-        private IEnumerable<string> CheckResourceFiles(IConfiguration configuration, IDictionaryFactory dictionaryFactory)
+        private IEnumerable<string> CheckResourceFiles(ILocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory)
         {
             var fs = new FolderScanner(dictionaryFactory);
             return fs.CheckResourceFiles(configuration);
@@ -178,16 +168,6 @@ namespace Localization.CoreLibrary.Manager.Impl
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
         }
 
-        public CultureInfo FallbackCulture(CultureInfo cultureInfo)
-        {
-            if (m_cultureFallback.TryGetValue(cultureInfo, out var fallbackCulture))
-            {
-                return fallbackCulture;
-            }
-
-            return null;
-        }
-
         public ILocalizationDictionary GetLocalizationDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             if (scope == null)
@@ -229,7 +209,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// </returns>
         public bool IsCultureSupported(CultureInfo cultureInfo)
         {
-            return DefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures().Contains(cultureInfo);
+            return DefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures.Contains(cultureInfo);
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Globalization;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Manager.Impl;
+using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,23 +15,28 @@ namespace Localization.CoreLibrary.Tests.Manager
         [TestMethod]
         public void TranslateFormatTest()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "es"},
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("es"),
+                },
+                TranslateFallbackMode = LocTranslateFallbackMode.Key,
+                AutoLoadResources = true,
             };
 
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
+            var dictionaryManager = new FileDictionaryManager(localizationConfiguration, JsonDictionaryFactory.FactoryInstance);
 
-            var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-
-            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
+            var fallbackCultureResolver = new FallbackCultureResolver(localizationConfiguration);
+            var fileLocalizationManager = new FileLocalizationManager(
+                localizationConfiguration, dictionaryManager, fallbackCultureResolver
+            );
 
             var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new object[] {"pondělí"},
-                new CultureInfo(configuration.DefaultCulture), "global");
+                localizationConfiguration.DefaultCulture, "global");
 
             Assert.AreEqual("Dnes je pondělí.", ls.Value);
         }
@@ -37,20 +44,24 @@ namespace Localization.CoreLibrary.Tests.Manager
         [TestMethod]
         public void TranslateConstant()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "LocalizationTree",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en"},
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en")
+                },
+                TranslateFallbackMode = LocTranslateFallbackMode.Key,
+                AutoLoadResources = true,
             };
 
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
+            var dictionaryManager = new FileDictionaryManager(localizationConfiguration, JsonDictionaryFactory.FactoryInstance);
 
-            var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-
-            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
+            var fallbackCultureResolver = new FallbackCultureResolver(localizationConfiguration);
+            var fileLocalizationManager = new FileLocalizationManager(
+                localizationConfiguration, dictionaryManager, fallbackCultureResolver
+            );
 
             var ls = fileLocalizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
 

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Manager.Impl;
+using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -16,20 +19,24 @@ namespace Localization.CoreLibrary.Tests.Translator
         [TestInitialize]
         public void Init()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "cs"},
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                   new CultureInfo("en"),
+                   new CultureInfo("cs"),
+                },
+                TranslateFallbackMode = LocTranslateFallbackMode.Key
             };
 
-            var localizationConfiguration = new LocalizationConfiguration(configuration);
+            m_dictionaryManager = new FileDictionaryManager(localizationConfiguration, JsonDictionaryFactory.FactoryInstance);
 
-            m_dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            m_dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-
-            m_fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, m_dictionaryManager);
+            var fallbackCultureResolver = new FallbackCultureResolver(localizationConfiguration);
+            m_fileLocalizationManager = new FileLocalizationManager(
+                localizationConfiguration, m_dictionaryManager, fallbackCultureResolver
+            );
         }
 
         [TestMethod]

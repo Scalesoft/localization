@@ -1,10 +1,18 @@
 ﻿using System.IO;
 using Localization.CoreLibrary.Dictionary.Impl;
+using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Dictionary.Factory
 {
     public class EmptyDictionaryFactory : IDictionaryFactory
     {
+        private readonly ILogger m_logger;
+
+        public EmptyDictionaryFactory(ILogger logger = null)
+        {
+            m_logger = logger;
+        }
+
         public ILocalizationDictionary CreateDictionary(string filePath)
         {
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))

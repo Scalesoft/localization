@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Localization.CoreLibrary.Manager;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,21 +15,23 @@ namespace Localization.CoreLibrary.Tests.Translator
         [TestInitialize]
         public void LibInit()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var configuration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string>() {"en", "cs"},
-                TranslationFallbackMode = LocTranslateFallbackMode.EmptyString.ToString(),
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>()
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("cs"),
+                },
+                TranslateFallbackMode = LocTranslateFallbackMode.EmptyString,
                 AutoLoadResources = true,
-                FirstAutoTranslateResource = LocLocalizationResource.File.ToString()
+                FirstAutoTranslateResource = LocLocalizationResource.File
             };
 
-            IConfiguration libConfiguration = new LocalizationConfiguration(configuration);
+            Localization.Init(configuration);
 
-            Localization.Init(libConfiguration);
-
-            m_dictionaryManager = Localization.Translator;
+            m_dictionaryManager = Localization.Instance();
 
             Localization.LibDeinit();
         }

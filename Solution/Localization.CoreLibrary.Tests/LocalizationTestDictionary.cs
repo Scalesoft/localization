@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Manager;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -19,20 +20,23 @@ namespace Localization.CoreLibrary.Tests
         [TestInitialize]
         public void SetUp()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = DefaultCulture,
-                SupportedCultures = new List<string> {SupportedCulture, "es", DefaultCulture},
-                AutoLoadResources = true,
-                FirstAutoTranslateResource = LocTranslationSource.File.ToString()
+                DefaultCulture = new CultureInfo(DefaultCulture),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo(SupportedCulture),
+                    new CultureInfo("es"),
+                    new CultureInfo(DefaultCulture),
+                },
+                FirstAutoTranslateResource = LocLocalizationResource.File,
+                AutoLoadResources = true
             };
-
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             Localization.Init(localizationConfiguration);
 
-            m_dictionaryManager = Localization.Dictionary;
+            m_dictionaryManager = Localization.Instance();
 
             Localization.LibDeinit();
         }

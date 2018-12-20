@@ -16,10 +16,14 @@ namespace Localization.AspNetCore.Service.Factory
         private readonly IAutoDictionaryManager m_dictionaryManager;
         private readonly IHttpContextAccessor m_httpContextAccessor;
 
-        public AttributeStringLocalizerFactory(IHttpContextAccessor httpContextAccessor)
+        public AttributeStringLocalizerFactory(
+            IHttpContextAccessor httpContextAccessor,
+            IAutoDictionaryManager autoDictionaryManager,
+            IAutoLocalizationManager autoLocalizationManager
+        )
         {
-            m_dictionaryManager = CoreLibrary.Localization.Dictionary;
-            m_autoLocalizationManager = CoreLibrary.Localization.Translator;
+            m_dictionaryManager = autoDictionaryManager;
+            m_autoLocalizationManager = autoLocalizationManager;
             m_httpContextAccessor = httpContextAccessor;
         }
 
@@ -27,8 +31,10 @@ namespace Localization.AspNetCore.Service.Factory
         {
             Guard.ArgumentNotNull(nameof(resourceSource), resourceSource);
 
-            return new AttributeStringLocalizer(m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager,
-                resourceSource.Name, LocTranslationSource.Auto);
+            return new AttributeStringLocalizer(
+                m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager,
+                resourceSource.Name, LocTranslationSource.Auto
+            );
         }
 
         public IStringLocalizer Create(string baseName, string location)
@@ -37,8 +43,11 @@ namespace Localization.AspNetCore.Service.Factory
             Guard.ArgumentNotNullOrEmpty(nameof(location), location);
 
             if (Enum.TryParse<LocTranslationSource>(location, out var parsedLocation))
-                return new AttributeStringLocalizer(m_dictionaryManager, m_httpContextAccessor,
-                    m_autoLocalizationManager, baseName, parsedLocation);
+            {
+                return new AttributeStringLocalizer(
+                    m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager, baseName, parsedLocation
+                );
+            }
 
             throw new ArgumentException($"Location string \"{location}\" is not valid enum.");
         }

@@ -12,10 +12,13 @@ namespace Localization.AspNetCore.Service
     {
         private readonly IAutoLocalizationManager m_localizationManager;
 
-        public LocalizationService(IHttpContextAccessor httpContextAccessor)
+        public LocalizationService(
+            IHttpContextAccessor httpContextAccessor,
+            IAutoLocalizationManager autoLocalizationManager
+        )
             : base(httpContextAccessor)
         {
-            m_localizationManager = CoreLibrary.Localization.Translator;
+            m_localizationManager = autoLocalizationManager;
         }
 
         // TODO there are almost duplicate definitions of this method (LocalizationService, DynamicText, DictionaryService, DatabaseDictionaryManager)

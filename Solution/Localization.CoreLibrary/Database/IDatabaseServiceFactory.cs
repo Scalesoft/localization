@@ -5,10 +5,10 @@ namespace Localization.CoreLibrary.Database
 {
     public interface IDatabaseServiceFactory
     {
-        IDatabaseTranslateService CreateTranslateService(IConfiguration configuration, ILoggerFactory loggerFactory);
+        IDatabaseTranslateService CreateTranslateService(ILocalizationConfiguration configuration, ILoggerFactory loggerFactory);
 
-        IDatabaseDictionaryService CreateDictionaryService(IConfiguration configuration, ILoggerFactory loggerFactory);
+        IDatabaseDictionaryService CreateDictionaryService(ILocalizationConfiguration configuration, ILoggerFactory loggerFactory);
 
-        IDatabaseDynamicTextService CreateDatabaseDynamicTextService(IConfiguration configuration, ILoggerFactory loggerFactory);
+        IDatabaseDynamicTextService CreateDatabaseDynamicTextService(ILocalizationConfiguration configuration, ILoggerFactory loggerFactory);
     }
 }

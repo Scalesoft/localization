@@ -10,9 +10,9 @@ namespace Localization.Database.NHibernate.Service
     {
         private readonly ILogger m_logger;
         protected readonly CultureUoW m_cultureUoW;
-        protected readonly IConfiguration m_configuration;
+        protected readonly ILocalizationConfiguration m_configuration;
 
-        protected DatabaseServiceBase(ILogger logger, CultureUoW cultureUoW, IConfiguration configuration)
+        protected DatabaseServiceBase(ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration)
         {
             m_logger = logger;
             m_cultureUoW = cultureUoW;
@@ -39,7 +39,7 @@ namespace Localization.Database.NHibernate.Service
 
         public ICulture GetDefaultCulture()
         {
-            var resultCulture = m_cultureUoW.GetCultureByName(m_configuration.DefaultCulture().Name);
+            var resultCulture = m_cultureUoW.GetCultureByName(m_configuration.DefaultCulture.Name);
 
             if (resultCulture == null)
             {

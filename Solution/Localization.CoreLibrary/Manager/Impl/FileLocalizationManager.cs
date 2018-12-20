@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Pluralization;
+using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
@@ -9,16 +11,19 @@ using Microsoft.Extensions.Localization;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class FileLocalizationManager : LocalizationManager, ILocalizationManager
+    public class FileLocalizationManager : LocalizationManager, IFileLocalizationManager
     {
         private readonly FileDictionaryManager m_dictionaryManager;
+        private readonly FallbackCultureResolver m_fallbackCultureResolver;
 
         public FileLocalizationManager(
-            IConfiguration configuration,
-            FileDictionaryManager fileDictionaryManager
+            ILocalizationConfiguration configuration,
+            FileDictionaryManager fileDictionaryManager,
+            FallbackCultureResolver fallbackCultureResolver
         ) : base(configuration)
         {
             m_dictionaryManager = fileDictionaryManager;
+            m_fallbackCultureResolver = fallbackCultureResolver;
         }
 
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
@@ -38,7 +43,7 @@ namespace Localization.CoreLibrary.Manager.Impl
                     return result;
                 }
 
-                cultureInfo = cultureInfo == null ? null : m_dictionaryManager.FallbackCulture(cultureInfo);
+                cultureInfo = cultureInfo == null ? null : m_fallbackCultureResolver.FallbackCulture(cultureInfo);
                 if (cultureInfo != null)
                 {
                     continue;
@@ -93,7 +98,7 @@ namespace Localization.CoreLibrary.Manager.Impl
                     return result.GetPluralizedLocalizedString(number);
                 }
 
-                cultureInfo = cultureInfo == null ? null : m_dictionaryManager.FallbackCulture(cultureInfo);
+                cultureInfo = cultureInfo == null ? null : m_fallbackCultureResolver.FallbackCulture(cultureInfo);
                 if (cultureInfo != null)
                 {
                     continue;
@@ -140,7 +145,7 @@ namespace Localization.CoreLibrary.Manager.Impl
                     return result;
                 }
 
-                cultureInfo = cultureInfo == null ? null : m_dictionaryManager.FallbackCulture(cultureInfo);
+                cultureInfo = cultureInfo == null ? null : m_fallbackCultureResolver.FallbackCulture(cultureInfo);
                 if (cultureInfo != null)
                 {
                     continue;

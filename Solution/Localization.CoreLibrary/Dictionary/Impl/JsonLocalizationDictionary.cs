@@ -20,7 +20,6 @@ namespace Localization.CoreLibrary.Dictionary.Impl
     {
         private const string NotLoadedPluralizedMsg = "Pluralized dictionary is not loaded.";
 
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
         private static readonly object m_initLock = new object();
 
         private const string CultureJPath = "culture";
@@ -31,6 +30,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private const string ConstantJPath = "constants";
         private const string ParentScopeJPath = "parentScope";
 
+        private readonly ILogger m_logger;
         private readonly CultureInfo m_cultureInfo;
         private readonly string m_scope;
         private readonly string m_parentScopeName;
@@ -48,8 +48,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         public bool IsRoot => m_parentDictionary == null;
 
-        public JsonLocalizationDictionary(Stream resourceStream)
+        public JsonLocalizationDictionary(Stream resourceStream, ILogger logger = null)
         {
+            m_logger = logger;
+
             ChildDictionaries = new List<ILocalizationDictionary>();
 
             m_jsonDictionary = LoadDictionaryJObject(resourceStream);
@@ -61,7 +63,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             m_parentScopeName = (string) m_jsonDictionary[ParentScopeJPath];
         }
 
-        public JsonLocalizationDictionary(Stream resourceStream, string filePath) : this(resourceStream)
+        public JsonLocalizationDictionary(Stream resourceStream, string filePath, ILogger logger = null) : this(resourceStream, logger)
         {
             var filePathWithoutExtension = Path.ChangeExtension(filePath, "");
             var pluralizedFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
@@ -82,9 +84,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 var message = string.Format(
                     @"Culture in pluralized version of dictionary ""{0}"" does not match expected value. Expected value is ""{1}""",
                     filePath, m_cultureInfo.Name);
-                if (Logger.IsErrorEnabled())
+
+                if (m_logger != null && m_logger.IsErrorEnabled())
                 {
-                    Logger.LogError(message);
+                    m_logger.LogError(message);
                 }
 
                 throw new DictionaryLoadException(message);
@@ -104,7 +107,10 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 catch (JsonReaderException e)
                 {
                     var message = $@"Resource file ""{fileName ?? "(stream)"}"" is not well-formatted. See library documentation.";
-                    Logger.LogError(message);
+                    if (m_logger != null && m_logger.IsErrorEnabled())
+                    {
+                        m_logger.LogError(message);
+                    }
 
                     throw new LocalizationDictionaryException(string.Concat(message, "\nsrc: ", e.Message));
                 }
@@ -204,9 +210,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             if (!IsPluralizationLoaded())
             {
-                if (Logger.IsWarningEnabled())
+                if (m_logger != null && m_logger.IsWarningEnabled())
                 {
-                    Logger.LogWarning(NotLoadedPluralizedMsg);
+                    m_logger.LogWarning(NotLoadedPluralizedMsg);
                 }
 
                 m_pluralizedDictionary = pluralizedDictionary;
@@ -255,9 +261,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                             var errorMessage = string.Format(
                                 @"The x value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
                                 leftInterval, m_scope, m_cultureInfo.Name);
-                            if (Logger.IsErrorEnabled())
+                            if (m_logger != null && m_logger.IsErrorEnabled())
                             {
-                                Logger.LogError(errorMessage);
+                                m_logger.LogError(errorMessage);
                             }
 
                             throw new DictionaryFormatException(errorMessage);
@@ -277,9 +283,9 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                             var errorMessage = string.Format(
                                 @"The y value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
                                 rightInterval.ToString(), m_scope, m_cultureInfo.Name);
-                            if (Logger.IsErrorEnabled())
+                            if (m_logger != null && m_logger.IsErrorEnabled())
                             {
-                                Logger.LogError(errorMessage);
+                                m_logger.LogError(errorMessage);
                             }
 
                             throw new DictionaryFormatException(errorMessage);

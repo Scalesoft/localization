@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
+using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,32 +22,39 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void InitLibTest()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "es", "cs"}
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("es"),
+                    new CultureInfo("cs"),
+                }
             };
-
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             Localization.Init(localizationConfiguration);
 
-            Assert.IsNotNull(Localization.Dictionary);
-            Assert.IsNotNull(Localization.Translator);
+            var instance = Localization.Instance();
+
+            Assert.IsNotNull(instance);
         }
 
         [TestMethod]
         public void DoubleInitLibTest()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "es", "cs"}
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("es"),
+                    new CultureInfo("cs"),
+                }
             };
-
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             Localization.Init(localizationConfiguration);
 
@@ -67,59 +75,38 @@ namespace Localization.CoreLibrary.Tests
         }
 
         [TestMethod]
-        public void AttachLoggerTest()
-        {
-            var configuration = new LocalizationConfiguration.Configuration
-            {
-                BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "es", "cs"}
-            };
-
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
-
-            Localization.Init(localizationConfiguration);
-
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddDebug();
-
-            Localization.AttachLogger(loggerFactory);
-
-            var logger = LogProvider.GetCurrentClassLogger();
-
-            logger.LogWarning("warning LOG test");
-            logger.LogCritical("critical LOG test");
-        }
-
-        [TestMethod]
         public void TranslateBasic()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "es", "cs"},
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString(),
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("es"),
+                    new CultureInfo("cs"),
+                },
+                TranslateFallbackMode = LocTranslateFallbackMode.Key,
                 AutoLoadResources = true
             };
 
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
             Localization.Init(localizationConfiguration);
+
+            var instance = Localization.Instance();
 
             //Localization.Init("localization.json.config");
 
-            Localization.AttachLogger(new NullLoggerFactory());
-
-            var ls = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst");
+            var ls = instance.Translate(LocTranslationSource.File, "text-2-odst");
 
             Assert.AreEqual("text-2-odst", ls.Name);
             Assert.IsFalse(ls.ResourceNotFound);
             Assert.AreEqual("Druhý odstavec v globálním slovníku", ls.Value);
 
-            var lsQQ = Localization.Translator.Translate(LocTranslationSource.File, "text-QQ-odst");
+            var lsQQ = instance.Translate(LocTranslationSource.File, "text-QQ-odst");
             Assert.AreEqual("text-QQ-odst", lsQQ);
 
-            var lsEn = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
+            var lsEn = instance.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
 
             Assert.AreEqual("text-2-odst", lsEn.Name);
             Assert.AreEqual("The second paragraph in global dictionary", lsEn.Value);
@@ -128,27 +115,25 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void PerformanceTest()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string>
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
                 {
-                    "en",
-                    "es",
-                    "hu",
-                    "zh",
-                    "cs"
+                    new CultureInfo("en"),
+                    new CultureInfo("es"),
+                    new CultureInfo("hu"),
+                    new CultureInfo("zh"),
+                    new CultureInfo("cs"),
                 },
-                AutoLoadResources = true,
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+                TranslateFallbackMode = LocTranslateFallbackMode.Key,
+                AutoLoadResources = true
             };
-
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             Localization.Init(localizationConfiguration);
 
-            Localization.AttachLogger(new NullLoggerFactory());
+            var instance = Localization.Instance();
 
             var sw = new Stopwatch();
             sw.Start();
@@ -157,13 +142,13 @@ namespace Localization.CoreLibrary.Tests
             {
                 for (var j = 0; j < 50; j++)
                 {
-                    var ls = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst");
-                    var lsQQ = Localization.Translator.Translate(LocTranslationSource.File, "text-qq-odst");
-                    var lsEn = Localization.Translator.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
+                    var ls = instance.Translate(LocTranslationSource.File, "text-2-odst");
+                    var lsQQ = instance.Translate(LocTranslationSource.File, "text-qq-odst");
+                    var lsEn = instance.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
 
-                    var ls2 = Localization.Translator.Translate(LocTranslationSource.File, "text-1-odst");
-                    var ls2QQ = Localization.Translator.Translate(LocTranslationSource.File, "q");
-                    var ls2En = Localization.Translator.Translate(LocTranslationSource.File, "text-5-odst", new CultureInfo("en"));
+                    var ls2 = instance.Translate(LocTranslationSource.File, "text-1-odst");
+                    var ls2QQ = instance.Translate(LocTranslationSource.File, "q");
+                    var ls2En = instance.Translate(LocTranslationSource.File, "text-5-odst", new CultureInfo("en"));
                 }
             }
 
@@ -176,28 +161,28 @@ namespace Localization.CoreLibrary.Tests
         {
             LibDeInit();
 
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string>
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
                 {
-                    "en",
-                    "es",
-                    "hu",
-                    "zh",
-                    "cs"
+                    new CultureInfo("en"),
+                    new CultureInfo("es"),
+                    new CultureInfo("hu"),
+                    new CultureInfo("zh"),
+                    new CultureInfo("cs"),
                 },
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString(),
-                AutoLoadResources = false,
-                FirstAutoTranslateResource = LocTranslationSource.File.ToString()
+                TranslateFallbackMode = LocTranslateFallbackMode.Key,
+                FirstAutoTranslateResource = LocLocalizationResource.File,
+                AutoLoadResources = false
             };
-
-            IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
             Localization.Init(localizationConfiguration);
 
-            var resA = CoreLibrary.Translator.Translator.Translate("ahoj");
+            var instance = Localization.Instance();
+
+            var resA = instance.Translate(LocTranslationSource.Auto, "ahoj");
             Assert.IsTrue(resA.ResourceNotFound);
         }
     }

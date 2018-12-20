@@ -8,7 +8,7 @@ namespace Localization.CoreLibrary.Pluralization
 {
     public class PluralizationInterval
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger m_logger;
 
         private readonly int m_x;
         private readonly int m_y;
@@ -18,15 +18,15 @@ namespace Localization.CoreLibrary.Pluralization
         /// </summary>
         /// <param name="x">Begining of interval (inclusive)</param>
         /// <param name="y">End of interval (inclusive)</param>
-        public PluralizationInterval(int x, int y)
+        public PluralizationInterval(int x, int y, ILogger logger = null)
         {
             if (x > y)
             {
                 var intervalErrorMsg = "The x value should be less or equal than y.";
 
-                if (Logger.IsErrorEnabled())
+                if (logger != null && logger.IsErrorEnabled())
                 {
-                    Logger.LogError(intervalErrorMsg);
+                    logger.LogError(intervalErrorMsg);
                 }
 
                 throw new ArgumentException(intervalErrorMsg);
@@ -34,6 +34,7 @@ namespace Localization.CoreLibrary.Pluralization
 
             m_x = x;
             m_y = y;
+            m_logger = logger;
         }
 
         /// <summary>
@@ -44,9 +45,9 @@ namespace Localization.CoreLibrary.Pluralization
         /// <exception cref="NullReferenceException">Is thrown if obj is null.</exception>
         public bool IsOverlaping(PluralizationInterval obj)
         {
-            Guard.ArgumentNotNull(nameof(obj), obj, Logger);
+            Guard.ArgumentNotNull(nameof(obj), obj, m_logger);
 
-            return this.m_x <= obj.m_y && obj.m_x <= this.m_y;
+            return m_x <= obj.m_y && obj.m_x <= m_y;
         }
 
         public override bool Equals(object obj)
@@ -56,7 +57,7 @@ namespace Localization.CoreLibrary.Pluralization
                 return false;
             }
 
-            if (this.GetType() != obj.GetType())
+            if (GetType() != obj.GetType())
             {
                 return false;
             }

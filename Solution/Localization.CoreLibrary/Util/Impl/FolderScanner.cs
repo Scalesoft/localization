@@ -16,12 +16,13 @@ namespace Localization.CoreLibrary.Util.Impl
 {
     internal class FolderScanner : ILocalizationStructureScanner
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger m_logger;
         private readonly IDictionaryFactory m_dictionaryFactory;
 
-        public FolderScanner(IDictionaryFactory dictionaryFactory)
+        public FolderScanner(IDictionaryFactory dictionaryFactory, ILogger logger = null)
         {
             m_dictionaryFactory = dictionaryFactory;
+            m_logger = logger;
         }
 
         /// <summary>
@@ -34,15 +35,15 @@ namespace Localization.CoreLibrary.Util.Impl
             return Directory.GetDirectories(basePath, "*", SearchOption.AllDirectories);
         }
 
-        private IEnumerable<string> CheckGlobalResourceFiles(IConfiguration libConfiguration)
+        private IEnumerable<string> CheckGlobalResourceFiles(ILocalizationConfiguration libConfiguration)
         {
             IList<string> localizationFiles = new List<string>();
             var exceptionLogStringBuilder = new StringBuilder();
             var shouldThrowException = false;
 
-            var defaultCulture = libConfiguration.DefaultCulture();
+            var defaultCulture = libConfiguration.DefaultCulture;
 
-            var defaultCultureResourceFilePath = Path.Combine(libConfiguration.BasePath(), defaultCulture.Name);
+            var defaultCultureResourceFilePath = Path.Combine(libConfiguration.BasePath, defaultCulture.Name);
             defaultCultureResourceFilePath = string.Concat(defaultCultureResourceFilePath, ".",
                 m_dictionaryFactory.FileExtension);
 
@@ -54,19 +55,19 @@ namespace Localization.CoreLibrary.Util.Impl
             {
                 var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                     defaultCultureResourceFilePath);
-                if (Logger.IsErrorEnabled())
+                if (m_logger != null && m_logger.IsErrorEnabled())
                 {
-                    Logger.LogError(message);
+                    m_logger.LogError(message);
                 }
 
                 exceptionLogStringBuilder.AppendLine(message);
                 shouldThrowException = true;
             }
 
-            foreach (var supportedCulture in libConfiguration.SupportedCultures())
+            foreach (var supportedCulture in libConfiguration.SupportedCultures)
             {
                 var supportedFilePathWithoutExtension =
-                    Path.Combine(libConfiguration.BasePath(), supportedCulture.Name);
+                    Path.Combine(libConfiguration.BasePath, supportedCulture.Name);
                 var supportedcultureFilePath = string.Concat(supportedFilePathWithoutExtension, ".",
                     m_dictionaryFactory.FileExtension);
                 if (File.Exists(supportedcultureFilePath))
@@ -77,9 +78,9 @@ namespace Localization.CoreLibrary.Util.Impl
                 {
                     var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                         supportedcultureFilePath);
-                    if (Logger.IsErrorEnabled())
+                    if (m_logger != null && m_logger.IsErrorEnabled())
                     {
-                        Logger.LogError(message);
+                        m_logger.LogError(message);
                     }
 
                     exceptionLogStringBuilder.AppendLine(message);
@@ -101,7 +102,7 @@ namespace Localization.CoreLibrary.Util.Impl
         /// </summary>
         /// <param name="libConfiguration">Library configuration.</param>
         /// <param name="scopeDirectories">Array with all folders inside localization folder</param>
-        private IEnumerable<string> CheckScopeResourceFiles(IConfiguration libConfiguration, string[] scopeDirectories)
+        private IEnumerable<string> CheckScopeResourceFiles(ILocalizationConfiguration libConfiguration, string[] scopeDirectories)
         {
             IList<string> localizationFiles = new List<string>();
 
@@ -109,7 +110,7 @@ namespace Localization.CoreLibrary.Util.Impl
             var shouldThrowException = false;
             foreach (var scopeDirectory in scopeDirectories)
             {
-                foreach (var supportedCulture in libConfiguration.SupportedCultures())
+                foreach (var supportedCulture in libConfiguration.SupportedCultures)
                 {
                     var currentPath = ConstructResourceFileName(libConfiguration, scopeDirectory, supportedCulture);
                     if (File.Exists(currentPath))
@@ -120,13 +121,17 @@ namespace Localization.CoreLibrary.Util.Impl
                     {
                         var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                             currentPath);
-                        Logger.LogError(message);
+                        if (m_logger != null && m_logger.IsErrorEnabled())
+                        {
+                            m_logger.LogError(message);
+                        }
+
                         exceptionLogStringBuilder.AppendLine(message);
                         shouldThrowException = true;
                     }
                 }
 
-                var defaultPath = ConstructResourceFileName(libConfiguration, scopeDirectory, libConfiguration.DefaultCulture());
+                var defaultPath = ConstructResourceFileName(libConfiguration, scopeDirectory, libConfiguration.DefaultCulture);
                 if (File.Exists(defaultPath))
                 {
                     localizationFiles.Add(defaultPath);
@@ -135,9 +140,9 @@ namespace Localization.CoreLibrary.Util.Impl
                 {
                     var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
                         defaultPath);
-                    if (Logger.IsErrorEnabled())
+                    if (m_logger != null && m_logger.IsErrorEnabled())
                     {
-                        Logger.LogError(message);
+                        m_logger.LogError(message);
                     }
 
                     exceptionLogStringBuilder.AppendLine(message);
@@ -145,10 +150,10 @@ namespace Localization.CoreLibrary.Util.Impl
                 }
             }
 
-            foreach (var supportedCulture in libConfiguration.SupportedCultures())
+            foreach (var supportedCulture in libConfiguration.SupportedCultures)
             {
                 var globalPath = string.Concat(supportedCulture.Name, ".", m_dictionaryFactory.FileExtension);
-                globalPath = Path.Combine(libConfiguration.BasePath(), globalPath);
+                globalPath = Path.Combine(libConfiguration.BasePath, globalPath);
                 if (File.Exists(globalPath))
                 {
                     localizationFiles.Add(globalPath);
@@ -156,9 +161,9 @@ namespace Localization.CoreLibrary.Util.Impl
                 else
                 {
                     var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.", globalPath);
-                    if (Logger.IsErrorEnabled())
+                    if (m_logger != null && m_logger.IsErrorEnabled())
                     {
-                        Logger.LogError(message);
+                        m_logger.LogError(message);
                     }
 
                     exceptionLogStringBuilder.AppendLine(message);
@@ -178,9 +183,9 @@ namespace Localization.CoreLibrary.Util.Impl
         /// Check for resource files base on folders structure in basePath.
         /// </summary>
         /// <param name="libConfiguration">Library configuration.</param>
-        public IList<string> CheckResourceFiles(IConfiguration libConfiguration)
+        public IList<string> CheckResourceFiles(ILocalizationConfiguration libConfiguration)
         {
-            return CheckScopeResourceFiles(libConfiguration, ScanScopeDirectories(libConfiguration.BasePath()))
+            return CheckScopeResourceFiles(libConfiguration, ScanScopeDirectories(libConfiguration.BasePath))
                 .Union(CheckGlobalResourceFiles(libConfiguration)).ToList();
         }
 
@@ -191,17 +196,17 @@ namespace Localization.CoreLibrary.Util.Impl
         /// <param name="directory"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public string ConstructResourceFileName(IConfiguration libConfiguration, string directory, CultureInfo cultureInfo)
+        public string ConstructResourceFileName(ILocalizationConfiguration libConfiguration, string directory, CultureInfo cultureInfo)
         {
-            var cutString = string.Concat(libConfiguration.BasePath(), Path.DirectorySeparatorChar);
+            var cutString = string.Concat(libConfiguration.BasePath, Path.DirectorySeparatorChar);
             var nameBase = directory.Split(new string[] {cutString}, StringSplitOptions.None);
             if (nameBase.Length != 2)
             {
                 var message = string.Format(@"Provided path ""{0}"" is not inside basepath: ""{1}""", directory,
-                    libConfiguration.BasePath());
-                if (Logger.IsErrorEnabled())
+                    libConfiguration.BasePath);
+                if (m_logger != null && m_logger.IsErrorEnabled())
                 {
-                    Logger.LogError(message);
+                    m_logger.LogError(message);
                 }
 
                 throw new DictionaryLoadException(message);

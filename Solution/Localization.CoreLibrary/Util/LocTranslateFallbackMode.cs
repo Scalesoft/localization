@@ -2,9 +2,9 @@
 {
     public enum LocTranslateFallbackMode
     {
-        Null,
-        Key,
-        Exception,
-        EmptyString,
+        Null = 0,
+        Key = 1,
+        Exception = 2,
+        EmptyString = 3,
     }
 }

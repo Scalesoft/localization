@@ -12,7 +12,7 @@ namespace Localization.CoreLibrary.Pluralization
 {
     public class PluralizedString
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private readonly ILogger m_logger;
 
         private readonly ConcurrentDictionary<PluralizationInterval, LocalizedString> m_pluralized;
         private readonly LocalizedString m_defaultLocalizedString;
@@ -21,12 +21,14 @@ namespace Localization.CoreLibrary.Pluralization
         /// Constructor.
         /// </summary>
         /// <param name="defaultLocalizedString">Default Localized string. Used if requested number does not fit in any interval.</param>
+        /// <param name="logger"></param>
         /// <exception cref="ArgumentNullException">If defaultLocalizedString is null.</exception>
-        public PluralizedString(LocalizedString defaultLocalizedString)
+        public PluralizedString(LocalizedString defaultLocalizedString, ILogger logger = null)
         {
-            Guard.ArgumentNotNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
+            Guard.ArgumentNotNull(nameof(defaultLocalizedString), defaultLocalizedString, logger);
 
             m_defaultLocalizedString = defaultLocalizedString;
+            m_logger = logger;
             m_pluralized = new ConcurrentDictionary<PluralizationInterval, LocalizedString>();
         }
 
@@ -62,9 +64,9 @@ namespace Localization.CoreLibrary.Pluralization
             if (CheckOverlaping(pluralizationInterval))
             {
                 var overlapErrorMsg = "Intervals are overlaping in the Pluralized string.";
-                if (Logger.IsErrorEnabled())
+                if (m_logger != null && m_logger.IsErrorEnabled())
                 {
-                    Logger.LogError(overlapErrorMsg);
+                    m_logger.LogError(overlapErrorMsg);
                 }
 
                 throw new PluralizedStringIntervalOverlapException(overlapErrorMsg);
@@ -80,7 +82,7 @@ namespace Localization.CoreLibrary.Pluralization
         /// <returns>True if overlap was found.</returns>
         private bool CheckOverlaping(PluralizationInterval pluralizationInterval)
         {
-            Guard.ArgumentNotNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
+            Guard.ArgumentNotNull(nameof(pluralizationInterval), pluralizationInterval, m_logger);
 
             var pluralizedKeys = m_pluralized.Keys;
             foreach (var pluralizedKey in pluralizedKeys)

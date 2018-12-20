@@ -5,7 +5,7 @@ namespace Localization.CoreLibrary.Util
 {
     public interface ILocalizationStructureBuilder
     {
-        void BuildMissingMembers(IConfiguration configuration);
+        void BuildMissingMembers(ILocalizationConfiguration configuration);
         void BuildMissingMembers(string path, IList<CultureInfo> supportingCultures);
     }
 }
