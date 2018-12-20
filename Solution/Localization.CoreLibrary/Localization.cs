@@ -188,11 +188,6 @@ namespace Localization.CoreLibrary
         /// <param name="filePath">path to file</param>
         public static void AddSingleDictionary(IDictionaryFactory dictionaryFactory, string filePath)
         {
-            if (!IsInstantinated())
-            {
-                throw new LocalizationLibraryException("Localization library is not initialized.");
-            }
-
             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 AddSingleDictionary(dictionaryFactory, fileStream);

@@ -1,3 +1,4 @@
+using Localization.Database.NHibernate.Factory;
 using Localization.Database.NHibernate.Repository;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,11 @@ namespace Localization.Database.NHibernate.IoC
 
             services.AddSingleton<CultureHierarchyUoW>();
             services.AddSingleton<CultureUoW>();
+        }
+        
+        public static void RegisterNHibernateLocalizationComponents(this IServiceCollection services)
+        {
+            services.AddSingleton<DatabaseServiceFactory>();
         }
     }
 }

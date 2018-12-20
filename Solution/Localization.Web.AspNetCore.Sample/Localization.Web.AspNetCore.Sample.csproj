@@ -23,7 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Localization.AspNetCore.Service\Localization.AspNetCore.Service.csproj" />
     <ProjectReference Include="..\Localization.CoreLibrary\Localization.CoreLibrary.csproj" />
-    <ProjectReference Include="..\Localization.Database.EFCore\Localization.Database.EFCore.csproj" />
+    <ProjectReference Include="..\Localization.Database.NHibernate\Localization.Database.NHibernate.csproj" />
   </ItemGroup>
 
   <ItemGroup>

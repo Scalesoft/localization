@@ -4,14 +4,14 @@ using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Util;
+using Localization.Database.NHibernate.Factory;
+using Localization.Database.NHibernate.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Localization.Database.EFCore.Factory;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.Web.AspNetCore.Sample
@@ -35,6 +35,7 @@ namespace Localization.Web.AspNetCore.Sample
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
+            services.RegisterNHibernateLocalizationComponents();
 
             services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
             services.AddScoped<DynamicText>();
@@ -66,10 +67,13 @@ namespace Localization.Web.AspNetCore.Sample
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            var databaseServiceFactory = app.ApplicationServices.GetService<DatabaseServiceFactory>();
+            var jsonDictionaryFactory = app.ApplicationServices.GetService<JsonDictionaryFactory>();
+
             CoreLibrary.Localization.Init(
                 "localizationsettings.json",
-                new DatabaseServiceFactory(options => { options.UseSqlServer(databaseConnectionString); }),
-                new JsonDictionaryFactory()
+                databaseServiceFactory,
+                jsonDictionaryFactory
             );
             AddLocalizationDictionary("cs-CZ.json");
             AddLocalizationDictionary("en.json");
@@ -87,10 +91,8 @@ namespace Localization.Web.AspNetCore.Sample
         private void AddLocalizationDictionary(string fileName)
         {
             var filePath = Path.Combine("OtherLocalization", fileName);
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
-            {
-                CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, fileStream);
-            }
+
+            CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, filePath);
         }
     }
 }
