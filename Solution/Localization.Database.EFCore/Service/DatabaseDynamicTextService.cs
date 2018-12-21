@@ -14,7 +14,7 @@ namespace Localization.Database.EFCore.Service
 {
     public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
     {
-        public DatabaseDynamicTextService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
+        public DatabaseDynamicTextService(Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
         }
@@ -245,7 +245,7 @@ namespace Localization.Database.EFCore.Service
 
             cultureHierarchyDao.MakeCultureSelfReferencing(culture);
 
-            var defaultCultureName = m_configuration.DefaultCulture().Name;
+            var defaultCultureName = m_configuration.DefaultCulture.Name;
             var defaultCulture = cultureDao.FindByName(defaultCultureName);
 
             var cultureInfo = new CultureInfo(culture.Name);

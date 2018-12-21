@@ -12,8 +12,10 @@ namespace Localization.Database.NHibernate.Service
     public class DatabaseDictionaryService : DatabaseServiceBase, IDatabaseDictionaryService
     {
         public DatabaseDictionaryService(
-            ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration
-        ) : base(logger, cultureUoW, configuration)
+            ILocalizationConfiguration configuration,
+            CultureUoW cultureUoW,
+            ILogger logger
+        ) : base(configuration, cultureUoW, logger)
         {
         }
 

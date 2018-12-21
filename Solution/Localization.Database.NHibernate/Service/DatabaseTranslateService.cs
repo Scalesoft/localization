@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Localization.CoreLibrary.Database;
+using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Localization;
@@ -10,10 +11,19 @@ namespace Localization.Database.NHibernate.Service
 {
     public class DatabaseTranslateService : DatabaseServiceBase, IDatabaseTranslateService
     {
+        private readonly FallbackCultureResolver m_fallbackCultureResolver;
+        private readonly CultureHierarchyUoW m_cultureHierarchyUoW;
+
         public DatabaseTranslateService(
-            ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration
-        ) : base(logger, cultureUoW, configuration)
+            FallbackCultureResolver fallbackCultureResolver,
+            CultureHierarchyUoW cultureHierarchyUoW,
+            ILocalizationConfiguration configuration,
+            CultureUoW cultureUoW,
+            ILogger logger
+        ) : base(configuration, cultureUoW, logger)
         {
+            m_fallbackCultureResolver = fallbackCultureResolver;
+            m_cultureHierarchyUoW = cultureHierarchyUoW;
         }
 
         public LocalizedString DatabaseTranslate(string text, CultureInfo cultureInfo, string scope)
@@ -54,8 +64,34 @@ namespace Localization.Database.NHibernate.Service
                     var culture = m_cultureUoW.GetCultureById(id);
 
                     availableCultures.Add(culture);
+                }
+            }
 
-                    //TODO create hierarchy
+            var cultureHierarchies = m_cultureHierarchyUoW.FindAllCultureHierarchies();
+
+            foreach (var availableCulture in availableCultures)
+            {
+                var parentCulture = new CultureInfo(availableCulture.Name);
+
+                byte level = 0;
+                while (parentCulture != null)
+                {
+                    var parentCultureEntity = availableCultures.First(x => x.Name == parentCulture.Name);
+
+                    if (!cultureHierarchies.Any(x =>
+                        x.Culture == availableCulture
+                        && x.ParentCulture == parentCultureEntity
+                    ))
+                    {
+                        m_cultureHierarchyUoW.AddCultureHierarchy(
+                            availableCulture,
+                            parentCultureEntity,
+                            level
+                        );
+                    }
+
+                    level++;
+                    parentCulture = m_fallbackCultureResolver.FallbackCulture(parentCulture);
                 }
             }
         }

@@ -12,8 +12,10 @@ namespace Localization.Database.NHibernate.Service
     public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
     {
         public DatabaseDynamicTextService(
-            ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration
-        ) : base(logger, cultureUoW, configuration)
+            ILocalizationConfiguration configuration,
+            CultureUoW cultureUoW,
+            ILogger logger
+        ) : base(configuration, cultureUoW, logger)
         {
         }
 

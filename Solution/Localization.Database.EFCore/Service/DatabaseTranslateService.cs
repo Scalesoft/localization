@@ -18,7 +18,7 @@ namespace Localization.Database.EFCore.Service
 {
     public sealed class DatabaseTranslateService : DatabaseServiceBase, IDatabaseTranslateService
     {
-        public DatabaseTranslateService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
+        public DatabaseTranslateService(Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
             //Should be empty.
@@ -34,14 +34,14 @@ namespace Localization.Database.EFCore.Service
 
         private async Task CheckCulturesInDatabaseAsync()
         {
-            var supportedCultures = m_configuration.SupportedCultures();
+            var supportedCultures = m_configuration.SupportedCultures;
             foreach (var supportedCulture in supportedCultures)
             {
                 await CreateCultureInDatabase(supportedCulture);
                 await CreateCultureHierarchySelfReference(supportedCulture);
             }
 
-            await CreateCultureHierarchy(supportedCultures, m_configuration.DefaultCulture());
+            await CreateCultureHierarchy(supportedCultures, m_configuration.DefaultCulture);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Localization.Database.EFCore.Service
             }
         }
 
-        private async Task CreateCultureHierarchy(IImmutableList<CultureInfo> supportedCultures, CultureInfo defaultCulture)
+        private async Task CreateCultureHierarchy(IReadOnlyList<CultureInfo> supportedCultures, CultureInfo defaultCulture)
         {
             using (var dbContext = m_dbContextFunc.Invoke())
             {

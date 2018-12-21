@@ -24,22 +24,22 @@ namespace Localization.Database.EFCore.Factory
         {
             return new StaticTextsContext(m_options);
         }
-        
-        public IDatabaseTranslateService CreateTranslateService(IConfiguration configuration, ILoggerFactory loggerFactory)
+
+        public IDatabaseTranslateService CreateTranslateService(ILocalizationConfiguration configuration, ILoggerFactory loggerFactory)
         {
             LogProvider.AttachLoggerFactory(loggerFactory);
 
             return new DatabaseTranslateService(CreateNewDbContext, configuration);
         }
-        
-        public IDatabaseDictionaryService CreateDictionaryService(IConfiguration configuration, ILoggerFactory loggerFactory)
+
+        public IDatabaseDictionaryService CreateDictionaryService(ILocalizationConfiguration configuration, ILoggerFactory loggerFactory)
         {
             LogProvider.AttachLoggerFactory(loggerFactory);
 
             return new DatabaseDictionaryService(CreateNewDbContext, configuration);
         }
 
-        public IDatabaseDynamicTextService CreateDatabaseDynamicTextService(IConfiguration configuration, ILoggerFactory loggerFactory)
+        public IDatabaseDynamicTextService CreateDatabaseDynamicTextService(ILocalizationConfiguration configuration, ILoggerFactory loggerFactory)
         {
             LogProvider.AttachLoggerFactory(loggerFactory);
 

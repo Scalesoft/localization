@@ -6,17 +6,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.NHibernate.Service
 {
-    public class DatabaseServiceBase
+    public abstract class DatabaseServiceBase
     {
         private readonly ILogger m_logger;
         protected readonly CultureUoW m_cultureUoW;
         protected readonly ILocalizationConfiguration m_configuration;
 
-        protected DatabaseServiceBase(ILogger logger, CultureUoW cultureUoW, ILocalizationConfiguration configuration)
+        protected DatabaseServiceBase(
+            ILocalizationConfiguration configuration,
+            CultureUoW cultureUoW,
+            ILogger logger
+        )
         {
-            m_logger = logger;
-            m_cultureUoW = cultureUoW;
             m_configuration = configuration;
+            m_cultureUoW = cultureUoW;
+            m_logger = logger;
         }
 
         public ICulture GetCultureByNameOrGetDefault(string cultureName)

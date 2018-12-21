@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class DatabaseDictionaryManager : ManagerBase, IDatabaseDictionaryManager
+    public class DatabaseDictionaryManager : ManagerBase, IDatabaseDictionaryManager
     {
         private readonly IDatabaseDictionaryService m_dbDictionaryService;
 

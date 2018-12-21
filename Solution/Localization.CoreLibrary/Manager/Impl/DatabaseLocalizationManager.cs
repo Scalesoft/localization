@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class DatabaseLocalizationManager : LocalizationManager, IDatabaseLocalizationManager, IDatabaseDynamicTextService
+    public class DatabaseLocalizationManager : LocalizationManager, IDatabaseLocalizationManager, IDatabaseDynamicTextService
     {
         private readonly IDatabaseTranslateService m_dbTranslateService;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;

@@ -12,9 +12,9 @@ namespace Localization.Database.EFCore.Service
     {
         private readonly ILogger m_logger;
         protected readonly Func<IDatabaseStaticTextContext> m_dbContextFunc;
-        protected readonly IConfiguration m_configuration;
+        protected readonly ILocalizationConfiguration m_configuration;
 
-        protected DatabaseServiceBase(ILogger logger, Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
+        protected DatabaseServiceBase(ILogger logger, Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
         {
             m_logger = logger;
             m_dbContextFunc = dbContext;
@@ -25,7 +25,7 @@ namespace Localization.Database.EFCore.Service
         {
             var cultureDao = new CultureDao(dbContext.Culture);
 
-            var resultCulture = cultureDao.FindByName(cultureName) ?? cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+            var resultCulture = cultureDao.FindByName(cultureName) ?? cultureDao.FindByName(m_configuration.DefaultCulture.Name);
 
             if (resultCulture == null)
             {
@@ -42,7 +42,7 @@ namespace Localization.Database.EFCore.Service
         {
             var cultureDao = new CultureDao(dbContext.Culture);
 
-            var resultCulture = cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+            var resultCulture = cultureDao.FindByName(m_configuration.DefaultCulture.Name);
 
             if (resultCulture == null)
             {

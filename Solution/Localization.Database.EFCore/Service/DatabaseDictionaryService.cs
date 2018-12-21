@@ -17,7 +17,7 @@ namespace Localization.Database.EFCore.Service
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
-        public DatabaseDictionaryService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
+        public DatabaseDictionaryService(Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
             //Should be empty.
