@@ -58,13 +58,15 @@ namespace Localization.Database.NHibernate.Service
 
             foreach (var supportedCulture in supportedCultures)
             {
-                if (availableCultures.All(x => x.Name != supportedCulture.Name))
+                if (availableCultures.Any(x => x.Name == supportedCulture.Name))
                 {
-                    var id = m_cultureUoW.AddCulture(supportedCulture.Name);
-                    var culture = m_cultureUoW.GetCultureById(id);
-
-                    availableCultures.Add(culture);
+                    continue;
                 }
+
+                var id = m_cultureUoW.AddCulture(supportedCulture.Name);
+                var culture = m_cultureUoW.GetCultureById(id);
+
+                availableCultures.Add(culture);
             }
 
             var cultureHierarchies = m_cultureHierarchyUoW.FindAllCultureHierarchies();
@@ -79,8 +81,8 @@ namespace Localization.Database.NHibernate.Service
                     var parentCultureEntity = availableCultures.First(x => x.Name == parentCulture.Name);
 
                     if (!cultureHierarchies.Any(x =>
-                        x.Culture == availableCulture
-                        && x.ParentCulture == parentCultureEntity
+                        x.Culture.Equals(availableCulture)
+                        && x.ParentCulture.Equals(parentCultureEntity)
                     ))
                     {
                         m_cultureHierarchyUoW.AddCultureHierarchy(

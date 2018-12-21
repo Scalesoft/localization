@@ -54,9 +54,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-
-            var resultLocalizedString =
-                m_dbTranslateService.DatabaseTranslateFormat(text, parameters, cultureInfo, scope);
+            var resultLocalizedString = m_dbTranslateService.DatabaseTranslateFormat(text, parameters, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);
@@ -71,8 +69,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-            var resultLocalizedString =
-                m_dbTranslateService.DatabaseTranslatePluralization(text, number, cultureInfo, scope);
+            var resultLocalizedString = m_dbTranslateService.DatabaseTranslatePluralization(text, number, cultureInfo, scope);
             if (resultLocalizedString == null)
             {
                 resultLocalizedString = TranslateFallback(text);

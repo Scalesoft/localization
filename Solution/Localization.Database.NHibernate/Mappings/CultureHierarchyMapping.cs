@@ -18,12 +18,14 @@ namespace Localization.Database.NHibernate.Mappings
             {
                 map.NotNullable(true);
                 map.Class(typeof(CultureEntity));
+                map.Column("Culture");
             });
 
             ManyToOne(x => x.ParentCulture, map =>
             {
                 map.NotNullable(true);
                 map.Class(typeof(CultureEntity));
+                map.Column("ParentCulture");
             });
         }
     }
