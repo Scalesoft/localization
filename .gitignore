@@ -74,3 +74,6 @@ Solution/Localization.Web.AspNetCore.Sample/Migrations/
 
 #NPM
 node_modules/
+
+#Rider
+Solution/.idea
