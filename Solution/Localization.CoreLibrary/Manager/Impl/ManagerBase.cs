@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    public class ManagerBase
+    public abstract class ManagerBase
     {
         protected readonly ILocalizationConfiguration Configuration;
         protected readonly ILogger Logger;
