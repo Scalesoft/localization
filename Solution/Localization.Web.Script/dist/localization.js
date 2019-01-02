@@ -1,4 +1,4 @@
-var Localization = (function () {
+var Localization = /** @class */ (function () {
     function Localization() {
         this.mGlobalScope = "global";
         this.mCultureCookieName = "Localization.Culture";
@@ -104,7 +104,7 @@ var Localization = (function () {
     };
     return Localization;
 }());
-var LocalizationDictionary = (function () {
+var LocalizationDictionary = /** @class */ (function () {
     function LocalizationDictionary(dictionary) {
         this.mDictionary = JSON.parse(dictionary);
     }
@@ -126,7 +126,7 @@ var LocalizationDictionary = (function () {
     };
     return LocalizationDictionary;
 }());
-var LocalizationUtils = (function () {
+var LocalizationUtils = /** @class */ (function () {
     function LocalizationUtils() {
     }
     LocalizationUtils.getCookie = function (name) {
@@ -144,3 +144,5 @@ var LocalizationUtils = (function () {
     };
     return LocalizationUtils;
 }());
+
+//# sourceMappingURL=localization.js.map
