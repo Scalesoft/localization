@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Globalization;
+﻿using System.Globalization;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,15 +10,16 @@ namespace Localization.CoreLibrary.Tests.Util
         [TestMethod]
         public void CheckConfData()
         {
-            string[] supportedCultures = new string[3];
-            supportedCultures[0] = "cs";
-            supportedCultures[1] = "en";
-            supportedCultures[2] = "es";
+            var supportedCultures = new[]
+            {
+                "cs",
+                "en",
+                "es"
+            };
 
-            CultureInfo defaultCulture = new CultureInfo("cs");
+            var defaultCulture = new CultureInfo("cs");
 
-
-            LocalizationConfiguration localizationConfiguration =
+            var localizationConfiguration =
                 new LocalizationConfiguration()
                     .SetBasePath("/localizationfolder")
                     .SetSupportedCultures(supportedCultures)
@@ -28,10 +27,9 @@ namespace Localization.CoreLibrary.Tests.Util
 
             IConfiguration configuration = localizationConfiguration;
 
-
             Assert.AreEqual("/localizationfolder", configuration.BasePath());
 
-            IImmutableList<CultureInfo> takenCulture = configuration.SupportedCultures();
+            var takenCulture = configuration.SupportedCultures();
             Assert.AreEqual(3, takenCulture.Count);
             Assert.AreEqual(new CultureInfo("cs"), takenCulture[0]);
             Assert.AreEqual(new CultureInfo("en"), takenCulture[1]);
@@ -39,7 +37,5 @@ namespace Localization.CoreLibrary.Tests.Util
 
             Assert.AreEqual(new CultureInfo("cs"), configuration.DefaultCulture());
         }
-
-
     }
 }

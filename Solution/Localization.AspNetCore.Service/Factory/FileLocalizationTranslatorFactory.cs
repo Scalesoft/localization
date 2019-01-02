@@ -6,7 +6,7 @@ namespace Localization.AspNetCore.Service.Factory
     {
         public ILocalizationManager Create()
         {
-            return Localization.CoreLibrary.Localization.FileTranslator;
+            return CoreLibrary.Localization.FileTranslator;
         }
     }
 }

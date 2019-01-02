@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
-namespace Localization.CoreLibrary.Util.Impl
+
+namespace Localization.CoreLibrary.Logging
 {
     internal static class LoggingExtensions
     {

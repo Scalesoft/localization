@@ -1,30 +1,29 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
 {
     public sealed class LocalizationService : ServiceBase, ILocalization
-    {       
+    {
         private readonly IAutoLocalizationManager m_localizationManager;
 
         public LocalizationService(IHttpContextAccessor httpContextAccessor)
             : base(httpContextAccessor)
         {
-            m_localizationManager = Localization.CoreLibrary.Localization.Translator;
+            m_localizationManager = CoreLibrary.Localization.Translator;
         }
 
-        private CultureInfo RequestCulture()
+        // TODO there are almost duplicate definitions of this method (LocalizationService, DynamicText, DictionaryService, DatabaseDictionaryManager)
+        public CultureInfo GetRequestCulture()
         {
-            HttpRequest request = HttpContextAccessor.HttpContext.Request;
+            var request = HttpContextAccessor.HttpContext.Request;
 
-            string cultureCookie = request.Cookies[ServiceBase.CultureCookieName];
-            if (cultureCookie == null)
-            {
-                cultureCookie = m_localizationManager.DefaultCulture().Name;
-            }
+            var cultureCookie = request.Cookies[CultureCookieName] ?? m_localizationManager.DefaultCulture().Name;
 
             return new CultureInfo(cultureCookie);
         }
@@ -35,30 +34,44 @@ namespace Localization.AspNetCore.Service
             return m_localizationManager.SupportedCultures();
         }
 
+        public void SetCulture(string culture)
+        {
+            var requestCulture = new RequestCulture(culture);
+            var response = HttpContextAccessor.HttpContext.Response;
+            response.Cookies.Append(
+                CultureCookieName,
+                requestCulture.Culture.Name,
+                new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddYears(1)
+                }
+            );
+        }
+
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.Translate(translationSource, text, requestCulture, scope);
         }
 
         public LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateFormat(translationSource, text, parameters, requestCulture, scope);
         }
 
         public LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslatePluralization(translationSource, text, number, requestCulture, scope);
         }
 
         public LocalizedString TranslateConstant(string text, string scope, LocTranslationSource translationSource)
         {
-            CultureInfo requestCulture = RequestCulture();
+            var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateConstant(translationSource, text, requestCulture, scope);
         }
@@ -89,23 +102,23 @@ namespace Localization.AspNetCore.Service
         //Without scope
         public LocalizedString Translate(string text, LocTranslationSource translationSource)
         {
-            return Translate(text, null, LocTranslationSource.Auto);
+            return Translate(text, null, translationSource);
         }
 
         public LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource)
         {
-            return TranslateFormat(text, parameters, null, LocTranslationSource.Auto);
+            return TranslateFormat(text, parameters, null, translationSource);
         }
 
         public LocalizedString TranslatePluralization(string text, int number,
             LocTranslationSource translationSource)
         {
-            return TranslatePluralization(text, number, null, LocTranslationSource.Auto);
+            return TranslatePluralization(text, number, null, translationSource);
         }
 
         public LocalizedString TranslateConstant(string text, LocTranslationSource translationSource)
         {
-            return TranslateConstant(text, null, LocTranslationSource.Auto);
+            return TranslateConstant(text, null, translationSource);
         }
 
         //Without scope and translationSource = LocTranslationSource.Auto

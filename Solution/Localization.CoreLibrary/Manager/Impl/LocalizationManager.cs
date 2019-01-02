@@ -5,6 +5,7 @@ using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Manager.Impl
 {
     internal abstract class LocalizationManager : ManagerBase

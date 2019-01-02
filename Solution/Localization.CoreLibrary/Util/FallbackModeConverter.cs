@@ -7,7 +7,7 @@ namespace Localization.CoreLibrary.Util
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            LocTranslateFallbackMode translateFallbackMode = (LocTranslateFallbackMode) value;
+            var translateFallbackMode = (LocTranslateFallbackMode) value;
 
             switch (translateFallbackMode)
             {

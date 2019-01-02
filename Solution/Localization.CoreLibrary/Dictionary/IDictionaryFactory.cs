@@ -1,12 +1,20 @@
-﻿namespace Localization.CoreLibrary.Dictionary
+﻿using System.IO;
+
+namespace Localization.CoreLibrary.Dictionary
 {
     public interface IDictionaryFactory
     {
         /// <summary>
-        /// Creates new instnace of ILocalizationDictionary.
+        /// Creates new instance of ILocalizationDictionary.
         /// </summary>
-        /// <returns>New instnace of ILocalizationDictionar</returns>
-        ILocalizationDictionary CreateDictionary();
+        /// <returns>New instance of ILocalizationDictionary</returns>
+        ILocalizationDictionary CreateDictionary(Stream resourceStream);
+
+        /// <summary>
+        /// Creates new instance of ILocalizationDictionary.
+        /// </summary>
+        /// <returns>New instance of ILocalizationDictionary</returns>
+        ILocalizationDictionary CreateDictionary(string filePath);
 
         /// <summary>
         /// Returns resource file extension.

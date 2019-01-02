@@ -1,4 +1,5 @@
-﻿using Localization.CoreLibrary.Util;
+﻿using System;
+using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
@@ -10,25 +11,39 @@ namespace Localization.Database.EFCore.Service
     public abstract class DatabaseServiceBase
     {
         private readonly ILogger m_logger;
-        protected readonly IDatabaseStaticTextContext DbContext;
-        protected readonly IConfiguration Configuration;
+        protected readonly Func<IDatabaseStaticTextContext> m_dbContextFunc;
+        protected readonly IConfiguration m_configuration;
 
-        protected DatabaseServiceBase(ILogger logger, IDatabaseStaticTextContext dbContext, IConfiguration configuration)
+        protected DatabaseServiceBase(ILogger logger, Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
         {
             m_logger = logger;
-            DbContext = dbContext;
-            Configuration = configuration;
+            m_dbContextFunc = dbContext;
+            m_configuration = configuration;
         }
 
-        protected Culture GetCulture(string cultureName)
+        protected Culture GetCultureByNameOrGetDefault(IDatabaseStaticTextContext dbContext, string cultureName)
         {
-            CultureDao cultureDao = new CultureDao(DbContext.Culture);
+            var cultureDao = new CultureDao(dbContext.Culture);
 
-            Culture resultCulture = cultureDao.FindByName(cultureName);
+            var resultCulture = cultureDao.FindByName(cultureName) ?? cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+
             if (resultCulture == null)
             {
-                resultCulture = cultureDao.FindByName(Configuration.DefaultCulture().Name);
+                if (m_logger.IsErrorEnabled())
+                {
+                    m_logger.LogError($"Culture {cultureName} and default culture from library configuration is not in database.");
+                }
             }
+
+            return resultCulture;
+        }
+
+        protected Culture GetDefaultCulture(IDatabaseStaticTextContext dbContext)
+        {
+            var cultureDao = new CultureDao(dbContext.Culture);
+
+            var resultCulture = cultureDao.FindByName(m_configuration.DefaultCulture().Name);
+
             if (resultCulture == null)
             {
                 if (m_logger.IsErrorEnabled())
@@ -40,11 +55,11 @@ namespace Localization.Database.EFCore.Service
             return resultCulture;
         }
 
-        protected DictionaryScope GetDictionaryScope(string scopeName)
+        protected DictionaryScope GetDictionaryScope(IDatabaseStaticTextContext dbContext, string scopeName)
         {
-            DictionaryScopeDao dictionaryScopeDao = new DictionaryScopeDao(DbContext.DictionaryScope);
+            var dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
 
-            DictionaryScope resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
+            var resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
             if (resultDictionaryScope == null)
             {
                 resultDictionaryScope = dictionaryScopeDao.FindByName(CoreLibrary.Localization.DefaultScope);

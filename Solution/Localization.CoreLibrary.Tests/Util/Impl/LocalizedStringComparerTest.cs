@@ -10,11 +10,11 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void EqualsTest()
         {
-            LocalizedString lsA = new LocalizedString("name", "value");
-            LocalizedString lsB = new LocalizedString("name", "value");
+            var lsA = new LocalizedString("name", "value");
+            var lsB = new LocalizedString("name", "value");
 
-            LocalizedStringComparer localizedStringComparer = new LocalizedStringComparer();
-            bool result = localizedStringComparer.Equals(lsA, lsB);
+            var localizedStringComparer = new LocalizedStringComparer();
+            var result = localizedStringComparer.Equals(lsA, lsB);
 
             Assert.IsTrue(result);
         }
@@ -22,8 +22,8 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void EqualsNullTest()
         {
-            LocalizedStringComparer localizedStringComparer = new LocalizedStringComparer();
-            bool result = localizedStringComparer.Equals(null, null);
+            var localizedStringComparer = new LocalizedStringComparer();
+            var result = localizedStringComparer.Equals(null, null);
 
             Assert.IsTrue(result);
         }
@@ -31,12 +31,12 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void NotEqualsNameTest()
         {
-            LocalizedString lsA = new LocalizedString("name", "value");
-            LocalizedString lsB = new LocalizedString("jmeno", "value");
+            var lsA = new LocalizedString("name", "value");
+            var lsB = new LocalizedString("jmeno", "value");
 
 
-            LocalizedStringComparer localizedStringComparer = new LocalizedStringComparer();
-            bool result = localizedStringComparer.Equals(lsA, lsB);
+            var localizedStringComparer = new LocalizedStringComparer();
+            var result = localizedStringComparer.Equals(lsA, lsB);
 
             Assert.IsFalse(result);
         }
@@ -44,12 +44,12 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void NotEqualsValueTest()
         {
-            LocalizedString lsA = new LocalizedString("name", "value");
-            LocalizedString lsB = new LocalizedString("name", "hodnota");
+            var lsA = new LocalizedString("name", "value");
+            var lsB = new LocalizedString("name", "hodnota");
 
 
-            LocalizedStringComparer localizedStringComparer = new LocalizedStringComparer();
-            bool result = localizedStringComparer.Equals(lsA, lsB);
+            var localizedStringComparer = new LocalizedStringComparer();
+            var result = localizedStringComparer.Equals(lsA, lsB);
 
             Assert.IsTrue(result);
         }
@@ -57,12 +57,12 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void NotEqualsNameAndValueTest()
         {
-            LocalizedString lsA = new LocalizedString("name", "value");
-            LocalizedString lsB = new LocalizedString("jmeno", "hodnota");
+            var lsA = new LocalizedString("name", "value");
+            var lsB = new LocalizedString("jmeno", "hodnota");
 
 
-            LocalizedStringComparer localizedStringComparer = new LocalizedStringComparer();
-            bool result = localizedStringComparer.Equals(lsA, lsB);
+            var localizedStringComparer = new LocalizedStringComparer();
+            var result = localizedStringComparer.Equals(lsA, lsB);
 
             Assert.IsFalse(result);
         }
@@ -70,16 +70,14 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void NotEqualsFoundTest()
         {
-            LocalizedString lsA = new LocalizedString("name", "value", true);
-            LocalizedString lsB = new LocalizedString("name", "value", false);
+            var lsA = new LocalizedString("name", "value", true);
+            var lsB = new LocalizedString("name", "value", false);
 
 
-            LocalizedStringComparer localizedStringComparer = new LocalizedStringComparer();
-            bool result = localizedStringComparer.Equals(lsA, lsB);
+            var localizedStringComparer = new LocalizedStringComparer();
+            var result = localizedStringComparer.Equals(lsA, lsB);
 
             Assert.IsTrue(result);
         }
-
-
     }
 }

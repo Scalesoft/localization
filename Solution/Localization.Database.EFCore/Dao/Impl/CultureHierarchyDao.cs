@@ -55,7 +55,7 @@ namespace Localization.Database.EFCore.Dao.Impl
 
         public bool MakeCultureSelfReferencing(Culture culture)
         {
-            CultureHierarchy newCultureHierarchy = Create(new CultureHierarchy()
+            var newCultureHierarchy = Create(new CultureHierarchy()
             {
                 Culture = culture,
                 ParentCulture = culture,

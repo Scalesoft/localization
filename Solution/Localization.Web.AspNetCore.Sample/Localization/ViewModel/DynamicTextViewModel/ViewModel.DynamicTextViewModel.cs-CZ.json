@@ -1,0 +1,8 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "DynamicTextViewModel",
+  "dictionary": {
+    "culture": "Jazyk",
+    "name": "Název" 
+  }
+}

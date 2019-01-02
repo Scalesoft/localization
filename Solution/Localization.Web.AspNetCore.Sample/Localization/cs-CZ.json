@@ -21,7 +21,19 @@
     "Contact-title": "Kontakt",
     "HelloWorld": "Ahoj Světě",
     "login-methods-header": "Metody přihlášení",
-    "text-1-odst": "Lokalizovany text-1-odst"
+    "text-1-odst": "Lokalizovany text-1-odst",
+    "Database": "Databáze",
+    "Save": "Uložit",
+    "Delete": "Smazat",
+    "save-dynamic-text-title": "Uložit dynamický text",
+    "delete-all-dynamic-text-title": "Smazat dynamický text pro všechny cultures",
+    "delete-dynamic-text-title": "Smazat dynamický text pro specifickou culture",
+    "dynamic-text-list-title": "Zobrazit dynamický text",
+    "name": "Název",
+    "text": "Text",
+    "show": "Zobrazit",
+    "result": "Výsledek",
+    "scope": "Scope"
   },"constants": {
     "const-date": "MMMM dd, yyyy",
     "const-time": "hh:mm:ss.f"

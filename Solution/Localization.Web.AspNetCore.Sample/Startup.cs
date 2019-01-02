@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Localization.AspNetCore.Service;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Localization.Database.EFCore.Factory;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.Web.AspNetCore.Sample
@@ -30,20 +33,11 @@ namespace Localization.Web.AspNetCore.Sample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string databaseConnectionString = @"Server=localhost;Database=ITJakubWebDBLocalization;Trusted_Connection=True;";
-
-
-            Localization.CoreLibrary.Localization.Init(
-                @"localizationsettings.json", null,
-                new JsonDictionaryFactory());
-
-            AddLocalizationDictionary("cs-CZ.json");
-            AddLocalizationDictionary("en.json");
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
 
             services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
+            services.AddScoped<DynamicText>();
 
             // Add framework services.
             services.AddMvc()
@@ -52,14 +46,18 @@ namespace Localization.Web.AspNetCore.Sample
                     options.DataAnnotationLocalizerProvider = (type, factory) => factory
                         .Create(type.Name, LocTranslationSource.File.ToString());
                 });
-            }
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            var databaseConnectionString =
+                @"Server=localhost;Database=LocalizationDatabaseEFCore;Trusted_Connection=True;";
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);         
+
+            CoreLibrary.Localization.AttachLogger(loggerFactory);
 
             if (env.IsDevelopment())
             {
@@ -71,7 +69,13 @@ namespace Localization.Web.AspNetCore.Sample
                 app.UseExceptionHandler("/Home/Error");
             }
 
-           
+            CoreLibrary.Localization.Init(
+                @"localizationsettings.json",
+                new DatabaseServiceFactory(options => { options.UseSqlServer(databaseConnectionString); }),
+                new JsonDictionaryFactory());
+            AddLocalizationDictionary("cs-CZ.json");
+            AddLocalizationDictionary("en.json");
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -85,9 +89,9 @@ namespace Localization.Web.AspNetCore.Sample
         private void AddLocalizationDictionary(string fileName)
         {
             var filePath = Path.Combine("OtherLocalization", fileName);
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
             {
-                Localization.CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, fileStream);
+                CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, fileStream);
             }
         }
     }

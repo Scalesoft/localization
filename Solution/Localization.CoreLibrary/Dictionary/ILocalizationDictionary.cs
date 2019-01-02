@@ -9,75 +9,75 @@ namespace Localization.CoreLibrary.Dictionary
     public interface ILocalizationDictionary
     {
         /// <summary>
-        /// Loads dictionary from stream.
-        /// </summary>
-        /// <param name="resourceStream">Resource stream.</param>
-        /// <returns>This instance.</returns>
-        ILocalizationDictionary Load(Stream resourceStream);
-        /// <summary>
-        /// Loads dictionary from file.
-        /// </summary>
-        /// <param name="filePath">Resource file path.</param>
-        /// <returns>This instance.</returns>
-        ILocalizationDictionary Load(string filePath);
-        /// <summary>
         /// Dictionary culture info.
         /// </summary>
         /// <returns>Dictionary culture info.</returns>
         CultureInfo CultureInfo();
+
         /// <summary>
         /// Dictionary scope.
         /// </summary>
         /// <returns>Dictionary scope.</returns>
         string Scope();
+
+        string GetParentScopeName();
+
         /// <summary>
         /// Dictionary resource file extension. e.g "json", "xml".
         /// </summary>
         /// <returns>Resource file extension.</returns>
         string Extension();
+
         /// <summary>
         /// Dictionary.
         /// </summary>
         /// <returns>All key-value strings.</returns>
-        Dictionary<string, LocalizedString> List();
+        IDictionary<string, LocalizedString> List();
+
         /// <summary>
         /// Dictionary.
         /// </summary>
         /// <returns>All pluralized strings.</returns>
-        Dictionary<string, PluralizedString> ListPlurals();
+        IDictionary<string, PluralizedString> ListPlurals();
+
         /// <summary>
         /// Dictionary
         /// </summary>
         /// <returns>All special constant strings.</returns>
-        Dictionary<string, LocalizedString> ListConstants();
-            /// <summary>
-        /// Parent dictionary based on culture hierarchy.
+        IDictionary<string, LocalizedString> ListConstants();
+
+        /// <summary>
+        /// Parent dictionary based on culture.
         /// </summary>
         /// <returns>Parent dictionary.</returns>
         ILocalizationDictionary ParentDictionary();
+
         /// <summary>
-        /// Child dictionary based on culture hierarchy.
+        /// Child dictionary based on culture.
         /// </summary>
         /// <returns>Child dictionary.</returns>
-        ILocalizationDictionary ChildDictionary();
+        IList<ILocalizationDictionary> ChildDictionaries { get; }
+
         /// <summary>
         /// Sets parent dictionary for this.
         /// </summary>
         /// <param name="parentDictionary"></param>
         /// <returns>False if parent dictionary is already set.</returns>
         bool SetParentDictionary(ILocalizationDictionary parentDictionary);
+
         /// <summary>
         /// Set child dictionary for this.
         /// </summary>
         /// <param name="childDictionary">Child dictionary.</param>
         /// <returns>False if child dictionary is already set.</returns>
-        bool SetChildDictionary(ILocalizationDictionary childDictionary);
+        void SetChildDictionary(ILocalizationDictionary childDictionary);
+
         /// <summary>
-        /// Dictionary is leaf if it hasn't any child dictionaries in dictionary hieararchy.
+        /// Dictionary is leaf if it hasn't any child dictionaries in dictionary hierarchy.
         /// </summary>
         /// <returns>True if this dictionary is leaf in hierarchy.</returns>
         bool IsLeaf();
 
-        bool IsRoot { get; set; }
+        bool IsRoot { get; }
     }
 }

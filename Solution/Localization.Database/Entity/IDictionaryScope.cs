@@ -2,7 +2,7 @@
 {
     public interface IDictionaryScope
     {
-        int Id { get;}
+        int Id { get; }
         string Name { get; }
     }
 }

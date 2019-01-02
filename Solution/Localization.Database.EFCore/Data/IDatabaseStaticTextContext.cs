@@ -1,9 +1,10 @@
-﻿using Localization.Database.EFCore.Entity;
+﻿using System;
+using Localization.Database.EFCore.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Localization.Database.EFCore.Data
 {
-    public interface IDatabaseStaticTextContext
+    public interface IDatabaseStaticTextContext : IDisposable
     {
         DbSet<Culture> Culture { get; set; }
         DbSet<CultureHierarchy> CultureHierarchy { get; set; }
@@ -13,5 +14,6 @@ namespace Localization.Database.EFCore.Data
         DbSet<IntervalText> IntervalText { get; set; }
         DbSet<PluralizedStaticText> PluralizedStaticText { get; set; }
         DbSet<StaticText> StaticText { get; set; }
+        int SaveChanges();
     }
 }

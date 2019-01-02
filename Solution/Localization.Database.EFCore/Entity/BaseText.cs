@@ -15,7 +15,7 @@ namespace Localization.Database.EFCore.Entity
 
         [Required]
         [Column(TypeName = "smallint")]
-        public Int16 Format { get; set; }
+        public short Format { get; set; }
 
         [Required]
         [Column(TypeName = "datetime")]

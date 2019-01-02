@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Manager.Impl
 {
     internal class NullDatabaseLocalizationManager : ILocalizationManager
@@ -24,6 +25,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
         {
             LogNotSet();
+
             return null;
         }
 
@@ -31,6 +33,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             string scope = null)
         {
             LogNotSet();
+
             return null;
         }
 
@@ -38,24 +41,28 @@ namespace Localization.CoreLibrary.Manager.Impl
             string scope = null)
         {
             LogNotSet();
+
             return null;
         }
 
         public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
         {
             LogNotSet();
+
             return null;
         }
 
         public CultureInfo DefaultCulture()
         {
             LogNotSet();
+
             return null;
         }
 
         public string DefaultScope()
         {
             LogNotSet();
+
             return null;
         }
     }

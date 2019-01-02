@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using Localization.CoreLibrary.Common;
@@ -13,7 +14,7 @@ namespace Localization.CoreLibrary.Pluralization
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
-        private readonly Dictionary<PluralizationInterval, LocalizedString> m_pluralized;
+        private readonly ConcurrentDictionary<PluralizationInterval, LocalizedString> m_pluralized;
         private readonly LocalizedString m_defaultLocalizedString;
 
         /// <summary>
@@ -25,8 +26,8 @@ namespace Localization.CoreLibrary.Pluralization
         {
             Guard.ArgumentNotNull(nameof(defaultLocalizedString), defaultLocalizedString, Logger);
 
-            m_defaultLocalizedString = defaultLocalizedString; 
-            m_pluralized = new Dictionary<PluralizationInterval, LocalizedString>();
+            m_defaultLocalizedString = defaultLocalizedString;
+            m_pluralized = new ConcurrentDictionary<PluralizationInterval, LocalizedString>();
         }
 
         /// <summary>
@@ -36,16 +37,16 @@ namespace Localization.CoreLibrary.Pluralization
         /// <returns>Pluralized string or default string if not found.</returns>
         public LocalizedString GetPluralizedLocalizedString(int number)
         {
-            PluralizationInterval pluralizationKey = new PluralizationInterval(number, number);
+            var pluralizationKey = new PluralizationInterval(number, number);
 
-            foreach (KeyValuePair<PluralizationInterval, LocalizedString> pluralizedLocalizedString in m_pluralized)
+            foreach (var pluralizedLocalizedString in m_pluralized)
             {
                 if (pluralizedLocalizedString.Key.Equals(pluralizationKey))
                 {
                     return pluralizedLocalizedString.Value;
                 }
             }
-           
+
             return m_defaultLocalizedString;
         }
 
@@ -60,16 +61,16 @@ namespace Localization.CoreLibrary.Pluralization
         {
             if (CheckOverlaping(pluralizationInterval))
             {
-                string overlapErrorMsg = "Intervals are overlaping in the Pluralized string.";
+                var overlapErrorMsg = "Intervals are overlaping in the Pluralized string.";
                 if (Logger.IsErrorEnabled())
                 {
                     Logger.LogError(overlapErrorMsg);
                 }
 
                 throw new PluralizedStringIntervalOverlapException(overlapErrorMsg);
-            }        
+            }
 
-            m_pluralized.Add(pluralizationInterval, localizedString);
+            m_pluralized.TryAdd(pluralizationInterval, localizedString);
         }
 
         /// <summary>
@@ -81,8 +82,8 @@ namespace Localization.CoreLibrary.Pluralization
         {
             Guard.ArgumentNotNull(nameof(pluralizationInterval), pluralizationInterval, Logger);
 
-            Dictionary<PluralizationInterval, LocalizedString>.KeyCollection pluralizedKeys = m_pluralized.Keys;
-            foreach (PluralizationInterval pluralizedKey in pluralizedKeys)
+            var pluralizedKeys = m_pluralized.Keys;
+            foreach (var pluralizedKey in pluralizedKeys)
             {
                 if (pluralizedKey.IsOverlaping(pluralizationInterval))
                 {
@@ -92,6 +93,5 @@ namespace Localization.CoreLibrary.Pluralization
 
             return false;
         }
-
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
-using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
@@ -17,66 +17,75 @@ namespace Localization.Database.EFCore.Service
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
-        public DatabaseDictionaryService(IDatabaseStaticTextContext dbContext, IConfiguration configuration)
+        public DatabaseDictionaryService(Func<IDatabaseStaticTextContext> dbContext, IConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
             //Should be empty.
         }
 
-        public Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo, string scope)
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo, string scope)
         {
-            Culture culture = GetCulture(cultureInfo.Name);
-            DictionaryScope dictionaryScope = GetDictionaryScope(scope);
-
-            StaticTextDao staticTextDao = new StaticTextDao(DbContext.StaticText);
-            StaticText[] result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-            Dictionary<string, LocalizedString> resultDictionary = new Dictionary<string, LocalizedString>();
-            foreach (StaticText singleStaticText in result)
+            using (var dbContext = m_dbContextFunc.Invoke())
             {
-                resultDictionary.Add(singleStaticText.Name, new LocalizedString(singleStaticText.Name, singleStaticText.Text, false));
-            }
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
 
-            return resultDictionary;
-        }
-
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope)
-        {
-            Culture culture = GetCulture(cultureInfo.Name);
-            DictionaryScope dictionaryScope = GetDictionaryScope(scope);
-
-            PluralizedStaticTextDao pluralizedStaticTextDao = new PluralizedStaticTextDao(DbContext.PluralizedStaticText);
-            PluralizedStaticText[] result = pluralizedStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-            Dictionary<string, PluralizedString> resultDictionary = new Dictionary<string, PluralizedString>();
-            foreach (PluralizedStaticText singleplPluralizedStaticText in result)
-            {
-                PluralizedString pluralizedString = new PluralizedString(new LocalizedString(singleplPluralizedStaticText.Name,
-                    singleplPluralizedStaticText.Text, false));
-                foreach (IntervalText intervalText in singleplPluralizedStaticText.IntervalTexts)
+                var staticTextDao = new StaticTextDao(dbContext.StaticText);
+                var result = staticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultDictionary = new Dictionary<string, LocalizedString>();
+                foreach (var singleStaticText in result)
                 {
-                    pluralizedString.Add(new PluralizationInterval(intervalText.IntervalStart, intervalText.IntervalEnd)
-                        , new LocalizedString(singleplPluralizedStaticText.Name, intervalText.Text));
+                    resultDictionary.Add(singleStaticText.Name, new LocalizedString(singleStaticText.Name, singleStaticText.Text, false));
                 }
 
-                resultDictionary.Add(singleplPluralizedStaticText.Name, pluralizedString);
+                return resultDictionary;
             }
-
-            return resultDictionary;
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope)
         {
-            Culture culture = GetCulture(cultureInfo.Name);
-            DictionaryScope dictionaryScope = GetDictionaryScope(scope);
-
-            ConstantStaticTextDao constantStaticTextDao = new ConstantStaticTextDao(DbContext.ConstantStaticText);
-            ConstantStaticText[] result = constantStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-            Dictionary<string, LocalizedString> resultDictionary = new Dictionary<string, LocalizedString>();
-            foreach (ConstantStaticText singleConstantStaticText in result)
+            using (var dbContext = m_dbContextFunc.Invoke())
             {
-                resultDictionary.Add(singleConstantStaticText.Name, new LocalizedString(singleConstantStaticText.Name, singleConstantStaticText.Text, false));
-            }
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
 
-            return resultDictionary;
+                var pluralizedStaticTextDao = new PluralizedStaticTextDao(dbContext.PluralizedStaticText);
+                var result = pluralizedStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultDictionary = new Dictionary<string, PluralizedString>();
+                foreach (var singleplPluralizedStaticText in result)
+                {
+                    var pluralizedString = new PluralizedString(new LocalizedString(singleplPluralizedStaticText.Name,
+                        singleplPluralizedStaticText.Text, false));
+                    foreach (var intervalText in singleplPluralizedStaticText.IntervalTexts)
+                    {
+                        pluralizedString.Add(new PluralizationInterval(intervalText.IntervalStart, intervalText.IntervalEnd)
+                            , new LocalizedString(singleplPluralizedStaticText.Name, intervalText.Text));
+                    }
+
+                    resultDictionary.Add(singleplPluralizedStaticText.Name, pluralizedString);
+                }
+
+                return resultDictionary;
+            }
+        }
+
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope)
+        {
+            using (var dbContext = m_dbContextFunc.Invoke())
+            {
+                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
+                var dictionaryScope = GetDictionaryScope(dbContext, scope);
+
+                var constantStaticTextDao = new ConstantStaticTextDao(dbContext.ConstantStaticText);
+                var result = constantStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultDictionary = new Dictionary<string, LocalizedString>();
+                foreach (var singleConstantStaticText in result)
+                {
+                    resultDictionary.Add(singleConstantStaticText.Name, new LocalizedString(singleConstantStaticText.Name, singleConstantStaticText.Text, false));
+                }
+
+                return resultDictionary;
+            }
         }
     }
 }

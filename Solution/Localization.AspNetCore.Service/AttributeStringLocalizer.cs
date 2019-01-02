@@ -68,15 +68,14 @@ namespace Localization.AspNetCore.Service
         ///     Culture filter method.
         /// </summary>
         /// <param name="cultureInfo">Culture info</param>
-        /// <returns>If cultureInfo param is not null, paramater value is returned. Else CultureInfo from cookie.</returns>
+        /// <returns>If cultureInfo param is not null, parameter value is returned. Else CultureInfo from cookie.</returns>
         private CultureInfo RequestCulture(CultureInfo cultureInfo = null)
         {
             if (cultureInfo != null) return cultureInfo;
 
-            HttpRequest request = m_httpContextAccessor.HttpContext.Request;
+            var request = m_httpContextAccessor.HttpContext.Request;
 
-            string cultureCookie = request.Cookies[CultureCookieName];
-            if (cultureCookie == null) cultureCookie = m_dictionaryManager.DefaultCulture().Name;
+            var cultureCookie = request.Cookies[CultureCookieName] ?? m_dictionaryManager.DefaultCulture().Name;
 
             return new CultureInfo(cultureCookie);
         }

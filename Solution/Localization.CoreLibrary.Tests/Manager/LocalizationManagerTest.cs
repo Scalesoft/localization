@@ -1,13 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Dictionary.Impl;
-using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Manager.Impl;
 using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
-using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Localization.CoreLibrary.Tests.Manager
@@ -18,22 +13,23 @@ namespace Localization.CoreLibrary.Tests.Manager
         [TestMethod]
         public void TranslateFormatTest()
         {
-            LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
-            configuration.BasePath = @"localization";
-            configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
+            var configuration = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "Localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"en", "es"},
+                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+            };
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            FileDictionaryManager dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            ILocalizationDictionary[] loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-            dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
+            var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
+            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
 
-            FileLocalizationManager fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
-            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
+            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
 
-            LocalizedString ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new []{"pondělí"}, new CultureInfo(configuration.DefaultCulture), "global");
+            var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new object[] {"pondělí"},
+                new CultureInfo(configuration.DefaultCulture), "global");
 
             Assert.AreEqual("Dnes je pondělí.", ls.Value);
         }
@@ -41,26 +37,25 @@ namespace Localization.CoreLibrary.Tests.Manager
         [TestMethod]
         public void TranslateConstant()
         {
-            LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
-            configuration.BasePath = @"localizationTree";
-            configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en" };
-            configuration.TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString();
+            var configuration = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "LocalizationTree",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"en"},
+                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+            };
 
             IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
 
-            FileDictionaryManager dictionaryManager = new FileDictionaryManager(localizationConfiguration);
-            ILocalizationDictionary[] loadedDictionaries = dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
-            dictionaryManager.BuildDictionaryHierarchyTrees(loadedDictionaries);
+            var dictionaryManager = new FileDictionaryManager(localizationConfiguration);
+            dictionaryManager.AutoLoadDictionaries(JsonDictionaryFactory.FactoryInstance);
 
-            FileLocalizationManager fileLocalizationManager = new FileLocalizationManager(localizationConfiguration);
-            fileLocalizationManager.AddDictionaryManager(dictionaryManager);
+            var fileLocalizationManager = new FileLocalizationManager(localizationConfiguration, dictionaryManager);
 
-            LocalizedString ls = fileLocalizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
+            var ls = fileLocalizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
 
             Assert.AreEqual("MMMM dd, yyyy", ls.Value);
             Assert.IsFalse(ls.ResourceNotFound);
         }
-
     }
 }

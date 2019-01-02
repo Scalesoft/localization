@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
@@ -29,9 +28,9 @@ namespace Localization.CoreLibrary.Translator
             return Localization.Translator.TranslateConstant(LocTranslationSource.Database, text, cultureInfo, scope);
         }
 
-        public static Dictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public static IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            Dictionary<string, LocalizedString> result = Localization.Dictionary.GetDictionary(LocTranslationSource.Database, cultureInfo, scope);
+            var result = Localization.Dictionary.GetDictionary(LocTranslationSource.Database, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -40,10 +39,10 @@ namespace Localization.CoreLibrary.Translator
             return result;
         }
 
-        public static Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
+        public static IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            Dictionary<string, LocalizedString> result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.Database, cultureInfo, scope);
+            var result = Localization.Dictionary.GetConstantsDictionary(LocTranslationSource.Database, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, LocalizedString>();
@@ -52,10 +51,10 @@ namespace Localization.CoreLibrary.Translator
             return result;
         }
 
-        public static Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
+        public static IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
             string scope = null)
         {
-            Dictionary<string, PluralizedString> result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.Database, cultureInfo, scope);
+            var result = Localization.Dictionary.GetPluralizedDictionary(LocTranslationSource.Database, cultureInfo, scope);
             if (result == null)
             {
                 result = new Dictionary<string, PluralizedString>();

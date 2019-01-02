@@ -1,139 +1,198 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Impl;
-using Localization.CoreLibrary.Logging;
+using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Manager.Impl
 {
-    internal class FileDictionaryManager : IDictionaryManager
+    internal class FileDictionaryManager : ManagerBase, IDictionaryManager
     {
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private const string UnknownCultureException = "Unknown culture {0} with scope {1}";
+
+        private const string GlobalScope = "global";
 
         private readonly IConfiguration m_configuration;
-        private HashSet<ILocalizationDictionary> m_dictionaries;
+
+        private readonly ISet<ILocalizationDictionary> m_dictionaries;
+        private readonly IDictionary<CultureInfo, ISet<ILocalizationDictionary>> m_dictionariesPerCulture;
+        private readonly IDictionary<CultureInfo, CultureInfo> m_cultureFallback;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="configuration">Library configuration.</param>
-        public FileDictionaryManager(IConfiguration configuration)
+        public FileDictionaryManager(IConfiguration configuration) : base(configuration)
         {
             m_configuration = configuration;
-        }
+            m_dictionaries = new HashSet<ILocalizationDictionary>();
+            m_dictionariesPerCulture = new Dictionary<CultureInfo, ISet<ILocalizationDictionary>>();
+            m_cultureFallback = new Dictionary<CultureInfo, CultureInfo>();
 
-        /// <summary>
-        /// Returns HashSet with ALL loaded dictionaries.
-        /// </summary>
-        public HashSet<ILocalizationDictionary> Dictionaries
-        {
-            get { return m_dictionaries; }
+            m_dictionariesPerCulture.Add(DefaultCulture(), new HashSet<ILocalizationDictionary>());
+            foreach (var supportedCulture in m_configuration.SupportedCultures())
+            {
+                if (!m_dictionariesPerCulture.ContainsKey(supportedCulture))
+                {
+                    m_dictionariesPerCulture.Add(supportedCulture, new HashSet<ILocalizationDictionary>());
+                }
+            }
+
+            foreach (var cultureInfo in m_dictionariesPerCulture.Keys)
+            {
+                var parentCulture = cultureInfo.Parent;
+
+                if (
+                    parentCulture.Equals(CultureInfo.InvariantCulture)
+                    || !m_dictionariesPerCulture.Keys.Contains(parentCulture)
+                )
+                {
+                    parentCulture = DefaultCulture();
+                }
+
+                if (!cultureInfo.Equals(parentCulture))
+                {
+                    m_cultureFallback.Add(cultureInfo, parentCulture);
+                }
+            }
         }
 
         /// <summary>
         /// Automatically loads dictionary files based on folder structure in basePath (specified in library config).
         /// </summary>
         /// <param name="dictionaryFactory">Dictionary factory.</param>
-        /// <returns>Array with loaded dictionaries.</returns>
-        public ILocalizationDictionary[] AutoLoadDictionaries(IDictionaryFactory dictionaryFactory)
+        public void AutoLoadDictionaries(IDictionaryFactory dictionaryFactory)
         {
-            IList<string> localizationFilesToLoad = CheckResourceFiles(m_configuration, dictionaryFactory);
+            var localizationFilesToLoad = CheckResourceFiles(m_configuration, dictionaryFactory);
 
-            ILocalizationDictionary[] loadedDictionaries = new ILocalizationDictionary[localizationFilesToLoad.Count];
-            for (int i = 0; i < loadedDictionaries.Length; i++)
+            foreach (var loadedDictionary in localizationFilesToLoad)
             {
-                loadedDictionaries[i] = dictionaryFactory.CreateDictionary().Load(localizationFilesToLoad[i]);
+                AddDictionaryToHierarchyTreesWithoutBuildTree(dictionaryFactory.CreateDictionary(loadedDictionary));
             }
 
-            return loadedDictionaries;
+            BuildDictionaryHierarchyTrees();
         }
 
         /// <summary>
-        /// Check for resource files base on folders structure in basePath. 
+        /// Check for resource files base on folders structure in basePath.
         /// </summary>
-        /// <param name="configuration">Libary configuration.</param>
+        /// <param name="configuration">Library configuration.</param>
+        /// <param name="dictionaryFactory"></param>
         /// <returns>List of resource files to load.</returns>
-        private IList<string> CheckResourceFiles(IConfiguration configuration, IDictionaryFactory dictionaryFactory)
+        private IEnumerable<string> CheckResourceFiles(IConfiguration configuration, IDictionaryFactory dictionaryFactory)
         {
-            FolderScanner fs = new FolderScanner(dictionaryFactory);
+            var fs = new FolderScanner(dictionaryFactory);
             return fs.CheckResourceFiles(configuration);
         }
 
-        /// <summary>
-        /// From provided dictionary instances builds hiararchical trees.
-        /// </summary>
-        /// <param name="dictionaries">Loaded dictionaries.</param>
-        public void BuildDictionaryHierarchyTrees(ILocalizationDictionary[] dictionaries)
+        public void AddDictionaryToHierarchyTrees(ILocalizationDictionary dictionary)
         {
-            m_dictionaries = new HashSet<ILocalizationDictionary>();
+            AddDictionaryToHierarchyTreesWithoutBuildTree(dictionary);
 
-            foreach (ILocalizationDictionary localizationDictionary in dictionaries)
+            BuildDictionaryHierarchyTrees(m_dictionariesPerCulture[dictionary.CultureInfo()], dictionary);
+        }
+
+        private void AddDictionaryToHierarchyTreesWithoutBuildTree(ILocalizationDictionary dictionary)
+        {
+            m_dictionaries.Add(dictionary);
+
+            if (!m_dictionariesPerCulture.Keys.Contains(dictionary.CultureInfo()))
             {
-                if (!localizationDictionary.CultureInfo().IsNeutralCulture && localizationDictionary.CultureInfo().Name != m_configuration.DefaultCulture().Name)
-                {
-                    //Neni neutral a neni default;
-                    m_dictionaries.Add(localizationDictionary);
-                }
+                throw new DictionaryLoadException(string.Format(UnknownCultureException, dictionary.CultureInfo(), dictionary.Scope()));
             }
-            foreach (ILocalizationDictionary localizationDictionary in dictionaries)               
+
+            m_dictionariesPerCulture[dictionary.CultureInfo()].Add(dictionary);
+        }
+
+        private void BuildDictionaryHierarchyTrees()
+        {
+            foreach (var dictionaries in m_dictionariesPerCulture)
             {
-                foreach (ILocalizationDictionary nonNeutralDictionary in m_dictionaries)
-                {
-                    if (nonNeutralDictionary.Scope().Equals(localizationDictionary.Scope()))
-                    {
-                        if (nonNeutralDictionary.CultureInfo().Parent.Equals(localizationDictionary.CultureInfo()))
-                        {
-                            nonNeutralDictionary.SetParentDictionary(localizationDictionary);
-                        }
-                        else if (localizationDictionary.CultureInfo().Equals(m_configuration.DefaultCulture()))
-                        {
-                            nonNeutralDictionary.SetParentDictionary(localizationDictionary);
-                        }
-                    }                   
-                }
-                m_dictionaries.Add(localizationDictionary);
+                BuildDictionaryHierarchyTrees(dictionaries.Value);
             }
         }
 
-        public Dictionary<string,LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
+        /// <summary>
+        /// From provided dictionary instances builds hierarchical trees.
+        /// </summary>
+        private void BuildDictionaryHierarchyTrees(ISet<ILocalizationDictionary> dictionaries)
+        {
+            var global = dictionaries.FirstOrDefault(d => d.Scope() == GlobalScope);
+
+            foreach (var cultureDictionary in dictionaries)
+            {
+                if (
+                    cultureDictionary.ParentDictionary() != null
+                    || Equals(cultureDictionary, global)
+                )
+                {
+                    continue;
+                }
+
+                var parentScope = string.IsNullOrEmpty(cultureDictionary.GetParentScopeName())
+                    ? null
+                    : dictionaries.FirstOrDefault(d => d.Scope() == cultureDictionary.GetParentScopeName());
+
+                cultureDictionary.SetParentDictionary(
+                    parentScope ?? global
+                );
+            }
+        }
+
+        private void BuildDictionaryHierarchyTrees(ISet<ILocalizationDictionary> dictionaries, ILocalizationDictionary dictionary)
+        {
+            if (dictionary.Scope() == GlobalScope)
+            {
+                return;
+            }
+
+            var parentScope = string.IsNullOrEmpty(dictionary.GetParentScopeName())
+                ? null
+                : dictionaries.FirstOrDefault(d => d.Scope() == dictionary.GetParentScopeName());
+
+            dictionary.SetParentDictionary(
+                parentScope ?? dictionaries.FirstOrDefault(d => d.Scope() == GlobalScope)
+            );
+        }
+
+        public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).List();
         }
 
-        public Dictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
         }
 
-        public Dictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
         }
 
-        public CultureInfo DefaultCulture()
+        public CultureInfo FallbackCulture(CultureInfo cultureInfo)
         {
-            return m_configuration.DefaultCulture();
-        }
+            if (m_cultureFallback.TryGetValue(cultureInfo, out var fallbackCulture))
+            {
+                return fallbackCulture;
+            }
 
-        public string DefaultScope()
-        {
-            return Localization.DefaultScope;
+            return null;
         }
 
         public ILocalizationDictionary GetLocalizationDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             if (scope == null)
             {
-                scope = Localization.DefaultScope;
+                scope = DefaultScope();
             }
 
             return GetScopedDictionary(cultureInfo, scope);
@@ -141,47 +200,36 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         private ILocalizationDictionary GetScopedDictionary(CultureInfo cultureInfo, string scope)
         {
-            if (m_dictionaries == null)
-            {
-                m_dictionaries = new HashSet<ILocalizationDictionary>();
-            }
-
-            ILocalizationDictionary result = null;
+            ILocalizationDictionary result;
             if (IsCultureSupported(cultureInfo)) //return scoped dictionary in requested culture (if scope exists)
-            {              
-                result = m_dictionaries.FirstOrDefault(w => w.CultureInfo().Equals(cultureInfo) && w.Scope().Equals(scope));
+            {
+                result = m_dictionariesPerCulture[cultureInfo].FirstOrDefault(
+                    w => w.Scope().Equals(scope)
+                );
             }
             else
             {
                 //return scoped dictionary in default culture
-                result = m_dictionaries.FirstOrDefault(w => w.CultureInfo().Equals(m_configuration.DefaultCulture()) && w.Scope().Equals(scope)); 
+                result = m_dictionariesPerCulture[DefaultCulture()].FirstOrDefault(
+                    w => w.Scope().Equals(scope)
+                );
             }
 
-            if (result == null)
-            {
-                return new EmptyLocalizationDictionary();
-            }
-
-            return result;
+            return result ?? new EmptyLocalizationDictionary();
         }
 
 
         /// <summary>
-        /// Resturns true if given culture is default culture or it is in supported cultures.
+        /// Returns true if given culture is default culture or it is in supported cultures.
         /// </summary>
         /// <param name="cultureInfo">Culture to check</param>
         /// <returns>
-        /// Resturns true if given culture is default culture or it is in supported cultures.
+        /// Returns true if given culture is default culture or it is in supported cultures.
         /// If given culture is null method returns false.
         /// </returns>
         public bool IsCultureSupported(CultureInfo cultureInfo)
         {
-            if (m_configuration.DefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures().Contains(cultureInfo))
-            {
-                return true;
-            }
-
-            return false;
+            return DefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures().Contains(cultureInfo);
         }
     }
 }

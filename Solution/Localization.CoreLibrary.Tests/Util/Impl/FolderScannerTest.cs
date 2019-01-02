@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Logging;
@@ -16,42 +15,42 @@ namespace Localization.CoreLibrary.Tests.Util.Impl
         [TestMethod]
         public void CheckScopeResourceFilesTest()
         {
-            LocalizationConfiguration.Configuration product =
-                new LocalizationConfiguration.Configuration
-                {
-                    BasePath = @"localization",
-                    DefaultCulture = "cs",
-                    SupportedCultures = new List<string> {"cs", "en", "es"},
-                };
+            var product = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "Localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"cs", "en", "es"},
+            };
 
             Localization.AttachLogger(new LoggerFactory());
 
             IConfiguration configuration = new LocalizationConfiguration(product);
 
-            FolderScanner folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
+            var folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
             folderScanner.CheckResourceFiles(configuration);
         }
 
         [TestMethod]
         public void ConstructResourceFileName()
         {
-            LocalizationConfiguration.Configuration product =
-                new LocalizationConfiguration.Configuration
-                {
-                    BasePath = @"localization",
-                    DefaultCulture = "cs",
-                    SupportedCultures = new List<string> { "cs", "en", "es" },
-                };
+            var product = new LocalizationConfiguration.Configuration
+            {
+                BasePath = "Localization",
+                DefaultCulture = "cs",
+                SupportedCultures = new List<string> {"cs", "en", "es"},
+            };
 
             Localization.AttachLogger(new LoggerFactory());
 
             IConfiguration configuration = new LocalizationConfiguration(product);
 
-            FolderScanner folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
-            string fileName = folderScanner.ConstructResourceFileName(configuration, Path.Combine("localization", "slovniky"), new CultureInfo("cs"));
+            var folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
+            var fileName = folderScanner.ConstructResourceFileName(
+                configuration, Path.Combine("Localization", "slovniky"), new CultureInfo("cs")
+            );
 
 
-            Assert.AreEqual("localization\\slovniky\\slovniky.cs.json", fileName);
+            Assert.AreEqual(@"Localization\slovniky\slovniky.cs.json", fileName);
         }
     }
 }

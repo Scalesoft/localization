@@ -1,0 +1,12 @@
+{
+  "BasePath": "Localization",
+  "SupportedCultures": [
+    "cs",
+    "en",
+    "es"
+  ],
+  "DefaultCulture": "cs",
+  "TranslationFallbackMode": "",
+  "AutoLoadResources": true,
+  "FirstAutoTranslateResource": ""
+}

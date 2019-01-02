@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using Localization.CoreLibrary.Util;
+﻿using System.Globalization;
 using Localization.CoreLibrary.Util.Impl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,10 +10,10 @@ namespace Localization.CoreLibrary.Tests.Util
         [TestMethod]
         public void TestConfigurationReader()
         {
-            JsonConfigurationReader configurationReader = new JsonConfigurationReader("localization.json.config");
-            IConfiguration configuration = configurationReader.ReadConfiguration();
+            var configurationReader = new JsonConfigurationReader("localization.config.json");
+            var configuration = configurationReader.ReadConfiguration();
 
-            Assert.AreEqual(@"localization", configuration.BasePath());
+            Assert.AreEqual("Localization", configuration.BasePath());
 
             Assert.AreEqual(3, configuration.SupportedCultures().Count);
             Assert.AreEqual(new CultureInfo("cs"), configuration.SupportedCultures()[0]);
@@ -26,6 +22,5 @@ namespace Localization.CoreLibrary.Tests.Util
 
             Assert.AreEqual(new CultureInfo("cs"), configuration.DefaultCulture());
         }
-
     }
 }

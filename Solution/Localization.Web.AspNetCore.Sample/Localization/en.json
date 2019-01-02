@@ -15,6 +15,18 @@
     "Login-submit": "Login",
     "RegisterAccount": "Register Account",
     "login-methods-header": "Login methods",
-    "text-1-odst": "Localized text-1-odst"
+    "text-1-odst": "Localized text-1-odst",
+    "Database": "Database",
+    "Save": "Save",
+    "Delete": "Delete",
+    "save-dynamic-text-title": "Save Dynamic Text",
+    "delete-all-dynamic-text-title": "Delete Dynamic Text for all cultures",
+    "delete-dynamic-text-title": "Delete Dynamic Text for a specific culture",
+    "dynamic-text-list-title": "Show Dynamic Text",
+    "name": "Name",
+    "text": "Text",
+    "show": "Show",
+    "result": "Result",
+    "scope": "Scope"
   }
 }

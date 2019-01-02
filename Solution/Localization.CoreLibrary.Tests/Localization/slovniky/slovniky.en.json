@@ -1,0 +1,7 @@
+﻿{
+    "culture": "en",
+    "scope": "slovniky",
+    "dictionary": {
+        "informace-1-odst": "I had to parse JSON into key value pairs recently. The key would be the path of the JSON property. Consider the following JSON:"
+    }
+}

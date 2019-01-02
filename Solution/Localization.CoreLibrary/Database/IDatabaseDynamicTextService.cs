@@ -1,11 +1,16 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Localization.CoreLibrary.Entity;
+using Localization.CoreLibrary.Models;
 
 namespace Localization.CoreLibrary.Database
 {
     public interface IDatabaseDynamicTextService
     {
         DynamicText GetDynamicText(string name, string scope, CultureInfo cultureInfo);
-        DynamicText SaveDynamicText(DynamicText dynamicText);
+        IList<DynamicText> GetAllDynamicText(string name, string scope);
+        DynamicText SaveDynamicText(DynamicText dynamicText, IfDefaultNotExistAction actionForDefaultCulture = IfDefaultNotExistAction.DoNothing);
+        void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo);
+        void DeleteAllDynamicText(string name, string scope);
     }
 }

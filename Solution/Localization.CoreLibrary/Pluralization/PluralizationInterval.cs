@@ -22,7 +22,7 @@ namespace Localization.CoreLibrary.Pluralization
         {
             if (x > y)
             {
-                string intervalErrorMsg = "The x value should be less or equal than y.";
+                var intervalErrorMsg = "The x value should be less or equal than y.";
 
                 if (Logger.IsErrorEnabled())
                 {
@@ -55,11 +55,13 @@ namespace Localization.CoreLibrary.Pluralization
             {
                 return false;
             }
+
             if (this.GetType() != obj.GetType())
             {
                 return false;
             }
-            PluralizationInterval pluralizationInterval = (PluralizationInterval) obj;
+
+            var pluralizationInterval = (PluralizationInterval) obj;
 
             return IsOverlaping(pluralizationInterval);
         }

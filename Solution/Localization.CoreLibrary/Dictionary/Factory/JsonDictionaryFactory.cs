@@ -1,4 +1,4 @@
-﻿
+﻿using System.IO;
 using Localization.CoreLibrary.Dictionary.Impl;
 
 namespace Localization.CoreLibrary.Dictionary.Factory
@@ -7,9 +7,16 @@ namespace Localization.CoreLibrary.Dictionary.Factory
     {
         string IDictionaryFactory.FileExtension => JsonLocalizationDictionary.JsonExtension;
 
-        public ILocalizationDictionary CreateDictionary()
+        public ILocalizationDictionary CreateDictionary(string filePath)
         {
-            return new JsonLocalizationDictionary();
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                return new JsonLocalizationDictionary(fileStream, filePath);
+            }
+        }
+        public ILocalizationDictionary CreateDictionary(Stream resourceStream)
+        {
+            return new JsonLocalizationDictionary(resourceStream);
         }
 
         public static IDictionaryFactory FactoryInstance => new JsonDictionaryFactory();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -6,20 +7,28 @@ using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+
 namespace Localization.CoreLibrary.Dictionary.Impl
 {
     internal class EmptyLocalizationDictionary : ILocalizationDictionary
     {
         public const string EmptyExtension = ""; //Should be empty.
 
-        public ILocalizationDictionary Load(Stream resourceStream)
+        public bool IsRoot => false;
+
+        public IList<ILocalizationDictionary> ChildDictionaries { get; }
+
+        public EmptyLocalizationDictionary()
         {
-            return this;
+            ChildDictionaries = new List<ILocalizationDictionary>();
         }
 
-        public ILocalizationDictionary Load(string filePath)
+        public EmptyLocalizationDictionary(Stream resourceStream) : this()
         {
-            return this;
+        }
+
+        public EmptyLocalizationDictionary(Stream resourceStream, string filePath) : this(resourceStream)
+        {
         }
 
         public CultureInfo CultureInfo()
@@ -32,32 +41,32 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return string.Empty;
         }
 
+        public string GetParentScopeName()
+        {
+            return string.Empty;
+        }
+
         public string Extension()
         {
             return string.Empty;
         }
 
-        public Dictionary<string, LocalizedString> List()
+        public IDictionary<string, LocalizedString> List()
         {
-            return new Dictionary<string, LocalizedString>();
+            return new ConcurrentDictionary<string, LocalizedString>();
         }
 
-        public Dictionary<string, PluralizedString> ListPlurals()
+        public IDictionary<string, PluralizedString> ListPlurals()
         {
-            return new Dictionary<string, PluralizedString>();
+            return new ConcurrentDictionary<string, PluralizedString>();
         }
 
-        public Dictionary<string, LocalizedString> ListConstants()
+        public IDictionary<string, LocalizedString> ListConstants()
         {
-            return new Dictionary<string, LocalizedString>();
+            return new ConcurrentDictionary<string, LocalizedString>();
         }
 
         public ILocalizationDictionary ParentDictionary()
-        {
-            return null;
-        }
-
-        public ILocalizationDictionary ChildDictionary()
         {
             return null;
         }
@@ -67,16 +76,13 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return false;
         }
 
-        public bool SetChildDictionary(ILocalizationDictionary childDictionary)
+        public void SetChildDictionary(ILocalizationDictionary childDictionary)
         {
-            return false;
         }
 
         public bool IsLeaf()
         {
-            return false;
+            return ChildDictionaries.Count == 0;
         }
-
-        bool ILocalizationDictionary.IsRoot { get; set; }
     }
 }

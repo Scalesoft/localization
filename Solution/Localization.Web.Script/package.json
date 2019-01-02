@@ -1,0 +1,26 @@
+{
+  "version": "1.1.0",
+  "name": "scalesoft-localization-web",
+  "description": "A JavaScript client-side library for Scalesoft localization framework.",
+  "license": "LGPL-3.0",
+  "author": "Scalesoft s.r.o.",
+  "main": "dist/localization.js",
+  "types": "dist/localization.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Scalesoft/localization.git"
+  },
+  "files": [
+    "dist/",
+    "package.json"
+  ],
+  "devDependencies": {
+    "typescript": "2.0.3",
+    "gulp": "3.9.1",
+    "gulp-typescript": "3.0.2",
+    "gulp-sourcemaps": "1.6.0",
+    "gulp-uglify": "1.5.4",
+    "rimraf": "2.5.4",
+    "event-stream": "3.3.4"
+  }
+}
