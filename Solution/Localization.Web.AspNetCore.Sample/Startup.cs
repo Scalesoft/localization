@@ -54,9 +54,6 @@ namespace Localization.Web.AspNetCore.Sample
             var databaseConnectionString =
                 @"Server=localhost;Database=LocalizationDatabaseEFCore;Trusted_Connection=True;";
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             CoreLibrary.Localization.AttachLogger(loggerFactory);
 
             if (env.IsDevelopment())

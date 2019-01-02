@@ -10,29 +10,29 @@
 <h3>@ViewData["Message"]</h3>
 
 <section id="loginForm">
-    @using (Html.BeginForm("About", "Login", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Login", "Login", new { returnUrl = ViewData["ReturnUrl"] }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
     {
         <h4>@Localizer.Translate("Login-text","main.contact")</h4>
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="form-group">
-                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                        @Html.LabelFor(m => m.Input.UserName, new { @class = "col-md-3 control-label" })
                         <div class="col-md-8">
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.Input.UserName, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                        @Html.LabelFor(m => m.Input.Password, new { @class = "col-md-3 control-label" })
                         <div class="col-md-8">
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            @Html.PasswordFor(m => m.Input.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Input.Password, "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-3 col-md-9">
                             <div class="checkbox">
-                                @Html.CheckBoxFor(m => m.RememberMe)
-                                @Html.LabelFor(m => m.RememberMe)
+                                @Html.CheckBoxFor(m => m.Input.RememberMe)
+                                @Html.LabelFor(m => m.Input.RememberMe)
                             </div>
                         </div>
                     </div>
@@ -45,6 +45,9 @@
             @Html.ActionLink(Localizer.Translate("RegisterAccount", "global"), "", "", new { returnUrl = ViewData["ReturnUrl"] }, new { })
         </p>
         <p>
+            @ViewData["username"]<br/>
+            @ViewData["password"]<br/>
+
             @Localizer.Translate("General", "other")
         </p>
                     @* Enable this once you have account confirmation enabled for password reset functionality

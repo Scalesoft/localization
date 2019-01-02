@@ -2,20 +2,18 @@
 using Localization.AspNetCore.Service;
 using Localization.CoreLibrary.Logging;
 using Localization.Web.AspNetCore.Sample.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
-    public class HomeController : LoginController
+    public class HomeController : Controller
     {
         private readonly ILocalization m_localizationManager;
         private readonly IDictionary m_dictionaryManager;
-        private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
+        private static readonly ILogger m_logger = LogProvider.GetCurrentClassLogger();
 
         public HomeController(ILocalization localizationManager, IDictionary dictionaryManager)
         {
@@ -44,32 +42,23 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/Login
-        [AllowAnonymous]
-        //[RequireHttps]
-        public IActionResult Login(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
         public IActionResult About()
         {
             return View();
         }
 
 
-        public IActionResult Contact()
+        public IActionResult Contact(LoginViewModel viewModel)
         {
-            var usernameTranslated = m_localizationManager.Translate("UserName", "LoginViewModel");
-            var passwordTranslated = m_localizationManager.Translate("Password");
+            var usernameLabel = m_localizationManager.Translate("UserName", "LoginViewModel");
+            var passwordLabel = m_localizationManager.Translate("Password");
 
             //return JsonConvert.SerializeObject(m_dictionaryManager.GetDictionary("home"), Formatting.Indented);
             //return Json(m_dictionaryManager.GetDictionary("home"));
-            ViewData["username"] = usernameTranslated;
-            ViewData["password"] = passwordTranslated;
-            return View(new LoginViewModel {UserName = usernameTranslated, Password = passwordTranslated});
+            ViewData["username"] = usernameLabel;
+            ViewData["password"] = passwordLabel;
+
+            return View(viewModel);
         }
 
         public IActionResult Error()

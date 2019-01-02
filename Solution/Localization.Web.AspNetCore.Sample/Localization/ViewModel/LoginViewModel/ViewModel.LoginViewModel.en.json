@@ -1,6 +1,6 @@
 ﻿{
   "culture": "en",
-  "scope": "LoginViewModel",
+  "scope": "InputModel",
   "dictionary": {
     "RememberMe": "Remember me",
     "UserName": "Username",
