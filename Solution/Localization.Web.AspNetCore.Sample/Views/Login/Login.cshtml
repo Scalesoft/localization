@@ -9,7 +9,7 @@
 }
 <div class="row login">
     <h2>@Localizer.Translate("login-heading")</h2>
-    <partial name="_ValidationSummary" />
+    @*<partial name="_ValidationSummary" />*@
     <form asp-route="Login">
         <input type="hidden" asp-for="ReturnUrl" />
         <input type="hidden" value="@Localizer.Translate("invalid-code")" id="wrong-code-message" />
