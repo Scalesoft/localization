@@ -4,7 +4,7 @@
     <section id="saveDynamicTextForm">
         @using (Html.BeginForm("DeleteAllDynamicText", "Database", new {returnUrl = ViewData["ReturnUrl"]}, FormMethod.Post, true, new {@class = "form-horizontal", role = "form"}))
     {
-        <h4>@Localizer.Translate("save-dynamic-text-title")</h4>
+        <h4>@Localizer.Translate("delete-all-dynamic-text-title")</h4>
         <hr />
         @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         <div class="form-group">
