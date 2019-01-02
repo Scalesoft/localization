@@ -1,6 +1,6 @@
 ﻿{
   "culture": "cs-CZ",
-  "scope": "LoginViewModel",
+  "scope": "InputModel",
   "dictionary": {
     "RememberMe": "Zapamatovat si me",
     "UserName": "Uživatelské jméno",

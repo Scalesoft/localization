@@ -10,9 +10,11 @@
     "SingOut": "Sign out",
     "SignIn": "Sign in",
     "SignUp": "Sign up",
+    "Cancel": "Cancel",
     "Login-text": "Login",
     "Login-submit": "Login",
     "RegisterAccount": "Register Account",
+    "login-methods-header": "Login methods",
     "text-1-odst": "Localized text-1-odst"
   }
 }
