@@ -8,6 +8,8 @@ namespace Localization.CoreLibrary.Models
     {
         public string BasePath { get; set; }
 
+        public string DefaultScope { get; set; } = "global";
+
         public IReadOnlyList<CultureInfo> SupportedCultures { get; set; }
 
         public CultureInfo DefaultCulture { get; set; }

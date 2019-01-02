@@ -7,6 +7,8 @@ namespace Localization.CoreLibrary.Util
     {
         string BasePath { get; }
 
+        string DefaultScope { get; }
+
         IReadOnlyList<CultureInfo> SupportedCultures { get; }
 
         CultureInfo DefaultCulture { get; }

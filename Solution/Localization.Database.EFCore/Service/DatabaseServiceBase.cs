@@ -62,13 +62,13 @@ namespace Localization.Database.EFCore.Service
             var resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
             if (resultDictionaryScope == null)
             {
-                resultDictionaryScope = dictionaryScopeDao.FindByName(CoreLibrary.Localization.DefaultScope);
+                resultDictionaryScope = dictionaryScopeDao.FindByName(m_configuration.DefaultScope);
             }
             if (resultDictionaryScope == null)
             {
                 if (m_logger.IsErrorEnabled())
                 {
-                    m_logger.LogError(@"Default dictionary scope ""{0}"" from library configuration is not in database.", CoreLibrary.Localization.DefaultScope);
+                    m_logger.LogError(@"Default dictionary scope ""{0}"" from library configuration is not in database.", m_configuration.DefaultScope);
                 }
             }
 

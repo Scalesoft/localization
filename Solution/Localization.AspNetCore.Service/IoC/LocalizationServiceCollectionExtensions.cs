@@ -1,4 +1,4 @@
-using Localization.AspNetCore.Service.Factory;
+﻿using Localization.AspNetCore.Service.Factory;
 using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Dictionary;
@@ -44,8 +44,8 @@ namespace Localization.AspNetCore.Service.IoC
             services.AddTransient<IDatabaseDictionaryManager, NullDatabaseDictionaryManager>();
             services.AddTransient<IDatabaseDynamicTextService, NullDatabaseDynamicTextService>();
 
-            services.AddTransient<IAutoDictionaryManager, CoreLibrary.Localization>();
-            services.AddTransient<IAutoLocalizationManager, CoreLibrary.Localization>();
+            services.AddTransient<IAutoDictionaryManager, CoreLibrary.DictionaryManager>();
+            services.AddTransient<IAutoLocalizationManager, CoreLibrary.LocalizationManager>();
 
             services.AddTransient<FallbackCultureResolver>();
         }

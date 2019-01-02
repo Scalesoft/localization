@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -10,7 +8,6 @@ using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
@@ -20,19 +17,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary
 {
+    [Obsolete("CoreLibrary.Localization is obsolete, use CoreLibrary.DictionaryManager or CoreLibrary.LocalizationManager inestead.")]
     public class Localization : IAutoLocalizationManager, IAutoDictionaryManager
     {
-        private readonly ILogger m_logger;
-
-        public const string DefaultScope = "global";
-
-        private readonly ILocalizationConfiguration m_configuration;
-
-        private readonly Dictionary<LocTranslationSource, ILocalizationManager> m_localizationManagers
-            = new Dictionary<LocTranslationSource, ILocalizationManager>();
-
-        private readonly Dictionary<LocTranslationSource, IDictionaryManager> m_dictionaryManagers
-            = new Dictionary<LocTranslationSource, IDictionaryManager>();
+        private readonly DictionaryManager m_dictionaryManager;
+        private readonly LocalizationManager m_localizationManager;
 
         /// <summary>
         /// [Deprecated use IoC]
@@ -141,13 +130,23 @@ namespace Localization.CoreLibrary
                 fallbackCultureResolver
             );
 
-            m_instance = new Lazy<Localization>(() => new Localization(
+            var autoLocalizationManager = new LocalizationManager(
                 configuration,
                 databaseLocalizationManager,
-                databaseDictionaryManager,
-                dictionaryManager,
                 fileLocalizationManager,
                 loggerFactory
+            );
+
+            var autoDictionaryManager = new DictionaryManager(
+                configuration,
+                databaseDictionaryManager,
+                dictionaryManager,
+                loggerFactory
+            );
+
+            m_instance = new Lazy<Localization>(() => new Localization(
+                autoLocalizationManager,
+                autoDictionaryManager
             ));
         }
 
@@ -180,91 +179,12 @@ namespace Localization.CoreLibrary
         }
 
         public Localization(
-            ILocalizationConfiguration configuration,
-            IDatabaseLocalizationManager databaseLocalizationManager,
-            IDatabaseDictionaryManager databaseDictionaryManager,
-            IFileDictionaryManager fileDictionaryManager,
-            IFileLocalizationManager fileLocalizationManager,
-            ILoggerFactory loggerFactory = null
+            LocalizationManager localizationManager,
+            DictionaryManager dictionaryManager
         )
         {
-            if (loggerFactory == null)
-            {
-                loggerFactory = new NullLoggerFactory();
-            }
-
-            m_logger = loggerFactory.CreateLogger<Localization>();
-
-            CheckConfiguration(configuration);
-            m_configuration = configuration;
-
-            m_localizationManagers.Add(LocTranslationSource.Database, databaseLocalizationManager);
-            m_dictionaryManagers.Add(LocTranslationSource.Database, databaseDictionaryManager);
-
-            m_localizationManagers.Add(LocTranslationSource.File, fileLocalizationManager);
-            m_dictionaryManagers.Add(LocTranslationSource.File, fileDictionaryManager);
-
-            ILocalizationManager autoLocalizationManager = new AutoLocalizationManager(
-                m_localizationManagers[LocTranslationSource.File],
-                databaseLocalizationManager,
-                configuration
-            );
-
-            IDictionaryManager autoDictionaryManager = new AutoDictionaryManager(
-                m_dictionaryManagers[LocTranslationSource.File],
-                databaseDictionaryManager,
-                configuration
-            );
-
-            m_localizationManagers.Add(LocTranslationSource.Auto, autoLocalizationManager);
-            m_dictionaryManagers.Add(LocTranslationSource.Auto, autoDictionaryManager);
-        }
-
-        /// <summary>
-        /// Checks if configuration is valid.
-        /// </summary>
-        /// <param name="configuration">Configuration to check.</param>
-        private void CheckConfiguration(ILocalizationConfiguration configuration)
-        {
-            if (!configuration.SupportedCultures.Contains(configuration.DefaultCulture))
-            {
-                const string defaultCultureErrorMsg = "Default language in configuration is not in supported languages.";
-                var localizationLibraryException = new LocalizationLibraryException(defaultCultureErrorMsg);
-
-                if (m_logger != null && m_logger.IsErrorEnabled())
-                {
-                    m_logger.LogError(defaultCultureErrorMsg, localizationLibraryException);
-                }
-
-                throw localizationLibraryException;
-            }
-        }
-
-        /// <summary>
-        /// Adds single specified dictionary from file.
-        /// </summary>
-        /// <param name="dictionaryFactory">Implementation of IDictionaryFactory</param>
-        /// <param name="filePath">path to file</param>
-        public void AddSingleDictionary(IDictionaryFactory dictionaryFactory, string filePath)
-        {
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                AddSingleDictionary(dictionaryFactory, fileStream);
-            }
-        }
-
-        /// <summary>
-        /// Adds single specified dictionary from stream.
-        /// </summary>
-        /// <param name="dictionaryFactory">Implementation of IDictionaryFactory</param>
-        /// <param name="resourceStream">stream</param>
-        public void AddSingleDictionary(IDictionaryFactory dictionaryFactory, Stream resourceStream)
-        {
-            var dictionaryManager = (FileDictionaryManager) m_dictionaryManagers[LocTranslationSource.File];
-
-            dictionaryManager.AddDictionaryToHierarchyTrees(
-                dictionaryFactory.CreateDictionary(resourceStream)
-            );
+            m_localizationManager = localizationManager;
+            m_dictionaryManager = dictionaryManager;
         }
 
         /// <summary>
@@ -292,112 +212,61 @@ namespace Localization.CoreLibrary
 
         public CultureInfo[] SupportedCultures()
         {
-            return m_configuration.SupportedCultures.ToArray();
+            return m_localizationManager.SupportedCultures();
         }
 
         public CultureInfo DefaultCulture()
         {
-            return m_configuration.DefaultCulture;
+            return m_localizationManager.DefaultCulture();
         }
 
         public LocalizedString Translate(
             LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetLocalizationManager(translationSource).Translate(text, cultureInfo, scope);
-
-            return FallbackFilter(text, result);
+            return m_localizationManager.Translate(translationSource, text, cultureInfo, scope);
         }
 
         public LocalizedString TranslateFormat(
             LocTranslationSource translationSource, string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);
-
-            return FallbackFilter(text, result);
+            return m_localizationManager.TranslateFormat(translationSource, text, parameters, cultureInfo, scope);
         }
-
 
         public LocalizedString TranslatePluralization(
             LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetLocalizationManager(translationSource).TranslatePluralization(text, number, cultureInfo, scope);
-
-            return FallbackFilter(text, result);
+            return m_localizationManager.TranslatePluralization(translationSource, text,number, cultureInfo, scope);
         }
 
         public LocalizedString TranslateConstant(
             LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetLocalizationManager(translationSource).TranslateConstant(text, cultureInfo, scope);
-
-            return FallbackFilter(text, result);
+            return m_localizationManager.TranslateConstant(translationSource, text, cultureInfo, scope);
         }
 
         public IDictionary<string, LocalizedString> GetDictionary(
             LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetDictionaryManager(translationSource).GetDictionary(cultureInfo, scope);
-
-            return result;
+            return m_dictionaryManager.GetDictionary(translationSource, cultureInfo, scope);
         }
 
         public IDictionary<string, PluralizedString> GetPluralizedDictionary(
             LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetDictionaryManager(translationSource).GetPluralizedDictionary(cultureInfo, scope);
-
-            return result;
+            return m_dictionaryManager.GetPluralizedDictionary(translationSource, cultureInfo, scope);
         }
 
         public IDictionary<string, LocalizedString> GetConstantsDictionary(
             LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetDictionaryManager(translationSource).GetConstantsDictionary(cultureInfo, scope);
-
-            return result;
-        }
-
-        private ILocalizationManager GetLocalizationManager(LocTranslationSource translationSource)
-        {
-            return m_localizationManagers[translationSource];
-        }
-
-        private IDictionaryManager GetDictionaryManager(LocTranslationSource translationSource)
-        {
-            return m_dictionaryManagers[translationSource];
-        }
-
-        private LocalizedString FallbackFilter(string text, LocalizedString stringToFilter)
-        {
-            if (stringToFilter == null)
-            {
-                return TranslateFallback(text, m_configuration.TranslateFallbackMode);
-            }
-
-            return stringToFilter;
-        }
-
-        private LocalizedString TranslateFallback(string text, LocTranslateFallbackMode translateFallbackMode)
-        {
-            switch (translateFallbackMode)
-            {
-                case LocTranslateFallbackMode.Key:
-                    return new LocalizedString(text, text, true);
-                case LocTranslateFallbackMode.Exception:
-                    var errorMessage = string.Format("String with key {0} was not found.", text);
-                    throw new TranslateException(errorMessage);
-                case LocTranslateFallbackMode.EmptyString:
-                    return new LocalizedString(text, "", true);
-                default:
-                    throw new LocalizationLibraryException("Unspecified fallback mode in library configuration");
-            }
+            return m_dictionaryManager.GetConstantsDictionary(translationSource, cultureInfo, scope);
         }
     }
 }

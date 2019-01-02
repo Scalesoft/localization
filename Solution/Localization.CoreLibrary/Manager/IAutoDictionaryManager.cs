@@ -18,5 +18,6 @@ namespace Localization.CoreLibrary.Manager
             CultureInfo cultureInfo = null, string scope = null);
 
         CultureInfo DefaultCulture();
+        CultureInfo[] SupportedCultures();
     }
 }

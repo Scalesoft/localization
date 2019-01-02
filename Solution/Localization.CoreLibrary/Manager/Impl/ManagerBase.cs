@@ -42,7 +42,7 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public string DefaultScope()
         {
-            return Localization.DefaultScope;
+            return Configuration.DefaultScope;
         }
     }
 }
