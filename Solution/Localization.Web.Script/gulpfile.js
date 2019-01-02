@@ -1,16 +1,39 @@
-﻿var gulp = require("gulp");
-var ts = require("gulp-typescript");
-var eventStream = require('event-stream');
-var tsProject = ts.createProject("tsconfig.json");
+﻿const gulp = require("gulp");
+const ts = require("gulp-typescript");
+const sourcemaps = require("gulp-sourcemaps");
+const uglify = require('gulp-uglify');
+const dest = require('gulp-dest');
 
-gulp.task("build:ts", function () {
-    var tsResult = tsProject.src()
-        .pipe(tsProject());
+const tsProject = () => {
+	const tsProjectPipe = ts.createProject("tsconfig.json");
 
-    return eventStream.merge(
-        tsResult.dts.pipe(gulp.dest('dist')),
-        tsResult.js.pipe(gulp.dest("dist"))
-    );
-});
+	return tsProjectPipe.src()
+		.pipe(sourcemaps.init())
+		.pipe(tsProjectPipe());
+};
 
-gulp.task("default", ["build:ts"]);
+gulp.task("build:ts", () =>
+	tsProject().js
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest("dist"))
+);
+
+gulp.task("build:dts", () =>
+	tsProject().dts.pipe(gulp.dest("dist"))
+);
+
+gulp.task("minify:js", () =>
+	gulp.src(["dist/*.js", "!dist/*.min.js"])
+		.pipe(uglify())
+		.pipe(dest({ext: '.min.js'}))
+		.pipe(gulp.dest('./dist'))
+);
+
+
+gulp.task("default", gulp.parallel([
+	gulp.series([
+		"build:ts",
+		"minify:js",
+	]),
+	"build:dts",
+]));
