@@ -1,4 +1,5 @@
-﻿using Localization.AspNetCore.Service.Factory;
+using Localization.AspNetCore.Service.Factory;
+using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -28,6 +29,7 @@ namespace Localization.AspNetCore.Service.IoC
             );
 
             services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
+            services.AddSingleton<RequestCultureManager>();
 
             services.AddTransient<ILocalization, LocalizationService>();
             services.AddTransient<IDictionary, DictionaryService>();

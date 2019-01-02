@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Http;
@@ -13,41 +14,39 @@ namespace Localization.AspNetCore.Service
     /// </summary>
     public class AttributeStringLocalizer : IStringLocalizer
     {
-        private const string CultureCookieName = "Localization.Culture";
-
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
         private readonly string m_baseName;
+        private readonly RequestCultureManager m_requestCultureManager;
         private readonly IAutoDictionaryManager m_dictionaryManager;
 
-        private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly LocTranslationSource m_location;
 
         private CultureInfo m_currentCultureInfo;
 
         private AttributeStringLocalizer(
+            RequestCultureManager requestCultureManager,
             IAutoDictionaryManager dictionaryManager,
-            IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
             string baseName,
             LocTranslationSource location,
             CultureInfo cultureInfo
         )
         {
+            m_requestCultureManager = requestCultureManager;
             m_dictionaryManager = dictionaryManager;
             m_baseName = baseName;
             m_location = location;
-            m_httpContextAccessor = httpContextAccessor;
             m_autoLocalizationManager = autoLocalizationManager;
             m_currentCultureInfo = cultureInfo;
         }
 
         public AttributeStringLocalizer(
+            RequestCultureManager requestCultureManager,
             IAutoDictionaryManager dictionaryManager,
-            IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
             string baseName,
             LocTranslationSource location
-        ) : this(dictionaryManager, httpContextAccessor, autoLocalizationManager, baseName, location, null)
+        ) : this(requestCultureManager, dictionaryManager, autoLocalizationManager, baseName, location, null)
         {
             //Should be empty
         }
@@ -60,7 +59,8 @@ namespace Localization.AspNetCore.Service
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
             return new AttributeStringLocalizer(
-                m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager, m_baseName, m_location, culture
+                m_requestCultureManager, m_dictionaryManager,
+                m_autoLocalizationManager, m_baseName, m_location, culture
             );
         }
 
@@ -76,15 +76,9 @@ namespace Localization.AspNetCore.Service
         /// </summary>
         /// <param name="cultureInfo">Culture info</param>
         /// <returns>If cultureInfo param is not null, parameter value is returned. Else CultureInfo from cookie.</returns>
-        private CultureInfo RequestCulture(CultureInfo cultureInfo = null)
+        private CultureInfo RequestCulture()
         {
-            if (cultureInfo != null) return cultureInfo;
-
-            var request = m_httpContextAccessor.HttpContext.Request;
-
-            var cultureCookie = request.Cookies[CultureCookieName] ?? m_dictionaryManager.DefaultCulture().Name;
-
-            return new CultureInfo(cultureCookie);
+            return m_requestCultureManager.ResolveRequestCulture(m_dictionaryManager.DefaultCulture());
         }
     }
 }

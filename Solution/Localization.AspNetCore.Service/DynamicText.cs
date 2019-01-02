@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace Localization.AspNetCore.Service
 {
@@ -13,11 +13,10 @@ namespace Localization.AspNetCore.Service
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
         public DynamicText(
-            IHttpContextAccessor httpContextAccessor,
+            RequestCultureManager requestCultureManager,
             IDatabaseDictionaryManager databaseDictionaryManager,
             IDatabaseDynamicTextService databaseDynamicTextService
-            )
-            : base(httpContextAccessor)
+        ) : base(requestCultureManager)
         {
             m_databaseDictionaryManager = databaseDictionaryManager;
             m_databaseDynamicTextService = databaseDynamicTextService;
@@ -55,12 +54,7 @@ namespace Localization.AspNetCore.Service
 
         private CultureInfo RequestCulture()
         {
-            var request = HttpContextAccessor.HttpContext.Request;
-
-            var cultureCookie = request.Cookies[CultureCookieName] ??
-                                m_databaseDictionaryManager.DefaultCulture().Name;
-
-            return new CultureInfo(cultureCookie);
+            return GetRequestCulture(m_databaseDictionaryManager.DefaultCulture());
         }
     }
 }

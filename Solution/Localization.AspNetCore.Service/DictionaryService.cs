@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
@@ -13,9 +13,9 @@ namespace Localization.AspNetCore.Service
         private readonly IAutoDictionaryManager m_dictionaryManager;
 
         public DictionaryService(
-            IHttpContextAccessor httpContextAccessor,
+            RequestCultureManager requestCultureManager,
             IAutoDictionaryManager autoDictionaryManager
-        ) : base(httpContextAccessor)
+        ) : base(requestCultureManager)
         {
             m_dictionaryManager = autoDictionaryManager;
         }
@@ -48,13 +48,9 @@ namespace Localization.AspNetCore.Service
         /// Gets and returns Culture from request httpContext culture cookie.
         /// </summary>
         /// <returns> Culture from request httpContext culture cookie.</returns>
-        protected CultureInfo RequestCulture()
+        private CultureInfo RequestCulture()
         {
-            var request = HttpContextAccessor.HttpContext.Request;
-
-            var cultureCookie = request.Cookies[CultureCookieName] ?? m_dictionaryManager.DefaultCulture().Name;
-
-            return new CultureInfo(cultureCookie);
+            return GetRequestCulture(m_dictionaryManager.DefaultCulture());
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
+using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Common;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service.Factory
@@ -14,17 +14,17 @@ namespace Localization.AspNetCore.Service.Factory
     {
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
         private readonly IAutoDictionaryManager m_dictionaryManager;
-        private readonly IHttpContextAccessor m_httpContextAccessor;
+        private readonly RequestCultureManager m_requestCultureManager;
 
         public AttributeStringLocalizerFactory(
-            IHttpContextAccessor httpContextAccessor,
+            RequestCultureManager requestCultureManager,
             IAutoDictionaryManager autoDictionaryManager,
             IAutoLocalizationManager autoLocalizationManager
         )
         {
             m_dictionaryManager = autoDictionaryManager;
             m_autoLocalizationManager = autoLocalizationManager;
-            m_httpContextAccessor = httpContextAccessor;
+            m_requestCultureManager = requestCultureManager;
         }
 
         public IStringLocalizer Create(Type resourceSource)
@@ -32,7 +32,7 @@ namespace Localization.AspNetCore.Service.Factory
             Guard.ArgumentNotNull(nameof(resourceSource), resourceSource);
 
             return new AttributeStringLocalizer(
-                m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager,
+                m_requestCultureManager, m_dictionaryManager, m_autoLocalizationManager,
                 resourceSource.Name, LocTranslationSource.Auto
             );
         }
@@ -45,7 +45,7 @@ namespace Localization.AspNetCore.Service.Factory
             if (Enum.TryParse<LocTranslationSource>(location, out var parsedLocation))
             {
                 return new AttributeStringLocalizer(
-                    m_dictionaryManager, m_httpContextAccessor, m_autoLocalizationManager, baseName, parsedLocation
+                    m_requestCultureManager, m_dictionaryManager, m_autoLocalizationManager, baseName, parsedLocation
                 );
             }
 

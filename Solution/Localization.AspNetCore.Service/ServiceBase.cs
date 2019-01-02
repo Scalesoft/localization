@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Globalization;
+using Localization.AspNetCore.Service.Manager;
 
 namespace Localization.AspNetCore.Service
 {
     public abstract class ServiceBase
     {
-        public const string CultureCookieName = "Localization.Culture";
+        protected readonly RequestCultureManager RequestCultureManager;
 
-        protected readonly IHttpContextAccessor HttpContextAccessor;
-
-        protected ServiceBase(IHttpContextAccessor httpContextAccessor)
+        protected ServiceBase(
+            RequestCultureManager requestCultureManager
+        )
         {
-            HttpContextAccessor = httpContextAccessor;
+            RequestCultureManager = requestCultureManager;
+        }
+
+        protected CultureInfo GetRequestCulture(CultureInfo defaultCulture)
+        {
+            return RequestCultureManager.ResolveRequestCulture(defaultCulture);
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
@@ -13,10 +12,9 @@ namespace Localization.AspNetCore.Service
         private readonly IAutoLocalizationManager m_localizationManager;
 
         public LocalizationService(
-            IHttpContextAccessor httpContextAccessor,
+            RequestCultureManager requestCultureManager,
             IAutoLocalizationManager autoLocalizationManager
-        )
-            : base(httpContextAccessor)
+        ) : base(requestCultureManager)
         {
             m_localizationManager = autoLocalizationManager;
         }
@@ -24,11 +22,7 @@ namespace Localization.AspNetCore.Service
         // TODO there are almost duplicate definitions of this method (LocalizationService, DynamicText, DictionaryService, DatabaseDictionaryManager)
         public CultureInfo GetRequestCulture()
         {
-            var request = HttpContextAccessor.HttpContext.Request;
-
-            var cultureCookie = request.Cookies[CultureCookieName] ?? m_localizationManager.DefaultCulture().Name;
-
-            return new CultureInfo(cultureCookie);
+            return GetRequestCulture(m_localizationManager.DefaultCulture());
         }
 
         //Explicit calls
@@ -39,16 +33,7 @@ namespace Localization.AspNetCore.Service
 
         public void SetCulture(string culture)
         {
-            var requestCulture = new RequestCulture(culture);
-            var response = HttpContextAccessor.HttpContext.Response;
-            response.Cookies.Append(
-                CultureCookieName,
-                requestCulture.Culture.Name,
-                new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddYears(1)
-                }
-            );
+            RequestCultureManager.SetCulture(culture);
         }
 
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
