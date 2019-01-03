@@ -5,46 +5,48 @@
 
 ## Usage
 ### First the library must be initialized:
-```
-Localization.LibInit("path/to/libSettings.json");
-```
-*Default IDictionaryFactory is JsonDictionaryFactory to loading json resource files.*
-*Default ILoggerFactory is NullLogerFactory which log nothing.*
+```c#
+using Localization.AspNetCore.Service.IoC;
 
-### Using logger or custom resource file loader:
+public IServiceProvider ConfigureServices(IServiceCollection services)
+    services.AddLocalizationService(
+        configuration, // instance of Microsoft.Extensions.Configuration.IConfiguration
+        "Localization" // configuration key in appsettings
+    );
+}
 ```
-IDictionaryFactory customDictionaryFactory = ...;
-ILoggerFactory loggerFactory = ...;
-Localization.LibInit("path/to/libSettings.json", customDictionaryFactory, loggerFactory);
-```
+
 ### Using library without config file:
-```
-LocalizationConfiguration.Configuration configuration = new LocalizationConfiguration.Configuration();
-            configuration.BasePath = @"localization";
-            configuration.DefaultCulture = @"cs";
-            configuration.SupportedCultures = new List<string> { "en", "es" };
-            configuration.DbSource = @"cosi://sql-source";
-            configuration.DbUser = "SA";
-            configuration.DbPassword = "SA";
-            configuration.TranslationFallbackMode = TranslateFallbackMode.Key;
-			
-IConfiguration localizationConfiguration = new LocalizationConfiguration(configuration);
-Localization.LibInit(localizationConfiguration);
+```c#
+public IServiceProvider ConfigureServices(IServiceCollection services)
+    services.TryAddSingleton<ILocalizationConfiguration>(
+        cfg => new LocalizationConfiguration
+        {
+            BasePath = "Localization",
+            DefaultScope = "global",
+            SupportedCultures = new List<CultureInfo>(),
+            DefaultCulture = new CultureInfo("en-US"),
+            TranslateFallbackMode = LocTranslateFallbackMode.Key,
+            AutoLoadResources = true,
+            FirstAutoTranslateResource = LocLocalizationResource.File,
+        }
+    );
+}
 ```
 
 ## Structure of config json file:
-```
+```json
 {
 	"BasePath":"path\\to\\localization",
+	"DefaultScope":"global",
 	"SupportedCultures":["en","es"],
 	"DefaultCulture":"cs",
-	"TranslationFallbackMode":"Key",
-	"DbSource":"cosi://sql-source",
-	"DbUser":"SA",
-	"DbPassword":"SA"
+	"TranslateFallbackMode":"Key",
+	"AutoLoadResources":true,
+	"FirstAutoTranslateResource":"File"
 }
 ```
-### Posibble values of TranslationFallbackMode:
+### Posibble values of TranslateFallbackMode:
 * Key
 * Exception
 * EmptyString
@@ -54,10 +56,12 @@ Every supported culture and default culture has to have resource file in every s
 Scopes are defined by directory structure.
 
 ### For example consider:
-```
-basePath: /path/to/localization
-DefaultCulture: "cs"
-SupportedCultures: [cs, en, es]
+```json
+{
+  "BasePath": "/path/to/localization",
+  "DefaultCulture": "cs",
+  "SupportedCultures": ["cs", "en", "es"]
+}
 ```
 ### Directory structure is:
 ```
@@ -65,7 +69,7 @@ path/to/localization
 			|__________info
 			|__________statements
 							|_________important
-```						
+```
 ### Resource files should be:
 ```
 path/to/localization
@@ -86,11 +90,12 @@ path/to/localization
 									  statements.important.es.json
 ```
 ### Json structure (cs.json):
-```
 Example of json resource file in global scope and cs culture:
+```json
 {
 	"culture":"cs",
 	"scope":"global",
+	"parentScope":null,
 	"dictionary": {
 		"text-1-odst" : "První odstavec v globálním slovníku",
 		"text-2-odst" : "Druhý odstavec v globálním slovníku",
@@ -99,7 +104,8 @@ Example of json resource file in global scope and cs culture:
 		"text-5-odst" : "Pátý odstavec v globálním slovníku",
 		"confirm-button" : "Potvrdit",
 		"klíč-stringu" : "Dnes je {0}."
-	},"constants": {
+	},
+	"constants": {
 		"const-date": "MMMM dd, yyyy",
 		"const-time": "hh:mm:ss.f"	
 	}
@@ -117,7 +123,7 @@ Every dictionary in scope can have pluralized version. Name of file is e.g. scop
 (keyword plural between scope and culture name).
 
 ### Example of pluralized Json file (cs.plural.json):
-```
+```json5
 {
 	"culture":"cs",
 	"scope":"global.plural",
@@ -145,27 +151,27 @@ Every dictionary in scope can have pluralized version. Name of file is e.g. scop
 ## Translating
 
 ### Translate
-```
+```c#
 LocalizedString ls = Translator.Translate("text-3-odst", new CultureInfo("cs"));
 //ls.value == "Třetí odstavec v globálním slovníku";
 ```
 ### Translate scope
-```
+```c#
 LocalizedString lsII = Translator.Translate("text-3-odst", new CultureInfo("en"), "info.important");
 //lsII.value == "Text in important info scope";
 ```
 ## Translate constant
-```
+```c#
 LocalizedString lsC = Translator.TranslateConstant("const-date", new CultureInfo("cs"));
 //lsC.value == "MMMM dd, yyyy";
 ```
 ### Translate pluralized
-```
+```c#
 LocalizedString lsP = Translator.TranslatePluralization("klíč-stringu", 1, new CultureInfo("cs"));
 //lsP.value == "rok";
 ```
 ### Translate format
-```
+```c#
 LocalizedString lsF = Translator.TranslateFormat("klíč-stringu", new[] {"pondělí"}, new CultureInfo("cs"));
 //lsF.value == "Dnes je pondělí.";
 ```
@@ -173,7 +179,7 @@ LocalizedString lsF = Translator.TranslateFormat("klíč-stringu", new[] {"pond�
 ...
 
 ### Getting global dictionary
-```
+```c#
 Dictionary<string, LocalizedString> dG = Translator.GetDictionary(new CultureInfo("cs"), "global")
 ```
 ### Getting dictionary part !!!Not supported NOW
@@ -181,11 +187,11 @@ Dictionary<string, LocalizedString> dG = Translator.GetDictionary(new CultureInf
 TODO
 
 ### Geting constants dictionary
-```
+```c#
 Dictionary<string, LocalizedString> dC = Translator.GetConstantsDictionary(new CultureInfo("cs"), "global")
 ```
 ### Getting pluralized dictionary
-```
+```c#
 Dictionary<string, PluralizedString> dP = Translator.GetPluralizedDictionary(new CultureInfo("cs"), "global");
 ```
 
@@ -197,7 +203,7 @@ Values of data annotation attributes are used as keys in dictionaries.
 For example: 
 In attribute ```[Display(Name = "UserName")]``` UserName is a key for translation in json resource file.
 For validation attributes it works the same. ```UserNameNotEmpty``` could be a key for translation in json resource file. 
-```
+```c#
 public class LoginViewModel
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "UserNameNotEmpty")]
@@ -207,7 +213,7 @@ public class LoginViewModel
 ...
 ```
 LoginViewModel.cs-CZ.json
-```
+```json
 {
   "culture": "cs-CZ",
   "scope": "LoginViewModel",
@@ -222,25 +228,19 @@ LoginViewModel.cs-CZ.json
 Konfigurace v ASP.NET:
 
 Startup.cs
-```
+```c#
 public void ConfigureServices(IServiceCollection services)
-        {
-            Localization.CoreLibrary.Localization.Init(
-                @"C:\Pool\localization-ridics\Solution\Localization.Service\bin\Debug\netstandard1.3\localization.json.config",
-                null,
-                new JsonDictionaryFactory());
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddLocalizationService();
-		}
+{
+    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+    services.AddLocalizationService(
+        configuration, // instance of Microsoft.Extensions.Configuration.IConfiguration
+        "Localization" // configuration key in appsettings
+    );
+}
 
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-			
-            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);   
-		}
+{  
+}
 ``` 
 
 

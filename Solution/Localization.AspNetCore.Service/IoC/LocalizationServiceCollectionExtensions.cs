@@ -26,7 +26,7 @@ namespace Localization.AspNetCore.Service.IoC
         )
         {
             services.Configure<LocalizationConfiguration>(configuration.GetSection(configurationKey));
-            services.AddSingleton<ILocalizationConfiguration>(
+            services.TryAddSingleton<ILocalizationConfiguration>(
                 cfg => cfg.GetService<IOptions<LocalizationConfiguration>>().Value
             );
 
