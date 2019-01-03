@@ -1,4 +1,4 @@
-﻿namespace Localization.CoreLibrary.Models
+﻿namespace Localization.CoreLibrary.Model
 {
     public enum IfDefaultNotExistAction
     {

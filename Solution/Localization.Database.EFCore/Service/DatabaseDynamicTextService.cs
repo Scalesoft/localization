@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Entity;
-using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Model;
 using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;

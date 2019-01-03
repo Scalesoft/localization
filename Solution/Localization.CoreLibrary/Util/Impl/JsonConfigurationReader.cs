@@ -1,12 +1,10 @@
 ﻿using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 

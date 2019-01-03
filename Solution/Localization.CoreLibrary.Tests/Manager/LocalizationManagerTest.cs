@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

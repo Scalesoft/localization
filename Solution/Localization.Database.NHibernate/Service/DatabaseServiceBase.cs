@@ -36,6 +36,8 @@ namespace Localization.Database.NHibernate.Service
 
         public ICulture GetCachedCultureByNameOrGetDefault(string cultureName)
         {
+            if (string.IsNullOrEmpty(cultureName)) throw new ArgumentException("Argument is required", nameof(cultureName));
+
             return m_memoryCache.GetOrCreate(
                 cultureName,
                 entry =>
@@ -82,6 +84,8 @@ namespace Localization.Database.NHibernate.Service
 
         public IDictionaryScope GetCachedDictionaryScope(string scopeName)
         {
+            if (string.IsNullOrEmpty(scopeName)) throw new ArgumentException("Argument is required", nameof(scopeName));
+
             return m_memoryCache.GetOrCreate(
                 scopeName,
                 entry =>

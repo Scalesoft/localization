@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Entity;
 using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Model;
 using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl

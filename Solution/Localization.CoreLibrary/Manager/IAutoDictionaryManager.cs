@@ -3,6 +3,8 @@ using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using System.IO;
+using Localization.CoreLibrary.Dictionary;
 
 namespace Localization.CoreLibrary.Manager
 {
@@ -19,5 +21,9 @@ namespace Localization.CoreLibrary.Manager
 
         CultureInfo DefaultCulture();
         CultureInfo[] SupportedCultures();
+
+        void AddSingleDictionary(IDictionaryFactory dictionaryFactory, string filePath);
+
+        void AddSingleDictionary(IDictionaryFactory dictionaryFactory, Stream resourceStream);
     }
 }

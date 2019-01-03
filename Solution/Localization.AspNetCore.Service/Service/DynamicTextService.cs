@@ -2,9 +2,8 @@
 using System.Globalization;
 using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Entity;
 using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Model;
 
 namespace Localization.AspNetCore.Service.Service
 {

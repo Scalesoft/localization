@@ -2,7 +2,7 @@
 using System.Globalization;
 using Localization.CoreLibrary.Util;
 
-namespace Localization.CoreLibrary.Models
+namespace Localization.CoreLibrary.Configuration
 {
     public class LocalizationConfiguration : ILocalizationConfiguration
     {

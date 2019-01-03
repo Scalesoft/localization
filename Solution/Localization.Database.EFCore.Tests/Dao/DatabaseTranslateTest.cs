@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
-using Localization.CoreLibrary;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Manager.Impl;
 using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Data;
@@ -20,15 +21,17 @@ namespace Localization.Database.EFCore.Tests.Dao
         [TestInitialize]
         public void InitTest()
         {
-            var configuration = new LocalizationConfiguration.Configuration
+            var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "localization",
-                DefaultCulture = "cs",
-                SupportedCultures = new List<string> {"en", "cs"},
-                TranslationFallbackMode = LocTranslateFallbackMode.Key.ToString()
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("cs"),
+                },
+                TranslateFallbackMode = LocTranslateFallbackMode.Key
             };
-
-            var localizationConfiguration = new LocalizationConfiguration(configuration);
 
             m_builderOptions = new DbContextOptionsBuilder<StaticTextsContext>()
                 .UseInMemoryDatabase("DatabaseTranslateTest").Options;

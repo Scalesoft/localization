@@ -1,14 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Entity;
-using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Model;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
-
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
-[assembly: InternalsVisibleTo("Localization.Database.EFCore.Tests")]
 
 namespace Localization.CoreLibrary.Manager.Impl
 {

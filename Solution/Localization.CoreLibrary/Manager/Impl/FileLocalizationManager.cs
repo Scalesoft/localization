@@ -1,13 +1,9 @@
 ﻿using System.Globalization;
-using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
-
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
 namespace Localization.CoreLibrary.Manager.Impl
 {

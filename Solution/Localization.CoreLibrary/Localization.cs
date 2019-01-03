@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -215,7 +216,7 @@ namespace Localization.CoreLibrary
             return m_localizationManager.SupportedCultures();
         }
 
-        public CultureInfo DefaultCulture()
+       public CultureInfo DefaultCulture()
         {
             return m_localizationManager.DefaultCulture();
         }
@@ -267,6 +268,16 @@ namespace Localization.CoreLibrary
         )
         {
             return m_dictionaryManager.GetConstantsDictionary(translationSource, cultureInfo, scope);
+        }
+
+        public void AddSingleDictionary(IDictionaryFactory dictionaryFactory, string filePath)
+        {
+            m_dictionaryManager.AddSingleDictionary(dictionaryFactory, filePath);
+        }
+
+        public void AddSingleDictionary(IDictionaryFactory dictionaryFactory, Stream resourceStream)
+        {
+            m_dictionaryManager.AddSingleDictionary(dictionaryFactory, resourceStream);
         }
     }
 }

@@ -12,13 +12,10 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
     public class HomeController : Controller
     {
         private readonly ILocalization m_localizationManager;
-        private readonly IDictionary m_dictionaryManager;
-        private static readonly ILogger m_logger = LogProvider.GetCurrentClassLogger();
 
         public HomeController(ILocalization localizationManager, IDictionary dictionaryManager)
         {
             m_localizationManager = localizationManager;
-            m_dictionaryManager = dictionaryManager;
         }
 
         public IActionResult Index()

@@ -1,10 +1,13 @@
-﻿using System.IO;
-using Localization.AspNetCore.Service;
-using Localization.AspNetCore.Service.Extensions;
-using Localization.AspNetCore.Service.Factory;
-using Localization.CoreLibrary.Dictionary.Factory;
+﻿using System;
+using System.IO;
+using DryIoc;
+using DryIoc.Facilities.AutoTx.Extensions;
+using DryIoc.Facilities.NHibernate;
+using DryIoc.Microsoft.DependencyInjection;
+using Localization.AspNetCore.Service.IoC;
+using Localization.CoreLibrary.Dictionary;
+using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Localization.Database.NHibernate.Factory;
 using Localization.Database.NHibernate.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,33 +15,32 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
+using Scalesoft.HealthPlatform.WebHub;
 
 namespace Localization.Web.AspNetCore.Sample
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        private readonly IConfiguration m_configuration;
+
+        private IContainer m_container;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            m_configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddLocalizationService();
-            services.RegisterNHibernateLocalizationComponents();
+            services.AddLocalizationService(
+                m_configuration,
+                "Localization"
+            );
 
-            services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
-            services.AddScoped<DynamicText>();
+            services.RegisterLocalizationDataEntitiesComponents();
+            services.RegisterNHibernateLocalizationComponents();
 
             // Add framework services.
             services.AddMvc()
@@ -47,15 +49,23 @@ namespace Localization.Web.AspNetCore.Sample
                     options.DataAnnotationLocalizerProvider = (type, factory) => factory
                         .Create(type.Name, LocTranslationSource.File.ToString());
                 });
+
+            m_container = new Container().WithDependencyInjectionAdapter(
+                services,
+                throwIfUnresolved: type => type.Name.EndsWith("Controller")
+            );
+
+            m_container.Register<INHibernateInstaller, NHibernateInstaller>(Reuse.Singleton);
+
+            m_container.AddAutoTx();
+            m_container.AddNHibernate();
+
+            return m_container.Resolve<IServiceProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            const string databaseConnectionString =
-                @"Server=localhost;Database=LocalizationDatabaseEFCore;Trusted_Connection=True;";
-
-            CoreLibrary.Localization.AttachLogger(loggerFactory);
 
             if (env.IsDevelopment())
             {
@@ -67,17 +77,6 @@ namespace Localization.Web.AspNetCore.Sample
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            var databaseServiceFactory = app.ApplicationServices.GetService<DatabaseServiceFactory>();
-            var jsonDictionaryFactory = app.ApplicationServices.GetService<JsonDictionaryFactory>();
-
-            CoreLibrary.Localization.Init(
-                "localizationsettings.json",
-                databaseServiceFactory,
-                jsonDictionaryFactory
-            );
-            AddLocalizationDictionary("cs-CZ.json");
-            AddLocalizationDictionary("en.json");
-
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -86,13 +85,25 @@ namespace Localization.Web.AspNetCore.Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            m_container.ResetAutoTxActivityContext();
+
+            var dictionaryFactory = app.ApplicationServices.GetService<IDictionaryFactory>();
+            var dictionaryManager = app.ApplicationServices.GetService<IAutoDictionaryManager>();
+
+            AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "cs-CZ.json");
+            AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "en.json");
         }
 
-        private void AddLocalizationDictionary(string fileName)
+        private void AddLocalizationDictionary(
+            IAutoDictionaryManager dictionaryManager,
+            IDictionaryFactory dictionaryFactory,
+            string fileName
+            )
         {
             var filePath = Path.Combine("OtherLocalization", fileName);
 
-            CoreLibrary.Localization.AddSingleDictionary(JsonDictionaryFactory.FactoryInstance, filePath);
+            dictionaryManager.AddSingleDictionary(dictionaryFactory, filePath);
         }
     }
 }

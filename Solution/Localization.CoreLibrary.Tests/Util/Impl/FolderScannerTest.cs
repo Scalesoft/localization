@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Models;
-using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Localization.CoreLibrary.Tests.Util.Impl

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Localization.CoreLibrary.Entity
+namespace Localization.CoreLibrary.Model
 {
     public class DynamicText
     {

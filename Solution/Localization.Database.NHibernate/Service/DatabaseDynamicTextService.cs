@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Entity;
-using Localization.CoreLibrary.Models;
+using Localization.CoreLibrary.Model;
 using Localization.CoreLibrary.Util;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.NHibernate.UnitOfWork;
@@ -31,12 +30,22 @@ namespace Localization.Database.NHibernate.Service
 
         public DynamicText GetDynamicText(string name, string scope, CultureInfo cultureInfo)
         {
+            if (string.IsNullOrEmpty(scope))
+            {
+                scope = Configuration.DefaultScope;
+            }
+
             var culture = GetCachedCultureByNameOrGetDefault(cultureInfo.Name);
             var dictionaryScope = GetCachedDictionaryScope(scope);
 
             var staticText = m_staticTextUoW.GetByNameAndCultureAndScope(
                 name, culture.Name, dictionaryScope.Name
             );
+
+            if (staticText == null)
+            {
+                return null;
+            }
 
             return new DynamicText
             {
@@ -53,6 +62,11 @@ namespace Localization.Database.NHibernate.Service
 
         public IList<DynamicText> GetAllDynamicText(string name, string scope)
         {
+            if (string.IsNullOrEmpty(scope))
+            {
+                scope = Configuration.DefaultScope;
+            }
+
             var dictionaryScope = GetCachedDictionaryScope(scope);
 
             var staticTexts = m_staticTextUoW.FindByNameAndScope(
@@ -131,6 +145,11 @@ namespace Localization.Database.NHibernate.Service
 
         public void DeleteDynamicText(string name, string scope, CultureInfo cultureInfo)
         {
+            if (string.IsNullOrEmpty(scope))
+            {
+                scope = Configuration.DefaultScope;
+            }
+
             var dictionaryScope = GetDictionaryScope(scope);
             if (dictionaryScope.Name != scope)
             {
@@ -149,14 +168,18 @@ namespace Localization.Database.NHibernate.Service
 
         public void DeleteAllDynamicText(string name, string scope)
         {
+            if (string.IsNullOrEmpty(scope))
+            {
+                scope = Configuration.DefaultScope;
+            }
+
             var dictionaryScope = GetDictionaryScope(scope);
             if (dictionaryScope.Name != scope)
             {
                 throw new ArgumentException($"Unknown scope {scope}");
             }
 
-
-            m_staticTextUoW.Delete(name, dictionaryScope.Name);
+            m_staticTextUoW.DeleteAll(name, dictionaryScope.Name);
         }
 
         /// <summary>

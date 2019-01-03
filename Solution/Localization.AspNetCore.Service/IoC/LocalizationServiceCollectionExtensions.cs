@@ -1,12 +1,12 @@
 ﻿using Localization.AspNetCore.Service.Factory;
 using Localization.AspNetCore.Service.Manager;
 using Localization.AspNetCore.Service.Service;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Factory;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Configuration;

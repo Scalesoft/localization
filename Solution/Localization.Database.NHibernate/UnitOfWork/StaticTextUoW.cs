@@ -85,7 +85,7 @@ namespace Localization.Database.NHibernate.UnitOfWork
         }
 
         [Transaction]
-        public virtual void Delete(
+        public virtual void DeleteAll(
             string name,
             string dictionaryScopeName
         )
@@ -94,7 +94,7 @@ namespace Localization.Database.NHibernate.UnitOfWork
                 name, dictionaryScopeName
             );
 
-            m_staticTextRepository.Delete(staticTextEntities);
+            m_staticTextRepository.DeleteAll(staticTextEntities);
         }
 
         [Transaction]

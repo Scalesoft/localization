@@ -1,23 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Localization.AspNetCore.Service;
-using Localization.CoreLibrary.Models;
 using Localization.CoreLibrary.Util;
 using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using DynamicTextService = Localization.AspNetCore.Service.DynamicText;
-using DynamicTextEntity = Localization.CoreLibrary.Entity.DynamicText;
+using Localization.CoreLibrary.Model;
 
 namespace Localization.Web.AspNetCore.Sample.Controllers
 {
     public class DatabaseController : Controller
     {
         private readonly ILocalization m_localization;
-        private readonly DynamicTextService m_dynamicTextService;
+        private readonly IDynamicText m_dynamicTextService;
 
-        public DatabaseController(ILocalization localization, DynamicTextService dynamicTextService)
+        public DatabaseController(ILocalization localization, IDynamicText dynamicTextService)
         {
             m_localization = localization;
             m_dynamicTextService = dynamicTextService;
@@ -53,7 +50,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
         {
             if (ModelState.IsValid)
             {
-                m_dynamicTextService.SaveDynamicText(new DynamicTextEntity
+                m_dynamicTextService.SaveDynamicText(new DynamicText
                 {
                     Culture = dynamicText.Culture.Name,
                     DictionaryScope = dynamicText.Scope ?? "global",
@@ -68,6 +65,11 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         public IActionResult GetDynamicText(string name, string scope)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                return View("Index");
+            }
+
             var model = m_dynamicTextService.GetDynamicText(name, scope);
 
             var directTranslation = m_localization.Translate(name, scope, LocTranslationSource.Database);
@@ -76,8 +78,8 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
             var result = new DynamicTextResult
             {
-                Name = model.Name,
-                Text = model.Text,
+                Name = model?.Name,
+                Text = model?.Text,
                 DirectTranslation = directTranslation,
                 AllDynamicTexts = allDynamicTexts.Select(x => new CultureAndTextResult
                 {
@@ -97,7 +99,10 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
         [HttpPost]
         public IActionResult DeleteAllDynamicText(string name, string scope)
         {
-            m_dynamicTextService.DeleteAllDynamicText(name, scope);
+            if (!string.IsNullOrEmpty(name))
+            {
+                m_dynamicTextService.DeleteAllDynamicText(name, scope);
+            }
 
             return View("Index");
         }
@@ -116,7 +121,11 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
         [HttpPost]
         public IActionResult DeleteDynamicText(DynamicTextViewModel dynamicTextViewModel)
         {
-            m_dynamicTextService.DeleteDynamicText(dynamicTextViewModel.Name, dynamicTextViewModel.Scope, dynamicTextViewModel.Culture);
+            m_dynamicTextService.DeleteDynamicText(
+                dynamicTextViewModel.Name,
+                dynamicTextViewModel.Scope,
+                dynamicTextViewModel.Culture
+            );
 
             return View("Index");
         }
