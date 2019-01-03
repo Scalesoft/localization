@@ -13,11 +13,17 @@ namespace Localization.Database.NHibernate.IoC
     {
         public static void RegisterLocalizationDataEntitiesComponents(this IServiceCollection services)
         {
+            services.AddSingleton<ConstantStaticTextRepository>();
             services.AddSingleton<CultureHierarchyRepository>();
             services.AddSingleton<CultureRepository>();
+            services.AddSingleton<DictionaryScopeRepository>();
+            services.AddSingleton<PluralizedStaticTextRepository>();
+            services.AddSingleton<StaticTextRepository>();
 
             services.AddSingleton<CultureHierarchyUoW>();
             services.AddSingleton<CultureUoW>();
+            services.AddSingleton<DictionaryScopeUoW>();
+            services.AddSingleton<StaticTextUoW>();
         }
 
         public static void RegisterNHibernateLocalizationComponents(this IServiceCollection services)

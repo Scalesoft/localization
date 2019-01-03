@@ -1,11 +1,10 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
-namespace Localization.AspNetCore.Service
+namespace Localization.AspNetCore.Service.Service
 {
     public sealed class LocalizationService : ServiceBase, ILocalization
     {

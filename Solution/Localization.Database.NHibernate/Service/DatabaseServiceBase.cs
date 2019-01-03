@@ -1,38 +1,62 @@
+using System;
 using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Logging;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.NHibernate.UnitOfWork;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace Localization.Database.NHibernate.Service
 {
     public abstract class DatabaseServiceBase
     {
+        private const int CacheTimeSpanInSeconds = 30;
+
         private readonly ILogger m_logger;
-        protected readonly CultureUoW m_cultureUoW;
-        protected readonly ILocalizationConfiguration m_configuration;
+        protected readonly CultureUoW CultureUoW;
+        protected readonly DictionaryScopeUoW DictionaryScopeUoW;
+        protected readonly ILocalizationConfiguration Configuration;
+
+        private readonly IMemoryCache m_memoryCache;
 
         protected DatabaseServiceBase(
             ILocalizationConfiguration configuration,
             CultureUoW cultureUoW,
-            ILogger logger
+            DictionaryScopeUoW dictionaryScopeUoW,
+            ILogger logger,
+            IMemoryCache memoryCache
         )
         {
-            m_configuration = configuration;
-            m_cultureUoW = cultureUoW;
+            Configuration = configuration;
+            CultureUoW = cultureUoW;
+            DictionaryScopeUoW = dictionaryScopeUoW;
             m_logger = logger;
+            m_memoryCache = memoryCache;
+        }
+
+        public ICulture GetCachedCultureByNameOrGetDefault(string cultureName)
+        {
+            return m_memoryCache.GetOrCreate(
+                cultureName,
+                entry =>
+                {
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(CacheTimeSpanInSeconds);
+
+                    return GetCultureByNameOrGetDefault(cultureName);
+                }
+            );
         }
 
         public ICulture GetCultureByNameOrGetDefault(string cultureName)
         {
-            ICulture resultCulture = m_cultureUoW.GetCultureByName(cultureName);
+            ICulture resultCulture = CultureUoW.GetCultureByName(cultureName);
 
             if (resultCulture == null)
             {
                 if (m_logger.IsErrorEnabled())
                 {
                     m_logger.LogError(
-                        $"Culture {cultureName} and default culture from library configuration is not in database.");
+                        $"Culture {cultureName} from library configuration is not in database.");
                 }
 
                 resultCulture = GetDefaultCulture();
@@ -43,7 +67,7 @@ namespace Localization.Database.NHibernate.Service
 
         public ICulture GetDefaultCulture()
         {
-            var resultCulture = m_cultureUoW.GetCultureByName(m_configuration.DefaultCulture.Name);
+            var resultCulture = CultureUoW.GetCultureByName(Configuration.DefaultCulture.Name);
 
             if (resultCulture == null)
             {
@@ -56,14 +80,25 @@ namespace Localization.Database.NHibernate.Service
             return resultCulture;
         }
 
-        /*protected DictionaryScope GetDictionaryScope(IDatabaseStaticTextContext dbContext, string scopeName)
+        public IDictionaryScope GetCachedDictionaryScope(string scopeName)
         {
-            var dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
+            return m_memoryCache.GetOrCreate(
+                scopeName,
+                entry =>
+                {
+                    entry.SlidingExpiration = TimeSpan.FromSeconds(CacheTimeSpanInSeconds);
 
-            var resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
+                    return GetDictionaryScope(scopeName);
+                }
+            );
+        }
+
+        protected IDictionaryScope GetDictionaryScope(string scopeName)
+        {
+            var resultDictionaryScope = DictionaryScopeUoW.GetScopeByName(scopeName);
             if (resultDictionaryScope == null)
             {
-                resultDictionaryScope = dictionaryScopeDao.FindByName(CoreLibrary.Localization.DefaultScope);
+                resultDictionaryScope = DictionaryScopeUoW.GetScopeByName(Configuration.DefaultScope);
             }
 
             if (resultDictionaryScope == null)
@@ -72,11 +107,11 @@ namespace Localization.Database.NHibernate.Service
                 {
                     m_logger.LogError(
                         @"Default dictionary scope ""{0}"" from library configuration is not in database.",
-                        CoreLibrary.Localization.DefaultScope);
+                        Configuration.DefaultScope);
                 }
             }
 
             return resultDictionaryScope;
-        }*/
+        }
     }
 }

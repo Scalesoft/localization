@@ -21,6 +21,7 @@
     <PackageReference Include="DryIoc.dll" Version="3.0.2" />
     <PackageReference Include="DryIoc.Facilities.NHibernate" Version="0.2.2" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="NHibernate" Version="5.2.1" />

@@ -26,16 +26,24 @@ namespace Localization.Database.NHibernate.Repository
             return query;
         }
 
-        protected T GetSingleValue<T>(Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null)
+        protected T GetSingleValue<T>(
+            Action<ISession, ICriterion> fetchMethod = null, ICriterion criterion = null,
+            Func<IQueryOver<T, T>, IQueryOver<T, T>> resultQueryModifier = null
+        )
             where T : class
         {
             var session = GetSession();
 
-            var result = CreateBaseQuery<T>(session, criterion).FutureValue<T>();
+            var query = CreateBaseQuery<T>(session, criterion);
+
+            if (resultQueryModifier != null)
+            {
+                query = resultQueryModifier.Invoke(query);
+            }
 
             fetchMethod?.Invoke(session, criterion);
 
-            return result.Value;
+            return query.FutureValue<T>().Value;
         }
 
         protected IList<T> GetValuesList<T>(

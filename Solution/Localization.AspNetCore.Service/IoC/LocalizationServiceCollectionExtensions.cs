@@ -1,5 +1,6 @@
 ﻿using Localization.AspNetCore.Service.Factory;
 using Localization.AspNetCore.Service.Manager;
+using Localization.AspNetCore.Service.Service;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -34,7 +35,7 @@ namespace Localization.AspNetCore.Service.IoC
 
             services.AddTransient<ILocalization, LocalizationService>();
             services.AddTransient<IDictionary, DictionaryService>();
-            services.AddTransient<IDynamicText, DynamicText>();
+            services.AddTransient<IDynamicText, DynamicTextService>();
 
             services.AddTransient<IDictionaryFactory, JsonDictionaryFactory>();
 

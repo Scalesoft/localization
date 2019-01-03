@@ -4,6 +4,7 @@ using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Localization.Database.NHibernate.UnitOfWork;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
@@ -14,8 +15,10 @@ namespace Localization.Database.NHibernate.Service
         public DatabaseDictionaryService(
             ILocalizationConfiguration configuration,
             CultureUoW cultureUoW,
-            ILogger logger
-        ) : base(configuration, cultureUoW, logger)
+            DictionaryScopeUoW dictionaryScopeUoW,
+            ILogger logger,
+            IMemoryCache memoryCache
+        ) : base(configuration, cultureUoW, dictionaryScopeUoW, logger, memoryCache)
         {
         }
 

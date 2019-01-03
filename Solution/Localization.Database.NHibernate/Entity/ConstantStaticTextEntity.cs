@@ -2,7 +2,7 @@
 
 namespace Localization.Database.NHibernate.Entity
 {
-    public class StaticText : BaseText, IStaticText
+    public class ConstantStaticTextEntity : BaseTextEntity, IConstantStaticText
     {
     }
 }
