@@ -4,7 +4,7 @@ using NHibernate.Mapping.ByCode.Conformist;
 
 namespace Localization.Database.NHibernate.Mappings
 {
-    public class CultureHierarchyMapping : ClassMapping<CultureHierarchyEntity>
+    public class CultureHierarchyMapping : ClassMapping<CultureHierarchyEntity>, IMapping
     {
         public CultureHierarchyMapping()
         {

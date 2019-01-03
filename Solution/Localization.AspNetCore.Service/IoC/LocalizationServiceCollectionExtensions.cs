@@ -10,6 +10,7 @@ using Localization.CoreLibrary.Resolver;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
@@ -40,9 +41,9 @@ namespace Localization.AspNetCore.Service.IoC
             services.AddTransient<IFileLocalizationManager, FileLocalizationManager>();
             services.AddTransient<IFileDictionaryManager, FileDictionaryManager>();
 
-            services.AddTransient<IDatabaseLocalizationManager, NullDatabaseLocalizationManager>();
-            services.AddTransient<IDatabaseDictionaryManager, NullDatabaseDictionaryManager>();
-            services.AddTransient<IDatabaseDynamicTextService, NullDatabaseDynamicTextService>();
+            services.TryAddTransient<IDatabaseLocalizationManager, NullDatabaseLocalizationManager>();
+            services.TryAddTransient<IDatabaseDictionaryManager, NullDatabaseDictionaryManager>();
+            services.TryAddTransient<IDatabaseDynamicTextService, NullDatabaseDynamicTextService>();
 
             services.AddTransient<IAutoDictionaryManager, CoreLibrary.DictionaryManager>();
             services.AddTransient<IAutoLocalizationManager, CoreLibrary.LocalizationManager>();

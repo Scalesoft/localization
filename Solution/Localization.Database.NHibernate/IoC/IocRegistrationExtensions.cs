@@ -1,6 +1,7 @@
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Manager.Impl;
+using Localization.Database.NHibernate.Provider;
 using Localization.Database.NHibernate.Repository;
 using Localization.Database.NHibernate.Service;
 using Localization.Database.NHibernate.UnitOfWork;
@@ -27,6 +28,7 @@ namespace Localization.Database.NHibernate.IoC
 
             services.AddTransient<IDatabaseDictionaryService, DatabaseDictionaryService>();
             services.AddTransient<IDatabaseTranslateService, DatabaseTranslateService>();
+            services.AddTransient<LocalizationMappingProvider>();
         }
     }
 }

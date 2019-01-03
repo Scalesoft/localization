@@ -1,5 +1,4 @@
-using System.Reflection;
-using Localization.Database.NHibernate.Dao;
+using Localization.Database.NHibernate.Provider;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -40,7 +39,7 @@ namespace Localization.Database.NHibernate.Tests.Helper
         {
             var mapper = new ModelMapper();
 
-            var mappings = Assembly.GetAssembly(typeof(NHibernateDao)).GetExportedTypes();
+            var mappings = new LocalizationMappingProvider().GetMappings();
             mapper.AddMappings(mappings);
             var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 
