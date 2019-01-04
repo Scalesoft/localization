@@ -7,6 +7,7 @@ using System.Text;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
+using Localization.CoreLibrary.Resolver;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -63,8 +64,12 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             m_parentScopeName = (string) m_jsonDictionary[ParentScopeJPath];
         }
 
-        public JsonLocalizationDictionary(Stream resourceStream, string filePath, ILogger logger = null) : this(resourceStream, logger)
+        public JsonLocalizationDictionary(
+            Stream resourceStream, string filePath, IParentScopeResolver parentScopeResolver, ILogger logger = null
+        ) : this(resourceStream, logger)
         {
+            m_parentScopeName = m_parentScopeName ?? parentScopeResolver?.ResolveParentScope(filePath);
+
             var filePathWithoutExtension = Path.ChangeExtension(filePath, "");
             var pluralizedFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
 
@@ -92,6 +97,12 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
                 throw new DictionaryLoadException(message);
             }
+        }
+
+        public JsonLocalizationDictionary(
+            Stream resourceStream, string filePath, ILogger logger = null
+        ) : this(resourceStream, filePath, new FileNameBasedParentScopeResolver(), logger)
+        {
         }
 
         private JObject LoadDictionaryJObject(Stream resourceStream, string fileName = null)
