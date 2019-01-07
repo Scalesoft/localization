@@ -12,7 +12,7 @@ namespace Localization.Database.NHibernate.Mappings
 
             Id(x => x.Id, map => map.Generator(Generators.Identity));
 
-            Property(x => x.LevelProperty, map => map.NotNullable(true));
+            Property(x => x.LevelProperty, map => { map.NotNullable(true); });
 
             ManyToOne(x => x.Culture, map =>
             {

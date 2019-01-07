@@ -100,6 +100,7 @@ namespace Localization.Database.NHibernate.Service
         protected IDictionaryScope GetDictionaryScope(string scopeName)
         {
             var resultDictionaryScope = DictionaryScopeUoW.GetScopeByName(scopeName);
+
             if (resultDictionaryScope == null)
             {
                 resultDictionaryScope = DictionaryScopeUoW.GetScopeByName(Configuration.DefaultScope);

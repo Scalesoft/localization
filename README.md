@@ -225,7 +225,7 @@ LoginViewModel.cs-CZ.json
 }
 ```
 
-Konfigurace v ASP.NET:
+Configuration in ASP.NET:
 
 Startup.cs
 ```c#
@@ -243,8 +243,8 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 }
 ``` 
 
-
-
+## Database structure 
+Init database schema script for SQL Server is in Sample project named CreateDBSchema.sql . Run it in SQL Server Management studio
 
 
 

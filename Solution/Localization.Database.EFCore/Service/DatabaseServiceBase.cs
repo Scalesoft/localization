@@ -60,6 +60,7 @@ namespace Localization.Database.EFCore.Service
             var dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
 
             var resultDictionaryScope = dictionaryScopeDao.FindByName(scopeName);
+
             if (resultDictionaryScope == null)
             {
                 resultDictionaryScope = dictionaryScopeDao.FindByName(m_configuration.DefaultScope);

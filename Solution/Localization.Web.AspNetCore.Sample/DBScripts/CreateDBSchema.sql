@@ -28,7 +28,7 @@ GO
 CREATE TABLE [CultureHierarchy] (
     [Id] int NOT NULL IDENTITY,
     [Culture] int NOT NULL,
-    [Level] tinyint NOT NULL,
+    [LevelProperty] tinyint NOT NULL,
     [ParentCulture] int NOT NULL,
     CONSTRAINT [PK_CultureHierarchy(Id)] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_CultureHierarchy(Culture)_Culture(Id)] FOREIGN KEY ([Culture]) REFERENCES [Culture] ([Id]) ON DELETE NO ACTION,
