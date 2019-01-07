@@ -1,58 +1,69 @@
 using System.Collections.Generic;
-using DryIoc.Facilities.NHibernate;
-using DryIoc.Transactions;
 using Localization.Database.NHibernate.Entity;
 using Localization.Database.NHibernate.Repository;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.UnitOfWork
 {
     public class DictionaryScopeUoW : UnitOfWorkBase
     {
-        private readonly DictionaryScopeRepository m_dictionaryScopeRepository;
-
         public DictionaryScopeUoW(
-            DictionaryScopeRepository dictionaryScopeRepository,
-            ISessionManager sessionManager
-        ) : base(sessionManager)
+            ISessionFactory sessionFactory
+        ) : base(sessionFactory)
         {
-            m_dictionaryScopeRepository = dictionaryScopeRepository;
         }
 
-        [Transaction]
         public virtual int AddScope(string name)
         {
-            var culture = new DictionaryScopeEntity
+            using (var session = GetSession())
             {
-                Name = name
-            };
+                var dictionaryScopeRepository = new DictionaryScopeRepository(session);
 
-            var result = (int) m_dictionaryScopeRepository.Create(culture);
+                var culture = new DictionaryScopeEntity
+                {
+                    Name = name
+                };
 
-            return result;
+                var result = (int) dictionaryScopeRepository.Create(culture);
+
+                return result;
+            }
         }
 
-        [Transaction]
         public virtual DictionaryScopeEntity GetScopeById(int id)
         {
-            var resultList = m_dictionaryScopeRepository.GetScopeById(id);
+            using (var session = GetSession())
+            {
+                var dictionaryScopeRepository = new DictionaryScopeRepository(session);
 
-            return resultList;
+                var resultList = dictionaryScopeRepository.GetScopeById(id);
+
+                return resultList;
+            }
         }
 
-        [Transaction]
         public virtual DictionaryScopeEntity GetScopeByName(string cultureName)
         {
-            var resultList = m_dictionaryScopeRepository.GetScopeByName(cultureName);
+            using (var session = GetSession())
+            {
+                var dictionaryScopeRepository = new DictionaryScopeRepository(session);
 
-            return resultList;
+                var resultList = dictionaryScopeRepository.GetScopeByName(cultureName);
+
+                return resultList;
+            }
         }
 
-        [Transaction]
         public virtual IList<DictionaryScopeEntity> FindAllScopes()
         {
-            var resultList = m_dictionaryScopeRepository.FindAllScopes();
+            using (var session = GetSession())
+            {
+                var dictionaryScopeRepository = new DictionaryScopeRepository(session);
 
-            return resultList;
+                var resultList = dictionaryScopeRepository.FindAllScopes();
+
+                return resultList;
+            }
         }
     }
 }

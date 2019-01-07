@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DryIoc.Facilities.NHibernate;
 using Localization.Database.NHibernate.Entity;
 using NHibernate;
 using NHibernate.Criterion;
@@ -13,8 +12,8 @@ namespace Localization.Database.NHibernate.Repository
         private const string EmptyArgumentMessage = "Empty argument";
 
         protected BaseTextRepository(
-            ISessionManager sessionManager
-        ) : base(sessionManager)
+            ISession session
+        ) : base(session)
         {
         }
 

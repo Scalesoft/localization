@@ -1,4 +1,3 @@
-using DryIoc.Facilities.NHibernate;
 using Localization.Database.NHibernate.Entity;
 using NHibernate;
 using NHibernate.Criterion;
@@ -8,8 +7,8 @@ namespace Localization.Database.NHibernate.Repository
     public class PluralizedStaticTextRepository : BaseTextRepository<PluralizedStaticTextEntity>
     {
         public PluralizedStaticTextRepository(
-            ISessionManager sessionManager
-        ) : base(sessionManager)
+            ISession session
+        ) : base(session)
         {
         }
 

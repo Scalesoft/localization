@@ -1,26 +1,20 @@
 using System;
-using DryIoc.Facilities.NHibernate;
 using Localization.Database.NHibernate.Entity;
 using Localization.Database.NHibernate.Repository;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.UnitOfWork
 {
     public abstract class BaseTextUoW : UnitOfWorkBase
     {
-        protected readonly CultureRepository CultureRepository;
-        protected readonly DictionaryScopeRepository DictionaryScopeRepository;
-
         protected BaseTextUoW(
-            CultureRepository cultureRepository,
-            DictionaryScopeRepository dictionaryScopeRepository,
-            ISessionManager sessionManager
-        ) : base(sessionManager)
+            ISessionFactory sessionFactory
+        ) : base(sessionFactory)
         {
-            CultureRepository = cultureRepository;
-            DictionaryScopeRepository = dictionaryScopeRepository;
         }
 
         protected T AddBaseText<T>(
+            ISession session,
             string name,
             short format,
             string text,
@@ -30,8 +24,11 @@ namespace Localization.Database.NHibernate.UnitOfWork
             DateTime modificationTime
         ) where T : BaseTextEntity, new()
         {
-            var culture = CultureRepository.GetCultureByName(cultureName);
-            var scope = DictionaryScopeRepository.GetScopeByName(dictionaryScope);
+            var cultureRepository = new CultureRepository(session);
+            var dictionaryScopeRepository = new DictionaryScopeRepository(session);
+
+            var culture = cultureRepository.GetCultureByName(cultureName);
+            var scope = dictionaryScopeRepository.GetScopeByName(dictionaryScope);
 
             var baseTextEntity = new T
             {

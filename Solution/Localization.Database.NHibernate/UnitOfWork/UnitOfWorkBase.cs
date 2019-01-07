@@ -1,20 +1,19 @@
-using DryIoc.Facilities.NHibernate;
 using NHibernate;
 
 namespace Localization.Database.NHibernate.UnitOfWork
 {
     public abstract class UnitOfWorkBase
     {
-        private readonly ISessionManager m_sessionManager;
+        private readonly ISessionFactory m_sessionFactory;
 
-        protected UnitOfWorkBase(ISessionManager sessionManager)
+        protected UnitOfWorkBase(ISessionFactory sessionFactory)
         {
-            m_sessionManager = sessionManager;
+            m_sessionFactory = sessionFactory;
         }
 
         protected ISession GetSession()
         {
-            return m_sessionManager.OpenSession();
+            return m_sessionFactory.OpenSession();
         }
     }
 }

@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="DryIoc.dll" Version="3.0.2" />
-    <PackageReference Include="DryIoc.Facilities.NHibernate" Version="0.2.2" />
     <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="2.1.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />

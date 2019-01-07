@@ -1,27 +1,19 @@
 using System;
 using System.Collections.Generic;
-using DryIoc.Facilities.NHibernate;
-using DryIoc.Transactions;
 using Localization.Database.NHibernate.Entity;
 using Localization.Database.NHibernate.Repository;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.UnitOfWork
 {
     public class StaticTextUoW : BaseTextUoW
     {
-        private readonly StaticTextRepository m_staticTextRepository;
-
         public StaticTextUoW(
-            StaticTextRepository staticTextRepository,
-            CultureRepository cultureRepository,
-            DictionaryScopeRepository dictionaryScopeRepository,
-            ISessionManager sessionManager
-        ) : base(cultureRepository, dictionaryScopeRepository, sessionManager)
+            ISessionFactory sessionFactory
+        ) : base(sessionFactory)
         {
-            m_staticTextRepository = staticTextRepository;
         }
 
-        [Transaction]
         public virtual int AddStaticText(
             string name,
             short format,
@@ -32,22 +24,27 @@ namespace Localization.Database.NHibernate.UnitOfWork
             DateTime modificationTime
         )
         {
-            var staticText = AddBaseText<StaticTextEntity>(
-                name,
-                format,
-                text,
-                cultureName,
-                dictionaryScope,
-                modificationUser,
-                modificationTime
-            );
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            var result = (int) m_staticTextRepository.Create(staticText);
+                var staticText = AddBaseText<StaticTextEntity>(
+                    session,
+                    name,
+                    format,
+                    text,
+                    cultureName,
+                    dictionaryScope,
+                    modificationUser,
+                    modificationTime
+                );
 
-            return result;
+                var result = (int) staticTextRepository.Create(staticText);
+
+                return result;
+            }
         }
 
-        [Transaction]
         public virtual void UpdateStaticText(
             string name,
             string cultureName,
@@ -58,83 +55,112 @@ namespace Localization.Database.NHibernate.UnitOfWork
             DateTime modificationTime
         )
         {
-            var staticTextEntity = m_staticTextRepository.GetByNameAndCultureAndScope(
-                name, cultureName, dictionaryScopeName
-            );
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            staticTextEntity.Format = format;
-            staticTextEntity.Text = text;
-            staticTextEntity.ModificationUser = modificationUser;
-            staticTextEntity.ModificationTime = modificationTime;
+                var staticTextEntity = staticTextRepository.GetByNameAndCultureAndScope(
+                    name, cultureName, dictionaryScopeName
+                );
 
-            m_staticTextRepository.Update(staticTextEntity);
+                staticTextEntity.Format = format;
+                staticTextEntity.Text = text;
+                staticTextEntity.ModificationUser = modificationUser;
+                staticTextEntity.ModificationTime = modificationTime;
+
+                staticTextRepository.Update(staticTextEntity);
+            }
         }
 
-        [Transaction]
         public virtual void Delete(
             string name,
             string cultureName,
             string dictionaryScopeName
         )
         {
-            var staticTextEntity = m_staticTextRepository.GetByNameAndCultureAndScope(
-                name, cultureName, dictionaryScopeName
-            );
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            m_staticTextRepository.Delete(staticTextEntity);
+                var staticTextEntity = staticTextRepository.GetByNameAndCultureAndScope(
+                    name, cultureName, dictionaryScopeName
+                );
+
+                staticTextRepository.Delete(staticTextEntity);
+            }
         }
 
-        [Transaction]
         public virtual void DeleteAll(
             string name,
             string dictionaryScopeName
         )
         {
-            var staticTextEntities = m_staticTextRepository.FindByNameAndScope(
-                name, dictionaryScopeName
-            );
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            m_staticTextRepository.DeleteAll(staticTextEntities);
+                var staticTextEntities = staticTextRepository.FindByNameAndScope(
+                    name, dictionaryScopeName
+                );
+
+                staticTextRepository.DeleteAll(staticTextEntities);
+            }
         }
 
-        [Transaction]
         public virtual StaticTextEntity GetStaticTextById(int id)
         {
-            var result = m_staticTextRepository.GetStaticTextById(id);
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            return result;
+                var result = staticTextRepository.GetStaticTextById(id);
+
+                return result;
+            }
         }
 
-        [Transaction]
         public virtual StaticTextEntity GetByNameAndCultureAndScope(
             string name, string cultureName, string dictionaryScopeName
         )
         {
-            var result = m_staticTextRepository.GetByNameAndCultureAndScope(
-                name, cultureName, dictionaryScopeName
-            );
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            return result;
+                var result = staticTextRepository.GetByNameAndCultureAndScope(
+                    name, cultureName, dictionaryScopeName
+                );
+
+                return result;
+            }
         }
 
-        [Transaction]
         public virtual IList<StaticTextEntity> FindByNameAndScope(
             string name, string dictionaryScopeName
         )
         {
-            var resultList = m_staticTextRepository.FindByNameAndScope(
-                name, dictionaryScopeName
-            );
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            return resultList;
+                var resultList = staticTextRepository.FindByNameAndScope(
+                    name, dictionaryScopeName
+                );
+
+                return resultList;
+            }
         }
 
-        [Transaction]
         public virtual IList<StaticTextEntity> FindAllStaticTexts()
         {
-            var resultList = m_staticTextRepository.FindAllStaticTexts();
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
 
-            return resultList;
+                var resultList = staticTextRepository.FindAllStaticTexts();
+
+                return resultList;
+            }
         }
     }
 }

@@ -18,15 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="DryIoc.dll" Version="3.0.2" />
-    <PackageReference Include="DryIoc.Facilities.NHibernate" Version="0.2.2" />
-    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="NHibernate" Version="5.2.1" />
-    <PackageReference Include="Npgsql" Version="4.0.4" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>

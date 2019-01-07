@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DryIoc.Facilities.NHibernate;
 using Localization.Database.NHibernate.Dao;
 using NHibernate;
 using NHibernate.Criterion;
@@ -10,7 +9,7 @@ namespace Localization.Database.NHibernate.Repository
 {
     public abstract class RepositoryBase : NHibernateDao
     {
-        protected RepositoryBase(ISessionManager sessionManager) : base(sessionManager)
+        protected RepositoryBase(ISession session) : base(session)
         {
         }
 

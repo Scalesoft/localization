@@ -2,25 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using DryIoc.Facilities.NHibernate;
 using NHibernate;
 
 namespace Localization.Database.NHibernate.Dao
 {
     public class NHibernateDao
     {
-        private readonly ISessionManager m_sessionManager;
+        private readonly ISession m_session;
         public const string WildcardAny = "%";
         public const string WildcardSingle = "_";
 
-        protected NHibernateDao(ISessionManager sessionManager)
+        protected NHibernateDao(ISession session)
         {
-            m_sessionManager = sessionManager;
+            m_session = session;
         }
 
         protected ISession GetSession()
         {
-            return m_sessionManager.OpenSession();
+            return m_session;
         }
 
         public static string EscapeQuery(string query)

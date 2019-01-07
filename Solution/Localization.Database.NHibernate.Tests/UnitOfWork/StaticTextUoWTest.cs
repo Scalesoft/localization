@@ -1,39 +1,29 @@
 using System;
 using System.Linq;
-using Localization.Database.NHibernate.Repository;
 using Localization.Database.NHibernate.Tests.Helper;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.Tests.UnitOfWork
 {
     [TestClass]
     public class StaticTextUoWTest
     {
-        private SessionManager m_sessionManager;
+        private ISessionFactory m_sessionFactory;
 
         [TestInitialize]
         public void InitTest()
         {
-            m_sessionManager = new SessionManager(
-                NHibernateConfigurator.GetSessionFactory(nameof(StaticTextUoWTest))
-            );
+            m_sessionFactory = NHibernateConfigurator.GetSessionFactory(nameof(StaticTextUoWTest));
         }
 
         [TestMethod]
         public void ScopeCrTest()
         {
-            var staticTextRepository = new StaticTextRepository(m_sessionManager);
-
-            var cultureRepository = new CultureRepository(m_sessionManager);
-            var cultureUoW = new CultureUoW(cultureRepository, m_sessionManager);
-
-            var dictionaryScopeRepository = new DictionaryScopeRepository(m_sessionManager);
-            var dictionaryScopeUoW = new DictionaryScopeUoW(dictionaryScopeRepository, m_sessionManager);
-
-            var staticTextUoW = new StaticTextUoW(
-                staticTextRepository, cultureRepository, dictionaryScopeRepository, m_sessionManager
-            );
+            var cultureUoW = new CultureUoW(m_sessionFactory);
+            var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
+            var staticTextUoW = new StaticTextUoW(m_sessionFactory);
 
             cultureUoW.AddCulture("cs");
             dictionaryScopeUoW.AddScope("dictionaryScope");

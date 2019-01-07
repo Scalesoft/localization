@@ -1,64 +1,75 @@
 using System.Collections.Generic;
-using DryIoc.Facilities.NHibernate;
-using DryIoc.Transactions;
 using Localization.Database.NHibernate.Entity;
 using Localization.Database.NHibernate.Repository;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.UnitOfWork
 {
     public class CultureHierarchyUoW : UnitOfWorkBase
     {
-        private readonly CultureHierarchyRepository m_cultureHierarchyRepository;
-
         public CultureHierarchyUoW(
-            CultureHierarchyRepository cultureHierarchyRepository,
-            ISessionManager sessionManager
-        ) : base(sessionManager)
+            ISessionFactory sessionFactory
+        ) : base(sessionFactory)
         {
-            m_cultureHierarchyRepository = cultureHierarchyRepository;
         }
 
-        [Transaction]
         public virtual int AddCultureHierarchy(
             CultureEntity culture,
             CultureEntity parentCulture,
             byte levelProperty
         )
         {
-            var cultureHierarchy = new CultureHierarchyEntity
+            using (var session = GetSession())
             {
-                Culture = culture,
-                ParentCulture = parentCulture,
-                LevelProperty = levelProperty,
-            };
+                var cultureHierarchyRepository = new CultureHierarchyRepository(session);
 
-            var result = (int) m_cultureHierarchyRepository.Create(cultureHierarchy);
+                var cultureHierarchy = new CultureHierarchyEntity
+                {
+                    Culture = culture,
+                    ParentCulture = parentCulture,
+                    LevelProperty = levelProperty,
+                };
 
-            return result;
+                var result = (int) cultureHierarchyRepository.Create(cultureHierarchy);
+
+                return result;
+            }
         }
 
-        [Transaction]
         public virtual CultureHierarchyEntity GetCultureHierarchyById(int id)
         {
-            var resultList = m_cultureHierarchyRepository.GetCultureHierarchyById(id);
+            using (var session = GetSession())
+            {
+                var cultureHierarchyRepository = new CultureHierarchyRepository(session);
 
-            return resultList;
+                var resultList = cultureHierarchyRepository.GetCultureHierarchyById(id);
+
+                return resultList;
+            }
         }
 
-        [Transaction]
         public virtual IList<CultureHierarchyEntity> FindCultureHierarchyByCulture(CultureEntity culture)
         {
-            var resultList = m_cultureHierarchyRepository.FindCultureHierarchyByCulture(culture);
+            using (var session = GetSession())
+            {
+                var cultureHierarchyRepository = new CultureHierarchyRepository(session);
 
-            return resultList;
+                var resultList = cultureHierarchyRepository.FindCultureHierarchyByCulture(culture);
+
+                return resultList;
+            }
         }
 
-        [Transaction]
         public virtual IList<CultureHierarchyEntity> FindAllCultureHierarchies()
         {
-            var resultList = m_cultureHierarchyRepository.FindAllCultureHierarchies();
+            using (var session = GetSession())
+            {
+                var cultureHierarchyRepository = new CultureHierarchyRepository(session);
 
-            return resultList;
+                var resultList = cultureHierarchyRepository.FindAllCultureHierarchies();
+
+                return resultList;
+            }
         }
     }
 }

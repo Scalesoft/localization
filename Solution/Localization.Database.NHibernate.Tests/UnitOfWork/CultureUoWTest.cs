@@ -1,30 +1,26 @@
 using System.Linq;
-using Localization.Database.NHibernate.Repository;
 using Localization.Database.NHibernate.Tests.Helper;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHibernate.Cfg;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.Tests.UnitOfWork
 {
     [TestClass]
     public class CultureUoWTest
     {
-        private SessionManager m_sessionManager;
+        private ISessionFactory m_sessionFactory;
 
         [TestInitialize]
         public void InitTest()
         {
-            m_sessionManager = new SessionManager(
-                NHibernateConfigurator.GetSessionFactory(nameof(CultureUoWTest))
-            );
+            m_sessionFactory = NHibernateConfigurator.GetSessionFactory(nameof(CultureUoWTest));
         }
 
         [TestMethod]
         public void CultureCrTest()
         {
-            var cultureRepository = new CultureRepository(m_sessionManager);
-            var cultureUoW = new CultureUoW(cultureRepository, m_sessionManager);
+            var cultureUoW = new CultureUoW(m_sessionFactory);
 
             Assert.AreEqual(null, cultureUoW.GetCultureById(0));
             Assert.AreEqual(null, cultureUoW.GetCultureByName("not-exist"));

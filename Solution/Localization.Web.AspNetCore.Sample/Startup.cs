@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using DryIoc;
-using DryIoc.Facilities.AutoTx.Extensions;
-using DryIoc.Facilities.NHibernate;
 using DryIoc.Microsoft.DependencyInjection;
 using Localization.AspNetCore.Service.IoC;
 using Localization.CoreLibrary.Dictionary;
@@ -15,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
-using Scalesoft.HealthPlatform.WebHub;
 
 namespace Localization.Web.AspNetCore.Sample
 {
@@ -50,15 +47,12 @@ namespace Localization.Web.AspNetCore.Sample
                         .Create(type.Name, LocTranslationSource.File.ToString());
                 });
 
+            services.AddNHibernate(m_configuration);
+
             m_container = new Container().WithDependencyInjectionAdapter(
                 services,
                 throwIfUnresolved: type => type.Name.EndsWith("Controller")
             );
-
-            m_container.Register<INHibernateInstaller, NHibernateInstaller>(Reuse.Singleton);
-
-            m_container.AddAutoTx();
-            m_container.AddNHibernate();
 
             return m_container.Resolve<IServiceProvider>();
         }
@@ -85,8 +79,6 @@ namespace Localization.Web.AspNetCore.Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            m_container.ResetAutoTxActivityContext();
 
             var dictionaryFactory = app.ApplicationServices.GetService<IDictionaryFactory>();
             var dictionaryManager = app.ApplicationServices.GetService<IAutoDictionaryManager>();

@@ -1,31 +1,26 @@
-using Localization.Database.NHibernate.Repository;
 using Localization.Database.NHibernate.Tests.Helper;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.Tests.UnitOfWork
 {
     [TestClass]
     public class CultureHierarchyUoWTest
     {
-        private SessionManager m_sessionManager;
+        private ISessionFactory m_sessionFactory;
 
         [TestInitialize]
         public void InitTest()
         {
-            m_sessionManager = new SessionManager(
-                NHibernateConfigurator.GetSessionFactory(nameof(CultureHierarchyUoWTest))
-            );
+            m_sessionFactory = NHibernateConfigurator.GetSessionFactory(nameof(CultureHierarchyUoWTest));
         }
 
         [TestMethod]
         public void CultureHierarchyCrTest()
         {
-            var cultureRepository = new CultureRepository(m_sessionManager);
-            var cultureUoW = new CultureUoW(cultureRepository, m_sessionManager);
-
-            var cultureHierarchyRepository = new CultureHierarchyRepository(m_sessionManager);
-            var cultureHierarchyUoW = new CultureHierarchyUoW(cultureHierarchyRepository, m_sessionManager);
+            var cultureUoW = new CultureUoW(m_sessionFactory);
+            var cultureHierarchyUoW = new CultureHierarchyUoW(m_sessionFactory);
 
 
             var cultureCs = cultureUoW.GetCultureById(cultureUoW.AddCulture("cs"));

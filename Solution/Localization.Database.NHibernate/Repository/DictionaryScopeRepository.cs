@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DryIoc.Facilities.NHibernate;
 using Localization.Database.NHibernate.Entity;
 using NHibernate;
 using NHibernate.Criterion;
@@ -11,8 +10,8 @@ namespace Localization.Database.NHibernate.Repository
     public class DictionaryScopeRepository : RepositoryBase
     {
         public DictionaryScopeRepository(
-            ISessionManager sessionManager
-        ) : base(sessionManager)
+            ISession session
+        ) : base(session)
         {
         }
 
