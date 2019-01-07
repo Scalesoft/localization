@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
@@ -35,7 +36,7 @@ namespace Localization.CoreLibrary.Util.Impl
             return Directory.GetDirectories(basePath, "*", SearchOption.AllDirectories);
         }
 
-        private IEnumerable<string> CheckGlobalResourceFiles(ILocalizationConfiguration libConfiguration)
+        private IEnumerable<string> CheckGlobalResourceFiles(LocalizationConfiguration libConfiguration)
         {
             IList<string> localizationFiles = new List<string>();
             var exceptionLogStringBuilder = new StringBuilder();
@@ -102,7 +103,7 @@ namespace Localization.CoreLibrary.Util.Impl
         /// </summary>
         /// <param name="libConfiguration">Library configuration.</param>
         /// <param name="scopeDirectories">Array with all folders inside localization folder</param>
-        private IEnumerable<string> CheckScopeResourceFiles(ILocalizationConfiguration libConfiguration, string[] scopeDirectories)
+        private IEnumerable<string> CheckScopeResourceFiles(LocalizationConfiguration libConfiguration, string[] scopeDirectories)
         {
             IList<string> localizationFiles = new List<string>();
 
@@ -183,7 +184,7 @@ namespace Localization.CoreLibrary.Util.Impl
         /// Check for resource files base on folders structure in basePath.
         /// </summary>
         /// <param name="libConfiguration">Library configuration.</param>
-        public IList<string> CheckResourceFiles(ILocalizationConfiguration libConfiguration)
+        public IList<string> CheckResourceFiles(LocalizationConfiguration libConfiguration)
         {
             return CheckScopeResourceFiles(libConfiguration, ScanScopeDirectories(libConfiguration.BasePath))
                 .Union(CheckGlobalResourceFiles(libConfiguration)).ToList();
@@ -196,7 +197,7 @@ namespace Localization.CoreLibrary.Util.Impl
         /// <param name="directory"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public string ConstructResourceFileName(ILocalizationConfiguration libConfiguration, string directory, CultureInfo cultureInfo)
+        public string ConstructResourceFileName(LocalizationConfiguration libConfiguration, string directory, CultureInfo cultureInfo)
         {
             var cutString = string.Concat(libConfiguration.BasePath, Path.DirectorySeparatorChar);
             var nameBase = directory.Split(new string[] {cutString}, StringSplitOptions.None);

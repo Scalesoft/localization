@@ -1,15 +1,15 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Util;
+using Localization.CoreLibrary.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Localization.CoreLibrary.Manager.Impl
 {
     public abstract class ManagerBase
     {
-        protected readonly ILocalizationConfiguration m_configuration;
+        protected readonly LocalizationConfiguration m_configuration;
         protected readonly ILogger m_logger;
 
-        protected ManagerBase(ILocalizationConfiguration configuration, ILogger logger = null)
+        protected ManagerBase(LocalizationConfiguration configuration, ILogger logger = null)
         {
             m_configuration = configuration;
             m_logger = logger;

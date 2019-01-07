@@ -4,7 +4,7 @@ using Localization.CoreLibrary.Util;
 
 namespace Localization.CoreLibrary.Configuration
 {
-    public class LocalizationConfiguration : ILocalizationConfiguration
+    public class LocalizationConfiguration
     {
         public string BasePath { get; set; }
 

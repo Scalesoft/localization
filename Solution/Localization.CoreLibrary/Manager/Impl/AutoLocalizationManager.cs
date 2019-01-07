@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
@@ -16,7 +17,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly ILocalizationManager m_databaseLocalizationManager;
 
         public AutoLocalizationManager(
-            ILocalizationManager fileLocalizationManager, ILocalizationManager databaseLocalizationManager, ILocalizationConfiguration configuration,
+            ILocalizationManager fileLocalizationManager, ILocalizationManager databaseLocalizationManager, LocalizationConfiguration configuration,
             ILogger<AutoLocalizationManager> logger = null
         ) : base(configuration, logger)
         {

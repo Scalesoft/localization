@@ -5,20 +5,21 @@ using Localization.Database.NHibernate.Provider;
 using Localization.Database.NHibernate.Service;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using NHibernate;
 
 namespace Localization.Database.NHibernate.IoC
 {
-    public static class IocRegistrationExtensions
+    public class NHibernateDatabaseConfiguration : IDatabaseConfiguration
     {
-        public static void RegisterLocalizationDataEntitiesComponents(this IServiceCollection services)
+        private readonly ISessionFactory m_sessionFactory;
+
+        public NHibernateDatabaseConfiguration(ISessionFactory sessionFactory)
         {
-            services.AddSingleton<CultureHierarchyUoW>();
-            services.AddSingleton<CultureUoW>();
-            services.AddSingleton<DictionaryScopeUoW>();
-            services.AddSingleton<StaticTextUoW>();
+            m_sessionFactory = sessionFactory;
         }
 
-        public static void RegisterNHibernateLocalizationComponents(this IServiceCollection services)
+        public void RegisterToIoc(IServiceCollection services)
         {
             services.AddTransient<IDatabaseLocalizationManager, DatabaseLocalizationManager>();
             services.AddTransient<IDatabaseDictionaryManager, DatabaseDictionaryManager>();
@@ -27,6 +28,13 @@ namespace Localization.Database.NHibernate.IoC
             services.AddTransient<IDatabaseDictionaryService, DatabaseDictionaryService>();
             services.AddTransient<IDatabaseTranslateService, DatabaseTranslateService>();
             services.AddTransient<LocalizationMappingProvider>();
+
+            services.AddSingleton<CultureHierarchyUoW>();
+            services.AddSingleton<CultureUoW>();
+            services.AddSingleton<DictionaryScopeUoW>();
+            services.AddSingleton<StaticTextUoW>();
+
+            services.TryAddSingleton(m_sessionFactory);
         }
     }
 }

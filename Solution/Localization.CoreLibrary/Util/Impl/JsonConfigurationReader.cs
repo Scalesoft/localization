@@ -23,9 +23,9 @@ namespace Localization.CoreLibrary.Util.Impl
             m_logger = logger;
         }
 
-        public ILocalizationConfiguration ReadConfiguration()
+        public LocalizationConfiguration ReadConfiguration()
         {
-            ILocalizationConfiguration configuration = new LocalizationConfiguration();
+            LocalizationConfiguration configuration = new LocalizationConfiguration();
 
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

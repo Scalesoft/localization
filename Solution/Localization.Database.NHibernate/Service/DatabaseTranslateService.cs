@@ -1,8 +1,8 @@
 using System.Globalization;
 using System.Linq;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Resolver;
-using Localization.CoreLibrary.Util;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
@@ -20,7 +20,7 @@ namespace Localization.Database.NHibernate.Service
             FallbackCultureResolver fallbackCultureResolver,
             CultureHierarchyUoW cultureHierarchyUoW,
             StaticTextUoW staticTextUoW,
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             CultureUoW cultureUoW,
             DictionaryScopeUoW dictionaryScopeUoW,
             ILogger<DatabaseTranslateService> logger,

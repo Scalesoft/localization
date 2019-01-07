@@ -1,4 +1,5 @@
 ﻿using System;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
@@ -8,7 +9,7 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     public abstract class LocalizationManager : ManagerBase
     {
-        protected LocalizationManager(ILocalizationConfiguration configuration, ILogger<LocalizationManager> logger = null) : base(configuration, logger)
+        protected LocalizationManager(LocalizationConfiguration configuration, ILogger<LocalizationManager> logger = null) : base(configuration, logger)
         {
             //Should be empty.
         }

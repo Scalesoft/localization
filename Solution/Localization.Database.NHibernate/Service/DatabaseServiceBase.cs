@@ -1,5 +1,5 @@
 using System;
-using Localization.CoreLibrary.Util;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Logging;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.NHibernate.UnitOfWork;
@@ -15,12 +15,12 @@ namespace Localization.Database.NHibernate.Service
         private readonly ILogger m_logger;
         protected readonly CultureUoW CultureUoW;
         protected readonly DictionaryScopeUoW DictionaryScopeUoW;
-        protected readonly ILocalizationConfiguration Configuration;
+        protected readonly LocalizationConfiguration Configuration;
 
         private readonly IMemoryCache m_memoryCache;
 
         protected DatabaseServiceBase(
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             CultureUoW cultureUoW,
             DictionaryScopeUoW dictionaryScopeUoW,
             ILogger<DatabaseServiceBase> logger,

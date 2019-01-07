@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Resolver;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.CoreLibrary.Manager.Impl
@@ -13,7 +13,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly FallbackCultureResolver m_fallbackCultureResolver;
 
         public FileLocalizationManager(
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             IFileDictionaryManager fileDictionaryManager,
             FallbackCultureResolver fallbackCultureResolver
         ) : base(configuration)

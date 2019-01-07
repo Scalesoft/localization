@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Model;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.CoreLibrary.Manager.Impl
@@ -13,7 +13,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
         public DatabaseLocalizationManager(
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             IDatabaseTranslateService dbTranslateService,
             IDatabaseDynamicTextService databaseDynamicTextService
         ) : base(configuration)

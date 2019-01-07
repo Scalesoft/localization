@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
@@ -19,7 +20,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly IDictionaryManager m_databaseDictionaryManager;
 
         public AutoDictionaryManager(
-            IDictionaryManager fileDictionaryManager, IDictionaryManager databaseDictionaryManager, ILocalizationConfiguration configuration,
+            IDictionaryManager fileDictionaryManager, IDictionaryManager databaseDictionaryManager, LocalizationConfiguration configuration,
             ILogger<AutoDictionaryManager> logger = null
         ) : base(configuration, logger)
         {

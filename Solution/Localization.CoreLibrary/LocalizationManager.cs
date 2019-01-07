@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Manager;
@@ -16,13 +17,13 @@ namespace Localization.CoreLibrary
     {
         private readonly ILogger m_logger;
 
-        private readonly ILocalizationConfiguration m_configuration;
+        private readonly LocalizationConfiguration m_configuration;
 
         private readonly Dictionary<LocTranslationSource, ILocalizationManager> m_localizationManagers;
 
 
         public LocalizationManager(
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             IDatabaseLocalizationManager databaseLocalizationManager,
             IFileLocalizationManager fileLocalizationManager,
             ILoggerFactory loggerFactory = null
@@ -56,7 +57,7 @@ namespace Localization.CoreLibrary
         /// Checks if configuration is valid.
         /// </summary>
         /// <param name="configuration">Configuration to check.</param>
-        private void CheckConfiguration(ILocalizationConfiguration configuration)
+        private void CheckConfiguration(LocalizationConfiguration configuration)
         {
             if (!configuration.SupportedCultures.Contains(configuration.DefaultCulture))
             {

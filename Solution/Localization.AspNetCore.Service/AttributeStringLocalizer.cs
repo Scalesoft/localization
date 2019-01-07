@@ -3,7 +3,6 @@ using System.Globalization;
 using Localization.AspNetCore.Service.Manager;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
@@ -71,11 +70,6 @@ namespace Localization.AspNetCore.Service
         LocalizedString IStringLocalizer.this[string name, params object[] arguments] =>
             m_autoLocalizationManager.TranslateFormat(m_location, name, arguments, RequestCulture(), m_baseName);
 
-        /// <summary>
-        ///     Culture filter method.
-        /// </summary>
-        /// <param name="cultureInfo">Culture info</param>
-        /// <returns>If cultureInfo param is not null, parameter value is returned. Else CultureInfo from cookie.</returns>
         private CultureInfo RequestCulture()
         {
             return m_requestCultureManager.ResolveRequestCulture(m_dictionaryManager.DefaultCulture());

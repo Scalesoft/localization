@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
-using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.Logging;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,7 @@ namespace Localization.Database.EFCore.Service
     {
         private static readonly ILogger Logger = LogProvider.GetCurrentClassLogger();
 
-        public DatabaseDictionaryService(Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
+        public DatabaseDictionaryService(Func<IDatabaseStaticTextContext> dbContext, LocalizationConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
             //Should be empty.

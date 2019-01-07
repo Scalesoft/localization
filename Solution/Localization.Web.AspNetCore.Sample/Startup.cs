@@ -33,11 +33,11 @@ namespace Localization.Web.AspNetCore.Sample
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService(
                 m_configuration,
-                "Localization"
-            );
+                "Localization",
+                new NHibernateDatabaseConfiguration()
+            ); // TODO update this method to allow direct Localization library initialization
 
-            services.RegisterLocalizationDataEntitiesComponents();
-            services.RegisterNHibernateLocalizationComponents();
+            // TODO configure NHibernate mapping from library
 
             // Add framework services.
             services.AddMvc()

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Util;
+using Localization.CoreLibrary.Configuration;
 
 namespace Localization.CoreLibrary.Resolver
 {
@@ -8,7 +8,7 @@ namespace Localization.CoreLibrary.Resolver
     {
         private readonly IDictionary<CultureInfo, CultureInfo> m_cultureFallback;
 
-        public FallbackCultureResolver(ILocalizationConfiguration configuration)
+        public FallbackCultureResolver(LocalizationConfiguration configuration)
         {
             m_cultureFallback = new Dictionary<CultureInfo, CultureInfo>();
 

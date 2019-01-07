@@ -1,5 +1,5 @@
 ﻿using System;
-using Localization.CoreLibrary.Util;
+using Localization.CoreLibrary.Configuration;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
@@ -12,9 +12,9 @@ namespace Localization.Database.EFCore.Service
     {
         private readonly ILogger m_logger;
         protected readonly Func<IDatabaseStaticTextContext> m_dbContextFunc;
-        protected readonly ILocalizationConfiguration m_configuration;
+        protected readonly LocalizationConfiguration m_configuration;
 
-        protected DatabaseServiceBase(ILogger logger, Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
+        protected DatabaseServiceBase(ILogger logger, Func<IDatabaseStaticTextContext> dbContext, LocalizationConfiguration configuration)
         {
             m_logger = logger;
             m_dbContextFunc = dbContext;

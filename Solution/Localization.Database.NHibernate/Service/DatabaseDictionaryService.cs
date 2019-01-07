@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
@@ -13,7 +13,7 @@ namespace Localization.Database.NHibernate.Service
     public class DatabaseDictionaryService : DatabaseServiceBase, IDatabaseDictionaryService
     {
         public DatabaseDictionaryService(
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             CultureUoW cultureUoW,
             DictionaryScopeUoW dictionaryScopeUoW,
             ILogger<DatabaseDictionaryService> logger,

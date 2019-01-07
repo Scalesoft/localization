@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Util;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Microsoft.Extensions.Localization;
-using Localization.Database.EFCore.Entity;
 using Localization.Database.EFCore.EntityBuilder;
 using Localization.Database.EFCore.Logging;
 
@@ -18,7 +16,7 @@ namespace Localization.Database.EFCore.Service
 {
     public sealed class DatabaseTranslateService : DatabaseServiceBase, IDatabaseTranslateService
     {
-        public DatabaseTranslateService(Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
+        public DatabaseTranslateService(Func<IDatabaseStaticTextContext> dbContext, LocalizationConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
             //Should be empty.

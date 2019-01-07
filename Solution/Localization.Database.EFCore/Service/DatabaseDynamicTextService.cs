@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Model;
-using Localization.CoreLibrary.Util;
 using Localization.Database.EFCore.Dao.Impl;
 using Localization.Database.EFCore.Data;
 using Localization.Database.EFCore.Entity;
@@ -13,7 +13,7 @@ namespace Localization.Database.EFCore.Service
 {
     public class DatabaseDynamicTextService : DatabaseServiceBase, IDatabaseDynamicTextService
     {
-        public DatabaseDynamicTextService(Func<IDatabaseStaticTextContext> dbContext, ILocalizationConfiguration configuration)
+        public DatabaseDynamicTextService(Func<IDatabaseStaticTextContext> dbContext, LocalizationConfiguration configuration)
             : base(LogProvider.GetCurrentClassLogger(), dbContext, configuration)
         {
         }

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Dictionary.Impl;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -28,7 +28,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// <param name="dictionaryFactory"></param>
         /// <param name="logger"></param>
         public FileDictionaryManager(
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             IDictionaryFactory dictionaryFactory,
             ILogger<FileDictionaryManager> logger = null
         ) : base(configuration, logger)
@@ -75,7 +75,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// <param name="configuration">Library configuration.</param>
         /// <param name="dictionaryFactory"></param>
         /// <returns>List of resource files to load.</returns>
-        private IEnumerable<string> CheckResourceFiles(ILocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory)
+        private IEnumerable<string> CheckResourceFiles(LocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory)
         {
             var fs = new FolderScanner(dictionaryFactory);
             return fs.CheckResourceFiles(configuration);

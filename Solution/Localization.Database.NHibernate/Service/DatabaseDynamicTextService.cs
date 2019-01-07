@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Model;
-using Localization.CoreLibrary.Util;
 using Localization.Database.Abstractions.Entity;
 using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Caching.Memory;
@@ -18,7 +18,7 @@ namespace Localization.Database.NHibernate.Service
 
         public DatabaseDynamicTextService(
             StaticTextUoW staticTextUoW,
-            ILocalizationConfiguration configuration,
+            LocalizationConfiguration configuration,
             CultureUoW cultureUoW,
             DictionaryScopeUoW dictionaryScopeUoW,
             ILogger<DatabaseDynamicTextService> logger,

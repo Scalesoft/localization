@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Database;
 using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +13,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly IDatabaseDictionaryService m_dbDictionaryService;
 
         public DatabaseDictionaryManager(
-            ILocalizationConfiguration configuration, IDatabaseDictionaryService dbDictionaryService, ILogger<DatabaseDictionaryManager> logger = null
+            LocalizationConfiguration configuration, IDatabaseDictionaryService dbDictionaryService, ILogger<DatabaseDictionaryManager> logger = null
         ) : base(configuration, logger)
         {
             m_dbDictionaryService = dbDictionaryService;
