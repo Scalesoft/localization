@@ -12,7 +12,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly ILogger m_logger;
         private const string NotSetMessage = "Database dynamic text service is not set.";
 
-        public NullDatabaseDynamicTextService(ILogger logger = null)
+        public NullDatabaseDynamicTextService(ILogger<NullDatabaseDynamicTextService> logger = null)
         {
             m_logger = logger;
         }

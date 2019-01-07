@@ -2,7 +2,6 @@
 using System.Globalization;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +12,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly ILogger m_logger;
         private const string NotSetMessage = "Database dictionary manager is not set.";
 
-        public NullDatabaseDictionaryManager(ILogger logger = null)
+        public NullDatabaseDictionaryManager(ILogger<NullDatabaseDictionaryManager> logger = null)
         {
             m_logger = logger;
         }

@@ -18,8 +18,6 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         private const string GlobalScope = "global";
 
-        private readonly ILocalizationConfiguration m_configuration;
-
         private readonly ISet<ILocalizationDictionary> m_dictionaries;
         private readonly IDictionary<CultureInfo, ISet<ILocalizationDictionary>> m_dictionariesPerCulture;
 
@@ -32,11 +30,9 @@ namespace Localization.CoreLibrary.Manager.Impl
         public FileDictionaryManager(
             ILocalizationConfiguration configuration,
             IDictionaryFactory dictionaryFactory,
-            ILogger logger = null
+            ILogger<FileDictionaryManager> logger = null
         ) : base(configuration, logger)
         {
-            m_configuration = configuration;
-
             m_dictionaries = new HashSet<ILocalizationDictionary>();
             m_dictionariesPerCulture = new Dictionary<CultureInfo, ISet<ILocalizationDictionary>>
             {

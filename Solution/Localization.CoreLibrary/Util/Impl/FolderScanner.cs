@@ -19,7 +19,7 @@ namespace Localization.CoreLibrary.Util.Impl
         private readonly ILogger m_logger;
         private readonly IDictionaryFactory m_dictionaryFactory;
 
-        public FolderScanner(IDictionaryFactory dictionaryFactory, ILogger logger = null)
+        public FolderScanner(IDictionaryFactory dictionaryFactory, ILogger<FolderScanner> logger = null)
         {
             m_dictionaryFactory = dictionaryFactory;
             m_logger = logger;

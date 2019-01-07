@@ -6,13 +6,13 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     public abstract class ManagerBase
     {
-        protected readonly ILocalizationConfiguration Configuration;
-        protected readonly ILogger Logger;
+        protected readonly ILocalizationConfiguration m_configuration;
+        protected readonly ILogger m_logger;
 
         protected ManagerBase(ILocalizationConfiguration configuration, ILogger logger = null)
         {
-            Configuration = configuration;
-            Logger = logger;
+            m_configuration = configuration;
+            m_logger = logger;
         }
 
         protected CultureInfo CultureInfoNullCheck(CultureInfo cultureInfo)
@@ -37,12 +37,12 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public CultureInfo DefaultCulture()
         {
-            return Configuration.DefaultCulture;
+            return m_configuration.DefaultCulture;
         }
 
         public string DefaultScope()
         {
-            return Configuration.DefaultScope;
+            return m_configuration.DefaultScope;
         }
     }
 }

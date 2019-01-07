@@ -13,7 +13,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly IDatabaseDictionaryService m_dbDictionaryService;
 
         public DatabaseDictionaryManager(
-            ILocalizationConfiguration configuration, IDatabaseDictionaryService dbDictionaryService, ILogger logger = null
+            ILocalizationConfiguration configuration, IDatabaseDictionaryService dbDictionaryService, ILogger<DatabaseDictionaryManager> logger = null
         ) : base(configuration, logger)
         {
             m_dbDictionaryService = dbDictionaryService;

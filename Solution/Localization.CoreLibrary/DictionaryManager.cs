@@ -11,6 +11,7 @@ using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Localization.CoreLibrary
 {
@@ -31,7 +32,7 @@ namespace Localization.CoreLibrary
         {
             if (loggerFactory == null)
             {
-                loggerFactory = new NullLoggerFactory();
+                loggerFactory = NullLoggerFactory.Instance;
             }
 
             m_logger = loggerFactory.CreateLogger<DictionaryManager>();

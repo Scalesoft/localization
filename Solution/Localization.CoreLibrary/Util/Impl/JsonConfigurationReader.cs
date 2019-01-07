@@ -15,7 +15,7 @@ namespace Localization.CoreLibrary.Util.Impl
         private readonly ILogger m_logger;
         private readonly string m_configurationFilePath;
 
-        public JsonConfigurationReader(string configurationFilePath, ILogger logger = null)
+        public JsonConfigurationReader(string configurationFilePath, ILogger<JsonConfigurationReader> logger = null)
         {
             CheckFileExists(configurationFilePath);
 

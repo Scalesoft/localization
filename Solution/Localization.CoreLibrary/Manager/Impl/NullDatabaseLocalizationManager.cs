@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
-using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +10,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         private readonly ILogger m_logger;
         private const string NotSetMessage = "Database localization manager is not set.";
 
-        public NullDatabaseLocalizationManager(ILogger logger = null)
+        public NullDatabaseLocalizationManager(ILogger<NullDatabaseLocalizationManager> logger = null)
         {
             m_logger = logger;
         }

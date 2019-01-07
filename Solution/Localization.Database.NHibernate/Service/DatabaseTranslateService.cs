@@ -23,7 +23,7 @@ namespace Localization.Database.NHibernate.Service
             ILocalizationConfiguration configuration,
             CultureUoW cultureUoW,
             DictionaryScopeUoW dictionaryScopeUoW,
-            ILogger logger,
+            ILogger<DatabaseTranslateService> logger,
             IMemoryCache memoryCache
         ) : base(configuration, cultureUoW, dictionaryScopeUoW, logger, memoryCache)
         {

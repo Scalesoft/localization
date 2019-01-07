@@ -91,7 +91,7 @@ namespace Localization.CoreLibrary
             if (databaseServiceFactory == null)
             {
                 databaseLocalizationManager = new NullDatabaseLocalizationManager(
-                    loggerFactory?.CreateLogger<NullDatabaseDictionaryManager>()
+                    loggerFactory?.CreateLogger<NullDatabaseLocalizationManager>()
                 );
             }
             else

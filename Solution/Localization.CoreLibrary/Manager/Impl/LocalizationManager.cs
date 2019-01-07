@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
@@ -9,14 +8,14 @@ namespace Localization.CoreLibrary.Manager.Impl
 {
     public abstract class LocalizationManager : ManagerBase
     {
-        protected LocalizationManager(ILocalizationConfiguration configuration, ILogger logger = null) : base(configuration, logger)
+        protected LocalizationManager(ILocalizationConfiguration configuration, ILogger<LocalizationManager> logger = null) : base(configuration, logger)
         {
             //Should be empty.
         }
 
         protected LocalizedString TranslateFallback(string text)
         {
-            switch (Configuration.TranslateFallbackMode)
+            switch (m_configuration.TranslateFallbackMode)
             {
                 case LocTranslateFallbackMode.Null:
                     return null;

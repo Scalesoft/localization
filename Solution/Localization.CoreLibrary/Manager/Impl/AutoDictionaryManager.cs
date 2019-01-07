@@ -6,7 +6,6 @@ using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Logging;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
@@ -21,7 +20,7 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public AutoDictionaryManager(
             IDictionaryManager fileDictionaryManager, IDictionaryManager databaseDictionaryManager, ILocalizationConfiguration configuration,
-            ILogger logger = null
+            ILogger<AutoDictionaryManager> logger = null
         ) : base(configuration, logger)
         {
             m_fileDictionaryManager = fileDictionaryManager;
@@ -37,9 +36,9 @@ namespace Localization.CoreLibrary.Manager.Impl
                 case LocLocalizationResource.File:
                     return m_fileDictionaryManager;
                 default:
-                    if (Logger != null && Logger.IsErrorEnabled())
+                    if (m_logger != null && m_logger.IsErrorEnabled())
                     {
-                        Logger.LogError(@"Requested resource type is not supported ""{0}"":""{1}""", nameof(localizationResource),
+                        m_logger.LogError(@"Requested resource type is not supported ""{0}"":""{1}""", nameof(localizationResource),
                             localizationResource);
                     }
 
@@ -56,9 +55,9 @@ namespace Localization.CoreLibrary.Manager.Impl
                 case LocLocalizationResource.File:
                     return m_databaseDictionaryManager;
                 default:
-                    if (Logger != null && Logger.IsErrorEnabled())
+                    if (m_logger != null && m_logger.IsErrorEnabled())
                     {
-                        Logger.LogError(@"Requested resource type is not supported ""{0}"":""{1}""", nameof(localizationResource),
+                        m_logger.LogError(@"Requested resource type is not supported ""{0}"":""{1}""", nameof(localizationResource),
                             localizationResource);
                     }
 
@@ -68,21 +67,21 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationManager = GetDictionaryManager(Configuration.FirstAutoTranslateResource);
+            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource);
 
             var result = localizationManager.GetDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
-                localizationManager = GetOtherDictionaryManager(Configuration.FirstAutoTranslateResource);
+                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource);
                 try
                 {
                     result = localizationManager.GetDictionary(cultureInfo, scope);
                 }
                 catch (DatabaseLocalizationManagerException e)
                 {
-                    if (Logger != null && Logger.IsInformationEnabled())
+                    if (m_logger != null && m_logger.IsInformationEnabled())
                     {
-                        Logger.LogInformation(@"Requested dictionary with culture ""{0}"" and scope ""{1}""", cultureInfo?.Name, scope,
+                        m_logger.LogInformation(@"Requested dictionary with culture ""{0}"" and scope ""{1}""", cultureInfo?.Name, scope,
                             e);
                     }
 
@@ -95,21 +94,21 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationManager = GetDictionaryManager(Configuration.FirstAutoTranslateResource);
+            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource);
 
             var result = localizationManager.GetPluralizedDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
-                localizationManager = GetOtherDictionaryManager(Configuration.FirstAutoTranslateResource);
+                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource);
                 try
                 {
                     result = localizationManager.GetPluralizedDictionary(cultureInfo, scope);
                 }
                 catch (DatabaseLocalizationManagerException e)
                 {
-                    if (Logger != null && Logger.IsInformationEnabled())
+                    if (m_logger != null && m_logger.IsInformationEnabled())
                     {
-                        Logger.LogInformation(@"Requested pluralization dictionary with culture ""{0}"" and scope ""{1}""",
+                        m_logger.LogInformation(@"Requested pluralization dictionary with culture ""{0}"" and scope ""{1}""",
                             cultureInfo?.Name, scope, e);
                     }
 
@@ -122,21 +121,21 @@ namespace Localization.CoreLibrary.Manager.Impl
 
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
-            var localizationManager = GetDictionaryManager(Configuration.FirstAutoTranslateResource);
+            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource);
 
             var result = localizationManager.GetConstantsDictionary(cultureInfo, scope);
             if (result == null || result.Count == 0)
             {
-                localizationManager = GetOtherDictionaryManager(Configuration.FirstAutoTranslateResource);
+                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource);
                 try
                 {
                     result = localizationManager.GetConstantsDictionary(cultureInfo, scope);
                 }
                 catch (DatabaseLocalizationManagerException e)
                 {
-                    if (Logger != null && Logger.IsInformationEnabled())
+                    if (m_logger != null && m_logger.IsInformationEnabled())
                     {
-                        Logger.LogInformation(@"Requested constants dictionary with culture ""{0}"" and scope ""{1}""", cultureInfo?.Name,
+                        m_logger.LogInformation(@"Requested constants dictionary with culture ""{0}"" and scope ""{1}""", cultureInfo?.Name,
                             scope, e);
                     }
 
