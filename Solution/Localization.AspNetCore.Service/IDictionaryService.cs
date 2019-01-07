@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Localization.CoreLibrary.Pluralization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
 {
-    public interface IDictionary
+    public interface IDictionaryService
     {
         /// <summary>
         /// Gets dictionary with keys and localized values.
@@ -40,4 +41,7 @@ namespace Localization.AspNetCore.Service
             LocTranslationSource translationSource = LocTranslationSource.Auto
         );
     }
+
+    [Obsolete("IDictionary is replaced by IDictionaryService")]
+    public interface IDictionary { }
 }

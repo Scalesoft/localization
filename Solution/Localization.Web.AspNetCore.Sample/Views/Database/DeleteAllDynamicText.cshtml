@@ -1,5 +1,5 @@
 ﻿@using Localization.AspNetCore.Service
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 <section id="saveDynamicTextForm">
     @using (Html.BeginForm("DeleteAllDynamicText", "Database", new {returnUrl = ViewData["ReturnUrl"]}, FormMethod.Post, true, new {role = "form"}))

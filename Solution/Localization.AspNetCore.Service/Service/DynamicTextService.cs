@@ -7,7 +7,7 @@ using Localization.CoreLibrary.Model;
 
 namespace Localization.AspNetCore.Service.Service
 {
-    public class DynamicTextService : ServiceBase, IDynamicText
+    public class DynamicTextService : ServiceBase, IDynamicTextService
     {
         private readonly IDatabaseDictionaryManager m_databaseDictionaryManager;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;

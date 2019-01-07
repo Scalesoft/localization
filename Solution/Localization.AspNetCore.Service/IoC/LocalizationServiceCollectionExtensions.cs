@@ -33,9 +33,9 @@ namespace Localization.AspNetCore.Service.IoC
             services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
             services.AddSingleton<RequestCultureManager>();
 
-            services.AddTransient<ILocalization, LocalizationService>();
-            services.AddTransient<IDictionary, DictionaryService>();
-            services.AddTransient<IDynamicText, DynamicTextService>();
+            services.AddTransient<ILocalizationService, LocalizationService>();
+            services.AddTransient<IDictionaryService, DictionaryService>();
+            services.AddTransient<IDynamicTextService, DynamicTextService>();
 
             services.AddTransient<IDictionaryFactory, JsonDictionaryFactory>();
 

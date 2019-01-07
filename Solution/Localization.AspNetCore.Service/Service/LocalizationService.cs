@@ -6,7 +6,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service.Service
 {
-    public sealed class LocalizationService : ServiceBase, ILocalization
+    public sealed class LocalizationService : ServiceBase, ILocalizationService
     {
         private readonly IAutoLocalizationManager m_localizationManager;
 
@@ -32,7 +32,7 @@ namespace Localization.AspNetCore.Service.Service
 
         public void SetCulture(string culture)
         {
-            RequestCultureManager.SetCulture(culture);
+            m_requestCultureManager.SetCulture(culture);
         }
 
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)

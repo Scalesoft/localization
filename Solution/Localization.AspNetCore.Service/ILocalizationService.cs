@@ -1,10 +1,11 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service
 {
-    public interface ILocalization
+    public interface ILocalizationService
     {
         CultureInfo[] SupportedCultures();
 
@@ -160,4 +161,7 @@ namespace Localization.AspNetCore.Service
         /// <returns>Localized constant string.</returns>
         LocalizedString TranslateConstant(string text);
     }
+
+    [Obsolete("ILocalization is replaced by ILocalizationService")]
+    public interface ILocalization { }
 }

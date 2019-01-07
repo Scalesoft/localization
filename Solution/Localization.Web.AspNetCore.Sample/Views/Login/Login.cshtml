@@ -1,7 +1,7 @@
 ﻿@using Localization.AspNetCore.Service
 @using Localization.Web.AspNetCore.Sample.Models
 @model LoginViewModel
-@inject ILocalization Localizer
+@inject ILocalizationService Localizer
 
 @{
     ViewData["Title"] = Localizer.Translate("login-title");

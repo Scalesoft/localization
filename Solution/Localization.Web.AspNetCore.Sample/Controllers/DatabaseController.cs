@@ -11,10 +11,10 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 {
     public class DatabaseController : Controller
     {
-        private readonly ILocalization m_localization;
-        private readonly IDynamicText m_dynamicTextService;
+        private readonly ILocalizationService m_localization;
+        private readonly IDynamicTextService m_dynamicTextService;
 
-        public DatabaseController(ILocalization localization, IDynamicText dynamicTextService)
+        public DatabaseController(ILocalizationService localization, IDynamicTextService dynamicTextService)
         {
             m_localization = localization;
             m_dynamicTextService = dynamicTextService;

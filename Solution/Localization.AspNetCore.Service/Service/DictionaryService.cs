@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Localization.AspNetCore.Service.Service
 {
-    public class DictionaryService : ServiceBase, IDictionary
+    public class DictionaryService : ServiceBase, IDictionaryService
     {
         private readonly IAutoDictionaryManager m_dictionaryManager;
 

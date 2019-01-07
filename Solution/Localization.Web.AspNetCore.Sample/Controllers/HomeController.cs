@@ -11,9 +11,9 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILocalization m_localizationManager;
+        private readonly ILocalizationService m_localizationManager;
 
-        public HomeController(ILocalization localizationManager, IDictionary dictionaryManager)
+        public HomeController(ILocalizationService localizationManager, IDictionaryService dictionaryManager)
         {
             m_localizationManager = localizationManager;
         }
