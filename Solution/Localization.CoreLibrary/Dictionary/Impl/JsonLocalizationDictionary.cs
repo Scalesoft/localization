@@ -23,9 +23,11 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
         private static readonly object m_initLock = new object();
 
+        public const string JsonExtension = "json";
+
         private const string CultureJPath = "culture";
         private const string ScopeJPath = "scope";
-        public const string JsonExtension = "json";
+        private const string ScopeAliasJPath = "scopeAlias";
         private const string PluralJPath = "plural";
         private const string DictionaryJPath = "dictionary";
         private const string ConstantJPath = "constants";
@@ -35,6 +37,7 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         private readonly CultureInfo m_cultureInfo;
         private readonly string m_scope;
         private readonly string m_parentScopeName;
+        private readonly IList<string> m_scopeAlias;
 
         private readonly JObject m_jsonDictionary;
         private readonly JObject m_jsonPluralizedDictionary;
@@ -62,6 +65,15 @@ namespace Localization.CoreLibrary.Dictionary.Impl
 
             m_scope = (string) m_jsonDictionary[ScopeJPath];
             m_parentScopeName = (string) m_jsonDictionary[ParentScopeJPath];
+
+            m_scopeAlias = new List<string>();
+            if (m_jsonDictionary[ScopeAliasJPath] != null)
+            {
+                foreach (var alias in m_jsonDictionary[ScopeAliasJPath])
+                {
+                    m_scopeAlias.Add((string) alias);
+                }
+            }
         }
 
         public JsonLocalizationDictionary(
@@ -117,7 +129,8 @@ namespace Localization.CoreLibrary.Dictionary.Impl
                 }
                 catch (JsonReaderException e)
                 {
-                    var message = $@"Resource file ""{fileName ?? "(stream)"}"" is not well-formatted. See library documentation.";
+                    var message =
+                        $@"Resource file ""{fileName ?? "(stream)"}"" is not well-formatted. See library documentation.";
                     if (m_logger != null && m_logger.IsErrorEnabled())
                     {
                         m_logger.LogError(message);
@@ -138,6 +151,11 @@ namespace Localization.CoreLibrary.Dictionary.Impl
         public string Scope()
         {
             return m_scope;
+        }
+
+        public IList<string> ScopeAlias()
+        {
+            return m_scopeAlias;
         }
 
         public string GetParentScopeName()

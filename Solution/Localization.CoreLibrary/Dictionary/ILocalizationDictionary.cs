@@ -19,6 +19,8 @@ namespace Localization.CoreLibrary.Dictionary
         /// </summary>
         /// <returns>Dictionary scope.</returns>
         string Scope();
+        
+        IList<string> ScopeAlias();
 
         string GetParentScopeName();
 

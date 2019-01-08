@@ -1,6 +1,10 @@
 ﻿{
   "culture": "cs",
   "scope": "global",
+  "scopeAlias": [
+    "personalScope1",
+    "personalScope2"
+  ],
   "dictionary": {
     "cancel": "Zrušit",
     "retry": "Opakovat",

@@ -29,10 +29,17 @@ namespace Localization.CoreLibrary.Tests.Manager
                 {
                     new CultureInfo("en"),
                     new CultureInfo("es")
-                }
+                },
+                AutoLoadResources = true
             };
 
-            var dictionaryManager = new FileDictionaryManager(localizationConfiguration, JsonDictionaryFactory.FactoryInstance);
+            var dictionaryManager = new FileDictionaryManager(
+                localizationConfiguration, JsonDictionaryFactory.FactoryInstance
+            );
+            var dictionary = dictionaryManager.GetLocalizationDictionary(new CultureInfo("cs"), "personalScope1");
+
+            Assert.IsTrue(dictionary.ScopeAlias().Contains("personalScope1"));
+            Assert.IsTrue(dictionary.ScopeAlias().Contains("personalScope2"));
 
             Assert.AreEqual(true, dictionaryManager.IsCultureSupported(new CultureInfo("cs")));
             Assert.AreEqual(true, dictionaryManager.IsCultureSupported(new CultureInfo("en")));
@@ -66,7 +73,9 @@ namespace Localization.CoreLibrary.Tests.Manager
                 AutoLoadResources = true
             };
 
-            var dictionaryManager = new FileDictionaryManager(localizationConfiguration, JsonDictionaryFactory.FactoryInstance);
+            var dictionaryManager = new FileDictionaryManager(
+                localizationConfiguration, JsonDictionaryFactory.FactoryInstance
+            );
 
             var fallbackCultureResolver = new FallbackCultureResolver(localizationConfiguration);
             var fileLocalizationManager = new FileLocalizationManager(

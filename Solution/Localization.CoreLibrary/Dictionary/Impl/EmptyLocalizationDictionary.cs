@@ -41,6 +41,11 @@ namespace Localization.CoreLibrary.Dictionary.Impl
             return string.Empty;
         }
 
+        public IList<string> ScopeAlias()
+        {
+            return new List<string>();
+        }
+
         public string GetParentScopeName()
         {
             return string.Empty;
