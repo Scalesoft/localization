@@ -1,4 +1,4 @@
-using Localization.Database.NHibernate.Provider;
+using Localization.Database.NHibernate;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
@@ -42,7 +42,7 @@ namespace Localization.Web.AspNetCore.Sample
         {
             var mapper = new ModelMapper();
 
-            mapper.AddMappings(new LocalizationMappingProvider().GetMappings());
+            mapper.AddMappings(NHibernateDatabaseConfiguration.GetMappings());
 
             var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 

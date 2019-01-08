@@ -3,10 +3,11 @@ using System.IO;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using Localization.AspNetCore.Service.IoC;
+using Localization.CoreLibrary.Configuration;
 using Localization.CoreLibrary.Dictionary;
 using Localization.CoreLibrary.Manager;
 using Localization.CoreLibrary.Util;
-using Localization.Database.NHibernate.IoC;
+using Localization.Database.NHibernate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,14 +32,7 @@ namespace Localization.Web.AspNetCore.Sample
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddLocalizationService(
-                m_configuration,
-                "Localization",
-                new NHibernateDatabaseConfiguration()
-            ); // TODO update this method to allow direct Localization library initialization
-
-            // TODO configure NHibernate mapping from library
-
+            
             // Add framework services.
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
@@ -48,6 +42,8 @@ namespace Localization.Web.AspNetCore.Sample
                 });
 
             services.AddNHibernate(m_configuration);
+
+            services.AddLocalizationService();
 
             m_container = new Container().WithDependencyInjectionAdapter(
                 services,
@@ -79,6 +75,13 @@ namespace Localization.Web.AspNetCore.Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // TODO localization should be configured here
+            var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
+            CoreLibrary.Localization.Init( //TODO
+                localizationConfiguration,
+                new NHibernateDatabaseConfiguration(),
+                loggerFactory);
 
             var dictionaryFactory = app.ApplicationServices.GetService<IDictionaryFactory>();
             var dictionaryManager = app.ApplicationServices.GetService<IAutoDictionaryManager>();

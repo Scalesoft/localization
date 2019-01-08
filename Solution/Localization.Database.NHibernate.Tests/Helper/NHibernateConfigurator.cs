@@ -1,4 +1,3 @@
-using Localization.Database.NHibernate.Provider;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -39,7 +38,7 @@ namespace Localization.Database.NHibernate.Tests.Helper
         {
             var mapper = new ModelMapper();
 
-            var mappings = new LocalizationMappingProvider().GetMappings();
+            var mappings = NHibernateDatabaseConfiguration.GetMappings();
             mapper.AddMappings(mappings);
             var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 
