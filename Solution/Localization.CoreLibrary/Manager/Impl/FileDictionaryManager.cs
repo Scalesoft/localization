@@ -75,8 +75,7 @@ namespace Localization.CoreLibrary.Manager.Impl
         /// <param name="configuration">Library configuration.</param>
         /// <param name="dictionaryFactory"></param>
         /// <returns>List of resource files to load.</returns>
-        private IEnumerable<string> CheckResourceFiles(LocalizationConfiguration configuration,
-            IDictionaryFactory dictionaryFactory)
+        private IEnumerable<string> CheckResourceFiles(LocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory)
         {
             var fs = new FolderScanner(dictionaryFactory);
             return fs.CheckResourceFiles(configuration);
@@ -137,8 +136,7 @@ namespace Localization.CoreLibrary.Manager.Impl
             }
         }
 
-        private void BuildDictionaryHierarchyTrees(ISet<ILocalizationDictionary> dictionaries,
-            ILocalizationDictionary dictionary)
+        private void BuildDictionaryHierarchyTrees(ISet<ILocalizationDictionary> dictionaries, ILocalizationDictionary dictionary)
         {
             if (dictionary.Scope() == GlobalScope)
             {
@@ -159,14 +157,12 @@ namespace Localization.CoreLibrary.Manager.Impl
             return GetLocalizationDictionary(cultureInfo, scope).List();
         }
 
-        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null,
-            string scope = null)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
         }
 
-        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null,
-            string scope = null)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
         }
