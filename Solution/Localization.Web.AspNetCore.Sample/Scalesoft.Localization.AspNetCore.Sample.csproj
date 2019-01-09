@@ -24,9 +24,9 @@
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Localization.AspNetCore.Service\Localization.AspNetCore.Service.csproj" />
-    <ProjectReference Include="..\Localization.CoreLibrary\Localization.CoreLibrary.csproj" />
-    <ProjectReference Include="..\Localization.Database.NHibernate\Localization.Database.NHibernate.csproj" />
+    <ProjectReference Include="..\Localization.AspNetCore.Service\Scalesoft.Localization.AspNetCore.csproj" />
+    <ProjectReference Include="..\Localization.CoreLibrary\Scalesoft.Localization.Core.csproj" />
+    <ProjectReference Include="..\Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj" />
   </ItemGroup>
 
   <ItemGroup>

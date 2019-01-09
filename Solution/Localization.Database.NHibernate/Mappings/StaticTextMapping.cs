@@ -1,7 +1,7 @@
-using Localization.Database.NHibernate.Entity;
 using NHibernate.Mapping.ByCode.Conformist;
+using Scalesoft.Localization.Database.NHibernate.Entity;
 
-namespace Localization.Database.NHibernate.Mappings
+namespace Scalesoft.Localization.Database.NHibernate.Mappings
 {
     public class StaticTextMapping : SubclassMapping<StaticTextEntity>, IMapping
     {

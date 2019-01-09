@@ -2,19 +2,19 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Manager.Impl;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary
+namespace Scalesoft.Localization.Core
 {
     public class DictionaryManager : IAutoDictionaryManager
     {

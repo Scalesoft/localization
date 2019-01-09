@@ -1,8 +1,8 @@
 ﻿using System;
-using Localization.Database.EFCore.Entity;
 using Microsoft.EntityFrameworkCore;
+using Scalesoft.Localization.Database.EFCore.Entity;
 
-namespace Localization.Database.EFCore.Data
+namespace Scalesoft.Localization.Database.EFCore.Data
 {
     public interface IDatabaseStaticTextContext : IDisposable
     {

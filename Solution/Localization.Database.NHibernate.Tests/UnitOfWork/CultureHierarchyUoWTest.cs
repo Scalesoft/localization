@@ -1,9 +1,9 @@
-using Localization.Database.NHibernate.Tests.Helper;
-using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
+using Scalesoft.Localization.Database.NHibernate.Tests.Helper;
+using Scalesoft.Localization.Database.NHibernate.UnitOfWork;
 
-namespace Localization.Database.NHibernate.Tests.UnitOfWork
+namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
 {
     [TestClass]
     public class CultureHierarchyUoWTest

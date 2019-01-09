@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Util;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     internal class AutoDictionaryManager : ManagerBase, IDictionaryManager
     {

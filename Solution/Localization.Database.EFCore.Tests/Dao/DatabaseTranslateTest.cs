@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Util;
-using Localization.Database.EFCore.Data;
-using Localization.Database.EFCore.Data.Impl;
-using Localization.Database.EFCore.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Manager.Impl;
+using Scalesoft.Localization.Core.Util;
+using Scalesoft.Localization.Database.EFCore.Data;
+using Scalesoft.Localization.Database.EFCore.Data.Impl;
+using Scalesoft.Localization.Database.EFCore.Service;
 
-namespace Localization.Database.EFCore.Tests.Dao
+namespace Scalesoft.Localization.Database.EFCore.Tests.Dao
 {
     [TestClass]
     public class DatabaseTranslateTest

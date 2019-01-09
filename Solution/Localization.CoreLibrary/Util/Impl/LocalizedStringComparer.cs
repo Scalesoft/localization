@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Localization;
 
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+[assembly: InternalsVisibleTo("Scalesoft.Localization.Core.Tests")]
 
-namespace Localization.CoreLibrary.Util.Impl
+namespace Scalesoft.Localization.Core.Util.Impl
 {
     internal class LocalizedStringComparer : IEqualityComparer<LocalizedString>
     {

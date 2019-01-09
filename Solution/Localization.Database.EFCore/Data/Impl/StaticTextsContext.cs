@@ -1,8 +1,7 @@
-﻿using Localization.Database.EFCore.Entity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using Scalesoft.Localization.Database.EFCore.Entity;
 
-namespace Localization.Database.EFCore.Data.Impl
+namespace Scalesoft.Localization.Database.EFCore.Data.Impl
 {
     public class StaticTextsContext : DbContext, IDatabaseStaticTextContext
     {

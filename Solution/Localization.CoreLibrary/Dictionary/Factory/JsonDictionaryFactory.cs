@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using Localization.CoreLibrary.Dictionary.Impl;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Dictionary.Impl;
 
-namespace Localization.CoreLibrary.Dictionary.Factory
+namespace Scalesoft.Localization.Core.Dictionary.Factory
 {
     public class JsonDictionaryFactory : IDictionaryFactory
     {

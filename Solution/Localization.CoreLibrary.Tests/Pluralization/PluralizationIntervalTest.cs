@@ -1,8 +1,8 @@
 ﻿using System;
-using Localization.CoreLibrary.Pluralization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Pluralization;
 
-namespace Localization.CoreLibrary.Tests.Pluralization
+namespace Scalesoft.Localization.Core.Tests.Pluralization
 {
     [TestClass]
     public class PluralizationIntervalTest

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.AspNetCore.Service
+namespace Scalesoft.Localization.AspNetCore
 {
     public interface ILocalizationService
     {

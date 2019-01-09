@@ -1,14 +1,14 @@
-﻿using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Resolver;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Dictionary.Factory;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Manager.Impl;
+using Scalesoft.Localization.Core.Resolver;
 
-namespace Localization.CoreLibrary.IoC
+namespace Scalesoft.Localization.Core.IoC
 {
     public static class LocalizationServiceCollectionExtensions
     {

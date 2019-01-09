@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Localization.Database.EFCore.Entity;
-using Localization.Database.EFCore.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Database.EFCore.Entity;
+using Scalesoft.Localization.Database.EFCore.Logging;
 
-namespace Localization.Database.EFCore.Dao.Impl
+namespace Scalesoft.Localization.Database.EFCore.Dao.Impl
 {
     public class DictionaryScopeDao : GenericDao<DictionaryScope, int>
     {

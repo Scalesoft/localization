@@ -1,6 +1,6 @@
-﻿using Localization.Database.EFCore.Entity;
+﻿using Scalesoft.Localization.Database.EFCore.Entity;
 
-namespace Localization.Database.EFCore.EntityBuilder
+namespace Scalesoft.Localization.Database.EFCore.EntityBuilder
 {
     public class ConstantStaticTextBuilder : ITextBuilder<ConstantStaticText>
     {

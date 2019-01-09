@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Localization.CoreLibrary.Resolver
+namespace Scalesoft.Localization.Core.Resolver
 {
     public class FileNameBasedParentScopeResolver : IParentScopeResolver
     {

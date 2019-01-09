@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Manager.Impl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary.Factory;
+using Scalesoft.Localization.Core.Manager.Impl;
 
-namespace Localization.CoreLibrary.Tests.Manager
+namespace Scalesoft.Localization.Core.Tests.Manager
 {
     [TestClass]
     public class FileDictionaryManagerTest

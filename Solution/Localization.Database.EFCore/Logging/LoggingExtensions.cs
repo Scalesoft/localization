@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 
 [assembly: InternalsVisibleTo("Localization.Database.EFCore.Tests")]
-namespace Localization.Database.EFCore.Logging
+namespace Scalesoft.Localization.Database.EFCore.Logging
 {
     internal static class LoggingExtensions
     {

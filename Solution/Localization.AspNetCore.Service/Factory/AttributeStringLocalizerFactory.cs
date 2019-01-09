@@ -1,11 +1,11 @@
 ﻿using System;
-using Localization.AspNetCore.Service.Manager;
-using Localization.CoreLibrary.Common;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.AspNetCore.Manager;
+using Scalesoft.Localization.Core.Common;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.AspNetCore.Service.Factory
+namespace Scalesoft.Localization.AspNetCore.Factory
 {
     /// <summary>
     ///     AttributeStringLocalizerFactory for creating IStringLocalizer instances

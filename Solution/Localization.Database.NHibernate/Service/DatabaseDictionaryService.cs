@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Pluralization;
-using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Database.NHibernate.UnitOfWork;
 
-namespace Localization.Database.NHibernate.Service
+namespace Scalesoft.Localization.Database.NHibernate.Service
 {
     public class DatabaseDictionaryService : DatabaseServiceBase, IDatabaseDictionaryService
     {

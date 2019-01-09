@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Tests
+namespace Scalesoft.Localization.Core.Tests
 {
     [TestClass]
     public class LocalizationTest

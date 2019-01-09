@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Manager.Impl;
-using Localization.Database.NHibernate.Mappings;
-using Localization.Database.NHibernate.Service;
-using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NHibernate;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Manager.Impl;
+using Scalesoft.Localization.Database.NHibernate.Mappings;
+using Scalesoft.Localization.Database.NHibernate.Service;
+using Scalesoft.Localization.Database.NHibernate.UnitOfWork;
 
-namespace Localization.Database.NHibernate
+namespace Scalesoft.Localization.Database.NHibernate
 {
     public class NHibernateDatabaseConfiguration : IDatabaseConfiguration
     {

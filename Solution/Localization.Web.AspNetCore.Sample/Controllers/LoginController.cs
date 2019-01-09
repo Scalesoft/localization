@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
-using Localization.Web.AspNetCore.Sample.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Scalesoft.Localization.AspNetCore.Sample.Models;
 
-namespace Localization.Web.AspNetCore.Sample.Controllers
+namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
 {
     public class LoginController : Controller
     {

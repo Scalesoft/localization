@@ -1,8 +1,8 @@
-﻿using Localization.CoreLibrary.Util.Impl;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Util.Impl;
 
-namespace Localization.CoreLibrary.Tests.Util.Impl
+namespace Scalesoft.Localization.Core.Tests.Util.Impl
 {
     [TestClass]
     public class LocalizedStringComparerTest

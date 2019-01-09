@@ -1,12 +1,12 @@
 using System;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Logging;
 using Localization.Database.Abstractions.Entity;
-using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Database.NHibernate.UnitOfWork;
 
-namespace Localization.Database.NHibernate.Service
+namespace Scalesoft.Localization.Database.NHibernate.Service
 {
     public abstract class DatabaseServiceBase
     {

@@ -1,4 +1,4 @@
-namespace Localization.CoreLibrary.Resolver
+namespace Scalesoft.Localization.Core.Resolver
 {
     public interface IParentScopeResolver
     {

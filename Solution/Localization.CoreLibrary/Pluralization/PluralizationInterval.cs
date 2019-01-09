@@ -1,10 +1,9 @@
 ﻿using System;
-using Localization.CoreLibrary.Common;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Common;
+using Scalesoft.Localization.Core.Logging;
 
-namespace Localization.CoreLibrary.Pluralization
+namespace Scalesoft.Localization.Core.Pluralization
 {
     public class PluralizationInterval
     {

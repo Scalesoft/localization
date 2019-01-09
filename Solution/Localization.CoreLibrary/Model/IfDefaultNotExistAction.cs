@@ -1,4 +1,4 @@
-﻿namespace Localization.CoreLibrary.Model
+﻿namespace Scalesoft.Localization.Core.Model
 {
     public enum IfDefaultNotExistAction
     {

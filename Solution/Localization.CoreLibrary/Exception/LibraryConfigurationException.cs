@@ -1,4 +1,4 @@
-﻿namespace Localization.CoreLibrary.Exception
+﻿namespace Scalesoft.Localization.Core.Exception
 {
     public class LibraryConfigurationException : System.Exception
     {

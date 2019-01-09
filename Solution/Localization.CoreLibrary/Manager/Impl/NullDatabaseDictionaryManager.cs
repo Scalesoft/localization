@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Core.Pluralization;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public class NullDatabaseDictionaryManager : IDatabaseDictionaryManager
     {

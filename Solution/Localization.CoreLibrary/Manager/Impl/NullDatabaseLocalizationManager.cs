@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Logging;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public class NullDatabaseLocalizationManager : IDatabaseLocalizationManager
     {

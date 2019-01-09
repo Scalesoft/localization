@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Pluralization;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
-namespace Localization.CoreLibrary.Dictionary.Impl
+namespace Scalesoft.Localization.Core.Dictionary.Impl
 {
     internal class EmptyLocalizationDictionary : ILocalizationDictionary
     {

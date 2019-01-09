@@ -1,12 +1,12 @@
 ﻿using System;
-using Localization.CoreLibrary.Configuration;
-using Localization.Database.EFCore.Dao.Impl;
-using Localization.Database.EFCore.Data;
-using Localization.Database.EFCore.Entity;
-using Localization.Database.EFCore.Logging;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Database.EFCore.Dao.Impl;
+using Scalesoft.Localization.Database.EFCore.Data;
+using Scalesoft.Localization.Database.EFCore.Entity;
+using Scalesoft.Localization.Database.EFCore.Logging;
 
-namespace Localization.Database.EFCore.Service
+namespace Scalesoft.Localization.Database.EFCore.Service
 {
     public abstract class DatabaseServiceBase
     {

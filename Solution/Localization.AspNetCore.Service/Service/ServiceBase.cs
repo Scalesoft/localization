@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using Localization.AspNetCore.Service.Manager;
+using Scalesoft.Localization.AspNetCore.Manager;
 
-namespace Localization.AspNetCore.Service.Service
+namespace Scalesoft.Localization.AspNetCore.Service
 {
     public abstract class ServiceBase
     {

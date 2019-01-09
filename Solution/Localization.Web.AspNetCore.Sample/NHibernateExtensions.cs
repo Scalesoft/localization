@@ -1,4 +1,3 @@
-using Localization.Database.NHibernate;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Cfg;
@@ -7,8 +6,9 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using NHibernate.Mapping.ByCode;
+using Scalesoft.Localization.Database.NHibernate;
 
-namespace Localization.Web.AspNetCore.Sample
+namespace Scalesoft.Localization.AspNetCore.Sample
 {
     /// <summary>
     /// Configure NHibernate and it's database connection

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Pluralization;
 
-namespace Localization.CoreLibrary.Database
+namespace Scalesoft.Localization.Core.Database
 {
     public interface IDatabaseDictionaryService
     {

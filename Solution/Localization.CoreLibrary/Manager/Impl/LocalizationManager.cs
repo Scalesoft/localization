@@ -1,11 +1,11 @@
 ﻿using System;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public abstract class LocalizationManager : ManagerBase
     {

@@ -1,9 +1,9 @@
 using System;
-using Localization.Database.NHibernate.Entity;
-using Localization.Database.NHibernate.Repository;
 using NHibernate;
+using Scalesoft.Localization.Database.NHibernate.Entity;
+using Scalesoft.Localization.Database.NHibernate.Repository;
 
-namespace Localization.Database.NHibernate.UnitOfWork
+namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
 {
     public abstract class BaseTextUoW : UnitOfWorkBase
     {

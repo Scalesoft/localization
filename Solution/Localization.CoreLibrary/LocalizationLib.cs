@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.IoC;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.IoC;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Util;
+using Scalesoft.Localization.Core.Util.Impl;
 
-namespace Localization.CoreLibrary
+namespace Scalesoft.Localization.Core
 {
     public class LocalizationLib : IAutoLocalizationManager, IAutoDictionaryManager
     {

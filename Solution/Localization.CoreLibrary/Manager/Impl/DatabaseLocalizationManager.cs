@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Model;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Model;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public class DatabaseLocalizationManager : LocalizationManager, IDatabaseLocalizationManager, IDatabaseDynamicTextService
     {

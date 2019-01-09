@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using Microsoft.Extensions.Logging;
 
-namespace Localization.CoreLibrary.Dictionary
+namespace Scalesoft.Localization.Core.Dictionary
 {
     public interface IDictionaryFactory
     {

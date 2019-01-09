@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Localization.Database.EFCore.Entity;
-using Localization.Database.EFCore.EntityBuilder.Common;
-using Localization.Database.EFCore.Exception;
+﻿using System.Collections.Generic;
+using Scalesoft.Localization.Database.EFCore.Entity;
+using Scalesoft.Localization.Database.EFCore.EntityBuilder.Common;
+using Scalesoft.Localization.Database.EFCore.Exception;
 
-namespace Localization.Database.EFCore.EntityBuilder
+namespace Scalesoft.Localization.Database.EFCore.EntityBuilder
 {
     public class PluralizedStaticTextBuilder : ITextBuilder<PluralizedStaticText>
     {

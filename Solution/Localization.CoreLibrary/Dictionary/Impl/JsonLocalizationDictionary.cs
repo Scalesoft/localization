@@ -4,18 +4,18 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Resolver;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Resolver;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
-namespace Localization.CoreLibrary.Dictionary.Impl
+namespace Scalesoft.Localization.Core.Dictionary.Impl
 {
     internal class JsonLocalizationDictionary : ILocalizationDictionary
     {

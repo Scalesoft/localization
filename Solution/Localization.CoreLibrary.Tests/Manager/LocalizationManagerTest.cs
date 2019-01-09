@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Resolver;
-using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary.Factory;
+using Scalesoft.Localization.Core.Manager.Impl;
+using Scalesoft.Localization.Core.Resolver;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Tests.Manager
+namespace Scalesoft.Localization.Core.Tests.Manager
 {
     [TestClass]
     public class LocalizationManagerTest

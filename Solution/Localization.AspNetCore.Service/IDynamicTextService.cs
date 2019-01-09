@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Model;
+using Scalesoft.Localization.Core.Model;
 
-namespace Localization.AspNetCore.Service
+namespace Scalesoft.Localization.AspNetCore
 {
     public interface IDynamicTextService
     {

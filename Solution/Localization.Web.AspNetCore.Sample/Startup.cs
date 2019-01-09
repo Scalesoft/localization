@@ -2,20 +2,20 @@
 using System.IO;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
-using Localization.AspNetCore.Service.IoC;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Util;
-using Localization.Database.NHibernate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
+using Scalesoft.Localization.AspNetCore.IoC;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Util;
+using Scalesoft.Localization.Database.NHibernate;
 
-namespace Localization.Web.AspNetCore.Sample
+namespace Scalesoft.Localization.AspNetCore.Sample
 {
     public class Startup
     {

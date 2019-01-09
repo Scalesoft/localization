@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Resolver;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Resolver;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public class FileLocalizationManager : LocalizationManager, IFileLocalizationManager
     {

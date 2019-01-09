@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Resolver;
-using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Resolver;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Tests.Resolver
+namespace Scalesoft.Localization.Core.Tests.Resolver
 {
     [TestClass]
     public class FallbackCultureResolverTest

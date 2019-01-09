@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Localization.AspNetCore.Service;
-using Localization.CoreLibrary.Util;
-using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Localization.CoreLibrary.Model;
+using Scalesoft.Localization.AspNetCore.Sample.Models;
+using Scalesoft.Localization.Core.Model;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.Web.AspNetCore.Sample.Controllers
+namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
 {
     public class DatabaseController : Controller
     {

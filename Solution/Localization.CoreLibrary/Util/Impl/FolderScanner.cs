@@ -5,15 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Logging;
 
-[assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
+[assembly: InternalsVisibleTo("Scalesoft.Localization.Core.Tests")]
 
-namespace Localization.CoreLibrary.Util.Impl
+namespace Scalesoft.Localization.Core.Util.Impl
 {
     internal class FolderScanner : ILocalizationStructureScanner
     {

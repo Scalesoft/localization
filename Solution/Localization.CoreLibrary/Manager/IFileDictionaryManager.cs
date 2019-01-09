@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Dictionary;
+using Scalesoft.Localization.Core.Dictionary;
 
-namespace Localization.CoreLibrary.Manager
+namespace Scalesoft.Localization.Core.Manager
 {
     public interface IFileDictionaryManager : IDictionaryManager
     {

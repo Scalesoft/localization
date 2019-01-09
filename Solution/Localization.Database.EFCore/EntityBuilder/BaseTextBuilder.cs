@@ -1,10 +1,10 @@
-﻿using Localization.Database.EFCore.Entity;
-using Localization.Database.EFCore.EntityBuilder.Common;
-using Localization.Database.EFCore.Exception;
-using Localization.Database.EFCore.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Database.EFCore.Entity;
+using Scalesoft.Localization.Database.EFCore.EntityBuilder.Common;
+using Scalesoft.Localization.Database.EFCore.Exception;
+using Scalesoft.Localization.Database.EFCore.Logging;
 
-namespace Localization.Database.EFCore.EntityBuilder
+namespace Scalesoft.Localization.Database.EFCore.EntityBuilder
 {
     public class BaseTextBuilder<T> : ITextBuilder<T> where T : BaseText
     {

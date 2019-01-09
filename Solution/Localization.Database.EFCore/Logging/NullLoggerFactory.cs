@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 [assembly: InternalsVisibleTo("Localization.Database.EFCore.Tests")]
-namespace Localization.Database.EFCore.Logging
+namespace Scalesoft.Localization.Database.EFCore.Logging
 {
     internal class NullLoggerFactory : ILoggerFactory
     {

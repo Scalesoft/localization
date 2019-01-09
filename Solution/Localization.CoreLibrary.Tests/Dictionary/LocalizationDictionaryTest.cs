@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Dictionary.Factory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Dictionary.Factory;
 
-namespace Localization.CoreLibrary.Tests.Dictionary
+namespace Scalesoft.Localization.Core.Tests.Dictionary
 {
     [TestClass]
     public class LocalizationDictionaryTest

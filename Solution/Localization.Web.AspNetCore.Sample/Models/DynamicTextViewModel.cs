@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Localization.Web.AspNetCore.Sample.Models
+namespace Scalesoft.Localization.AspNetCore.Sample.Models
 {
     public class DynamicTextViewModel
     {

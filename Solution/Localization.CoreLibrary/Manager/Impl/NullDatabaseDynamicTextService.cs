@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Model;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Core.Model;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public class NullDatabaseDynamicTextService : IDatabaseDynamicTextService
     {

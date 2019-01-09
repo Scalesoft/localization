@@ -1,7 +1,7 @@
-using Localization.CoreLibrary.Resolver;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Resolver;
 
-namespace Localization.CoreLibrary.Tests.Resolver
+namespace Scalesoft.Localization.Core.Tests.Resolver
 {
     [TestClass]
     public class FileNameBasedParentScopeResolverTest

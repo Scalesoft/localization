@@ -1,4 +1,4 @@
-﻿namespace Localization.Database.EFCore.Tests
+﻿namespace Scalesoft.Localization.Database.EFCore.Tests
 {
     public static class Configuration
     {

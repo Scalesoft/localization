@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.IoC;
-using Localization.CoreLibrary.Manager.Impl;
-using Localization.CoreLibrary.Util;
-using Localization.Database.NHibernate.Tests.Helper;
-using Localization.Database.NHibernate.UnitOfWork;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHibernate;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.IoC;
+using Scalesoft.Localization.Core.Manager.Impl;
+using Scalesoft.Localization.Core.Util;
+using Scalesoft.Localization.Database.NHibernate.Tests.Helper;
+using Scalesoft.Localization.Database.NHibernate.UnitOfWork;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
-namespace Localization.Database.NHibernate.Tests
+namespace Scalesoft.Localization.Database.NHibernate.Tests
 {
     [TestClass]
     public class DatabaseTranslateTest

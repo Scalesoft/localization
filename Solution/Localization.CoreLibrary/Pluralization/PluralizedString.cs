@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
-using Localization.CoreLibrary.Common;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Common;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Logging;
 
-namespace Localization.CoreLibrary.Pluralization
+namespace Scalesoft.Localization.Core.Pluralization
 {
     public class PluralizedString
     {

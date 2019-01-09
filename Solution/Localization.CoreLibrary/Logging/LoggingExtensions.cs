@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Localization.CoreLibrary.Logging
+namespace Scalesoft.Localization.Core.Logging
 {
     public static class LoggingExtensions
     {

@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Web.AspNetCore.Sample", "Localization.Web.AspNetCore.Sample\Localization.Web.AspNetCore.Sample.csproj", "{5F0206F6-1493-4791-B325-49C3735D2BAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.AspNetCore.Sample", "Localization.Web.AspNetCore.Sample\Scalesoft.Localization.AspNetCore.Sample.csproj", "{5F0206F6-1493-4791-B325-49C3735D2BAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.CoreLibrary", "Localization.CoreLibrary\Localization.CoreLibrary.csproj", "{B25ED303-630A-4394-8A07-07DFBF797D66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Core", "Localization.CoreLibrary\Scalesoft.Localization.Core.csproj", "{B25ED303-630A-4394-8A07-07DFBF797D66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.CoreLibrary.Tests", "Localization.CoreLibrary.Tests\Localization.CoreLibrary.Tests.csproj", "{22AB5346-1DB6-4A75-A6CC-A19C8AEAC74A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Core.Tests", "Localization.CoreLibrary.Tests\Scalesoft.Localization.Core.Tests.csproj", "{22AB5346-1DB6-4A75-A6CC-A19C8AEAC74A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Database.Abstractions", "Localization.Database\Localization.Database.Abstractions.csproj", "{55C83677-17FD-4795-AB41-0B646D3150BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Database.Abstractions", "Localization.Database\Scalesoft.Localization.Database.Abstractions.csproj", "{55C83677-17FD-4795-AB41-0B646D3150BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.AspNetCore.Service", "Localization.AspNetCore.Service\Localization.AspNetCore.Service.csproj", "{14772079-FF6C-49D3-8547-701FEA0C2935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.AspNetCore", "Localization.AspNetCore.Service\Scalesoft.Localization.AspNetCore.csproj", "{14772079-FF6C-49D3-8547-701FEA0C2935}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Database.EFCore", "Localization.Database.EFCore\Localization.Database.EFCore.csproj", "{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Database.EFCore", "Localization.Database.EFCore\Scalesoft.Localization.Database.EFCore.csproj", "{3EAABF19-20BA-420B-B271-BA5E4ED5DE43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Database.EFCore.Tests", "Localization.Database.EFCore.Tests\Localization.Database.EFCore.Tests.csproj", "{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Database.EFCore.Tests", "Localization.Database.EFCore.Tests\Scalesoft.Localization.Database.EFCore.Tests.csproj", "{2ED9E0F6-3FE7-4E9E-B97D-0A02B28235E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Localization.Web.Script", "Localization.Web.Script\Localization.Web.Script.csproj", "{95D34F8D-3B71-4380-8885-A8857CC225C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Web.Script", "Localization.Web.Script\Scalesoft.Localization.Web.Script.csproj", "{95D34F8D-3B71-4380-8885-A8857CC225C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Database.NHibernate", "Localization.Database.NHibernate\Localization.Database.NHibernate.csproj", "{7D17B343-4C2B-4F19-B0E3-0B37944C615E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Database.NHibernate", "Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj", "{7D17B343-4C2B-4F19-B0E3-0B37944C615E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Database.NHibernate.Tests", "Localization.Database.NHibernate.Tests\Localization.Database.NHibernate.Tests.csproj", "{D8827DB2-B6D9-4F53-AEBA-57BA63FC1E92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Database.NHibernate.Tests", "Localization.Database.NHibernate.Tests\Scalesoft.Localization.Database.NHibernate.Tests.csproj", "{D8827DB2-B6D9-4F53-AEBA-57BA63FC1E92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

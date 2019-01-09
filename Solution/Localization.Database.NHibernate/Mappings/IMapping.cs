@@ -1,4 +1,4 @@
-namespace Localization.Database.NHibernate.Mappings
+namespace Scalesoft.Localization.Database.NHibernate.Mappings
 {
     public interface IMapping
     {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Localization.Web.AspNetCore.Sample.Models
+namespace Scalesoft.Localization.AspNetCore.Sample.Models
 {
     public class LoginViewModel
     {

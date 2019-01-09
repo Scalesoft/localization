@@ -1,11 +1,11 @@
 ﻿using System;
-using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Dictionary.Factory;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Pluralization;
 
-namespace Localization.CoreLibrary.Tests.Pluralization
+namespace Scalesoft.Localization.Core.Tests.Pluralization
 {
     [TestClass]
     public class PluralizedStringTest

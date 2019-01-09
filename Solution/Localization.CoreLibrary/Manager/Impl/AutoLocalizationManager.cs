@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Logging;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Logging;
+using Scalesoft.Localization.Core.Util;
 
 [assembly: InternalsVisibleTo("Localization.CoreLibrary.Tests")]
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     internal class AutoLocalizationManager : ManagerBase, ILocalizationManager
     {

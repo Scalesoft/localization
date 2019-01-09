@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Localization.CoreLibrary.Database
+namespace Scalesoft.Localization.Core.Database
 {
     public interface IDatabaseConfiguration
     {

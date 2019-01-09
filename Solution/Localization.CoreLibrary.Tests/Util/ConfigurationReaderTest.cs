@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Util.Impl;
 
-namespace Localization.CoreLibrary.Tests.Util
+namespace Scalesoft.Localization.Core.Tests.Util
 {
     [TestClass]
     public class ConfigurationReaderTest

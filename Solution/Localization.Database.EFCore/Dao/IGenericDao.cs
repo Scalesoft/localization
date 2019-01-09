@@ -1,4 +1,4 @@
-﻿namespace Localization.Database.EFCore.Dao
+﻿namespace Scalesoft.Localization.Database.EFCore.Dao
 {
     public interface IGenericDao<T, PK>
     {

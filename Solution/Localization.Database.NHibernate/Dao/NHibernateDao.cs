@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using NHibernate;
 
-namespace Localization.Database.NHibernate.Dao
+namespace Scalesoft.Localization.Database.NHibernate.Dao
 {
     public class NHibernateDao
     {

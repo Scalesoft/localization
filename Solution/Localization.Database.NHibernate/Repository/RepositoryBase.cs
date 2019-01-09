@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Localization.Database.NHibernate.Dao;
 using NHibernate;
 using NHibernate.Criterion;
+using Scalesoft.Localization.Database.NHibernate.Dao;
 
-namespace Localization.Database.NHibernate.Repository
+namespace Scalesoft.Localization.Database.NHibernate.Repository
 {
     public abstract class RepositoryBase : NHibernateDao
     {

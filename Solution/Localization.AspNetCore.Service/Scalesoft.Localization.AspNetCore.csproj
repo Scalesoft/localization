@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Localization.CoreLibrary\Localization.CoreLibrary.csproj" />
+    <ProjectReference Include="..\Localization.CoreLibrary\Scalesoft.Localization.Core.csproj" />
   </ItemGroup>
 
 </Project>

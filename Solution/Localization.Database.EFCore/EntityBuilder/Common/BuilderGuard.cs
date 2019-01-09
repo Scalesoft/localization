@@ -1,8 +1,8 @@
-﻿using Localization.Database.EFCore.Exception;
-using Localization.Database.EFCore.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Database.EFCore.Exception;
+using Scalesoft.Localization.Database.EFCore.Logging;
 
-namespace Localization.Database.EFCore.EntityBuilder.Common
+namespace Scalesoft.Localization.Database.EFCore.EntityBuilder.Common
 {
     public static class BuilderGuard
     {

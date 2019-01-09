@@ -1,12 +1,12 @@
-﻿using System.Globalization;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
-using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using Localization.CoreLibrary.Dictionary;
+using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Manager
+namespace Scalesoft.Localization.Core.Manager
 {
     public interface IAutoDictionaryManager
     {

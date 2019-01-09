@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Localization.Database.EFCore.Entity
+namespace Scalesoft.Localization.Database.EFCore.Entity
 {
     public sealed class DatabaseVersion
     {

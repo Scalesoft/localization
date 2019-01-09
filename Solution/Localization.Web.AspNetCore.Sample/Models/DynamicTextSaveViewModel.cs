@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Localization.CoreLibrary.Model;
+using Scalesoft.Localization.Core.Model;
 
-namespace Localization.Web.AspNetCore.Sample.Models
+namespace Scalesoft.Localization.AspNetCore.Sample.Models
 {
     public class DynamicTextSaveViewModel : DynamicTextViewModel
     {

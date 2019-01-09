@@ -2,13 +2,12 @@
 using System.IO;
 using System.Linq;
 using Localization.Database.Abstractions.Entity;
-using Localization.Database.EFCore.Dao.Impl;
-using Localization.Database.EFCore.Data.Impl;
-using Localization.Database.EFCore.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Database.EFCore.Dao.Impl;
+using Scalesoft.Localization.Database.EFCore.Data.Impl;
 
-namespace Localization.Database.EFCore.Tests.Dao
+namespace Scalesoft.Localization.Database.EFCore.Tests.Dao
 {
     [TestClass]
     public class StaticTextDaoTest

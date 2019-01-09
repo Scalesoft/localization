@@ -1,4 +1,4 @@
-﻿namespace Localization.Database.EFCore.Exception
+﻿namespace Scalesoft.Localization.Database.EFCore.Exception
 {
     public class BuilderException : System.Exception
     {

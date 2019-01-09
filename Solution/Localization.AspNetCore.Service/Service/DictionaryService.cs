@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.AspNetCore.Service.Manager;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.AspNetCore.Manager;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.AspNetCore.Service.Service
+namespace Scalesoft.Localization.AspNetCore.Service
 {
     public class DictionaryService : ServiceBase, IDictionaryService
     {

@@ -1,6 +1,6 @@
 using NHibernate;
 
-namespace Localization.Database.NHibernate.UnitOfWork
+namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
 {
     public abstract class UnitOfWorkBase
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Localization.CoreLibrary.Model
+namespace Scalesoft.Localization.Core.Model
 {
     public class DynamicText
     {

@@ -7,7 +7,7 @@ using NHibernate.Driver;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 
-namespace Localization.Database.NHibernate.Tests.Helper
+namespace Scalesoft.Localization.Database.NHibernate.Tests.Helper
 {
     public static class NHibernateConfigurator
     {

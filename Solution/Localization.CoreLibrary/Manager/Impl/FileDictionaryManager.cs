@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary;
-using Localization.CoreLibrary.Dictionary.Impl;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Pluralization;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary;
+using Scalesoft.Localization.Core.Dictionary.Impl;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Core.Util.Impl;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public class FileDictionaryManager : ManagerBase, IFileDictionaryManager
     {

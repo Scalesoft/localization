@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Tests.Translator
+namespace Scalesoft.Localization.Core.Tests.Translator
 {
     [TestClass]
     public class TranslatorTest

@@ -3,7 +3,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 
-namespace Localization.AspNetCore.Service.Manager
+namespace Scalesoft.Localization.AspNetCore.Manager
 {
     public class RequestCultureManager
     {

@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.Extensions.Localization;
 
-namespace Localization.CoreLibrary.Database
+namespace Scalesoft.Localization.Core.Database
 {
     public interface IDatabaseTranslateService
     {

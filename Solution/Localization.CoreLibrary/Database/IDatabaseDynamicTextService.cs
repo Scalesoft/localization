@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Model;
+using Scalesoft.Localization.Core.Model;
 
-namespace Localization.CoreLibrary.Database
+namespace Scalesoft.Localization.Core.Database
 {
     public interface IDatabaseDynamicTextService
     {

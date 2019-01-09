@@ -1,6 +1,6 @@
-﻿@using Localization.AspNetCore.Service
-@inject ILocalizationService Localizer
-@model Localization.Web.AspNetCore.Sample.Models.DynamicTextViewModel
+﻿@inject ILocalizationService Localizer
+@using Scalesoft.Localization.AspNetCore
+@model Scalesoft.Localization.AspNetCore.Sample.Models.DynamicTextViewModel
 
 <section id="saveDynamicTextForm">
     @using (Html.BeginForm("DeleteDynamicText", "Database", new {returnUrl = ViewData["ReturnUrl"]}, FormMethod.Post, true, new {role = "form"}))

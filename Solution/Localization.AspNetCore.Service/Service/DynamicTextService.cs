@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.AspNetCore.Service.Manager;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Manager;
-using Localization.CoreLibrary.Model;
+using Scalesoft.Localization.AspNetCore.Manager;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Manager;
+using Scalesoft.Localization.Core.Model;
 
-namespace Localization.AspNetCore.Service.Service
+namespace Scalesoft.Localization.AspNetCore.Service
 {
     public class DynamicTextService : ServiceBase, IDynamicTextService
     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
+using Scalesoft.Localization.Core.Configuration;
 
-namespace Localization.CoreLibrary.Resolver
+namespace Scalesoft.Localization.Core.Resolver
 {
     public class FallbackCultureResolver
     {

@@ -1,4 +1,4 @@
-﻿namespace Localization.CoreLibrary.Util
+﻿namespace Scalesoft.Localization.Core.Util
 {
     /// <summary>
     /// Types of translation sources

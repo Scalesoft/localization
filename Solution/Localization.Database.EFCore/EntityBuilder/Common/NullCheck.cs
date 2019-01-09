@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Localization.Database.EFCore.EntityBuilder.Common
+namespace Scalesoft.Localization.Database.EFCore.EntityBuilder.Common
 {
     public static class NullCheck
     {

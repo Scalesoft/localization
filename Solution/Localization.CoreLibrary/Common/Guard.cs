@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
-using Localization.CoreLibrary.Logging;
+using Scalesoft.Localization.Core.Logging;
 
-namespace Localization.CoreLibrary.Common
+namespace Scalesoft.Localization.Core.Common
 {
     public static class Guard
     {

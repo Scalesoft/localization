@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Util;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Configuration
+namespace Scalesoft.Localization.Core.Configuration
 {
     public class LocalizationConfiguration
     {

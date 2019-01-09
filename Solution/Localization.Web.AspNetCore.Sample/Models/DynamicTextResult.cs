@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Localization.Web.AspNetCore.Sample.Models
+namespace Scalesoft.Localization.AspNetCore.Sample.Models
 {
     public class DynamicTextResult
     {

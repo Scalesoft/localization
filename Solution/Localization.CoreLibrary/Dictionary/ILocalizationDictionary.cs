@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using Localization.CoreLibrary.Pluralization;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Pluralization;
 
-namespace Localization.CoreLibrary.Dictionary
+namespace Scalesoft.Localization.Core.Dictionary
 {
     public interface ILocalizationDictionary
     {

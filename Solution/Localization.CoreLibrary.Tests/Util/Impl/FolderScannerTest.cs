@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Dictionary.Factory;
-using Localization.CoreLibrary.Util.Impl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Dictionary.Factory;
+using Scalesoft.Localization.Core.Util.Impl;
 
-namespace Localization.CoreLibrary.Tests.Util.Impl
+namespace Scalesoft.Localization.Core.Tests.Util.Impl
 {
     [TestClass]
     public class FolderScannerTest

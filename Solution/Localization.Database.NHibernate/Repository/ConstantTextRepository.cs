@@ -1,7 +1,7 @@
-using Localization.Database.NHibernate.Entity;
 using NHibernate;
+using Scalesoft.Localization.Database.NHibernate.Entity;
 
-namespace Localization.Database.NHibernate.Repository
+namespace Scalesoft.Localization.Database.NHibernate.Repository
 {
     public class ConstantStaticTextRepository : BaseTextRepository<ConstantStaticTextEntity>
     {

@@ -1,4 +1,4 @@
-﻿namespace Localization.CoreLibrary.Util
+﻿namespace Scalesoft.Localization.Core.Util
 {
     public enum LocLocalizationResource
     {

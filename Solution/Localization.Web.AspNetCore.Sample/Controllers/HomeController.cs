@@ -1,13 +1,10 @@
 ﻿using System;
-using Localization.AspNetCore.Service;
-using Localization.CoreLibrary.Logging;
-using Localization.Web.AspNetCore.Sample.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.AspNetCore.Sample.Models;
 
-namespace Localization.Web.AspNetCore.Sample.Controllers
+namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
 {
     public class HomeController : Controller
     {

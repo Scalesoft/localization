@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Configuration;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
 
-namespace Localization.CoreLibrary.Manager.Impl
+namespace Scalesoft.Localization.Core.Manager.Impl
 {
     public abstract class ManagerBase
     {

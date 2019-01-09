@@ -1,11 +1,11 @@
 ﻿using System.IO;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Exception;
-using Localization.CoreLibrary.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Exception;
+using Scalesoft.Localization.Core.Logging;
 
-namespace Localization.CoreLibrary.Util.Impl
+namespace Scalesoft.Localization.Core.Util.Impl
 {
     public class JsonConfigurationReader
     {

@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
-using Localization.CoreLibrary.Util;
 using Microsoft.Extensions.Localization;
+using Scalesoft.Localization.Core.Util;
 
-namespace Localization.CoreLibrary.Manager
+namespace Scalesoft.Localization.Core.Manager
 {
     public interface IAutoLocalizationManager
     {

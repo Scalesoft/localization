@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Localization.Database.EFCore.Dao.Impl
+namespace Scalesoft.Localization.Database.EFCore.Dao.Impl
 {
     public class GenericDao<T, PK> : IGenericDao<T, PK> where T : class
     {

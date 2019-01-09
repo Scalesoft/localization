@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Database;
-using Localization.CoreLibrary.Pluralization;
-using Localization.Database.EFCore.Dao.Impl;
-using Localization.Database.EFCore.Data;
-using Localization.Database.EFCore.Logging;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Core.Configuration;
+using Scalesoft.Localization.Core.Database;
+using Scalesoft.Localization.Core.Pluralization;
+using Scalesoft.Localization.Database.EFCore.Dao.Impl;
+using Scalesoft.Localization.Database.EFCore.Data;
+using Scalesoft.Localization.Database.EFCore.Logging;
 
-namespace Localization.Database.EFCore.Service
+namespace Scalesoft.Localization.Database.EFCore.Service
 {
     public sealed class DatabaseDictionaryService : DatabaseServiceBase, IDatabaseDictionaryService
     {
