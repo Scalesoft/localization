@@ -18,7 +18,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
         }
 
         [TestMethod]
-        public void ScopeCrTest()
+        public void DictionaryCrTest()
         {
             var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
 
