@@ -44,7 +44,10 @@ namespace Scalesoft.Localization.Database.NHibernate
             services.TryAddSingleton<IMemoryCache, MemoryCache>();
             services.Configure<MemoryCacheOptions>(options => { });
 
-            services.TryAddSingleton(m_sessionFactory);
+            if (m_sessionFactory != null)
+            {
+                services.TryAddSingleton(m_sessionFactory);
+            }
         }
 
         public static IEnumerable<Type> GetMappings()
