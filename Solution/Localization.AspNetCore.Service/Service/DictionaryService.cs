@@ -50,7 +50,7 @@ namespace Localization.AspNetCore.Service.Service
         /// <returns> Culture from request httpContext culture cookie.</returns>
         private CultureInfo RequestCulture()
         {
-            return GetRequestCulture(m_dictionaryManager.DefaultCulture());
+            return GetRequestCulture(m_dictionaryManager.GetDefaultCulture());
         }
     }
 }

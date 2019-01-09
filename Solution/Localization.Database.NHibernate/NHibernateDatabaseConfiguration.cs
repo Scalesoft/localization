@@ -17,7 +17,11 @@ namespace Localization.Database.NHibernate
     {
         private readonly ISessionFactory m_sessionFactory;
 
-        public NHibernateDatabaseConfiguration(ISessionFactory sessionFactory)
+        /// <summary>
+        /// Configure Localization library to use NHibernate for database storage.
+        ///  </summary>
+        /// <param name="sessionFactory">Specify ISessionFactory if this factory should be registered to IoC. If container already contains ISessionFactory, this parameter should be null.</param>
+        public NHibernateDatabaseConfiguration(ISessionFactory sessionFactory = null)
         {
             m_sessionFactory = sessionFactory;
         }

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using Localization.CoreLibrary.Configuration;
-using Localization.CoreLibrary.Exception;
 using Localization.CoreLibrary.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,12 +10,6 @@ namespace Localization.CoreLibrary.Tests
     [TestClass]
     public class LocalizationTest
     {
-        [TestCleanup]
-        public void LibDeInit()
-        {
-            Localization.LibDeinit();
-        }
-
         [TestMethod]
         public void InitLibTest()
         {
@@ -32,44 +25,9 @@ namespace Localization.CoreLibrary.Tests
                 }
             };
 
-            Localization.Init(localizationConfiguration);
-
-            var instance = Localization.Instance();
+            var instance = new LocalizationLib(localizationConfiguration);
 
             Assert.IsNotNull(instance);
-        }
-
-        [TestMethod]
-        public void DoubleInitLibTest()
-        {
-            var localizationConfiguration = new LocalizationConfiguration
-            {
-                BasePath = "Localization",
-                DefaultCulture = new CultureInfo("cs"),
-                SupportedCultures = new List<CultureInfo>
-                {
-                    new CultureInfo("en"),
-                    new CultureInfo("es"),
-                    new CultureInfo("cs"),
-                }
-            };
-
-            Localization.Init(localizationConfiguration);
-
-            var exceptionThrown = false;
-            try
-            {
-                Localization.Init(localizationConfiguration);
-            }
-            catch (LocalizationLibraryException)
-            {
-                exceptionThrown = true;
-            }
-
-            if (exceptionThrown)
-            {
-                Assert.IsTrue(exceptionThrown);
-            }
         }
 
         [TestMethod]
@@ -89,9 +47,7 @@ namespace Localization.CoreLibrary.Tests
                 AutoLoadResources = true
             };
 
-            Localization.Init(localizationConfiguration);
-
-            var instance = Localization.Instance();
+            var instance = new LocalizationLib(localizationConfiguration);
 
             //Localization.Init("localization.json.config");
 
@@ -129,9 +85,7 @@ namespace Localization.CoreLibrary.Tests
                 AutoLoadResources = true
             };
 
-            Localization.Init(localizationConfiguration);
-
-            var instance = Localization.Instance();
+            var instance = new LocalizationLib(localizationConfiguration);
 
             var sw = new Stopwatch();
             sw.Start();
@@ -157,8 +111,6 @@ namespace Localization.CoreLibrary.Tests
         [TestMethod]
         public void AutoOffInitTest()
         {
-            LibDeInit();
-
             var localizationConfiguration = new LocalizationConfiguration
             {
                 BasePath = "Localization",
@@ -176,9 +128,7 @@ namespace Localization.CoreLibrary.Tests
                 AutoLoadResources = false
             };
 
-            Localization.Init(localizationConfiguration);
-
-            var instance = Localization.Instance();
+            var instance = new LocalizationLib(localizationConfiguration);
 
             var resA = instance.Translate(LocTranslationSource.Auto, "ahoj");
             Assert.IsTrue(resA.ResourceNotFound);

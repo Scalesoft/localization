@@ -43,7 +43,9 @@ namespace Localization.Web.AspNetCore.Sample
 
             services.AddNHibernate(m_configuration);
 
-            services.AddLocalizationService();
+            var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
+            var databaseConfiguration = new NHibernateDatabaseConfiguration();
+            services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
 
             m_container = new Container().WithDependencyInjectionAdapter(
                 services,
@@ -75,13 +77,6 @@ namespace Localization.Web.AspNetCore.Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            // TODO localization should be configured here
-            var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
-            CoreLibrary.Localization.Init( //TODO
-                localizationConfiguration,
-                new NHibernateDatabaseConfiguration(),
-                loggerFactory);
 
             var dictionaryFactory = app.ApplicationServices.GetService<IDictionaryFactory>();
             var dictionaryManager = app.ApplicationServices.GetService<IAutoDictionaryManager>();

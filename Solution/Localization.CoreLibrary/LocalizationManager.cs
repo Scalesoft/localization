@@ -73,12 +73,12 @@ namespace Localization.CoreLibrary
             }
         }
 
-        public CultureInfo[] SupportedCultures()
+        public CultureInfo[] GetSupportedCultures()
         {
             return m_configuration.SupportedCultures.ToArray();
         }
 
-        public CultureInfo DefaultCulture()
+        public CultureInfo GetDefaultCulture()
         {
             return m_configuration.DefaultCulture;
         }

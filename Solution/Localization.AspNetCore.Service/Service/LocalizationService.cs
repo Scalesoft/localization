@@ -18,16 +18,15 @@ namespace Localization.AspNetCore.Service.Service
             m_localizationManager = autoLocalizationManager;
         }
 
-        // TODO there are almost duplicate definitions of this method (LocalizationService, DynamicText, DictionaryService, DatabaseDictionaryManager)
         public CultureInfo GetRequestCulture()
         {
-            return GetRequestCulture(m_localizationManager.DefaultCulture());
+            return GetRequestCulture(m_localizationManager.GetDefaultCulture());
         }
 
         //Explicit calls
-        public CultureInfo[] SupportedCultures()
+        public CultureInfo[] GetSupportedCultures()
         {
-            return m_localizationManager.SupportedCultures();
+            return m_localizationManager.GetSupportedCultures();
         }
 
         public void SetCulture(string culture)

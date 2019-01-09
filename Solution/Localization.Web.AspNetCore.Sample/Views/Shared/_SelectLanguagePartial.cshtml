@@ -9,7 +9,7 @@
 
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
-    var cultureItems = Localization.SupportedCultures()
+    var cultureItems = Localization.GetSupportedCultures()
         .Select(c => new SelectListItem {Value = c.Name, Text = c.DisplayName})
         .ToList();
 }

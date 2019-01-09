@@ -7,7 +7,7 @@ namespace Localization.AspNetCore.Service
 {
     public interface ILocalizationService
     {
-        CultureInfo[] SupportedCultures();
+        CultureInfo[] GetSupportedCultures();
 
         /// <summary>
         /// Gets current culture.

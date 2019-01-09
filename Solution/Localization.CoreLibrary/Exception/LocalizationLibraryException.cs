@@ -1,7 +1,4 @@
-﻿using Localization.CoreLibrary.Logging;
-using Microsoft.Extensions.Logging;
-
-namespace Localization.CoreLibrary.Exception
+﻿namespace Localization.CoreLibrary.Exception
 {
     public class LocalizationLibraryException : System.Exception
     {

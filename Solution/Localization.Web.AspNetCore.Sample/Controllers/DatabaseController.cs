@@ -37,7 +37,7 @@ namespace Localization.Web.AspNetCore.Sample.Controllers
 
         private IEnumerable<SelectListItem> GetSupportedCultures()
         {
-            var result = m_localization.SupportedCultures().Select(i =>
+            var result = m_localization.GetSupportedCultures().Select(i =>
                 new SelectListItem()
                 {
                     Text = i.DisplayName,

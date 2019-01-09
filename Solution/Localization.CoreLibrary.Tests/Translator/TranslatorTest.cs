@@ -10,7 +10,7 @@ namespace Localization.CoreLibrary.Tests.Translator
     [TestClass]
     public class TranslatorTest
     {
-        private IAutoLocalizationManager m_dictionaryManager;
+        private IAutoLocalizationManager m_localizationManager;
 
         [TestInitialize]
         public void LibInit()
@@ -29,11 +29,7 @@ namespace Localization.CoreLibrary.Tests.Translator
                 FirstAutoTranslateResource = LocLocalizationResource.File
             };
 
-            Localization.Init(configuration);
-
-            m_dictionaryManager = Localization.Instance();
-
-            Localization.LibDeinit();
+            m_localizationManager = new LocalizationLib(configuration).LocalizationManager;
         }
 
         [TestMethod]
@@ -67,7 +63,7 @@ namespace Localization.CoreLibrary.Tests.Translator
             for (var i = 0; i < 21; i++)
             {
                 var pluralizationNum = i - 10;
-                var lsA = m_dictionaryManager.TranslatePluralization(
+                var lsA = m_localizationManager.TranslatePluralization(
                     LocTranslationSource.Auto, "klíč-stringu", pluralizationNum, null,
                     "slovniky"
                 );

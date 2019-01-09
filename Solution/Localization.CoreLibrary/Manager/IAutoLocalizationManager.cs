@@ -18,7 +18,7 @@ namespace Localization.CoreLibrary.Manager
         LocalizedString TranslateConstant(LocTranslationSource translationSource, string text,
             CultureInfo cultureInfo = null, string scope = null);
 
-        CultureInfo DefaultCulture();
-        CultureInfo[] SupportedCultures();
+        CultureInfo GetDefaultCulture();
+        CultureInfo[] GetSupportedCultures();
     }
 }

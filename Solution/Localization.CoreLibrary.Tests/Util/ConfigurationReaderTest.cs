@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
-using System.IO;
 using Localization.CoreLibrary.Util.Impl;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Localization.CoreLibrary.Tests.Util
@@ -12,7 +11,7 @@ namespace Localization.CoreLibrary.Tests.Util
         [TestMethod]
         public void TestConfigurationReader()
         {
-            var configurationReader = new JsonConfigurationReader("localization.config.json");
+            var configurationReader = new JsonConfigurationReader("localization.config.json", NullLogger<JsonConfigurationReader>.Instance);
             var configuration = configurationReader.ReadConfiguration();
 
             Assert.AreEqual("Localization", configuration.BasePath);

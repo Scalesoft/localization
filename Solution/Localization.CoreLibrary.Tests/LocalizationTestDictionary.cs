@@ -34,11 +34,7 @@ namespace Localization.CoreLibrary.Tests
                 AutoLoadResources = true
             };
 
-            Localization.Init(localizationConfiguration);
-
-            m_dictionaryManager = Localization.Instance();
-
-            Localization.LibDeinit();
+            m_dictionaryManager = new LocalizationLib(localizationConfiguration).DictionaryManager;
         }
 
         [TestMethod]

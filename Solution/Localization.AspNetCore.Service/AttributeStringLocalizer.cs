@@ -72,7 +72,7 @@ namespace Localization.AspNetCore.Service
 
         private CultureInfo RequestCulture()
         {
-            return m_requestCultureManager.ResolveRequestCulture(m_dictionaryManager.DefaultCulture());
+            return m_requestCultureManager.ResolveRequestCulture(m_dictionaryManager.GetDefaultCulture());
         }
     }
 }

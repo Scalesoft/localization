@@ -19,8 +19,8 @@ namespace Localization.CoreLibrary.Manager
         IDictionary<string, LocalizedString> GetConstantsDictionary(LocTranslationSource translationSource,
             CultureInfo cultureInfo = null, string scope = null);
 
-        CultureInfo DefaultCulture();
-        CultureInfo[] SupportedCultures();
+        CultureInfo GetDefaultCulture();
+        CultureInfo[] GetSupportedCultures();
 
         void AddSingleDictionary(IDictionaryFactory dictionaryFactory, string filePath);
 
