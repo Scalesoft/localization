@@ -30,16 +30,11 @@ namespace Scalesoft.Localization.Core.Tests.Manager
                     new CultureInfo("en"),
                     new CultureInfo("es")
                 },
-                AutoLoadResources = true
             };
 
             var dictionaryManager = new FileDictionaryManager(
                 localizationConfiguration, JsonDictionaryFactory.FactoryInstance
             );
-            var dictionary = dictionaryManager.GetLocalizationDictionary(new CultureInfo("cs"), "personalScope1");
-
-            Assert.IsTrue(dictionary.ScopeAlias().Contains("personalScope1"));
-            Assert.IsTrue(dictionary.ScopeAlias().Contains("personalScope2"));
 
             Assert.AreEqual(true, dictionaryManager.IsCultureSupported(new CultureInfo("cs")));
             Assert.AreEqual(true, dictionaryManager.IsCultureSupported(new CultureInfo("en")));
@@ -51,6 +46,32 @@ namespace Scalesoft.Localization.Core.Tests.Manager
             Assert.AreEqual(false, dictionaryManager.IsCultureSupported(new CultureInfo("en-gb")));
 
             Assert.AreEqual(false, dictionaryManager.IsCultureSupported(null));
+        }
+
+        [TestMethod]
+        public void ScopeAliasSupportTest()
+        {
+            var localizationConfiguration = new LocalizationConfiguration
+            {
+                BasePath = "Localization",
+                DefaultCulture = new CultureInfo("cs"),
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("es")
+                },
+                AutoLoadResources = true
+            };
+
+            var dictionaryManager = new FileDictionaryManager(
+                localizationConfiguration, JsonDictionaryFactory.FactoryInstance
+            );
+            var dictionaryScope = dictionaryManager.GetLocalizationDictionary(new CultureInfo("cs"), "global");
+            var dictionaryAlias1 = dictionaryManager.GetLocalizationDictionary(new CultureInfo("cs"), "personalScope1");
+            var dictionaryAlias2 = dictionaryManager.GetLocalizationDictionary(new CultureInfo("cs"), "personalScope2");
+
+            Assert.AreSame(dictionaryScope, dictionaryAlias1);
+            Assert.AreSame(dictionaryScope, dictionaryAlias2);
         }
 
         [TestMethod]
