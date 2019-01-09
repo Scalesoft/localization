@@ -19,7 +19,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
         }
 
         [TestMethod]
-        public void ScopeCrTest()
+        public void ScopeCruTest()
         {
             var cultureUoW = new CultureUoW(m_sessionFactory);
             var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
@@ -72,6 +72,24 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
             Assert.AreEqual(null, nullStaticText1);
             Assert.AreEqual(null, nullStaticText2);
             Assert.AreEqual(null, nullStaticText3);
+
+            staticTextUoW.UpdateStaticText(
+                "name",
+                "cs",
+                "dictionaryScope",
+                0,
+                "modifiedText",
+                "modificationUser",
+                time
+            );
+
+            var staticTextReFetched = staticTextUoW.GetByNameAndCultureAndScope(
+                "name",
+                "cs",
+                "dictionaryScope"
+            );
+
+            Assert.AreEqual("modifiedText", staticTextReFetched.Text);
         }
     }
 }
