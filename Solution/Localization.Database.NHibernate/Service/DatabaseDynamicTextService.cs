@@ -32,7 +32,7 @@ namespace Localization.Database.NHibernate.Service
         {
             if (string.IsNullOrEmpty(scope))
             {
-                scope = Configuration.DefaultScope;
+                scope = m_configuration.DefaultScope;
             }
 
             var culture = GetCachedCultureByNameOrGetDefault(cultureInfo.Name);
@@ -64,7 +64,7 @@ namespace Localization.Database.NHibernate.Service
         {
             if (string.IsNullOrEmpty(scope))
             {
-                scope = Configuration.DefaultScope;
+                scope = m_configuration.DefaultScope;
             }
 
             var dictionaryScope = GetCachedDictionaryScope(scope);
@@ -98,7 +98,7 @@ namespace Localization.Database.NHibernate.Service
             var dictionaryScope = GetDictionaryScope(dynamicText.DictionaryScope);
             if (dictionaryScope.Name != dynamicText.DictionaryScope)
             {
-                DictionaryScopeUoW.AddScope(dynamicText.DictionaryScope);
+                m_dictionaryScopeUoW.AddScope(dynamicText.DictionaryScope);
                 dictionaryScope = GetDictionaryScope(dynamicText.DictionaryScope);
             }
 
@@ -147,7 +147,7 @@ namespace Localization.Database.NHibernate.Service
         {
             if (string.IsNullOrEmpty(scope))
             {
-                scope = Configuration.DefaultScope;
+                scope = m_configuration.DefaultScope;
             }
 
             var dictionaryScope = GetDictionaryScope(scope);
@@ -170,7 +170,7 @@ namespace Localization.Database.NHibernate.Service
         {
             if (string.IsNullOrEmpty(scope))
             {
-                scope = Configuration.DefaultScope;
+                scope = m_configuration.DefaultScope;
             }
 
             var dictionaryScope = GetDictionaryScope(scope);

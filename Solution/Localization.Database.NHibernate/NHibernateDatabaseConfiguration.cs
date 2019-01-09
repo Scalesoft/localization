@@ -7,6 +7,7 @@ using Localization.CoreLibrary.Manager.Impl;
 using Localization.Database.NHibernate.Mappings;
 using Localization.Database.NHibernate.Service;
 using Localization.Database.NHibernate.UnitOfWork;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NHibernate;
@@ -39,6 +40,9 @@ namespace Localization.Database.NHibernate
             services.AddSingleton<CultureUoW>();
             services.AddSingleton<DictionaryScopeUoW>();
             services.AddSingleton<StaticTextUoW>();
+
+            services.TryAddSingleton<IMemoryCache, MemoryCache>();
+            services.Configure<MemoryCacheOptions>(options => { });
 
             services.TryAddSingleton(m_sessionFactory);
         }

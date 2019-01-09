@@ -76,8 +76,8 @@ namespace Localization.Database.NHibernate.Service
         /// </summary>
         public void CheckCulturesInDatabase()
         {
-            var supportedCultures = Configuration.SupportedCultures;
-            var availableCultures = CultureUoW.FindAllCultures();
+            var supportedCultures = m_configuration.SupportedCultures;
+            var availableCultures = m_cultureUoW.FindAllCultures();
 
             foreach (var supportedCulture in supportedCultures)
             {
@@ -86,8 +86,8 @@ namespace Localization.Database.NHibernate.Service
                     continue;
                 }
 
-                var id = CultureUoW.AddCulture(supportedCulture.Name);
-                var culture = CultureUoW.GetCultureById(id);
+                var id = m_cultureUoW.AddCulture(supportedCulture.Name);
+                var culture = m_cultureUoW.GetCultureById(id);
 
                 availableCultures.Add(culture);
             }

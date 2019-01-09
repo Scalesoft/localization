@@ -18,7 +18,7 @@ namespace Localization.Database.NHibernate.Tests.Helper
             var configuration = new Configuration()
                 .DataBaseIntegration(db =>
                 {
-                    db.LogSqlInConsole = true;
+                    db.LogSqlInConsole = false;
                     db.LogFormattedSql = true;
                     db.Dialect<SQLiteDialect>();
                     db.Driver<SQLite20Driver>();

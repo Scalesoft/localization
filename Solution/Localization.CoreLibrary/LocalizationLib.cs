@@ -60,6 +60,7 @@ namespace Localization.CoreLibrary
             ILoggerFactory loggerFactory = null
         ) : this(LoadConfigurationFromFile(configFilePath, loggerFactory), databaseConfiguration, loggerFactory)
         {
+            // Empty, only call different constructor
         }
 
         public static LocalizationConfiguration LoadConfigurationFromFile(string configFilePath, ILoggerFactory loggerFactory = null)

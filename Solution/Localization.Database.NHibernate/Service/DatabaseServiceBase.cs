@@ -13,9 +13,9 @@ namespace Localization.Database.NHibernate.Service
         private const int CacheTimeSpanInSeconds = 30;
 
         private readonly ILogger m_logger;
-        protected readonly CultureUoW CultureUoW;
-        protected readonly DictionaryScopeUoW DictionaryScopeUoW;
-        protected readonly LocalizationConfiguration Configuration;
+        protected readonly CultureUoW m_cultureUoW;
+        protected readonly DictionaryScopeUoW m_dictionaryScopeUoW;
+        protected readonly LocalizationConfiguration m_configuration;
 
         private readonly IMemoryCache m_memoryCache;
 
@@ -27,9 +27,9 @@ namespace Localization.Database.NHibernate.Service
             IMemoryCache memoryCache
         )
         {
-            Configuration = configuration;
-            CultureUoW = cultureUoW;
-            DictionaryScopeUoW = dictionaryScopeUoW;
+            m_configuration = configuration;
+            m_cultureUoW = cultureUoW;
+            m_dictionaryScopeUoW = dictionaryScopeUoW;
             m_logger = logger;
             m_memoryCache = memoryCache;
         }
@@ -51,7 +51,7 @@ namespace Localization.Database.NHibernate.Service
 
         public ICulture GetCultureByNameOrGetDefault(string cultureName)
         {
-            ICulture resultCulture = CultureUoW.GetCultureByName(cultureName);
+            ICulture resultCulture = m_cultureUoW.GetCultureByName(cultureName);
 
             if (resultCulture == null)
             {
@@ -69,7 +69,7 @@ namespace Localization.Database.NHibernate.Service
 
         public ICulture GetDefaultCulture()
         {
-            var resultCulture = CultureUoW.GetCultureByName(Configuration.DefaultCulture.Name);
+            var resultCulture = m_cultureUoW.GetCultureByName(m_configuration.DefaultCulture.Name);
 
             if (resultCulture == null)
             {
@@ -99,11 +99,11 @@ namespace Localization.Database.NHibernate.Service
 
         protected IDictionaryScope GetDictionaryScope(string scopeName)
         {
-            var resultDictionaryScope = DictionaryScopeUoW.GetScopeByName(scopeName);
+            var resultDictionaryScope = m_dictionaryScopeUoW.GetScopeByName(scopeName);
 
             if (resultDictionaryScope == null)
             {
-                resultDictionaryScope = DictionaryScopeUoW.GetScopeByName(Configuration.DefaultScope);
+                resultDictionaryScope = m_dictionaryScopeUoW.GetScopeByName(m_configuration.DefaultScope);
             }
 
             if (resultDictionaryScope == null)
@@ -112,7 +112,7 @@ namespace Localization.Database.NHibernate.Service
                 {
                     m_logger.LogError(
                         @"Default dictionary scope ""{0}"" from library configuration is not in database.",
-                        Configuration.DefaultScope);
+                        m_configuration.DefaultScope);
                 }
             }
 
