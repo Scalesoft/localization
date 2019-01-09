@@ -19,7 +19,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
         }
 
         [TestMethod]
-        public void ScopeCruTest()
+        public void StaticTextCruTest()
         {
             var cultureUoW = new CultureUoW(m_sessionFactory);
             var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
