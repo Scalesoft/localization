@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Microsoft.Extensions.Localization;
@@ -19,7 +20,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         private const string GlobalScope = "global";
 
         private readonly ISet<ILocalizationDictionary> m_dictionaries;
-        private readonly IDictionary<CultureInfo, ISet<ILocalizationDictionary>> m_dictionariesPerCulture;
+        private readonly IDictionary<CultureInfo, IDictionary<string, ILocalizationDictionary>> m_dictionariesPerCultureAndScope;
 
         /// <summary>
         /// Constructor.
@@ -34,22 +35,33 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         ) : base(configuration, logger)
         {
             m_dictionaries = new HashSet<ILocalizationDictionary>();
-            m_dictionariesPerCulture = new Dictionary<CultureInfo, ISet<ILocalizationDictionary>>
+            m_dictionariesPerCultureAndScope = new Dictionary<CultureInfo, IDictionary<string, ILocalizationDictionary>>
             {
-                {DefaultCulture(), new HashSet<ILocalizationDictionary>()}
+                {DefaultCulture(), new Dictionary<string, ILocalizationDictionary>()}
             };
 
             foreach (var supportedCulture in m_configuration.SupportedCultures)
             {
-                if (!m_dictionariesPerCulture.ContainsKey(supportedCulture))
+                if (!m_dictionariesPerCultureAndScope.ContainsKey(supportedCulture))
                 {
-                    m_dictionariesPerCulture.Add(supportedCulture, new HashSet<ILocalizationDictionary>());
+                    m_dictionariesPerCultureAndScope.Add(supportedCulture, new ConcurrentDictionary<string, ILocalizationDictionary>());
                 }
             }
 
             if (configuration.AutoLoadResources)
             {
                 AutoLoadDictionaries(dictionaryFactory);
+            }
+        }
+
+        private void CheckGlobalScopeAvailabilityInAllCulture()
+        {
+            foreach (var dictionariesPerScope in m_dictionariesPerCultureAndScope)
+            {
+                if (!dictionariesPerScope.Value.Keys.Contains(GlobalScope))
+                {
+                    throw new DictionaryLoadException($"Not found '{GlobalScope}' scope in '{dictionariesPerScope.Key.Name}' culture, unable to construct dictionary tree");
+                }
             }
         }
 
@@ -65,6 +77,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             {
                 AddDictionaryToHierarchyTreesWithoutBuildTree(dictionaryFactory.CreateDictionary(loadedDictionary));
             }
+            
+            CheckGlobalScopeAvailabilityInAllCulture();
 
             BuildDictionaryHierarchyTrees();
         }
@@ -85,24 +99,30 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         {
             AddDictionaryToHierarchyTreesWithoutBuildTree(dictionary);
 
-            BuildDictionaryHierarchyTrees(m_dictionariesPerCulture[dictionary.CultureInfo()], dictionary);
+            BuildDictionaryHierarchyTrees(m_dictionariesPerCultureAndScope[dictionary.CultureInfo()], dictionary);
         }
 
         private void AddDictionaryToHierarchyTreesWithoutBuildTree(ILocalizationDictionary dictionary)
         {
             m_dictionaries.Add(dictionary);
 
-            if (!m_dictionariesPerCulture.Keys.Contains(dictionary.CultureInfo()))
+            if (!m_dictionariesPerCultureAndScope.Keys.Contains(dictionary.CultureInfo()))
             {
                 throw new DictionaryLoadException(string.Format(UnknownCultureException, dictionary.CultureInfo(), dictionary.Scope()));
             }
 
-            m_dictionariesPerCulture[dictionary.CultureInfo()].Add(dictionary);
+            var dictionariesPerCulture = m_dictionariesPerCultureAndScope[dictionary.CultureInfo()];
+            dictionariesPerCulture.Add(dictionary.Scope(), dictionary);
+
+            foreach (var scopeAlias in dictionary.ScopeAlias())
+            {
+                dictionariesPerCulture.Add(scopeAlias, dictionary);
+            }
         }
 
         private void BuildDictionaryHierarchyTrees()
         {
-            foreach (var dictionaries in m_dictionariesPerCulture)
+            foreach (var dictionaries in m_dictionariesPerCultureAndScope)
             {
                 BuildDictionaryHierarchyTrees(dictionaries.Value);
             }
@@ -111,11 +131,11 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         /// <summary>
         /// From provided dictionary instances builds hierarchical trees.
         /// </summary>
-        private void BuildDictionaryHierarchyTrees(ISet<ILocalizationDictionary> dictionaries)
+        private void BuildDictionaryHierarchyTrees(IDictionary<string, ILocalizationDictionary> dictionaries)
         {
-            var global = dictionaries.FirstOrDefault(d => d.Scope() == GlobalScope);
+            var global = dictionaries[GlobalScope];
 
-            foreach (var cultureDictionary in dictionaries)
+            foreach (var cultureDictionary in dictionaries.Values)
             {
                 if (
                     cultureDictionary.ParentDictionary() != null
@@ -127,7 +147,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
 
                 var parentScope = string.IsNullOrEmpty(cultureDictionary.GetParentScopeName())
                     ? null
-                    : dictionaries.FirstOrDefault(d => d.Scope() == cultureDictionary.GetParentScopeName());
+                    : dictionaries[cultureDictionary.GetParentScopeName()];
 
                 cultureDictionary.SetParentDictionary(
                     parentScope ?? global
@@ -135,7 +155,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
         }
 
-        private void BuildDictionaryHierarchyTrees(ISet<ILocalizationDictionary> dictionaries, ILocalizationDictionary dictionary)
+        private void BuildDictionaryHierarchyTrees(IDictionary<string, ILocalizationDictionary> dictionaries, ILocalizationDictionary dictionary)
         {
             if (dictionary.Scope() == GlobalScope)
             {
@@ -144,10 +164,10 @@ namespace Scalesoft.Localization.Core.Manager.Impl
 
             var parentScope = string.IsNullOrEmpty(dictionary.GetParentScopeName())
                 ? null
-                : dictionaries.FirstOrDefault(d => d.Scope() == dictionary.GetParentScopeName());
+                : dictionaries[dictionary.GetParentScopeName()];
 
             dictionary.SetParentDictionary(
-                parentScope ?? dictionaries.FirstOrDefault(d => d.Scope() == GlobalScope)
+                parentScope ?? dictionaries[GlobalScope]
             );
         }
 
@@ -178,20 +198,11 @@ namespace Scalesoft.Localization.Core.Manager.Impl
 
         private ILocalizationDictionary GetScopedDictionary(CultureInfo cultureInfo, string scope)
         {
-            ILocalizationDictionary result;
-            if (IsCultureSupported(cultureInfo)) //return scoped dictionary in requested culture (if scope exists)
-            {
-                result = m_dictionariesPerCulture[cultureInfo].FirstOrDefault(
-                    w => w.Scope().Equals(scope) || w.ScopeAlias().Contains(scope)
-                );
-            }
-            else
-            {
-                //return scoped dictionary in default culture
-                result = m_dictionariesPerCulture[DefaultCulture()].FirstOrDefault(
-                    w => w.Scope().Equals(scope) || w.ScopeAlias().Contains(scope)
-                );
-            }
+            var dictionaryPerCulture = m_dictionariesPerCultureAndScope[
+                IsCultureSupported(cultureInfo) ? cultureInfo : DefaultCulture()
+            ];
+
+            dictionaryPerCulture.TryGetValue(scope, out var result);
 
             return result ?? new EmptyLocalizationDictionary();
         }
