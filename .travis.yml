@@ -1,0 +1,5 @@
+language: csharp
+script:
+  - cd Solution
+  - dotnet restore
+  - find . -type f -name '*.Tests.csproj' -exec dotnet test "{}" \;

@@ -10,6 +10,7 @@ using Scalesoft.Localization.Database.EFCore.Data.Impl;
 namespace Scalesoft.Localization.Database.EFCore.Tests.Dao
 {
     [TestClass]
+    [TestCategory("SQL-Server-Required")]
     public class StaticTextDaoTest
     {
         private DbContextOptions<StaticTextsContext> m_builderOptions;
