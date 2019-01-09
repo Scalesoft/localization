@@ -7,7 +7,7 @@ dotnet: 2.2
 script:
   - cd Solution
   - dotnet restore
-  - find . -type f -name '*.Tests.csproj' -exec dotnet test "{}" \;
+  - find . -type f -name '*.Tests.csproj' -exec dotnet test --filter "TestCategory!=SQL-Server-Required" "{}" \;
 global:
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
   - DOTNET_CLI_TELEMETRY_OPTOUT=1
