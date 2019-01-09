@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Localization.Database.EFCore\Scalesoft.Localization.Database.EFCore.csproj" />
+    <ProjectReference Include="..\Scalesoft.Localization.Database.EFCore\Scalesoft.Localization.Database.EFCore.csproj" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

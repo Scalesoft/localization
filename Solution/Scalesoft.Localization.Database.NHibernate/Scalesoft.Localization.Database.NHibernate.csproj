@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Localization.CoreLibrary\Scalesoft.Localization.Core.csproj" />
-    <ProjectReference Include="..\Localization.Database\Scalesoft.Localization.Database.Abstractions.csproj" />
+    <ProjectReference Include="..\Scalesoft.Localization.Core\Scalesoft.Localization.Core.csproj" />
+    <ProjectReference Include="..\Scalesoft.Localization.Database.Abstractions\Scalesoft.Localization.Database.Abstractions.csproj" />
   </ItemGroup>
 </Project>

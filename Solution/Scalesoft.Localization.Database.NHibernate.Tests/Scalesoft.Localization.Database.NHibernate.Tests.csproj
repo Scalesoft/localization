@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj" />
+    <ProjectReference Include="..\Scalesoft.Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj" />
   </ItemGroup>
 
 </Project>
