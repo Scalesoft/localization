@@ -4,8 +4,6 @@ matrix:
   include:
     - dotnet: 2.2.100
       mono: none
-    - dotnet: latest
-      mono: none
     - mono: latest
 
 script:
