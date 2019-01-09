@@ -11,8 +11,9 @@ namespace Scalesoft.Localization.AspNetCore.IoC
 {
     public static class AspNetCoreLocalizationServiceCollectionExtensions
     {
-        public static void AddLocalizationService(this IServiceCollection services, LocalizationConfiguration configuration,
-            IDatabaseConfiguration databaseConfiguration = null)
+        public static void AddLocalizationService(
+            this IServiceCollection services, LocalizationConfiguration configuration, IDatabaseConfiguration databaseConfiguration = null
+        )
         {
             services.AddLocalizationCore(configuration, databaseConfiguration);
 

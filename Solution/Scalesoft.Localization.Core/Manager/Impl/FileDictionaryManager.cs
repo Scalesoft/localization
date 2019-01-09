@@ -94,8 +94,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
 
             if (!m_dictionariesPerCulture.Keys.Contains(dictionary.CultureInfo()))
             {
-                throw new DictionaryLoadException(string.Format(UnknownCultureException, dictionary.CultureInfo(),
-                    dictionary.Scope()));
+                throw new DictionaryLoadException(string.Format(UnknownCultureException, dictionary.CultureInfo(), dictionary.Scope()));
             }
 
             m_dictionariesPerCulture[dictionary.CultureInfo()].Add(dictionary);

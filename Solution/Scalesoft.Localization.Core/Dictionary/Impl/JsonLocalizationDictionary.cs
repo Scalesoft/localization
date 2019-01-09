@@ -129,8 +129,7 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
                 }
                 catch (JsonReaderException e)
                 {
-                    var message =
-                        $@"Resource file ""{fileName ?? "(stream)"}"" is not well-formatted. See library documentation.";
+                    var message = $@"Resource file ""{fileName ?? "(stream)"}"" is not well-formatted. See library documentation.";
                     if (m_logger != null && m_logger.IsErrorEnabled())
                     {
                         m_logger.LogError(message);

@@ -12,9 +12,9 @@ namespace Scalesoft.Localization.Core.IoC
 {
     public static class LocalizationServiceCollectionExtensions
     {
-        public static void AddLocalizationCore(this IServiceCollection services,
-            LocalizationConfiguration configuration,
-            IDatabaseConfiguration databaseConfiguration)
+        public static void AddLocalizationCore(
+            this IServiceCollection services, LocalizationConfiguration configuration, IDatabaseConfiguration databaseConfiguration
+        )
         {
             services.AddSingleton(configuration);
 
