@@ -21,7 +21,7 @@ namespace Scalesoft.Localization.Core.IoC
             services.AddTransient<IDictionaryFactory, JsonDictionaryFactory>();
 
             services.AddTransient<IFileLocalizationManager, FileLocalizationManager>();
-            services.AddTransient<IFileDictionaryManager, FileDictionaryManager>();
+            services.AddSingleton<IFileDictionaryManager, FileDictionaryManager>();
 
             services.AddTransient<IAutoDictionaryManager, DictionaryManager>();
             services.AddTransient<IAutoLocalizationManager, LocalizationManager>();
