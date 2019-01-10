@@ -11,9 +11,13 @@
 using Localization.AspNetCore.Service.IoC;
 
 public IServiceProvider ConfigureServices(IServiceCollection services)
+    var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
+    IDatabaseConfiguration databaseConfiguration = null;
+    //IDatabaseConfiguration databaseConfiguration = new NHibernateDatabaseConfiguration();
+    
     services.AddLocalizationService(
-        configuration, // instance of Microsoft.Extensions.Configuration.IConfiguration
-        "Localization" // configuration key in appsettings
+        localizationConfiguration,
+        databaseConfiguration
     );
 }
 ```
@@ -21,7 +25,7 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 ### Using library without config file:
 ```c#
 public IServiceProvider ConfigureServices(IServiceCollection services)
-    services.TryAddSingleton<ILocalizationConfiguration>(
+    services.TryAddSingleton<LocalizationConfiguration>(
         cfg => new LocalizationConfiguration
         {
             BasePath = "Localization",
@@ -97,6 +101,10 @@ Example of json resource file in global scope and cs culture:
 {
 	"culture":"cs",
 	"scope":"global",
+	"scopeAlias": [
+	  "scopeAlias1",
+	  "scopeAlias2"
+	],
 	"parentScope":null,
 	"dictionary": {
 		"text-1-odst" : "První odstavec v globálním slovníku",
@@ -203,8 +211,8 @@ To translate data annotations you have to add json resource file in scope, which
 Values of data annotation attributes are used as keys in dictionaries.
 
 For example: 
-In attribute ```[Display(Name = "UserName")]``` UserName is a key for translation in json resource file.
-For validation attributes it works the same. ```UserNameNotEmpty``` could be a key for translation in json resource file. 
+In attribute `[Display(Name = "UserName")]` UserName is a key for translation in json resource file.
+For validation attributes it works the same. `UserNameNotEmpty` could be a key for translation in json resource file. 
 ```c#
 public class LoginViewModel
     {
@@ -233,10 +241,14 @@ Startup.cs
 ```c#
 public void ConfigureServices(IServiceCollection services)
 {
+    var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
+    IDatabaseConfiguration databaseConfiguration = null;
+    //IDatabaseConfiguration databaseConfiguration = new NHibernateDatabaseConfiguration();
+    
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     services.AddLocalizationService(
-        configuration, // instance of Microsoft.Extensions.Configuration.IConfiguration
-        "Localization" // configuration key in appsettings
+        localizationConfiguration,
+        databaseConfiguration
     );
 }
 
@@ -246,20 +258,4 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 ``` 
 
 ## Database structure 
-Init database schema script for SQL Server is in Sample project named CreateDBSchema.sql . Run it in SQL Server Management studio
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Init database schema script for SQL Server is in Sample project named `CreateDBSchema.sql`. Run it in SQL Server Management studio
