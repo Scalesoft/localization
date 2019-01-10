@@ -35,9 +35,9 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         ) : base(configuration, logger)
         {
             m_dictionaries = new HashSet<ILocalizationDictionary>();
-            m_dictionariesPerCultureAndScope = new Dictionary<CultureInfo, IDictionary<string, ILocalizationDictionary>>
+            m_dictionariesPerCultureAndScope = new ConcurrentDictionary<CultureInfo, IDictionary<string, ILocalizationDictionary>>
             {
-                {DefaultCulture(), new Dictionary<string, ILocalizationDictionary>()}
+                [DefaultCulture()] = new ConcurrentDictionary<string, ILocalizationDictionary>()
             };
 
             foreach (var supportedCulture in m_configuration.SupportedCultures)
@@ -77,7 +77,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             {
                 AddDictionaryToHierarchyTreesWithoutBuildTree(dictionaryFactory.CreateDictionary(loadedDictionary));
             }
-            
+
             CheckGlobalScopeAvailabilityInAllCulture();
 
             BuildDictionaryHierarchyTrees();
