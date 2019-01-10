@@ -69,6 +69,7 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
                 staticTextEntity.ModificationTime = modificationTime;
 
                 staticTextRepository.Update(staticTextEntity);
+                session.Flush();
             }
         }
 
@@ -87,6 +88,7 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
                 );
 
                 staticTextRepository.Delete(staticTextEntity);
+                session.Flush();
             }
         }
 
@@ -104,6 +106,7 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
                 );
 
                 staticTextRepository.DeleteAll(staticTextEntities);
+                session.Flush();
             }
         }
 
