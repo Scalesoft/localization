@@ -139,19 +139,17 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             {
                 if (
                     cultureDictionary.ParentDictionary() != null
-                    || Equals(cultureDictionary, global)
+                    || cultureDictionary.Equals(global)
                 )
                 {
                     continue;
                 }
 
                 var parentScope = string.IsNullOrEmpty(cultureDictionary.GetParentScopeName())
-                    ? null
+                    ? global
                     : dictionaries[cultureDictionary.GetParentScopeName()];
 
-                cultureDictionary.SetParentDictionary(
-                    parentScope ?? global
-                );
+                cultureDictionary.SetParentDictionary(parentScope);
             }
         }
 
@@ -163,12 +161,10 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
 
             var parentScope = string.IsNullOrEmpty(dictionary.GetParentScopeName())
-                ? null
+                ? dictionaries[GlobalScope]
                 : dictionaries[dictionary.GetParentScopeName()];
 
-            dictionary.SetParentDictionary(
-                parentScope ?? dictionaries[GlobalScope]
-            );
+            dictionary.SetParentDictionary(parentScope);
         }
 
         public IDictionary<string, LocalizedString> GetDictionary(CultureInfo cultureInfo = null, string scope = null)
