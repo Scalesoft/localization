@@ -19,7 +19,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
         }
 
         [TestMethod]
-        public void StaticTextCruTest()
+        public void StaticTextCreateReadTest()
         {
             var cultureUoW = new CultureUoW(m_sessionFactory);
             var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
@@ -28,8 +28,8 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
             cultureUoW.AddCulture("cs");
             dictionaryScopeUoW.AddScope("dictionaryScope");
 
-            Assert.AreEqual(null, staticTextUoW.GetStaticTextById(0));
-            Assert.AreEqual(null, staticTextUoW.GetByNameAndCultureAndScope("not-exist", "not-exist", "not-exist"));
+            Assert.IsNull(staticTextUoW.GetStaticTextById(0));
+            Assert.IsNull(staticTextUoW.GetByNameAndCultureAndScope("not-exist", "not-exist", "not-exist"));
 
             var time = DateTime.UtcNow;
             staticTextUoW.AddStaticText(
@@ -69,9 +69,39 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
                 "cs",
                 "not-exist"
             );
-            Assert.AreEqual(null, nullStaticText1);
-            Assert.AreEqual(null, nullStaticText2);
-            Assert.AreEqual(null, nullStaticText3);
+            Assert.IsNull(nullStaticText1);
+            Assert.IsNull(nullStaticText2);
+            Assert.IsNull(nullStaticText3);
+        }
+
+        [TestMethod]
+        public void StaticTextCreateUpdateTest()
+        {
+            var cultureUoW = new CultureUoW(m_sessionFactory);
+            var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
+            var staticTextUoW = new StaticTextUoW(m_sessionFactory);
+
+            cultureUoW.AddCulture("cs");
+            dictionaryScopeUoW.AddScope("dictionaryScope");
+
+            var time = DateTime.UtcNow;
+            staticTextUoW.AddStaticText(
+                "name",
+                0,
+                "text",
+                "cs",
+                "dictionaryScope",
+                "modificationUser",
+                time
+            );
+
+            var staticText = staticTextUoW.GetByNameAndCultureAndScope(
+                "name",
+                "cs",
+                "dictionaryScope"
+            );
+            Assert.AreEqual("name", staticText.Name);
+            Assert.AreEqual("text", staticText.Text);
 
             staticTextUoW.UpdateStaticText(
                 "name",
@@ -90,6 +120,50 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
             );
 
             Assert.AreEqual("modifiedText", staticTextReFetched.Text);
+        }
+
+        [TestMethod]
+        public void StaticTextCreateDeleteTest()
+        {
+            var cultureUoW = new CultureUoW(m_sessionFactory);
+            var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
+            var staticTextUoW = new StaticTextUoW(m_sessionFactory);
+
+            cultureUoW.AddCulture("cs");
+            dictionaryScopeUoW.AddScope("dictionaryScope");
+
+            var time = DateTime.UtcNow;
+            staticTextUoW.AddStaticText(
+                "name",
+                0,
+                "text",
+                "cs",
+                "dictionaryScope",
+                "modificationUser",
+                time
+            );
+
+            var staticText = staticTextUoW.GetByNameAndCultureAndScope(
+                "name",
+                "cs",
+                "dictionaryScope"
+            );
+            Assert.AreEqual("name", staticText.Name);
+            Assert.AreEqual("text", staticText.Text);
+
+            staticTextUoW.Delete(
+                "name",
+                "cs",
+                "dictionaryScope"
+            );
+
+            var staticTextReFetched = staticTextUoW.GetByNameAndCultureAndScope(
+                "name",
+                "cs",
+                "dictionaryScope"
+            );
+
+            Assert.IsNull(staticTextReFetched);
         }
     }
 }
