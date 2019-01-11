@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Localization.Database.Abstractions.Entity;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Core.Configuration;

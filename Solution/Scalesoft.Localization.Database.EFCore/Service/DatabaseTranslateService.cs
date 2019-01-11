@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Localization.Database.Abstractions.Entity;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Database;
