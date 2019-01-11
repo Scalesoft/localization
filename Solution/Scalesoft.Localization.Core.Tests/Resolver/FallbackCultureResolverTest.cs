@@ -36,12 +36,12 @@ namespace Scalesoft.Localization.Core.Tests.Resolver
             var cultureEs = new CultureInfo("es");
             var cultureDe = new CultureInfo("de");
 
-            Assert.AreEqual(null, fallbackCultureResolver.FallbackCulture(cultureCs));
+            Assert.IsNull(fallbackCultureResolver.FallbackCulture(cultureCs));
             Assert.AreEqual(cultureCs, fallbackCultureResolver.FallbackCulture(cultureCsCz));
             Assert.AreEqual(cultureCs, fallbackCultureResolver.FallbackCulture(cultureEn));
             Assert.AreEqual(cultureEn, fallbackCultureResolver.FallbackCulture(cultureEnUs));
             Assert.AreEqual(cultureCs, fallbackCultureResolver.FallbackCulture(cultureEs));
-            Assert.AreEqual(null, fallbackCultureResolver.FallbackCulture(cultureDe));
+            Assert.IsNull(fallbackCultureResolver.FallbackCulture(cultureDe));
         }
     }
 }

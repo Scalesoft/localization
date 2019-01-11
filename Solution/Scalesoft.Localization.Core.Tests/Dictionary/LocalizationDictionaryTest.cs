@@ -90,15 +90,15 @@ namespace Scalesoft.Localization.Core.Tests.Dictionary
             Assert.AreEqual("cs", dictionaryCultureInfo.Name);
             Assert.AreEqual(0, childLocalizationDictionary.Count);
             Assert.AreEqual("json", localizationDictionaryExtension);
-            Assert.AreEqual(true, localizationDictionaryIsRoot);
-            Assert.AreEqual(true, localizationDictionaryIsLeaf);
+            Assert.IsTrue(localizationDictionaryIsRoot);
+            Assert.IsTrue(localizationDictionaryIsLeaf);
             Assert.AreEqual(1, localizedStrings.Count);
             Assert.AreEqual(0, localizedConstants.Count);
             Assert.AreEqual(0, localizedPluralizedStrings.Count);
-            Assert.AreEqual(null, parentLocalizationDictionary);
+            Assert.IsNull(parentLocalizationDictionary);
             Assert.AreEqual("obrazky", localizationDictionaryScope);
 
-            Assert.AreEqual(true, localizedStrings.ContainsKey("header.jpg"));
+            Assert.IsTrue(localizedStrings.ContainsKey("header.jpg"));
             Assert.AreEqual("header.cs.jpg", localizedStrings["header.jpg"]);
         }
     }

@@ -22,8 +22,8 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
         {
             var cultureUoW = new CultureUoW(m_sessionFactory);
 
-            Assert.AreEqual(null, cultureUoW.GetCultureById(0));
-            Assert.AreEqual(null, cultureUoW.GetCultureByName("not-exist"));
+            Assert.IsNull(cultureUoW.GetCultureById(0));
+            Assert.IsNull(cultureUoW.GetCultureByName("not-exist"));
 
             cultureUoW.AddCulture("es");
 

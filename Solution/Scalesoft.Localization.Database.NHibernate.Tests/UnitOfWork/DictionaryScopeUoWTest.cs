@@ -22,8 +22,8 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests.UnitOfWork
         {
             var dictionaryScopeUoW = new DictionaryScopeUoW(m_sessionFactory);
 
-            Assert.AreEqual(null, dictionaryScopeUoW.GetScopeById(0));
-            Assert.AreEqual(null, dictionaryScopeUoW.GetScopeByName("not-exist"));
+            Assert.IsNull(dictionaryScopeUoW.GetScopeById(0));
+            Assert.IsNull(dictionaryScopeUoW.GetScopeByName("not-exist"));
 
             dictionaryScopeUoW.AddScope("global");
 

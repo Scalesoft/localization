@@ -11,8 +11,7 @@ namespace Scalesoft.Localization.Core.Tests.Resolver
         {
             var fileNameBasedParentScopeResolver = new FileNameBasedParentScopeResolver();
 
-            Assert.AreSame(
-                null,
+            Assert.IsNull(
                 fileNameBasedParentScopeResolver.ResolveParentScope("Localization/apiresource/apiresource.cs.json")
             );
             Assert.AreEqual(
@@ -24,8 +23,7 @@ namespace Scalesoft.Localization.Core.Tests.Resolver
                 fileNameBasedParentScopeResolver.ResolveParentScope("Localization/dynamicModule/generic/dynamicModule.generic.en.json")
             );
 
-            Assert.AreSame(
-                null,
+            Assert.IsNull(
                 fileNameBasedParentScopeResolver.ResolveParentScope("Localization/apiresource/apiresource_cs.json")
             );
             Assert.AreEqual(
