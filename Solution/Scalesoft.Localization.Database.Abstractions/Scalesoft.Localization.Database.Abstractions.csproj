@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Localization.Database.Abstractions</AssemblyName>
-    <RootNamespace>Localization.Database.Abstractions</RootNamespace>
+    <AssemblyName>Scalesoft.Localization.Database.Abstractions</AssemblyName>
+    <RootNamespace>Scalesoft.Localization.Database.Abstractions</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>..\..\build\</PackageOutputPath>
     <Authors>Scalesoft s.r.o.</Authors>

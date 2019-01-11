@@ -1,5 +1,5 @@
 using System;
-using Localization.Database.Abstractions.Entity;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Core.Configuration;

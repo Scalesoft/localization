@@ -1,5 +1,5 @@
 ﻿using System;
-using Localization.Database.Abstractions.Entity;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Database.EFCore.Entity;
 using Scalesoft.Localization.Database.EFCore.EntityBuilder.Common;
@@ -20,7 +20,7 @@ namespace Scalesoft.Localization.Database.EFCore.EntityBuilder
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name">Dictionary scope name. E.g. global or about</param>
         /// <returns>this</returns>

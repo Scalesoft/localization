@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Localization.Database.Abstractions.Entity;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 
 namespace Scalesoft.Localization.Database.EFCore.Entity
 {

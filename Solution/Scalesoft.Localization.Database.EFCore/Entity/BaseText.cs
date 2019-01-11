@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Localization.Database.Abstractions.Entity;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 
 namespace Scalesoft.Localization.Database.EFCore.Entity
 {
@@ -11,7 +11,7 @@ namespace Scalesoft.Localization.Database.EFCore.Entity
 
         [Required]
         [Column(TypeName = "varchar(255)")]
-        public string Name { get; set; }      
+        public string Name { get; set; }
 
         [Required]
         [Column(TypeName = "smallint")]

@@ -1,4 +1,4 @@
-﻿using Localization.Database.Abstractions.Entity;
+﻿using Scalesoft.Localization.Database.Abstractions.Entity;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Database.EFCore.Entity;
 using Scalesoft.Localization.Database.EFCore.EntityBuilder.Common;
