@@ -19,19 +19,19 @@
     <ProjectReference Include="..\Scalesoft.Localization.Database.EFCore\Scalesoft.Localization.Database.EFCore.csproj" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(OS)' == 'Windows_NT' ">
-    <Exec Command="RD /S /Q &quot;$(TargetDir)Resources\&quot;&#xD;&#xA;&#xD;&#xA;" />
+  <Target Name="PreBuildWin" BeforeTargets="PreBuildEvent" Condition=" '$(OS)' == 'Windows_NT' ">
+    <Exec Command="RD /S /Q &quot;$(TargetDir)Resources\&quot;" />
   </Target>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
+  <Target Name="PreBuildUnix" BeforeTargets="PreBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
     <Exec Command="rm -r -f &quot;$(TargetDir)Resources&quot;" />
   </Target>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' ">
+  <Target Name="PostBuildWin" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' ">
     <Exec Command="XCOPY &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
   </Target>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
+  <Target Name="PostBuildUnix" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
     <Exec Command="cp -r &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources&quot;" />
   </Target>
 
