@@ -4,11 +4,9 @@
     private mCultureCookieName: string = "Localization.Culture";
     private mCurrentCulture: string;
 
-    private mDownloading: boolean;
-    private mDownloadingCulture: string;
-    private mDownloadingScope: string;
+    private mDictionary: { [key: string]: LocalizationDictionary } = {};
 
-    private mDictionary: { [key: string] : LocalizationDictionary } = {};
+    private mPluralizedDictionary: { [key: string]: LocalizationPluralizationDictionary } = {};
 
     private mSiteUrl: string;
 
@@ -34,6 +32,17 @@
         return result;
     }
 
+    public translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString {
+        let dictionary = this.getPluralizationDictionary(scope, cultureName);
+
+        var result = dictionary.translatePluralization(text, number);
+        if (result == null) {
+            return this.getFallbackTranslation(text, scope, cultureName);
+        }
+
+        return result;
+    }
+
     private getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
         console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
         var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
@@ -49,6 +58,13 @@
         cultureName = this.checkCultureName(cultureName);
 
         return this.getLocalizationDictionary(scope, cultureName);
+    }
+
+    private getPluralizationDictionary(scope?: string, cultureName?: string): LocalizationPluralizationDictionary {
+        scope = this.checkScope(scope);
+        cultureName = this.checkCultureName(cultureName);
+
+        return this.getPluralizationLocalizationDictionary(scope, cultureName);
     }
 
     private checkCultureName(cultureName?: string): string {
@@ -79,13 +95,23 @@
         return dictionary;
     }
 
+    private getPluralizationLocalizationDictionary(scope: string, cultureName: string): LocalizationPluralizationDictionary {
+        let dictionaryKey = this.dictionaryKey(scope, cultureName);
+        let dictionary = this.mPluralizedDictionary[dictionaryKey];
+        if (typeof dictionary === "undefined") {
+            this.downloadPluralizedDictionary(scope, cultureName);
+
+            return this.mPluralizedDictionary[dictionaryKey];
+        }
+
+        return dictionary;
+    }
+
     private dictionaryKey(scope: string, cultureName: string): string {
         return scope.concat("|", cultureName);
     }
 
     private downloadDictionary(scope: string, cultureName: string){
-        this.markDownloading(true, scope, cultureName);
-
         let xmlHttpRequest = new XMLHttpRequest();
 
         xmlHttpRequest.onreadystatechange = () => {
@@ -95,8 +121,6 @@
                     let dictionaryKey = this.dictionaryKey(scope, cultureName);
                     this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
                 }
-
-                this.markDownloading(false, scope, cultureName);
             }
         }
 
@@ -105,6 +129,27 @@
             baseUrl = baseUrl.substring(0, baseUrl.length - 1);
         }
         xmlHttpRequest.open("GET", `${baseUrl}/Localization/Dictionary?scope=${scope}`, false);
+        xmlHttpRequest.send();
+    }
+
+    private downloadPluralizedDictionary(scope: string, cultureName: string) {
+        let xmlHttpRequest = new XMLHttpRequest();
+
+        xmlHttpRequest.onreadystatechange = () => {
+            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
+                if (xmlHttpRequest.status === 200) {
+                    let response = xmlHttpRequest.responseText;
+                    let dictionaryKey = this.dictionaryKey(scope, cultureName);
+                    this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                }
+            }
+        }
+
+        let baseUrl = this.mSiteUrl;
+        if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
+            baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+        }
+        xmlHttpRequest.open("GET", `${baseUrl}/Localization/PluralizedDictionary?scope=${scope}`, false);
         xmlHttpRequest.send();
     }
 
@@ -123,18 +168,6 @@
 
     private getCurrentCultureCookie(): string {
         return LocalizationUtils.getCookie(this.mCultureCookieName);
-    }
-
-    private markDownloading(downloading: boolean, scope: string, cultureName: string) {       
-        if (downloading) {
-            this.mDownloadingScope = scope;
-            this.mDownloadingCulture = cultureName;
-        } else {
-            this.mDownloadingScope = "";
-            this.mDownloadingCulture = "";
-        }
-
-        this.mDownloading = downloading;
     }
 }
 
@@ -163,8 +196,34 @@ class LocalizationDictionary {
         return localizedString;
     }
 
+    public translatePluralization(text: string, number: number): ILocalizedString {
+        let result = this.mDictionary[text];
+        if (typeof result === "undefined") {
+            return null;
+        }
+
+        return result;
+    }
+
     private formatString(str: ILocalizedString, obj: string[]): string {
         return str.value.replace(/\{\s*([^}\s]+)\s*\}/g, (m, p1, offset, string) => obj[p1]);
+    }
+}
+
+class LocalizationPluralizationDictionary {
+    private mDictionary: { [key: string]: ILocalizedString };
+
+    constructor(dictionary: string) {
+        this.mDictionary = JSON.parse(dictionary);
+    }
+
+    public translatePluralization(text: string, number: number): ILocalizedString {
+        let result = this.mDictionary[text];
+        if (typeof result === "undefined") {
+            return null;
+        }
+
+        return result;
     }
 }
 
