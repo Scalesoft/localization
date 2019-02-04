@@ -40,6 +40,8 @@ namespace Scalesoft.Localization.Database.NHibernate
             services.AddSingleton<CultureUoW>();
             services.AddSingleton<DictionaryScopeUoW>();
             services.AddSingleton<StaticTextUoW>();
+            services.AddSingleton<PluralizedStaticTextUoW>();
+            services.AddSingleton<ConstantStaticTextUoW>();
 
             services.TryAddSingleton<IMemoryCache, MemoryCache>();
             services.Configure<MemoryCacheOptions>(options => { });

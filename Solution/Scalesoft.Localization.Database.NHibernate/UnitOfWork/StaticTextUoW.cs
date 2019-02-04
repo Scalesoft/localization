@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NHibernate;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 using Scalesoft.Localization.Database.NHibernate.Entity;
 using Scalesoft.Localization.Database.NHibernate.Repository;
 
@@ -161,6 +162,18 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
                 var staticTextRepository = new StaticTextRepository(session);
 
                 var resultList = staticTextRepository.FindAllStaticTexts();
+
+                return resultList;
+            }
+        }
+
+        public virtual IList<StaticTextEntity> FindAllByCultureAndScope(ICulture culture, IDictionaryScope dictionaryScope)
+        {
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
+
+                var resultList = staticTextRepository.FindAllByCultureAndScope(culture, dictionaryScope);
 
                 return resultList;
             }
