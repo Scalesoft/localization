@@ -36,7 +36,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
         {
             var culture = GetCultureByNameOrGetDefault(cultureInfo.Name);
             var dictionaryScope = GetDictionaryScope(scope);
-            var result = m_staticTextUoW.FindAllByCultureAndScope(culture, dictionaryScope);
+            var result = m_staticTextUoW.FindAllByCultureAndScope(culture.Name, dictionaryScope.Name);
             var resultDictionary = new Dictionary<string, LocalizedString>();
             foreach (var singleStaticText in result)
             {
@@ -51,7 +51,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
             var culture = GetCultureByNameOrGetDefault(cultureInfo.Name);
             var dictionaryScope = GetDictionaryScope(scope);
 
-            var result = m_pluralizedStaticTextUoW.FindAllByCultureAndScope(culture, dictionaryScope);
+            var result = m_pluralizedStaticTextUoW.FindAllByCultureAndScope(culture.Name, dictionaryScope.Name);
             var resultDictionary = new Dictionary<string, PluralizedString>();
             foreach (var singleplPluralizedStaticText in result)
             {
@@ -74,7 +74,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
                 var culture = GetCultureByNameOrGetDefault(cultureInfo.Name);
                 var dictionaryScope = GetDictionaryScope(scope);
 
-                var result = m_constantStaticTextUoW.FindAllByCultureAndScope(culture, dictionaryScope);
+                var result = m_constantStaticTextUoW.FindAllByCultureAndScope(culture.Name, dictionaryScope.Name);
                 var resultDictionary = new Dictionary<string, LocalizedString>();
                 foreach (var singleConstantStaticText in result)
                 {

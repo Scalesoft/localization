@@ -14,13 +14,13 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
         {
         }
 
-        public virtual IList<ConstantStaticTextEntity> FindAllByCultureAndScope(ICulture culture, IDictionaryScope dictionaryScope)
+        public virtual IList<ConstantStaticTextEntity> FindAllByCultureAndScope(string cultureName, string dictionaryScopeName)
         {
             using (var session = GetSession())
             {
                 var dictionaryScopeRepository = new ConstantStaticTextRepository(session);
 
-                var resultList = dictionaryScopeRepository.FindAllByCultureAndScope(culture, dictionaryScope);
+                var resultList = dictionaryScopeRepository.FindAllByCultureAndScope(cultureName, dictionaryScopeName);
 
                 return resultList;
             }

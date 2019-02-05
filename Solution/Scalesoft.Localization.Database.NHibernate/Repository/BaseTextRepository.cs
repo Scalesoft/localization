@@ -107,20 +107,22 @@ namespace Scalesoft.Localization.Database.NHibernate.Repository
             }
         }
 
-        public IList<T> FindAllByCultureAndScope(ICulture culture, IDictionaryScope dictionaryScope)
+        public IList<T> FindAllByCultureAndScope(string cultureName, string dictionaryScopeName)
         {
-            if (culture == null) throw new ArgumentException(EmptyArgumentMessage, nameof(culture));
-            if (dictionaryScope == null) throw new ArgumentException(EmptyArgumentMessage, nameof(dictionaryScope));
+            if (string.IsNullOrEmpty(cultureName)) throw new ArgumentException(EmptyArgumentMessage, nameof(cultureName));
+            if (string.IsNullOrEmpty(dictionaryScopeName)) throw new ArgumentException(EmptyArgumentMessage, nameof(dictionaryScopeName));
 
             try
             {
-                var criteria = Restrictions.Where<T>(x => Equals(x.Culture, culture));
-
-                return GetValuesList<T>(FetchCollections, criteria, query =>
+                return GetValuesList<T>(FetchCollections, null, query =>
                 {
-                    DictionaryScopeEntity dictionaryScopeJoin = null;
-                    return query.JoinAlias(x => x.DictionaryScope, () => dictionaryScopeJoin)
-                        .Where(x => Equals(dictionaryScopeJoin, dictionaryScope));
+                    DictionaryScopeEntity dictionaryScope = null;
+                    CultureEntity culture = null;
+                    return query
+                        .JoinAlias(x => x.DictionaryScope, () => dictionaryScope)
+                        .JoinAlias(x => x.Culture, () => culture)
+                        .Where(x => culture.Name == cultureName)
+                        .Where(x => dictionaryScope.Name == dictionaryScopeName);
                 });
             }
             catch (Exception ex)
