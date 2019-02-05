@@ -16,6 +16,9 @@ namespace Scalesoft.Localization.Core.Manager
         IDictionary<string, PluralizedString> GetPluralizedDictionary(LocTranslationSource translationSource,
             CultureInfo cultureInfo = null, string scope = null);
 
+        IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(LocTranslationSource translationSource,
+            CultureInfo cultureInfo = null, string scope = null);
+
         IDictionary<string, LocalizedString> GetConstantsDictionary(LocTranslationSource translationSource,
             CultureInfo cultureInfo = null, string scope = null);
 

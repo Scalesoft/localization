@@ -25,6 +25,15 @@ namespace Scalesoft.Localization.Core.Manager
             string scope = null);
 
         /// <summary>
+        /// Gets pluralized dictionary with keys and localized values for the puprpose of client-side translation.
+        /// </summary>
+        /// <param name="cultureInfo">Culture info includes names, calendars, date formatting etc. Default values is configured in localization config file.</param>
+        /// <param name="scope">String name of a scope. Dictionary of this scope will be returned. Default value is global.</param>
+        /// <returns>Pluralized dictionary with keys and localized values.</returns>
+        IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null,
+            string scope = null);
+
+        /// <summary>
         /// Gets dictionary with keys and localized constant values.
         /// </summary>
         /// <param name="cultureInfo">Culture info includes names, calendars, date formatting etc. Default values is configured in localization config file.</param>
