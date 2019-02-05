@@ -5,12 +5,12 @@ using Scalesoft.Localization.Core.Logging;
 
 namespace Scalesoft.Localization.Core.Pluralization
 {
-    public class PluralizationInterval
+    public class PluralizationInterval // TODO should implement IEquatable?
     {
         private readonly ILogger m_logger;
 
-        private readonly int m_x;
-        private readonly int m_y;
+        public readonly int X;
+        public readonly int Y;
 
         /// <summary>
         /// Constructor
@@ -31,8 +31,8 @@ namespace Scalesoft.Localization.Core.Pluralization
                 throw new ArgumentException(intervalErrorMsg);
             }
 
-            m_x = x;
-            m_y = y;
+            X = x;
+            Y = y;
             m_logger = logger;
         }
 
@@ -46,7 +46,7 @@ namespace Scalesoft.Localization.Core.Pluralization
         {
             Guard.ArgumentNotNull(nameof(obj), obj, m_logger);
 
-            return m_x <= obj.m_y && obj.m_x <= m_y;
+            return X <= obj.Y && obj.X <= Y;
         }
 
         public override bool Equals(object obj)
@@ -68,7 +68,7 @@ namespace Scalesoft.Localization.Core.Pluralization
 
         public override int GetHashCode()
         {
-            return m_x.GetHashCode() ^ m_y.GetHashCode();
+            return X.GetHashCode() ^ Y.GetHashCode();
         }
     }
 }

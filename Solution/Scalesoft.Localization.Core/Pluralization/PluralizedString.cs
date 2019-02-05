@@ -30,6 +30,16 @@ namespace Scalesoft.Localization.Core.Pluralization
             m_pluralized = new ConcurrentDictionary<PluralizationInterval, LocalizedString>();
         }
 
+        public LocalizedString GetDefaultLocalizedString()
+        {
+            return m_defaultLocalizedString;
+        }
+
+        public ConcurrentDictionary<PluralizationInterval, LocalizedString> GetPluralizationDictionary()
+        {
+            return m_pluralized;
+        }
+
         /// <summary>
         /// Returns correct pluralized string.
         /// </summary>
