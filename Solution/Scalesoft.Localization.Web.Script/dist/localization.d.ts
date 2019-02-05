@@ -9,6 +9,7 @@ declare class Localization {
     translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString;
     translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString;
     private getFallbackTranslation;
+    private handleError;
     configureSiteUrl(siteUrl: string): void;
     private getDictionary;
     private getPluralizationDictionary;
@@ -48,8 +49,8 @@ interface IClientPluralizedString {
     defaultLocalizedString: ILocalizedString;
 }
 declare class PluralizationInterval {
-    readonly X: number;
-    readonly Y: number;
+    readonly x: number;
+    readonly y: number;
     constructor(x: number, y: number);
     isOverlaping(obj: PluralizationInterval): boolean;
     equals(obj: PluralizationInterval): boolean;

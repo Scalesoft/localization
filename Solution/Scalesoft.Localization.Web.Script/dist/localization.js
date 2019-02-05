@@ -23,15 +23,25 @@ var Localization = /** @class */ (function () {
     };
     Localization.prototype.translatePluralization = function (text, number, scope, cultureName) {
         var dictionary = this.getPluralizationDictionary(scope, cultureName);
-        var result = dictionary.translatePluralization(text, number);
-        if (result == null) {
-            return this.getFallbackTranslation(text, scope, cultureName);
+        try {
+            var result = dictionary.translatePluralization(text, number);
+            if (result == null) {
+                return this.getFallbackTranslation(text, scope, cultureName);
+            }
+            return result;
         }
-        return result;
+        catch (exception) {
+            return this.handleError(exception, text);
+        }
     };
     Localization.prototype.getFallbackTranslation = function (text, scope, cultureName) {
         console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
         var localizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
+        return localizedString;
+    };
+    Localization.prototype.handleError = function (exception, text) {
+        console.error(exception.message);
+        var localizedString = { name: text, value: "X{error}", resourceNotFound: true };
         return localizedString;
     };
     Localization.prototype.configureSiteUrl = function (siteUrl) {
@@ -168,10 +178,10 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
     }
     LocalizationPluralizationDictionary.prototype.translatePluralization = function (text, number) {
         var pluralizedString = this.mDictionary[text];
-        var requestedInterval = new PluralizationInterval(number, number);
         if (typeof pluralizedString === "undefined" || pluralizedString === null) {
             return null;
         }
+        var requestedInterval = new PluralizationInterval(number, number);
         for (var key in pluralizedString.pluralized) {
             if (pluralizedString.pluralized.hasOwnProperty(key)) {
                 var separatedString = key.split(",");
@@ -196,14 +206,14 @@ var PluralizationInterval = /** @class */ (function () {
             var intervalErrorMsg = "The x value should be less or equal than y.";
             throw new Error(intervalErrorMsg);
         }
-        this.X = x;
-        this.Y = y;
+        this.x = x;
+        this.y = y;
     }
     PluralizationInterval.prototype.isOverlaping = function (obj) {
         if (!obj) {
             throw new Error("Interval is not defined");
         }
-        return this.X <= obj.Y && obj.X <= this.Y;
+        return this.x <= obj.y && obj.x <= this.y;
     };
     PluralizationInterval.prototype.equals = function (obj) {
         if (obj == null) {
