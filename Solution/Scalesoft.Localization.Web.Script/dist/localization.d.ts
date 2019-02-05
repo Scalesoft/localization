@@ -41,6 +41,19 @@ interface ILocalizedString {
     resourceNotFound: boolean;
     value: string;
 }
+interface IClientPluralizedString {
+    pluralized: {
+        [key: string]: ILocalizedString;
+    };
+    defaultLocalizedString: ILocalizedString;
+}
+declare class PluralizationInterval {
+    readonly X: number;
+    readonly Y: number;
+    constructor(x: number, y: number);
+    isOverlaping(obj: PluralizationInterval): boolean;
+    equals(obj: PluralizationInterval): boolean;
+}
 declare class LocalizationUtils {
     static getCookie(name: string): string;
 }

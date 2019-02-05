@@ -32,7 +32,8 @@
         return result;
     }
 
-    public translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString {
+    public translatePluralization(text: string, number: number, scope?: string, cultureName?: string):
+        ILocalizedString {
         let dictionary = this.getPluralizationDictionary(scope, cultureName);
 
         var result = dictionary.translatePluralization(text, number);
@@ -44,7 +45,8 @@
     }
 
     private getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
-        console.log(`Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
+        console.log(
+            `Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`);
         var localizedString: ILocalizedString = { name: text, value: "X{undefined}", resourceNotFound: true };
         return localizedString;
     }
@@ -75,7 +77,7 @@
         return this.getCurrentCulture();
     }
 
-    private checkScope(scope?: string): string{
+    private checkScope(scope?: string): string {
         if (scope) {
             return scope;
         }
@@ -83,7 +85,7 @@
         return this.mGlobalScope;
     }
 
-    private getLocalizationDictionary(scope: string, cultureName: string) : LocalizationDictionary {
+    private getLocalizationDictionary(scope: string, cultureName: string): LocalizationDictionary {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mDictionary[dictionaryKey];
         if (typeof dictionary === "undefined") {
@@ -95,7 +97,8 @@
         return dictionary;
     }
 
-    private getPluralizationLocalizationDictionary(scope: string, cultureName: string): LocalizationPluralizationDictionary {
+    private getPluralizationLocalizationDictionary(scope: string, cultureName: string):
+        LocalizationPluralizationDictionary {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mPluralizedDictionary[dictionaryKey];
         if (typeof dictionary === "undefined") {
@@ -111,7 +114,7 @@
         return scope.concat("|", cultureName);
     }
 
-    private downloadDictionary(scope: string, cultureName: string){
+    private downloadDictionary(scope: string, cultureName: string) {
         let xmlHttpRequest = new XMLHttpRequest();
 
         xmlHttpRequest.onreadystatechange = () => {
@@ -191,7 +194,8 @@ class LocalizationDictionary {
         let translation = this.translate(text);
 
         var formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
-        var localizedString: ILocalizedString = { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
+        var localizedString: ILocalizedString =
+            { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
 
         return localizedString;
     }
@@ -211,19 +215,37 @@ class LocalizationDictionary {
 }
 
 class LocalizationPluralizationDictionary {
-    private mDictionary: { [key: string]: ILocalizedString };
+    private mDictionary: { [key: string]: IClientPluralizedString };
 
     constructor(dictionary: string) {
         this.mDictionary = JSON.parse(dictionary);
     }
 
     public translatePluralization(text: string, number: number): ILocalizedString {
-        let result = this.mDictionary[text];
-        if (typeof result === "undefined") {
+        const pluralizedString = this.mDictionary[text];
+        const requestedInterval = new PluralizationInterval(number, number);
+        if (typeof pluralizedString === "undefined" || pluralizedString === null) {
             return null;
         }
+        for (let key in pluralizedString.pluralized) {
+            if (pluralizedString.pluralized.hasOwnProperty(key)) {
+                const separatedString = key.split(",");
+                const intervalStart = parseInt(separatedString[0], 10);
+                const intervalEnd = parseInt(separatedString[1], 10);
 
-        return result;
+                if (isNaN(intervalStart) || isNaN(intervalEnd)) {
+                    continue;
+                }
+
+                const translationInterval = new PluralizationInterval(intervalStart, intervalEnd);
+
+                if (translationInterval.equals(requestedInterval)) {
+                    return pluralizedString.pluralized[key];
+                }
+            }
+        }
+
+        return pluralizedString.defaultLocalizedString;
     }
 }
 
@@ -233,8 +255,50 @@ interface ILocalizedString {
     value: string;
 }
 
+interface IClientPluralizedString {
+    pluralized: { [key: string]: ILocalizedString }; // key is pluralization interval joined with a comma
+    defaultLocalizedString: ILocalizedString;
+}
+
+class PluralizationInterval {
+
+    public readonly X: number;
+    public readonly Y: number;
+
+    constructor(x: number, y: number) {
+        if (x > y) {
+            const intervalErrorMsg = "The x value should be less or equal than y.";
+
+            throw new Error(intervalErrorMsg);
+        }
+
+        this.X = x;
+        this.Y = y;
+    }
+
+    public isOverlaping(obj: PluralizationInterval): boolean {
+        if (!obj) {
+            throw new Error("Interval is not defined");
+        }
+
+        return this.X <= obj.Y && obj.X <= this.Y;
+    }
+
+    public equals(obj: PluralizationInterval): boolean {
+        if (obj == null) {
+            return false;
+        }
+
+        if (typeof this != typeof obj) {
+            return false;
+        }
+
+        return this.isOverlaping(obj);
+    }
+}
+
 class LocalizationUtils {
-    
+
     static getCookie(name: string): string {
         name = name + "=";
         return document.cookie

@@ -167,13 +167,54 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
         this.mDictionary = JSON.parse(dictionary);
     }
     LocalizationPluralizationDictionary.prototype.translatePluralization = function (text, number) {
-        var result = this.mDictionary[text];
-        if (typeof result === "undefined") {
+        var pluralizedString = this.mDictionary[text];
+        var requestedInterval = new PluralizationInterval(number, number);
+        if (typeof pluralizedString === "undefined" || pluralizedString === null) {
             return null;
         }
-        return result;
+        for (var key in pluralizedString.pluralized) {
+            if (pluralizedString.pluralized.hasOwnProperty(key)) {
+                var separatedString = key.split(",");
+                var intervalStart = parseInt(separatedString[0], 10);
+                var intervalEnd = parseInt(separatedString[1], 10);
+                if (isNaN(intervalStart) || isNaN(intervalEnd)) {
+                    continue;
+                }
+                var translationInterval = new PluralizationInterval(intervalStart, intervalEnd);
+                if (translationInterval.equals(requestedInterval)) {
+                    return pluralizedString.pluralized[key];
+                }
+            }
+        }
+        return pluralizedString.defaultLocalizedString;
     };
     return LocalizationPluralizationDictionary;
+}());
+var PluralizationInterval = /** @class */ (function () {
+    function PluralizationInterval(x, y) {
+        if (x > y) {
+            var intervalErrorMsg = "The x value should be less or equal than y.";
+            throw new Error(intervalErrorMsg);
+        }
+        this.X = x;
+        this.Y = y;
+    }
+    PluralizationInterval.prototype.isOverlaping = function (obj) {
+        if (!obj) {
+            throw new Error("Interval is not defined");
+        }
+        return this.X <= obj.Y && obj.X <= this.Y;
+    };
+    PluralizationInterval.prototype.equals = function (obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (typeof this != typeof obj) {
+            return false;
+        }
+        return this.isOverlaping(obj);
+    };
+    return PluralizationInterval;
 }());
 var LocalizationUtils = /** @class */ (function () {
     function LocalizationUtils() {
