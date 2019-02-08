@@ -37,7 +37,8 @@ namespace Scalesoft.Localization.AspNetCore.Manager
                 requestCulture.Culture.Name,
                 new CookieOptions
                 {
-                    Expires = DateTimeOffset.UtcNow.AddYears(1)
+                    Expires = DateTimeOffset.UtcNow.AddYears(1),
+                    IsEssential = true
                 }
             );
         }
