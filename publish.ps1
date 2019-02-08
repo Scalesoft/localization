@@ -1,12 +1,15 @@
 #!/usr/bin/env pwsh
 
-[CmdletBinding()]
+    [CmdletBinding()]
 Param(
- [Parameter(Mandatory=$true)]
- [String]$apiKey,
+    [Parameter(Mandatory = $true)]
+    [String]$apiKey,
 
- [Parameter(Mandatory=$true)]
- [String]$packageVersion
+    [Parameter(Mandatory = $true)]
+    [String]$packageVersion,
+
+    [Parameter()]
+    [Switch]$disableRestore = $false
 )
 
 $currentPath = (Get-Location -PSProvider FileSystem).ProviderPath
@@ -18,9 +21,19 @@ $packages.Add("Scalesoft.Localization.Database.Abstractions") > $null
 $packages.Add("Scalesoft.Localization.Database.EFCore") > $null
 $packages.Add("Scalesoft.Localization.Database.NHibernate") > $null
 
+if ($packageVersion[0] -eq 'v')
+{
+    $packageVersion = $packageVersion.Substring(1)
+}
+
 Set-Location Solution
 
-dotnet publish
+if (!$disableRestore)
+{
+    dotnet restore
+}
+
+dotnet publish --no-restore "/property:Version=${packageVersion}"
 
 Set-Location $currentPath
 Set-Location build

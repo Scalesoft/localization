@@ -4,9 +4,33 @@ sudo: required
 dist: xenial
 dotnet: 2.2
 
-script:
-  - ./tests.sh
-
 global:
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
   - DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+addons:
+  apt:
+    sources:
+      - sourceline: "deb [arch=amd64] https://packages.microsoft.com/ubuntu/16.04/prod xenial main"
+        key_url: "https://packages.microsoft.com/keys/microsoft.asc"
+    packages:
+      - powershell
+
+cache:
+  directories:
+    - .nuget
+
+before_script:
+  - dotnet restore --packages ./.nuget/ Solution/Scalesoft.Localization.sln
+
+stages:
+  - test
+  - deploy
+
+jobs:
+  include:
+    - stage: test
+      script: pwsh -f tests.ps1 --disableRestore
+    - stage: deploy
+      if: branch = master AND fork = false AND tag = true
+      script: pwsh -f publish.ps1 --disableRestore "${NUGET_API_KEY}" "${TRAVIS_TAG}"
