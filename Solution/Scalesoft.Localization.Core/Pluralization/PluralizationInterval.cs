@@ -9,19 +9,19 @@ namespace Scalesoft.Localization.Core.Pluralization
     {
         private readonly ILogger m_logger;
 
-        public readonly int X;
-        public readonly int Y;
+        public readonly int Start;
+        public readonly int End;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="x">Begining of interval (inclusive)</param>
-        /// <param name="y">End of interval (inclusive)</param>
-        public PluralizationInterval(int x, int y, ILogger logger = null)
+        /// <param name="start">Beginning of interval (inclusive)</param>
+        /// <param name="end">End of interval (inclusive)</param>
+        public PluralizationInterval(int start, int end, ILogger logger = null)
         {
-            if (x > y)
+            if (start > end)
             {
-                var intervalErrorMsg = "The x value should be less or equal than y.";
+                var intervalErrorMsg = "The start value should be less or equal than end.";
 
                 if (logger != null && logger.IsErrorEnabled())
                 {
@@ -31,8 +31,8 @@ namespace Scalesoft.Localization.Core.Pluralization
                 throw new ArgumentException(intervalErrorMsg);
             }
 
-            X = x;
-            Y = y;
+            Start = start;
+            End = end;
             m_logger = logger;
         }
 
@@ -46,7 +46,7 @@ namespace Scalesoft.Localization.Core.Pluralization
         {
             Guard.ArgumentNotNull(nameof(obj), obj, m_logger);
 
-            return X <= obj.Y && obj.X <= Y;
+            return Start <= obj.End && obj.Start <= End;
         }
 
         public override bool Equals(object obj)
@@ -68,7 +68,7 @@ namespace Scalesoft.Localization.Core.Pluralization
 
         public override int GetHashCode()
         {
-            return X.GetHashCode() ^ Y.GetHashCode();
+            return Start.GetHashCode() ^ End.GetHashCode();
         }
     }
 }

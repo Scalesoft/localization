@@ -21,7 +21,7 @@ namespace Scalesoft.Localization.Core.Pluralization
             Guard.ArgumentNotNull(nameof(pluralizedString), pluralizedString);
 
             DefaultLocalizedString = pluralizedString.GetDefaultLocalizedString();
-            var mappedDictionary = pluralizedString.GetPluralizationDictionary().ToDictionary(p => $"{p.Key.X},{p.Key.Y}", p => p.Value);
+            var mappedDictionary = pluralizedString.GetPluralizationDictionary().ToDictionary(p => $"{p.Key.Start},{p.Key.End}", p => p.Value);
             Pluralized = new ConcurrentDictionary<string, LocalizedString>(mappedDictionary);
         }
     }

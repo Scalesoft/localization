@@ -272,18 +272,18 @@ interface IClientPluralizedString {
 }
 
 class PluralizationInterval {
-    public readonly x: number;
-    public readonly y: number;
+    public readonly start: number;
+    public readonly end: number;
 
-    constructor(x: number, y: number) {
-        if (x > y) {
-            const intervalErrorMsg = "The x value should be less or equal than y.";
+    constructor(start: number, end: number) {
+        if (start > end) {
+            const intervalErrorMsg = "The start value should be less or equal than end.";
 
             throw new Error(intervalErrorMsg);
         }
 
-        this.x = x;
-        this.y = y;
+        this.start = start;
+        this.end = end;
     }
 
     public isOverlaping(obj: PluralizationInterval): boolean {
