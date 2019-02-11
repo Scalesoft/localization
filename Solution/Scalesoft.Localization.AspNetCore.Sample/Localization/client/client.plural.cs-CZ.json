@@ -1,0 +1,33 @@
+{
+  "culture": "cs-CZ",
+  "scope": "client.plural",
+  "dictionary": {
+    "years": {
+      "lety": [
+        [ null, -2, "lety" ],
+        [ -1, -1, "rokem" ],
+        [ 0, 0, "lety" ],
+        [ 1, 1, "rokem" ],
+        [ 2, null, "lety" ]
+      ]
+    },
+    "months": {
+      "měsíci": [
+        [ null, -2, "měsíci" ],
+        [ -1, -1, "měsícem" ],
+        [ 0, 0, "měsíci" ],
+        [ 1, 1, "měsícem" ],
+        [ 2, null, "měsíci" ]
+      ]
+    },
+    "days": {
+      "dny": [
+        [ null, -2, "dny" ],
+        [ -1, -1, "dnem" ],
+        [ 0, 0, "dny" ],
+        [ 1, 1, "dnem" ],
+        [ 2, null, "dny" ]
+      ]
+    }
+  }
+}

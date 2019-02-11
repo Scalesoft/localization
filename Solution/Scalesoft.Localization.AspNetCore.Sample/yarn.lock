@@ -156,10 +156,27 @@
   resolved "https://registry.yarnpkg.com/@types/fancy-log/-/fancy-log-1.3.0.tgz#a61ab476e5e628cd07a846330df53b85e05c8ce0"
   integrity sha512-mQjDxyOM1Cpocd+vm1kZBP7smwKZ4TNokFeds9LV7OZibmPJFEzY3+xZMrKfUdNT71lv8GoCPD6upKwHxubClw==
 
+"@types/jquery@^3.3.29":
+  version "3.3.29"
+  resolved "http://proget.scalesoft.cz/npm/Default-NPM/@types/jquery/-/jquery-3.3.29.tgz#680a2219ce3c9250483722fccf5570d1e2d08abd"
+  integrity sha1-aAoiGc48klBINyL8z1Vw0eLQir0=
+  dependencies:
+    "@types/sizzle" "*"
+
 "@types/node@*":
   version "10.12.24"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.24.tgz#b13564af612a22a20b5d95ca40f1bffb3af315cf"
   integrity sha512-GWWbvt+z9G5otRBW8rssOFgRY87J9N/qbhqfjMZ+gUuL6zoL+Hm6gP/8qQBG4jjimqdaNLCehcVapZ/Fs2WjCQ==
+
+"@types/scalesoft-localization-web@npm:scalesoft-localization-web@2.1.0", scalesoft-localization-web@2.1.0:
+  version "2.1.0"
+  resolved "http://proget.scalesoft.cz/npm/Default-NPM/scalesoft-localization-web/-/scalesoft-localization-web-2.1.0.tgz#48d6f66feb876e62154acac6a9c5ba00740623ea"
+  integrity sha1-SNb2b+uHbmIVSsrGqcW6AHQGI+o=
+
+"@types/sizzle@*":
+  version "2.3.2"
+  resolved "http://proget.scalesoft.cz/npm/Default-NPM/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"
+  integrity sha1-qBG4wY4rq6t9VCszZYh64uTZ3kc=
 
 "@types/unist@*", "@types/unist@^2.0.0":
   version "2.0.2"

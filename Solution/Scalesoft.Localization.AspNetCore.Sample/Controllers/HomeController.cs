@@ -25,6 +25,11 @@ namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
             return View();
         }
 
+        public IActionResult Client()
+        {
+            return View();
+        }
+
         public IActionResult Contact(LoginViewModel viewModel)
         {
             var usernameLabel = m_localizationManager.Translate("UserName", "LoginViewModel");
