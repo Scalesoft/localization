@@ -17,6 +17,7 @@ namespace Scalesoft.Localization.Core.Pluralization
         /// </summary>
         /// <param name="start">Beginning of interval (inclusive)</param>
         /// <param name="end">End of interval (inclusive)</param>
+        /// <param name="logger">Logger instance</param>
         public PluralizationInterval(int start, int end, ILogger logger = null)
         {
             if (start > end)
