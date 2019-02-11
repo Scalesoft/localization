@@ -12,9 +12,16 @@ namespace LocalizationSample {
         }
 
         public init() {
-            const localizedString = this.localization.translatePluralization("months", 3, "client");
+            this.addPluralizationTestLine("years", -5);
+            this.addPluralizationTestLine("years", -1);
+            this.addPluralizationTestLine("years", 0);
+            this.addPluralizationTestLine("years", 1);
+            this.addPluralizationTestLine("years", 11);
+        }
 
-            $(".output").append(`<div>key="months" number=3 scope="client": ${localizedString.value}</div>`);
+        private addPluralizationTestLine(key: string, value: number, scope?: string) {
+            const localizedString = this.localization.translatePluralization(key, value, scope);
+            $(".output").append(`<div>key="${key}" number=${value} scope="${scope}": ${localizedString.value}</div>`);
         }
     }
 }
