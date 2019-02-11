@@ -1,8 +1,8 @@
 ﻿const gulp = require("gulp");
 const ts = require("gulp-typescript");
 const sourcemaps = require("gulp-sourcemaps");
-const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
+const uglify = require("gulp-uglify");
+const rename = require("gulp-rename");
 
 const tsProject = () => {
 	const tsProjectPipe = ts.createProject("tsconfig.json");
