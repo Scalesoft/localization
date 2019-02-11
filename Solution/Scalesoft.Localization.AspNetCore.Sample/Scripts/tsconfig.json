@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true
+  },
+  "exclude": [
+    "wwwroot"
+  ],
+  "include": ["**/*"]
+}
