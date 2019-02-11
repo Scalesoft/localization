@@ -160,13 +160,6 @@ var LocalizationDictionary = /** @class */ (function () {
         var localizedString = { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
         return localizedString;
     };
-    LocalizationDictionary.prototype.translatePluralization = function (text, number) {
-        var result = this.mDictionary[text];
-        if (typeof result === "undefined") {
-            return null;
-        }
-        return result;
-    };
     LocalizationDictionary.prototype.formatString = function (str, obj) {
         return str.value.replace(/\{\s*([^}\s]+)\s*\}/g, function (m, p1, offset, string) { return obj[p1]; });
     };
@@ -182,18 +175,11 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
             return null;
         }
         var requestedInterval = new PluralizationInterval(number, number);
-        for (var key in pluralizedString.intervals) {
-            if (pluralizedString.intervals.hasOwnProperty(key)) {
-                var separatedString = key.split(",");
-                var intervalStart = parseInt(separatedString[0], 10);
-                var intervalEnd = parseInt(separatedString[1], 10);
-                if (isNaN(intervalStart) || isNaN(intervalEnd)) {
-                    continue;
-                }
-                var translationInterval = new PluralizationInterval(intervalStart, intervalEnd);
-                if (translationInterval.isInInterval(requestedInterval)) {
-                    return pluralizedString.intervals[key];
-                }
+        for (var _i = 0, _a = pluralizedString.intervals; _i < _a.length; _i++) {
+            var interval = _a[_i];
+            var translationInterval = interval.interval;
+            if (translationInterval.isInInterval(requestedInterval)) {
+                return interval.localizedString;
             }
         }
         return pluralizedString.defaultLocalizedString;
@@ -201,19 +187,19 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
     return LocalizationPluralizationDictionary;
 }());
 var PluralizationInterval = /** @class */ (function () {
-    function PluralizationInterval(x, y) {
-        if (x > y) {
-            var intervalErrorMsg = "The x value should be less or equal than y.";
+    function PluralizationInterval(start, end) {
+        if (start > end) {
+            var intervalErrorMsg = "The start value should be less or equal than end.";
             throw new Error(intervalErrorMsg);
         }
-        this.x = x;
-        this.y = y;
+        this.start = start;
+        this.end = end;
     }
     PluralizationInterval.prototype.isOverlaping = function (obj) {
         if (!obj) {
             throw new Error("Interval is not defined");
         }
-        return this.x <= obj.y && obj.x <= this.y;
+        return this.start <= obj.start && obj.end <= this.end;
     };
     PluralizationInterval.prototype.isInInterval = function (obj) {
         if (obj == null) {

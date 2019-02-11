@@ -29,7 +29,6 @@ declare class LocalizationDictionary {
     constructor(dictionary: string);
     translate(text: string): ILocalizedString;
     translateFormat(text: string, parameters: string[]): ILocalizedString;
-    translatePluralization(text: string, number: number): ILocalizedString;
     private formatString;
 }
 declare class LocalizationPluralizationDictionary {
@@ -43,15 +42,17 @@ interface ILocalizedString {
     value: string;
 }
 interface IClientPluralizedString {
-    intervals: {
-        [key: string]: ILocalizedString;
-    };
+    intervals: IClientIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
 }
+interface IClientIntervalWithTranslation {
+    interval: PluralizationInterval;
+    localizedString: ILocalizedString;
+}
 declare class PluralizationInterval {
-    readonly x: number;
-    readonly y: number;
-    constructor(x: number, y: number);
+    readonly start: number;
+    readonly end: number;
+    constructor(start: number, end: number);
     isOverlaping(obj: PluralizationInterval): boolean;
     isInInterval(obj: PluralizationInterval): boolean;
 }
