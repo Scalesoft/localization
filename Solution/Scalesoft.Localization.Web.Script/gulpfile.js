@@ -2,7 +2,7 @@
 const ts = require("gulp-typescript");
 const sourcemaps = require("gulp-sourcemaps");
 const uglify = require('gulp-uglify');
-const dest = require('gulp-dest');
+const rename = require('gulp-rename');
 
 const tsProject = () => {
 	const tsProjectPipe = ts.createProject("tsconfig.json");
@@ -25,7 +25,7 @@ gulp.task("build:dts", () =>
 gulp.task("minify:js", () =>
 	gulp.src(["dist/*.js", "!dist/*.min.js"])
 		.pipe(uglify())
-		.pipe(dest({ext: '.min.js'}))
+		.pipe(rename({extname: '.min.js'}))
 		.pipe(gulp.dest('./dist'))
 );
 
