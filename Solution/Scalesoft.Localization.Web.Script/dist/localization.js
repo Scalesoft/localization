@@ -182,8 +182,8 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
             return null;
         }
         var requestedInterval = new PluralizationInterval(number, number);
-        for (var key in pluralizedString.pluralized) {
-            if (pluralizedString.pluralized.hasOwnProperty(key)) {
+        for (var key in pluralizedString.intervals) {
+            if (pluralizedString.intervals.hasOwnProperty(key)) {
                 var separatedString = key.split(",");
                 var intervalStart = parseInt(separatedString[0], 10);
                 var intervalEnd = parseInt(separatedString[1], 10);
@@ -191,8 +191,8 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
                     continue;
                 }
                 var translationInterval = new PluralizationInterval(intervalStart, intervalEnd);
-                if (translationInterval.equals(requestedInterval)) {
-                    return pluralizedString.pluralized[key];
+                if (translationInterval.isInInterval(requestedInterval)) {
+                    return pluralizedString.intervals[key];
                 }
             }
         }
@@ -215,7 +215,7 @@ var PluralizationInterval = /** @class */ (function () {
         }
         return this.x <= obj.y && obj.x <= this.y;
     };
-    PluralizationInterval.prototype.equals = function (obj) {
+    PluralizationInterval.prototype.isInInterval = function (obj) {
         if (obj == null) {
             return false;
         }

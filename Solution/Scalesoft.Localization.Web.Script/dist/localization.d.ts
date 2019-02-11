@@ -43,7 +43,7 @@ interface ILocalizedString {
     value: string;
 }
 interface IClientPluralizedString {
-    pluralized: {
+    intervals: {
         [key: string]: ILocalizedString;
     };
     defaultLocalizedString: ILocalizedString;
@@ -53,7 +53,7 @@ declare class PluralizationInterval {
     readonly y: number;
     constructor(x: number, y: number);
     isOverlaping(obj: PluralizationInterval): boolean;
-    equals(obj: PluralizationInterval): boolean;
+    isInInterval(obj: PluralizationInterval): boolean;
 }
 declare class LocalizationUtils {
     static getCookie(name: string): string;

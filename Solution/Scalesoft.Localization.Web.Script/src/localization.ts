@@ -96,8 +96,8 @@
     }
 
     private getLocalizationDictionary(scope: string, cultureName: string): LocalizationDictionary {
-        let dictionaryKey = this.dictionaryKey(scope, cultureName);
-        let dictionary = this.mDictionary[dictionaryKey];
+        const dictionaryKey = this.dictionaryKey(scope, cultureName);
+        const dictionary = this.mDictionary[dictionaryKey];
         if (typeof dictionary === "undefined") {
             this.downloadDictionary(scope, cultureName);
 
@@ -192,7 +192,7 @@ class LocalizationDictionary {
     }
 
     public translate(text: string): ILocalizedString {
-        let result = this.mDictionary[text];
+        const result = this.mDictionary[text];
         if (typeof result === "undefined") {
             return null;
         }
@@ -201,22 +201,12 @@ class LocalizationDictionary {
     }
 
     public translateFormat(text: string, parameters: string[]): ILocalizedString {
-        let translation = this.translate(text);
+        const translation = this.translate(text);
 
-        var formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
-        var localizedString: ILocalizedString =
-            { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
+        const formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
+        const localizedString: ILocalizedString = { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
 
         return localizedString;
-    }
-
-    public translatePluralization(text: string, number: number): ILocalizedString {
-        let result = this.mDictionary[text];
-        if (typeof result === "undefined") {
-            return null;
-        }
-
-        return result;
     }
 
     private formatString(str: ILocalizedString, obj: string[]): string {
@@ -237,22 +227,13 @@ class LocalizationPluralizationDictionary {
             return null;
         }
         const requestedInterval = new PluralizationInterval(number, number);
-        for (let key in pluralizedString.pluralized) {
-            if (pluralizedString.pluralized.hasOwnProperty(key)) {
-                const separatedString = key.split(",");
-                const intervalStart = parseInt(separatedString[0], 10);
-                const intervalEnd = parseInt(separatedString[1], 10);
+        for (let interval of pluralizedString.intervals) {              
+                const translationInterval = interval.interval;
 
-                if (isNaN(intervalStart) || isNaN(intervalEnd)) {
-                    continue;
+                if (translationInterval.isInInterval(requestedInterval)) {
+                    return interval.localizedString;
                 }
-
-                const translationInterval = new PluralizationInterval(intervalStart, intervalEnd);
-
-                if (translationInterval.equals(requestedInterval)) {
-                    return pluralizedString.pluralized[key];
-                }
-            }
+            
         }
 
         return pluralizedString.defaultLocalizedString;
@@ -267,8 +248,13 @@ interface ILocalizedString {
 }
 
 interface IClientPluralizedString {
-    pluralized: { [key: string]: ILocalizedString }; // key is pluralization interval joined with a comma
+    intervals: IClientIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
+}
+
+interface IClientIntervalWithTranslation {
+    interval: PluralizationInterval;
+    localizedString: ILocalizedString;
 }
 
 class PluralizationInterval {
@@ -291,10 +277,10 @@ class PluralizationInterval {
             throw new Error("Interval is not defined");
         }
 
-        return this.x <= obj.y && obj.x <= this.y;
+        return this.start <= obj.start && obj.end <= this.end;
     }
 
-    public equals(obj: PluralizationInterval): boolean {
+    public isInInterval(obj: PluralizationInterval): boolean {
         if (obj == null) {
             return false;
         }

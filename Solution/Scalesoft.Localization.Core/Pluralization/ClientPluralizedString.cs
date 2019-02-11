@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.Core.Common;
@@ -8,8 +8,8 @@ namespace Scalesoft.Localization.Core.Pluralization
 {
     public class ClientPluralizedString
     {
-        public readonly ConcurrentDictionary<string, LocalizedString> Pluralized;
-        public readonly LocalizedString DefaultLocalizedString;
+        public IList<ClientIntervalWithTranslation> Intervals;
+        public LocalizedString DefaultLocalizedString;
 
         /// <summary>
         /// Constructor.
@@ -21,8 +21,13 @@ namespace Scalesoft.Localization.Core.Pluralization
             Guard.ArgumentNotNull(nameof(pluralizedString), pluralizedString);
 
             DefaultLocalizedString = pluralizedString.GetDefaultLocalizedString();
-            var mappedDictionary = pluralizedString.GetPluralizationDictionary().ToDictionary(p => $"{p.Key.Start},{p.Key.End}", p => p.Value);
-            Pluralized = new ConcurrentDictionary<string, LocalizedString>(mappedDictionary);
+            Intervals = pluralizedString.GetPluralizationDictionary().Select(x => new ClientIntervalWithTranslation{Interval = x.Key, LocalizedString = x.Value}).ToList();
         }
+    }
+
+    public class ClientIntervalWithTranslation
+    {
+        public PluralizationInterval Interval { get; set; }
+        public LocalizedString LocalizedString { get; set; }
     }
 }
