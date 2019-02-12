@@ -259,3 +259,8 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 
 ## Database structure 
 Init database schema script for SQL Server is in Sample project named `CreateDBSchema.sql`. Run it in SQL Server Management studio
+
+## Sample project for testing
+
+1. Run `YarnInstall.ps1` script before first launch.
+2. Execute `default` task in Task Runner Exlorer in Visual Studio if you are modifiying localization web script (of force rebuild the sample project).
