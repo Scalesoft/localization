@@ -168,11 +168,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.24.tgz#b13564af612a22a20b5d95ca40f1bffb3af315cf"
   integrity sha512-GWWbvt+z9G5otRBW8rssOFgRY87J9N/qbhqfjMZ+gUuL6zoL+Hm6gP/8qQBG4jjimqdaNLCehcVapZ/Fs2WjCQ==
 
-"@types/scalesoft-localization-web@npm:scalesoft-localization-web@2.1.0", scalesoft-localization-web@2.1.0:
-  version "2.1.0"
-  resolved "http://proget.scalesoft.cz/npm/Default-NPM/scalesoft-localization-web/-/scalesoft-localization-web-2.1.0.tgz#48d6f66feb876e62154acac6a9c5ba00740623ea"
-  integrity sha1-SNb2b+uHbmIVSsrGqcW6AHQGI+o=
-
 "@types/sizzle@*":
   version "2.3.2"
   resolved "http://proget.scalesoft.cz/npm/Default-NPM/@types/sizzle/-/sizzle-2.3.2.tgz#a811b8c18e2babab7d542b3365887ae2e4d9de47"

@@ -12,8 +12,10 @@ const gulp = require("gulp"),
     fs = require("fs"),
     tslint = require("gulp-tslint"),
     stylelint = require("gulp-stylelint"),
-    bundleconfig = require("./bundleconfig.json");
-
+    bundleconfig = require("./bundleconfig.json"),
+    spawn = require("child_process").spawn,
+    path = require("path");
+    
 const paths = {
     webroot: `./wwwroot/`,
     nodemodules: `./node_modules/`,
@@ -23,7 +25,8 @@ const paths = {
     sass: `./Styles/**/*.scss`,
     scripts: `./Scripts`,
     typescript: `./Scripts/**/*.ts`,
-    tsconfig: `./Scripts/tsconfig.json`
+    tsconfig: `./Scripts/tsconfig.json`,
+    localizationWebScriptProject: `./../Scalesoft.Localization.Web.Script/`
 };
 
 const regex = {
@@ -60,7 +63,10 @@ const taskNames = {
     bundleCss: "bundle:css",
     bundleAndMinifyJs: "minify:js",
     bundleAndMinifyCss: "minify:css",
-    bundleAndMinify: "minify"
+    bundleAndMinify: "minify",
+    buildExternalProject: "build-external-project",
+    packExternalProject: "pack-external-project",
+    installExternalProject: "install-external-project",
 };
 
 let enableSwallowTsError = false;
@@ -75,6 +81,78 @@ const getBundles = regexPattern => bundleconfig.filter(
     bundle => regexPattern.test(bundle.outputFileName)
 );
 
+gulp.task(taskNames.buildExternalProject,
+    (callback) => {
+        var yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
+        const externalGulp = spawn(yarn, ["gulp"], { cwd: paths.localizationWebScriptProject });
+
+        externalGulp.on("close", (code) => {
+            callback(code);
+            if (code !== 0) {
+                callback(code);
+                return;
+            }
+            gulp.task(taskNames.packExternalProject)(callback);
+        });
+
+        externalGulp.on("error", (err) => {
+            console.error(err);
+        });
+    }
+);
+
+gulp.task(taskNames.packExternalProject,
+    (callback) => {
+        var npm = (process.platform === "win32" ? "npm.cmd" : "npm");
+        const npmPack = spawn(npm, ["pack"], { cwd: paths.localizationWebScriptProject });
+
+        let packName;
+        npmPack.stdout.on("data", (data) => {
+            packName = data.toString();
+        });
+
+        npmPack.on("close", (code) => {
+            if (code !== 0) {
+                callback(code);
+                return;
+            }
+            gulp.task(taskNames.installExternalProject)(callback, packName);
+        });
+
+        npmPack.on("error", (err) => {
+            console.error(err);
+        });
+    }
+);
+
+gulp.task(taskNames.installExternalProject,
+    (callback, packName) => {
+        const fullpath = path.join(paths.localizationWebScriptProject, packName);
+        var yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
+        const releaseGulp = spawn(yarn, ["add", "--no-lockfile", `scalesoft-localization-web@${fullpath}`]);
+
+        releaseGulp.on("close", (code) => {
+            if (code !== 0) {
+                callback(code);
+                return;
+            }
+            const devGulp = spawn(yarn, ["add", "--no-lockfile", "--dev", `@types/scalesoft-localization-web@${fullpath}`]);
+
+            devGulp.on("close", (devCode) => {
+                callback(devCode);
+                return;
+            });
+
+            devGulp.on("error", (err) => {
+                console.error(err);
+            });
+        });
+        
+        releaseGulp.on("error", (err) => {
+            console.error(err);
+        });
+    }
+);
 
 gulp.task(taskNames.lintTs,
     () => tsProject.src()
@@ -315,6 +393,7 @@ if (fs.existsSync("../skip-gulp-run")) {
 else {
     gulp.task("default",
         gulp.series(
+            taskNames.buildExternalProject,
             taskNames.downloadAllDeps,
             taskNames.bundleAndMinify
         )

@@ -14,7 +14,7 @@ const tsProject = () => {
 
 gulp.task("build:ts", () =>
 	tsProject().js
-		.pipe(sourcemaps.write('.'))
+		.pipe(sourcemaps.write("."))
 		.pipe(gulp.dest("dist"))
 );
 
@@ -25,8 +25,8 @@ gulp.task("build:dts", () =>
 gulp.task("minify:js", () =>
 	gulp.src(["dist/*.js", "!dist/*.min.js"])
 		.pipe(uglify())
-		.pipe(rename({extname: '.min.js'}))
-		.pipe(gulp.dest('./dist'))
+		.pipe(rename({extname: ".min.js"}))
+		.pipe(gulp.dest("./dist"))
 );
 
 

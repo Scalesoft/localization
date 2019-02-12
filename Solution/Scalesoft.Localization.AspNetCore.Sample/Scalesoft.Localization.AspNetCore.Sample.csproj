@@ -31,6 +31,10 @@
     <ProjectReference Include="..\Scalesoft.Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj" />
   </ItemGroup>
 
+  <Target Name="Gulp" BeforeTargets="BeforeBuild">
+    <Exec Command="yarn gulp -b $(ProjectDir) --gulpfile $(ProjectDir)gulpfile.js default" />
+  </Target>
+  
   <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
