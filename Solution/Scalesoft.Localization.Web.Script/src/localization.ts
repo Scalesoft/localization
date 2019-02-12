@@ -4,16 +4,16 @@
     private mCultureCookieName: string = "Localization.Culture";
     private mCurrentCulture: string;
 
-    private mDictionary: { [key: string]: LocalizationDictionary } = {};
+    private readonly mDictionary: { [key: string]: LocalizationDictionary } = {};
 
     private mPluralizedDictionary: { [key: string]: LocalizationPluralizationDictionary } = {};
 
     private mSiteUrl: string;
 
     public translate(text: string, scope?: string, cultureName?: string): ILocalizedString {
-        let dictionary = this.getDictionary(scope, cultureName);
+        const dictionary = this.getDictionary(scope, cultureName);
 
-        var result = dictionary.translate(text);
+        const result = dictionary.translate(text);
         if (result == null) {
             return this.getFallbackTranslation(text, scope, cultureName);
         }
@@ -22,9 +22,9 @@
     }
 
     public translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString {
-        let dictionary = this.getDictionary(scope, cultureName);
+        const dictionary = this.getDictionary(scope, cultureName);
 
-        var result = dictionary.translateFormat(text, parameters);
+        const result = dictionary.translateFormat(text, parameters);
         if (result == null) {
             return this.getFallbackTranslation(text, scope, cultureName);
         }
@@ -35,7 +35,6 @@
     public translatePluralization(text: string, number: number, scope?: string, cultureName?: string):
         ILocalizedString {
         const dictionary = this.getPluralizationDictionary(scope, cultureName);
-
         try {
             const result = dictionary.translatePluralization(text, number);
             if (result == null) {
@@ -185,7 +184,7 @@
 }
 
 class LocalizationDictionary {
-    private mDictionary: { [key: string]: ILocalizedString };
+    private readonly mDictionary: { [key: string]: ILocalizedString };
 
     constructor(dictionary: string) {
         this.mDictionary = JSON.parse(dictionary);
@@ -216,7 +215,7 @@ class LocalizationDictionary {
 }
 
 class LocalizationPluralizationDictionary {
-    private mDictionary: { [key: string]: IClientPluralizedString };
+    private readonly mDictionary: { [key: string]: IClientPluralizedString };
 
     constructor(dictionary: string) {
         this.mDictionary = JSON.parse(dictionary);
@@ -276,7 +275,7 @@ class PluralizationInterval {
 
 class LocalizationUtils {
 
-    static getCookie(name: string): string {
+    public static getCookie(name: string): string {
         name = name + "=";
         return document.cookie
             .split(";")
@@ -301,7 +300,7 @@ class LocalizationUtils {
     /*
      * Returns true when inner pluralization interval is in the outer pluralization interval
      */
-    static isInInterval(inner: PluralizationInterval, outer: PluralizationInterval): boolean {
+    public static isInInterval(inner: PluralizationInterval, outer: PluralizationInterval): boolean {
         if (!inner) {
             return false;
         }

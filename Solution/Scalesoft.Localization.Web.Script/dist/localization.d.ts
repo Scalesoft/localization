@@ -2,7 +2,7 @@ declare class Localization {
     private mGlobalScope;
     private mCultureCookieName;
     private mCurrentCulture;
-    private mDictionary;
+    private readonly mDictionary;
     private mPluralizedDictionary;
     private mSiteUrl;
     translate(text: string, scope?: string, cultureName?: string): ILocalizedString;
@@ -25,14 +25,14 @@ declare class Localization {
     private getCurrentCultureCookie;
 }
 declare class LocalizationDictionary {
-    private mDictionary;
+    private readonly mDictionary;
     constructor(dictionary: string);
     translate(text: string): ILocalizedString;
     translateFormat(text: string, parameters: string[]): ILocalizedString;
     private formatString;
 }
 declare class LocalizationPluralizationDictionary {
-    private mDictionary;
+    private readonly mDictionary;
     constructor(dictionary: string);
     translatePluralization(text: string, number: number): ILocalizedString;
 }
