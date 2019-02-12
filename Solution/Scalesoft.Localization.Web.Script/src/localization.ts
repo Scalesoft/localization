@@ -204,7 +204,8 @@ class LocalizationDictionary {
         const translation = this.translate(text);
 
         const formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
-        const localizedString: ILocalizedString = { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
+        const localizedString: ILocalizedString =
+            { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
 
         return localizedString;
     }
@@ -227,13 +228,13 @@ class LocalizationPluralizationDictionary {
             return null;
         }
         const requestedInterval = new PluralizationInterval(number, number);
-        for (let interval of pluralizedString.intervals) {              
-                const translationInterval = interval.interval;
+        for (let interval of pluralizedString.intervals) {
+            const translationInterval = interval.interval;
 
-                if (translationInterval.isInInterval(requestedInterval)) {
-                    return interval.localizedString;
-                }
-            
+            if (LocalizationUtils.isInInterval(requestedInterval, translationInterval)) {
+                return interval.localizedString;
+            }
+
         }
 
         return pluralizedString.defaultLocalizedString;
@@ -271,26 +272,6 @@ class PluralizationInterval {
         this.start = start;
         this.end = end;
     }
-
-    public isOverlaping(obj: PluralizationInterval): boolean {
-        if (!obj) {
-            throw new Error("Interval is not defined");
-        }
-
-        return this.start <= obj.start && obj.end <= this.end;
-    }
-
-    public isInInterval(obj: PluralizationInterval): boolean {
-        if (obj == null) {
-            return false;
-        }
-
-        if (typeof this != typeof obj) {
-            return false;
-        }
-
-        return this.isOverlaping(obj);
-    }
 }
 
 class LocalizationUtils {
@@ -307,5 +288,28 @@ class LocalizationUtils {
                 return decodeURIComponent(cookie.substring(name.length));
             })[0] ||
             null;
+    }
+
+    private static isOverlaping(inner: PluralizationInterval, outer: PluralizationInterval): boolean {
+        if (!inner) {
+            throw new Error("Interval is not defined");
+        }
+
+        return outer.start <= inner.start && inner.end <= outer.end;
+    }
+
+    /*
+     * Returns true when inner pluralization interval is in the outer pluralization interval
+     */
+    static isInInterval(inner: PluralizationInterval, outer: PluralizationInterval): boolean {
+        if (!inner) {
+            return false;
+        }
+
+        if (typeof outer != typeof inner) {
+            return false;
+        }
+
+        return this.isOverlaping(inner, outer);
     }
 }

@@ -53,9 +53,9 @@ declare class PluralizationInterval {
     readonly start: number;
     readonly end: number;
     constructor(start: number, end: number);
-    isOverlaping(obj: PluralizationInterval): boolean;
-    isInInterval(obj: PluralizationInterval): boolean;
 }
 declare class LocalizationUtils {
     static getCookie(name: string): string;
+    private static isOverlaping;
+    static isInInterval(inner: PluralizationInterval, outer: PluralizationInterval): boolean;
 }

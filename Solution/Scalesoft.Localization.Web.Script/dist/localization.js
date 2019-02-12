@@ -178,7 +178,7 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
         for (var _i = 0, _a = pluralizedString.intervals; _i < _a.length; _i++) {
             var interval = _a[_i];
             var translationInterval = interval.interval;
-            if (translationInterval.isInInterval(requestedInterval)) {
+            if (LocalizationUtils.isInInterval(requestedInterval, translationInterval)) {
                 return interval.localizedString;
             }
         }
@@ -195,21 +195,6 @@ var PluralizationInterval = /** @class */ (function () {
         this.start = start;
         this.end = end;
     }
-    PluralizationInterval.prototype.isOverlaping = function (obj) {
-        if (!obj) {
-            throw new Error("Interval is not defined");
-        }
-        return this.start <= obj.start && obj.end <= this.end;
-    };
-    PluralizationInterval.prototype.isInInterval = function (obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (typeof this != typeof obj) {
-            return false;
-        }
-        return this.isOverlaping(obj);
-    };
     return PluralizationInterval;
 }());
 var LocalizationUtils = /** @class */ (function () {
@@ -227,6 +212,24 @@ var LocalizationUtils = /** @class */ (function () {
             return decodeURIComponent(cookie.substring(name.length));
         })[0] ||
             null;
+    };
+    LocalizationUtils.isOverlaping = function (inner, outer) {
+        if (!inner) {
+            throw new Error("Interval is not defined");
+        }
+        return outer.start <= inner.start && inner.end <= outer.end;
+    };
+    /*
+     * Returns true when inner pluralization interval is in the outer pluralization interval
+     */
+    LocalizationUtils.isInInterval = function (inner, outer) {
+        if (!inner) {
+            return false;
+        }
+        if (typeof outer != typeof inner) {
+            return false;
+        }
+        return this.isOverlaping(inner, outer);
     };
     return LocalizationUtils;
 }());
