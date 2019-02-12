@@ -82,6 +82,3 @@ node_modules/
 
 #Rider
 Solution/.idea
-
-#Web localization compiled package
-Solution/Scalesoft.Localization.Web.Script/scalesoft-localization-web-*.tgz

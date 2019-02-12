@@ -1,3 +1,4 @@
+/// <reference path="../../Scalesoft.Localization.Web.Script/src/localization.ts" />
 namespace LocalizationSample {
     $(document.documentElement).ready(() => {
         new LocalizationTest().init();

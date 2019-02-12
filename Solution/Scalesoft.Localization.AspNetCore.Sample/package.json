@@ -4,7 +4,6 @@
 	"private": true,
 	"devDependencies": {
 		"@types/jquery": "^3.3.29",
-		"@types/scalesoft-localization-web": "..\\Scalesoft.Localization.Web.Script\\scalesoft-localization-web-2.1.0.tgz",
 		"del": "^3.0.0",
 		"gulp": "^4.0.0",
 		"gulp-concat": "^2.6.0",
@@ -25,6 +24,6 @@
 		"jquery": "^3.3",
 		"jquery-validation": "^1.17",
 		"jquery-validation-unobtrusive": "^3.2",
-		"scalesoft-localization-web": "..\\Scalesoft.Localization.Web.Script\\scalesoft-localization-web-2.1.0.tgz"
+		"scalesoft-localization-web": "*"
 	}
 }

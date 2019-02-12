@@ -65,8 +65,10 @@ const taskNames = {
     bundleAndMinifyCss: "minify:css",
     bundleAndMinify: "minify",
     buildExternalProject: "build-external-project",
-    packExternalProject: "pack-external-project",
-    installExternalProject: "install-external-project",
+    linkExternalProject: "link-external-project",
+    linkToExternalProject: "link-to-external-project",
+    bootstrapExternalProject: "bootstrap-external-project",
+    linkToExternalProjectProduction: "link-external-project-production",
 };
 
 let enableSwallowTsError = false;
@@ -88,11 +90,6 @@ gulp.task(taskNames.buildExternalProject,
 
         externalGulp.on("close", (code) => {
             callback(code);
-            if (code !== 0) {
-                callback(code);
-                return;
-            }
-            gulp.task(taskNames.packExternalProject)(callback);
         });
 
         externalGulp.on("error", (err) => {
@@ -101,58 +98,52 @@ gulp.task(taskNames.buildExternalProject,
     }
 );
 
-gulp.task(taskNames.packExternalProject,
+gulp.task(taskNames.linkExternalProject,
     (callback) => {
-        var npm = (process.platform === "win32" ? "npm.cmd" : "npm");
-        const npmPack = spawn(npm, ["pack"], { cwd: paths.localizationWebScriptProject });
-
-        let packName;
-        npmPack.stdout.on("data", (data) => {
-            packName = data.toString();
-        });
-
-        npmPack.on("close", (code) => {
-            if (code !== 0) {
-                callback(code);
-                return;
-            }
-            gulp.task(taskNames.installExternalProject)(callback, packName);
-        });
-
-        npmPack.on("error", (err) => {
-            console.error(err);
-        });
-    }
-);
-
-gulp.task(taskNames.installExternalProject,
-    (callback, packName) => {
-        const fullpath = path.join(paths.localizationWebScriptProject, packName);
         var yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
-        const releaseGulp = spawn(yarn, ["add", "--no-lockfile", `scalesoft-localization-web@${fullpath}`]);
+        const externalGulp = spawn(yarn, ["link"], { cwd: paths.localizationWebScriptProject });
 
-        releaseGulp.on("close", (code) => {
-            if (code !== 0) {
-                callback(code);
-                return;
-            }
-            const devGulp = spawn(yarn, ["add", "--no-lockfile", "--dev", `@types/scalesoft-localization-web@${fullpath}`]);
-
-            devGulp.on("close", (devCode) => {
-                callback(devCode);
-                return;
-            });
-
-            devGulp.on("error", (err) => {
-                console.error(err);
-            });
+        externalGulp.on("close", (code) => {
+            callback(code);
         });
-        
-        releaseGulp.on("error", (err) => {
+
+        externalGulp.on("error", (err) => {
             console.error(err);
         });
     }
 );
+
+gulp.task(taskNames.linkToExternalProject,
+    (callback) => {
+        linkDependency(callback);
+    }
+);
+
+function linkDependency(callback, cwd) {
+    const yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
+    const externalGulp = spawn(yarn, ["link", "scalesoft-localization-web"], {cwd});
+
+    externalGulp.on("close", (code) => {
+        callback(code);
+    });
+
+    externalGulp.on("error", (err) => {
+        console.error(err);
+    });
+}
+
+gulp.task(taskNames.linkToExternalProjectProduction,
+    (callback) => {
+        linkDependency(callback, paths.webroot);
+    }
+);
+
+gulp.task(taskNames.bootstrapExternalProject,
+    gulp.series(
+        taskNames.buildExternalProject,
+        taskNames.linkExternalProject,
+        taskNames.linkToExternalProject
+    ));
 
 gulp.task(taskNames.lintTs,
     () => tsProject.src()
@@ -367,6 +358,7 @@ gulp.task(taskNames.deleteProductionPackageJson,
 gulp.task(taskNames.downloadAllDeps,
     gulp.series(
         taskNames.downloadProductionDeps,
+        taskNames.linkToExternalProjectProduction,
         taskNames.deleteProductionPackageJson
     )
 );
@@ -393,7 +385,7 @@ if (fs.existsSync("../skip-gulp-run")) {
 else {
     gulp.task("default",
         gulp.series(
-            taskNames.buildExternalProject,
+            taskNames.bootstrapExternalProject,
             taskNames.downloadAllDeps,
             taskNames.bundleAndMinify
         )
