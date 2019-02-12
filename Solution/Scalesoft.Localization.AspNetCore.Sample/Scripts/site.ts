@@ -5,7 +5,7 @@ namespace LocalizationSample {
     });
 
     class LocalizationTest {
-        private localization: Localization;
+        private readonly localization: Localization;
 
         constructor() {
             this.localization = new Localization();
@@ -13,11 +13,16 @@ namespace LocalizationSample {
         }
 
         public init() {
-            this.addPluralizationTestLine("years", -5);
-            this.addPluralizationTestLine("years", -1);
-            this.addPluralizationTestLine("years", 0);
-            this.addPluralizationTestLine("years", 1);
-            this.addPluralizationTestLine("years", 11);
+            this.testPluralization();
+
+        }
+
+        private testPluralization() {
+            const translatedString = this.localization.translate("Pluralization").value;
+            $(".output").append(`<div>${translatedString}</div>`);
+            for (let i = -11; i < 12; i++) {
+                this.addPluralizationTestLine("years", i);
+            }
         }
 
         private addPluralizationTestLine(key: string, value: number, scope?: string) {

@@ -12,6 +12,12 @@ namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
         }
 
         [HttpGet]
+        public IActionResult Dictionary(string scope)
+        {
+            return Json(m_dictionary.GetDictionary(scope));
+        }
+
+        [HttpGet]
         public IActionResult PluralizedDictionary(string scope)
         {
             return Json(m_dictionary.GetClientPluralizedDictionary(scope));
