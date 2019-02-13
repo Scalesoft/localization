@@ -8,8 +8,8 @@ namespace Scalesoft.Localization.Core.Pluralization
 {
     public class ClientPluralizedString
     {
-        public IList<ClientIntervalWithTranslation> Intervals;
-        public LocalizedString DefaultLocalizedString;
+        public IList<ClientIntervalWithTranslation> Intervals { get; set; }
+        public LocalizedString DefaultLocalizedString { get; set; }
 
         /// <summary>
         /// Constructor.
