@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Exceptions;
+using Scalesoft.Localization.Database.Abstractions.Entity;
 using Scalesoft.Localization.Database.NHibernate.Entity;
 
 namespace Scalesoft.Localization.Database.NHibernate.Repository
@@ -103,6 +104,30 @@ namespace Scalesoft.Localization.Database.NHibernate.Repository
             catch (Exception ex)
             {
                 throw new DataException("Find all static texts operation failed", ex);
+            }
+        }
+
+        public IList<T> FindAllByCultureAndScope(string cultureName, string dictionaryScopeName)
+        {
+            if (string.IsNullOrEmpty(cultureName)) throw new ArgumentException(EmptyArgumentMessage, nameof(cultureName));
+            if (string.IsNullOrEmpty(dictionaryScopeName)) throw new ArgumentException(EmptyArgumentMessage, nameof(dictionaryScopeName));
+
+            try
+            {
+                return GetValuesList<T>(FetchCollections, null, query =>
+                {
+                    DictionaryScopeEntity dictionaryScope = null;
+                    CultureEntity culture = null;
+                    return query
+                        .JoinAlias(x => x.DictionaryScope, () => dictionaryScope)
+                        .JoinAlias(x => x.Culture, () => culture)
+                        .Where(x => culture.Name == cultureName)
+                        .Where(x => dictionaryScope.Name == dictionaryScopeName);
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("FindAllByCultureAndScope operation failed", ex);
             }
         }
     }

@@ -128,6 +128,13 @@ namespace Scalesoft.Localization.Core
             return m_dictionaryManager.GetPluralizedDictionary(translationSource, cultureInfo, scope);
         }
 
+        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(
+            LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
+        )
+        {
+            return m_dictionaryManager.GetClientPluralizedDictionary(translationSource, cultureInfo, scope);
+        }
+
         public IDictionary<string, LocalizedString> GetConstantsDictionary(
             LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
         )

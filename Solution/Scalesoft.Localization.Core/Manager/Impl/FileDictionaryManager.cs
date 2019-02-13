@@ -60,7 +60,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             {
                 if (!dictionariesPerScope.Value.Keys.Contains(GlobalScope))
                 {
-                    throw new DictionaryLoadException($"Not found '{GlobalScope}' scope in '{dictionariesPerScope.Key.Name}' culture, unable to construct dictionary tree");
+                    throw new DictionaryLoadException(
+                        $"Not found '{GlobalScope}' scope in '{dictionariesPerScope.Key.Name}' culture, unable to construct dictionary tree");
                 }
             }
         }
@@ -153,7 +154,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
         }
 
-        private void BuildDictionaryHierarchyTrees(IDictionary<string, ILocalizationDictionary> dictionaries, ILocalizationDictionary dictionary)
+        private void BuildDictionaryHierarchyTrees(IDictionary<string, ILocalizationDictionary> dictionaries,
+            ILocalizationDictionary dictionary)
         {
             if (dictionary.Scope() == GlobalScope)
             {
@@ -175,6 +177,13 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         public IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
+        }
+
+        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null,
+            string scope = null)
+        {
+            return GetLocalizationDictionary(cultureInfo, scope).ListPlurals()
+                .ToDictionary(p => p.Key, p => new ClientPluralizedString(p.Value));
         }
 
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)

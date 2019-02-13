@@ -39,6 +39,9 @@
             <li class="nav-item">
                 <a class="nav-link active" asp-controller="Home" asp-action="Contact">@Localizer.Translate("Contact")</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link active" asp-controller="Home" asp-action="Client">@Localizer.Translate("Client-Side")</a>
+            </li>
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle"
@@ -73,7 +76,6 @@
 <environment names="Development">
     <script src="~/node_modules/jquery/dist/jquery.js"></script>
     <script src="~/node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 </environment>
 <environment names="Staging,Production">
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
@@ -88,7 +90,6 @@
             crossorigin="anonymous"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
     </script>
-    <script src="~/js/site.min.js" asp-append-version="true"></script>
 </environment>
 
 @RenderSection("Scripts", required: false)

@@ -35,6 +35,14 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return m_dbDictionaryService.GetPluralizedDictionary(cultureInfo, scope);
         }
 
+        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
+        {
+            cultureInfo = CultureInfoNullCheck(cultureInfo);
+            scope = ScopeNullCheck(scope);
+
+            return m_dbDictionaryService.GetClientPluralizedDictionary(cultureInfo, scope);
+        }
+
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);

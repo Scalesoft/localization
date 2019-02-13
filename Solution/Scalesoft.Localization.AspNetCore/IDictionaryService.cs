@@ -31,6 +31,17 @@ namespace Scalesoft.Localization.AspNetCore
         );
 
         /// <summary>
+        /// Gets pluralized dictionary with keys and localized values for the purpose of client-side translation.
+        /// </summary>
+        /// <param name="scope">String name of a scope. Dictionary of this scope will be returned. Default value is global.</param>
+        /// <param name="translationSource">Source of a dictionary. Can be file or database.</param>
+        /// <returns>Pluralized dictionary with keys and localized values.</returns>
+        IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(
+            string scope = null,
+            LocTranslationSource translationSource = LocTranslationSource.Auto
+        );
+
+        /// <summary>
         /// Gets dictionary with keys and localized constant values.
         /// </summary>
         /// <param name="scope">String name of a scope. Dictionary of this scope will be returned. Default value is global.</param>

@@ -11,4 +11,8 @@
     <None Remove="node_modules\**" />
   </ItemGroup>
 
+  <Target Name="Gulp" BeforeTargets="BeforeBuild">
+    <Exec Command="yarn gulp -b $(ProjectDir) --gulpfile $(ProjectDir)gulpfile.js default" />
+  </Target>
+  
 </Project>

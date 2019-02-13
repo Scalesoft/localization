@@ -130,6 +130,15 @@ namespace Scalesoft.Localization.Core
             return result;
         }
 
+        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(
+            LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
+        )
+        {
+            var result = GetDictionaryManager(translationSource).GetClientPluralizedDictionary(cultureInfo, scope);
+
+            return result;
+        }
+
         public IDictionary<string, LocalizedString> GetConstantsDictionary(
             LocTranslationSource translationSource, CultureInfo cultureInfo = null, string scope = null
         )

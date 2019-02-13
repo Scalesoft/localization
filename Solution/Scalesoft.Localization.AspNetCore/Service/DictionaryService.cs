@@ -36,6 +36,14 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return m_dictionaryManager.GetPluralizedDictionary(translationSource, requestCulture, scope);
         }
 
+        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(string scope = null,
+            LocTranslationSource translationSource = LocTranslationSource.Auto)
+        {
+            var requestCulture = RequestCulture();
+
+            return m_dictionaryManager.GetClientPluralizedDictionary(translationSource, requestCulture, scope);
+        }
+
         public IDictionary<string, LocalizedString> GetConstantsDictionary(string scope = null,
             LocTranslationSource translationSource = LocTranslationSource.Auto)
         {
