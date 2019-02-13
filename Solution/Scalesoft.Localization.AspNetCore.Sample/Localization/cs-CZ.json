@@ -5,8 +5,8 @@
     "Home": "Domů",
     "About": "O nás",
     "Contact": "Kontakt",
-	"Client-Side": "Client-side",
-	"Pluralization": "Pluralizace",
+    "Client-Side": "JavaScript",
+    "Pluralization": "Pluralizace",
     "UserAccount": "Uživatelský účet",
     "Language": "Jazyk",
     "SingOut": "Odhlásit",
@@ -36,7 +36,8 @@
     "show": "Zobrazit",
     "result": "Výsledek",
     "scope": "Scope"
-  },"constants": {
+  },
+  "constants": {
     "const-date": "MMMM dd, yyyy",
     "const-time": "hh:mm:ss.f"
   }

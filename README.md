@@ -264,3 +264,5 @@ Init database schema script for SQL Server is in Sample project named `CreateDBS
 
 1. Run `YarnInstall.ps1` script before first launch.
 2. Execute `default` task in Task Runner Exlorer in Visual Studio if you are modifiying localization web script (of force rebuild the sample project).
+
+> If gulp throws exception from task `link-to-external-project`, try shutdown IIS Express and Visual Studio.
