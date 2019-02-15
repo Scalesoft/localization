@@ -11,7 +11,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
         private readonly IAutoLocalizationManager m_localizationManager;
 
         public LocalizationService(
-            RequestCultureManager requestCultureManager,
+            IRequestCultureManager requestCultureManager,
             IAutoLocalizationManager autoLocalizationManager
         ) : base(requestCultureManager)
         {

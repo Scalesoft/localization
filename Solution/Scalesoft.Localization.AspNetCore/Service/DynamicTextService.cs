@@ -13,7 +13,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
 
         public DynamicTextService(
-            RequestCultureManager requestCultureManager,
+            IRequestCultureManager requestCultureManager,
             IDatabaseDictionaryManager databaseDictionaryManager,
             IDatabaseDynamicTextService databaseDynamicTextService
         ) : base(requestCultureManager)

@@ -15,7 +15,7 @@ namespace Scalesoft.Localization.AspNetCore
     {
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
         private readonly string m_baseName;
-        private readonly RequestCultureManager m_requestCultureManager;
+        private readonly IRequestCultureManager m_requestCultureManager;
         private readonly IAutoDictionaryManager m_dictionaryManager;
 
         private readonly LocTranslationSource m_location;
@@ -23,7 +23,7 @@ namespace Scalesoft.Localization.AspNetCore
         private CultureInfo m_currentCultureInfo;
 
         private AttributeStringLocalizer(
-            RequestCultureManager requestCultureManager,
+            IRequestCultureManager requestCultureManager,
             IAutoDictionaryManager dictionaryManager,
             IAutoLocalizationManager autoLocalizationManager,
             string baseName,
@@ -40,7 +40,7 @@ namespace Scalesoft.Localization.AspNetCore
         }
 
         public AttributeStringLocalizer(
-            RequestCultureManager requestCultureManager,
+            IRequestCultureManager requestCultureManager,
             IAutoDictionaryManager dictionaryManager,
             IAutoLocalizationManager autoLocalizationManager,
             string baseName,

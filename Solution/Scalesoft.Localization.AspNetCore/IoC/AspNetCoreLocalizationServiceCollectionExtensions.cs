@@ -18,7 +18,7 @@ namespace Scalesoft.Localization.AspNetCore.IoC
             services.AddLocalizationCore(configuration, databaseConfiguration);
 
             services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
-            services.AddSingleton<RequestCultureManager>();
+            services.AddSingleton<IRequestCultureManager, RequestCultureManager>();
 
             services.AddTransient<ILocalizationService, LocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();

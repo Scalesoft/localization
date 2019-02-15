@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Localization;
 
 namespace Scalesoft.Localization.AspNetCore.Manager
 {
-    public class RequestCultureManager
+    public class RequestCultureManager : IRequestCultureManager
     {
         protected const string CultureCookieName = "Localization.Culture";
 

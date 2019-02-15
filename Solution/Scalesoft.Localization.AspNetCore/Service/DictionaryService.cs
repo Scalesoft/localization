@@ -13,7 +13,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
         private readonly IAutoDictionaryManager m_dictionaryManager;
 
         public DictionaryService(
-            RequestCultureManager requestCultureManager,
+            IRequestCultureManager requestCultureManager,
             IAutoDictionaryManager autoDictionaryManager
         ) : base(requestCultureManager)
         {

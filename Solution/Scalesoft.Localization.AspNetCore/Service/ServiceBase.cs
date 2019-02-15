@@ -5,10 +5,10 @@ namespace Scalesoft.Localization.AspNetCore.Service
 {
     public abstract class ServiceBase
     {
-        protected readonly RequestCultureManager m_requestCultureManager;
+        protected readonly IRequestCultureManager m_requestCultureManager;
 
         protected ServiceBase(
-            RequestCultureManager requestCultureManager
+            IRequestCultureManager requestCultureManager
         )
         {
             m_requestCultureManager = requestCultureManager;

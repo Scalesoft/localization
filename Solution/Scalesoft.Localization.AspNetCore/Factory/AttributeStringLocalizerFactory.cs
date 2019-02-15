@@ -14,10 +14,10 @@ namespace Scalesoft.Localization.AspNetCore.Factory
     {
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
         private readonly IAutoDictionaryManager m_dictionaryManager;
-        private readonly RequestCultureManager m_requestCultureManager;
+        private readonly IRequestCultureManager m_requestCultureManager;
 
         public AttributeStringLocalizerFactory(
-            RequestCultureManager requestCultureManager,
+            IRequestCultureManager requestCultureManager,
             IAutoDictionaryManager autoDictionaryManager,
             IAutoLocalizationManager autoLocalizationManager
         )
