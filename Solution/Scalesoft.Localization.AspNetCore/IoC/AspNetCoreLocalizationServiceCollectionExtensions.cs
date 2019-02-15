@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.AspNetCore.Factory;
 using Scalesoft.Localization.AspNetCore.Manager;
@@ -17,8 +18,8 @@ namespace Scalesoft.Localization.AspNetCore.IoC
         {
             services.AddLocalizationCore(configuration, databaseConfiguration);
 
-            services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
-            services.AddSingleton<IRequestCultureManager, RequestCultureManager>();
+            services.TryAddScoped<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
+            services.TryAddScoped<IRequestCultureManager, RequestCultureManager>();
 
             services.AddTransient<ILocalizationService, LocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
