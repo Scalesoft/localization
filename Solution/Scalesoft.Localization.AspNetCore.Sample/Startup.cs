@@ -32,7 +32,11 @@ namespace Scalesoft.Localization.AspNetCore.Sample
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
+            var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
+            var databaseConfiguration = new NHibernateDatabaseConfiguration();
+            services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
+
             // Add framework services.
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
@@ -42,11 +46,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
                 });
 
             services.AddNHibernate(m_configuration);
-
-            var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
-            var databaseConfiguration = new NHibernateDatabaseConfiguration();
-            services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
-
+            
             m_container = new Container().WithDependencyInjectionAdapter(
                 services,
                 throwIfUnresolved: type => type.Name.EndsWith("Controller")
