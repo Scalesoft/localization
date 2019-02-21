@@ -33,7 +33,11 @@ if (!$disableRestore)
     dotnet restore
 }
 
-dotnet publish --no-restore "/property:Version=${packageVersion}"
+# `dotnet build` must run before `dotnet publish` because GeneratePackageOnBuild in csproj forces not to build when running `dotnet publish` command
+# https://github.com/dotnet/core/issues/1778
+dotnet build -c Release "/property:Version=${packageVersion}"
+
+dotnet publish -c Release --no-build
 
 Set-Location $currentPath
 Set-Location build
