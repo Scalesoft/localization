@@ -4,6 +4,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Dictionary.Factory;
+using Scalesoft.Localization.Core.Dictionary.Impl;
 using Scalesoft.Localization.Core.Util.Impl;
 
 namespace Scalesoft.Localization.Core.Tests.Util.Impl
@@ -49,7 +50,7 @@ namespace Scalesoft.Localization.Core.Tests.Util.Impl
 
             var folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
             var fileName = folderScanner.ConstructResourceFileName(
-                configuration, Path.Combine("Localization", "slovniky"), new CultureInfo("cs")
+                configuration, Path.Combine("Localization", "slovniky"), new CultureInfo("cs"), JsonLocalizationDictionary.JsonExtension
             );
 
             Assert.AreEqual(Path.GetFullPath("Localization/slovniky/slovniky.cs.json"), Path.GetFullPath(fileName));

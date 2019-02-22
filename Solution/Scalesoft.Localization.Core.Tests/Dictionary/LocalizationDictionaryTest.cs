@@ -78,7 +78,7 @@ namespace Scalesoft.Localization.Core.Tests.Dictionary
             var localizationDictionary = dictionaryFactory.CreateDictionary("Localization/obrazky/obrazky.cs.json");
             var dictionaryCultureInfo = localizationDictionary.CultureInfo();
             var childLocalizationDictionary = localizationDictionary.ChildDictionaries;
-            var localizationDictionaryExtension = localizationDictionary.Extension();
+            var localizationDictionaryExtension = localizationDictionary.Extensions();
             var localizationDictionaryIsRoot = localizationDictionary.IsRoot;
             var localizationDictionaryIsLeaf = localizationDictionary.IsLeaf();
             var localizedStrings = localizationDictionary.List();
@@ -89,7 +89,8 @@ namespace Scalesoft.Localization.Core.Tests.Dictionary
 
             Assert.AreEqual("cs", dictionaryCultureInfo.Name);
             Assert.AreEqual(0, childLocalizationDictionary.Count);
-            Assert.AreEqual("json", localizationDictionaryExtension);
+            Assert.AreEqual("json", localizationDictionaryExtension[0]);
+            Assert.AreEqual("json5", localizationDictionaryExtension[1]);
             Assert.IsTrue(localizationDictionaryIsRoot);
             Assert.IsTrue(localizationDictionaryIsLeaf);
             Assert.AreEqual(1, localizedStrings.Count);

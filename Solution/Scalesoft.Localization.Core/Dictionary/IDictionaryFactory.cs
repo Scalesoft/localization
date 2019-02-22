@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Scalesoft.Localization.Core.Dictionary
 {
@@ -19,6 +21,12 @@ namespace Scalesoft.Localization.Core.Dictionary
         /// <summary>
         /// Returns resource file extension.
         /// </summary>
+        [Obsolete]
         string FileExtension { get; }
+        
+        /// <summary>
+        /// Returns resource file extension.
+        /// </summary>
+        IList<string> FileExtensions { get; }
     }
 }

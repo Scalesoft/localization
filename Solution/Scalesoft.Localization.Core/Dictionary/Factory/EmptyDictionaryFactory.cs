@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Core.Dictionary.Impl;
 
@@ -20,11 +22,17 @@ namespace Scalesoft.Localization.Core.Dictionary.Factory
                 return new EmptyLocalizationDictionary(fileStream, filePath);
             }
         }
+
         public ILocalizationDictionary CreateDictionary(Stream resourceStream)
         {
             return new EmptyLocalizationDictionary(resourceStream);
         }
 
-        public string FileExtension => EmptyLocalizationDictionary.EmptyExtension;
+        public string FileExtension => FileExtensions.First();
+
+        public IList<string> FileExtensions => new List<string>
+        {
+            EmptyLocalizationDictionary.EmptyExtension
+        };
     }
 }

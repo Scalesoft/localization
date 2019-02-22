@@ -44,41 +44,38 @@ namespace Scalesoft.Localization.Core.Util.Impl
 
             var defaultCulture = libConfiguration.DefaultCulture;
 
-            var defaultCultureResourceFilePath = Path.Combine(libConfiguration.BasePath, defaultCulture.Name);
-            defaultCultureResourceFilePath = string.Concat(defaultCultureResourceFilePath, ".",
-                m_dictionaryFactory.FileExtension);
-
-            if (File.Exists(defaultCultureResourceFilePath))
+            var allSupportedCultures = libConfiguration.SupportedCultures.ToList();
+            if (!allSupportedCultures.Contains(defaultCulture))
             {
-                localizationFiles.Add(defaultCultureResourceFilePath);
-            }
-            else
-            {
-                var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
-                    defaultCultureResourceFilePath);
-                if (m_logger != null && m_logger.IsErrorEnabled())
-                {
-                    m_logger.LogError(message);
-                }
-
-                exceptionLogStringBuilder.AppendLine(message);
-                shouldThrowException = true;
+                allSupportedCultures.Add(defaultCulture);
             }
 
-            foreach (var supportedCulture in libConfiguration.SupportedCultures)
+            foreach (var supportedCulture in allSupportedCultures)
             {
-                var supportedFilePathWithoutExtension =
-                    Path.Combine(libConfiguration.BasePath, supportedCulture.Name);
-                var supportedcultureFilePath = string.Concat(supportedFilePathWithoutExtension, ".",
-                    m_dictionaryFactory.FileExtension);
-                if (File.Exists(supportedcultureFilePath))
+                var supportedFilePathWithoutExtension = Path.Combine(libConfiguration.BasePath, supportedCulture.Name);
+
+                var supportedCultureResourceFileFound = false;
+
+                foreach (var fileExtension in m_dictionaryFactory.FileExtensions)
                 {
-                    localizationFiles.Add(supportedcultureFilePath);
+                    var supportedCultureFilePath = string.Concat(supportedFilePathWithoutExtension, ".", fileExtension);
+
+                    if (File.Exists(supportedCultureFilePath))
+                    {
+                        supportedCultureResourceFileFound = true;
+                        localizationFiles.Add(supportedCultureFilePath);
+
+                        break;
+                    }
                 }
-                else
+
+                if (!supportedCultureResourceFileFound)
                 {
-                    var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
-                        supportedcultureFilePath);
+                    var message = string.Format(
+                        @"Cannot init library. Dictionary file ""{0}.[{1}]"" is missing.",
+                        supportedFilePathWithoutExtension,
+                        string.Join("|", m_dictionaryFactory.FileExtensions)
+                    );
                     if (m_logger != null && m_logger.IsErrorEnabled())
                     {
                         m_logger.LogError(message);
@@ -109,19 +106,39 @@ namespace Scalesoft.Localization.Core.Util.Impl
 
             var exceptionLogStringBuilder = new StringBuilder();
             var shouldThrowException = false;
+            
+            var allSupportedCultures = libConfiguration.SupportedCultures.ToList();
+            if (!allSupportedCultures.Contains(libConfiguration.DefaultCulture))
+            {
+                allSupportedCultures.Add(libConfiguration.DefaultCulture);
+            }
+            
             foreach (var scopeDirectory in scopeDirectories)
             {
-                foreach (var supportedCulture in libConfiguration.SupportedCultures)
+                foreach (var supportedCulture in allSupportedCultures)
                 {
-                    var currentPath = ConstructResourceFileName(libConfiguration, scopeDirectory, supportedCulture);
-                    if (File.Exists(currentPath))
+                    var currentResourceFileFound = false;
+
+                    foreach (var fileExtension in m_dictionaryFactory.FileExtensions)
                     {
-                        localizationFiles.Add(currentPath);
+                        var currentPath = ConstructResourceFileName(libConfiguration, scopeDirectory, supportedCulture, fileExtension);
+
+                        if (File.Exists(currentPath))
+                        {
+                            currentResourceFileFound = true;
+                            localizationFiles.Add(currentPath);
+
+                            break;
+                        }
                     }
-                    else
+
+                    if (!currentResourceFileFound)
                     {
-                        var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
-                            currentPath);
+                        var message = string.Format(
+                            @"Cannot init library. Dictionary file ""{0}[{1}]"" is missing.",
+                            ConstructResourceFileName(libConfiguration, scopeDirectory, supportedCulture, ""),
+                            string.Join("|", m_dictionaryFactory.FileExtensions)
+                            );
                         if (m_logger != null && m_logger.IsErrorEnabled())
                         {
                             m_logger.LogError(message);
@@ -131,37 +148,33 @@ namespace Scalesoft.Localization.Core.Util.Impl
                         shouldThrowException = true;
                     }
                 }
-
-                var defaultPath = ConstructResourceFileName(libConfiguration, scopeDirectory, libConfiguration.DefaultCulture);
-                if (File.Exists(defaultPath))
-                {
-                    localizationFiles.Add(defaultPath);
-                }
-                else
-                {
-                    var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.",
-                        defaultPath);
-                    if (m_logger != null && m_logger.IsErrorEnabled())
-                    {
-                        m_logger.LogError(message);
-                    }
-
-                    exceptionLogStringBuilder.AppendLine(message);
-                    shouldThrowException = true;
-                }
             }
 
-            foreach (var supportedCulture in libConfiguration.SupportedCultures)
+            foreach (var supportedCulture in allSupportedCultures)
             {
-                var globalPath = string.Concat(supportedCulture.Name, ".", m_dictionaryFactory.FileExtension);
-                globalPath = Path.Combine(libConfiguration.BasePath, globalPath);
-                if (File.Exists(globalPath))
+                var globalPathWithoutExtension = Path.Combine(libConfiguration.BasePath, supportedCulture.Name);
+                var globalResourceFileFound = false;
+
+                foreach (var fileExtension in m_dictionaryFactory.FileExtensions)
                 {
-                    localizationFiles.Add(globalPath);
+                    var globalPath = string.Concat(globalPathWithoutExtension, ".", fileExtension);
+
+                    if (File.Exists(globalPath))
+                    {
+                        globalResourceFileFound = true;
+                        localizationFiles.Add(globalPath);
+
+                        break;
+                    }
                 }
-                else
+
+                if (!globalResourceFileFound)
                 {
-                    var message = string.Format(@"Cannot init library. Dictionary file ""{0}"" is missing.", globalPath);
+                    var message = string.Format(
+                        @"Cannot init library. Dictionary file ""{0}.[{1}]"" is missing.",
+                        globalPathWithoutExtension,
+                        string.Join("|", m_dictionaryFactory.FileExtensions)
+                    );
                     if (m_logger != null && m_logger.IsErrorEnabled())
                     {
                         m_logger.LogError(message);
@@ -197,14 +210,13 @@ namespace Scalesoft.Localization.Core.Util.Impl
         /// <param name="directory"></param>
         /// <param name="cultureInfo"></param>
         /// <returns></returns>
-        public string ConstructResourceFileName(LocalizationConfiguration libConfiguration, string directory, CultureInfo cultureInfo)
+        public string ConstructResourceFileName(LocalizationConfiguration libConfiguration, string directory, CultureInfo cultureInfo, string fileExtension)
         {
             var cutString = string.Concat(libConfiguration.BasePath, Path.DirectorySeparatorChar);
-            var nameBase = directory.Split(new string[] {cutString}, StringSplitOptions.None);
+            var nameBase = directory.Split(new[] {cutString}, StringSplitOptions.None);
             if (nameBase.Length != 2)
             {
-                var message = string.Format(@"Provided path ""{0}"" is not inside basepath: ""{1}""", directory,
-                    libConfiguration.BasePath);
+                var message = string.Format(@"Provided path ""{0}"" is not inside basepath: ""{1}""", directory, libConfiguration.BasePath);
                 if (m_logger != null && m_logger.IsErrorEnabled())
                 {
                     m_logger.LogError(message);
@@ -214,7 +226,7 @@ namespace Scalesoft.Localization.Core.Util.Impl
             }
 
             var dotNotatedFileName = nameBase[1].Replace(Path.DirectorySeparatorChar, '.');
-            dotNotatedFileName = string.Concat(dotNotatedFileName, '.', cultureInfo.Name, '.', m_dictionaryFactory.FileExtension);
+            dotNotatedFileName = string.Concat(dotNotatedFileName, '.', cultureInfo.Name, '.', fileExtension);
 
             return Path.Combine(directory, dotNotatedFileName);
         }

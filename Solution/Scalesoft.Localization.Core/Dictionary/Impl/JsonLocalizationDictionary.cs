@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Localization;
@@ -22,6 +23,7 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
         private static readonly object m_initLock = new object();
 
         public const string JsonExtension = "json";
+        public const string Json5Extension = "json5";
 
         private const string CultureJPath = "culture";
         private const string ScopeJPath = "scope";
@@ -133,7 +135,16 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
 
         public string Extension()
         {
-            return JsonExtension;
+            return Extensions().First();
+        }
+
+        public IList<string> Extensions()
+        {
+            return new List<string>
+            {
+                JsonExtension,
+                Json5Extension,
+            };
         }
 
         public IDictionary<string, LocalizedString> List()

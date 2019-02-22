@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.Core.Pluralization;
@@ -27,7 +28,14 @@ namespace Scalesoft.Localization.Core.Dictionary
         /// Dictionary resource file extension. e.g "json", "xml".
         /// </summary>
         /// <returns>Resource file extension.</returns>
+        [Obsolete]
         string Extension();
+        
+        /// <summary>
+        /// Dictionary resource file extension. e.g {"json", "json5"}, {"xml"}.
+        /// </summary>
+        /// <returns>Resource file extension.</returns>
+        IList<string> Extensions();
 
         /// <summary>
         /// Dictionary.

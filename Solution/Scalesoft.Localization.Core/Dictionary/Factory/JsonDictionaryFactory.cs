@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Core.Dictionary.Impl;
 
@@ -7,7 +9,13 @@ namespace Scalesoft.Localization.Core.Dictionary.Factory
     public class JsonDictionaryFactory : IDictionaryFactory
     {
         private readonly ILogger m_logger;
-        string IDictionaryFactory.FileExtension => JsonLocalizationDictionary.JsonExtension;
+        public string FileExtension => FileExtensions.First();
+
+        public IList<string> FileExtensions => new List<string>
+        {
+            JsonLocalizationDictionary.JsonExtension,
+            JsonLocalizationDictionary.Json5Extension,
+        };
 
         public JsonDictionaryFactory(ILogger logger = null)
         {

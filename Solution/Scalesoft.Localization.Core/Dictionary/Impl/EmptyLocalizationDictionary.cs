@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.Core.Pluralization;
@@ -53,7 +54,12 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
 
         public string Extension()
         {
-            return string.Empty;
+            return Extensions().First();
+        }
+        
+        public IList<string> Extensions()
+        {
+            return new List<string> {string.Empty};
         }
 
         public IDictionary<string, LocalizedString> List()
