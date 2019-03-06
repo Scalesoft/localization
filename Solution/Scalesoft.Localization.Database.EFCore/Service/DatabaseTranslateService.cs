@@ -162,7 +162,6 @@ namespace Scalesoft.Localization.Database.EFCore.Service
                         {
                             if (cultureEntityA.Name != defaultCultureEntity.Name)
                             {
-
                                 var isCultureAReferencingDefaultCulture =
                                     await cultureHierarchyDao.IsCultureReferencing(cultureEntityA, defaultCultureEntity);
                                 if (isCultureAReferencingDefaultCulture)
@@ -191,31 +190,22 @@ namespace Scalesoft.Localization.Database.EFCore.Service
                 var dictionaryScope = GetDictionaryScope(dbContext, scope);
 
                 var staticTextDao = new StaticTextDao(dbContext.StaticText);
-                IStaticText dbResult = staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, dbContext.CultureHierarchy);
+                IStaticText dbResult =
+                    staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, dbContext.CultureHierarchy);
 
                 if (dbResult == null)
                 {
                     return null;
                 }
+
                 return new LocalizedString(text, dbResult.Text, false);
             }
         }
 
         public LocalizedString DatabaseTranslateFormat(string text, object[] parameters, CultureInfo cultureInfo, string scope)
         {
-            using (var dbContext = m_dbContextFunc.Invoke())
-            {
-                var cultureDao = new CultureDao(dbContext.Culture);
-                var culture = cultureDao.FindByName(cultureInfo.Name);
-
-                var dictionaryScopeDao = new DictionaryScopeDao(dbContext.DictionaryScope);
-                var dictionaryScope = dictionaryScopeDao.FindByName(scope);
-
-                var staticTextDao = new StaticTextDao(dbContext.StaticText);
-                IStaticText dbResult = staticTextDao.FindByNameAndCultureAndScope(text, culture, dictionaryScope, dbContext.CultureHierarchy);
-
-                return new LocalizedString(text, dbResult.Text, false);
-            }
+            //TODO translate format using database
+            throw new NotImplementedException();
         }
 
         public LocalizedString DatabaseTranslatePluralization(string text, int number, CultureInfo cultureInfo, string scope)
@@ -229,7 +219,5 @@ namespace Scalesoft.Localization.Database.EFCore.Service
             //TODO translate constants using database
             throw new NotImplementedException();
         }
-
-
     }
 }
