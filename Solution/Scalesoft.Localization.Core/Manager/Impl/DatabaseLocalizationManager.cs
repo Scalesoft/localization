@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Database;
 using Scalesoft.Localization.Core.Model;
+using Scalesoft.Localization.Core.Resolver;
 
 namespace Scalesoft.Localization.Core.Manager.Impl
 {
@@ -11,15 +12,18 @@ namespace Scalesoft.Localization.Core.Manager.Impl
     {
         private readonly IDatabaseTranslateService m_dbTranslateService;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;
+        private readonly FallbackCultureResolver m_fallbackCultureResolver;
 
         public DatabaseLocalizationManager(
             LocalizationConfiguration configuration,
             IDatabaseTranslateService dbTranslateService,
-            IDatabaseDynamicTextService databaseDynamicTextService
+            IDatabaseDynamicTextService databaseDynamicTextService,
+            FallbackCultureResolver fallbackCultureResolver
         ) : base(configuration)
         {
             m_dbTranslateService = dbTranslateService;
             m_databaseDynamicTextService = databaseDynamicTextService;
+            m_fallbackCultureResolver = fallbackCultureResolver;
 
             Check();
         }
@@ -34,13 +38,23 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
 
-            var resultLocalizedString = m_dbTranslateService.DatabaseTranslate(text, cultureInfo, scope);
-            if (resultLocalizedString == null)
+            while (true)
             {
-                resultLocalizedString = TranslateFallback(text);
-            }
+                var resultLocalizedString = m_dbTranslateService.DatabaseTranslate(text, cultureInfo, scope);
 
-            return resultLocalizedString;
+                if (resultLocalizedString != null)
+                {
+                    return resultLocalizedString;
+                }
+
+                cultureInfo = cultureInfo == null ? null : m_fallbackCultureResolver.FallbackCulture(cultureInfo);
+                if (cultureInfo != null)
+                {
+                    continue;
+                }
+
+                return TranslateFallback(text);
+            }
         }
 
         public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null,
