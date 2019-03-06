@@ -55,7 +55,8 @@ namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
                     DictionaryScope = dynamicText.Scope ?? "global",
                     FallBack = false,
                     Text = dynamicText.Text,
-                    Name = dynamicText.Name
+                    Name = dynamicText.Name,
+                    ModificationUser = "test",
                 }, dynamicText.IfDefaultNotExistAction);
             }
 
