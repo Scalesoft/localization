@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -92,9 +93,18 @@ namespace Scalesoft.Localization.Core
             return FallbackFilter(text, result);
         }
 
+        [Obsolete("Use new method with params")]
         public LocalizedString TranslateFormat(
             LocTranslationSource translationSource, string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null
         )
+        {
+            var result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);
+
+            return FallbackFilter(text, result);
+        }
+
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, string scope, CultureInfo cultureInfo = null,
+            params object[] parameters)
         {
             var result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);
 
