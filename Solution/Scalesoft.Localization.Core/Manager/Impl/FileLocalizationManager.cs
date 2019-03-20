@@ -7,7 +7,7 @@ using Scalesoft.Localization.Core.Resolver;
 
 namespace Scalesoft.Localization.Core.Manager.Impl
 {
-    public class FileLocalizationManager : LocalizationManager, IFileLocalizationManager
+    public class FileLocalizationManager : LocalizationManagerBase, IFileLocalizationManager
     {
         private readonly IFileDictionaryManager m_dictionaryManager;
         private readonly FallbackCultureResolver m_fallbackCultureResolver;

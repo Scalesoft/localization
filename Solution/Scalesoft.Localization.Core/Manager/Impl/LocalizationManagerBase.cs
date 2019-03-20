@@ -7,9 +7,9 @@ using Scalesoft.Localization.Core.Util;
 
 namespace Scalesoft.Localization.Core.Manager.Impl
 {
-    public abstract class LocalizationManager : ManagerBase
+    public abstract class LocalizationManagerBase : ManagerBase
     {
-        protected LocalizationManager(LocalizationConfiguration configuration, ILogger<LocalizationManager> logger = null) : base(configuration, logger)
+        protected LocalizationManagerBase(LocalizationConfiguration configuration, ILogger<LocalizationManagerBase> logger = null) : base(configuration, logger)
         {
             //Should be empty.
         }

@@ -54,7 +54,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
         {
             var requestCulture = GetRequestCulture();
 
-            return m_localizationManager.TranslateFormat(translationSource, text, scope, requestCulture, parameters);
+            return m_localizationManager.TranslateFormat(translationSource, text, requestCulture, scope, parameters);
         }
 
         public LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource)

@@ -101,10 +101,10 @@ namespace Scalesoft.Localization.Core
             return m_localizationManager.TranslateFormat(translationSource, text, parameters, cultureInfo, scope);
         }
 
-        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, string scope, CultureInfo cultureInfo = null,
-            params object[] parameters)
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null,
+            string scope = null, params object[] parameters)
         {
-            return m_localizationManager.TranslateFormat(translationSource, text, scope, cultureInfo, parameters);
+            return m_localizationManager.TranslateFormat(translationSource, text, cultureInfo, scope, parameters);
         }
 
         public LocalizedString TranslatePluralization(

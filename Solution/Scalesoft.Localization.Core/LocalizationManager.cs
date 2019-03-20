@@ -103,8 +103,8 @@ namespace Scalesoft.Localization.Core
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, string scope, CultureInfo cultureInfo = null,
-            params object[] parameters)
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null,
+            string scope = null, params object[] parameters)
         {
             var result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);
 

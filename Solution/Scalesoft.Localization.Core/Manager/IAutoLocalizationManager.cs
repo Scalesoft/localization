@@ -15,7 +15,7 @@ namespace Scalesoft.Localization.Core.Manager
             object[] parameters, CultureInfo cultureInfo = null, string scope = null);
 
         LocalizedString TranslateFormat(LocTranslationSource translationSource, string text,
-            string scope, CultureInfo cultureInfo = null, params object[] parameters);
+            CultureInfo cultureInfo = null, string scope = null, params object[] parameters);
         
         LocalizedString TranslatePluralization(LocTranslationSource translationSource, string text,
             int number, CultureInfo cultureInfo = null, string scope = null);
