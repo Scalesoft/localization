@@ -7,7 +7,7 @@ using Scalesoft.Localization.Core.Model;
 
 namespace Scalesoft.Localization.Core.Manager.Impl
 {
-    public class DatabaseLocalizationManager : LocalizationManager, IDatabaseLocalizationManager, IDatabaseDynamicTextService
+    public class DatabaseLocalizationManager : LocalizationManagerBase, IDatabaseLocalizationManager, IDatabaseDynamicTextService
     {
         private readonly IDatabaseTranslateService m_dbTranslateService;
         private readonly IDatabaseDynamicTextService m_databaseDynamicTextService;

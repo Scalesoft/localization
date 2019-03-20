@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.AspNetCore.Manager;
 using Scalesoft.Localization.Core.Manager;
@@ -41,11 +42,19 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return m_localizationManager.Translate(translationSource, text, requestCulture, scope);
         }
 
+        [Obsolete("Use new method with params")]
         public LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource)
         {
             var requestCulture = GetRequestCulture();
 
             return m_localizationManager.TranslateFormat(translationSource, text, parameters, requestCulture, scope);
+        }
+
+        public LocalizedString TranslateFormat(string text, string scope, LocTranslationSource translationSource, params object[] parameters)
+        {
+            var requestCulture = GetRequestCulture();
+
+            return m_localizationManager.TranslateFormat(translationSource, text, requestCulture, scope, parameters);
         }
 
         public LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource)
@@ -68,9 +77,15 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return Translate(text, scope, LocTranslationSource.Auto);
         }
 
+        [Obsolete("Use new method with params")]
         public LocalizedString TranslateFormat(string text, object[] parameters, string scope)
         {
             return TranslateFormat(text, parameters, scope, LocTranslationSource.Auto);
+        }
+
+        public LocalizedString TranslateFormat(string text, string scope, params object[] parameters)
+        {
+            return TranslateFormat(text, scope, LocTranslationSource.Auto, parameters);
         }
 
         public LocalizedString TranslatePluralization(string text, int number,
@@ -91,9 +106,15 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return Translate(text, null, translationSource);
         }
 
+        [Obsolete("Use new method with params")]
         public LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource)
         {
             return TranslateFormat(text, parameters, null, translationSource);
+        }
+
+        public LocalizedString TranslateFormat(string text, LocTranslationSource translationSource, params object[] parameters)
+        {
+            return TranslateFormat(text, null, translationSource, parameters);
         }
 
         public LocalizedString TranslatePluralization(string text, int number,
@@ -113,9 +134,9 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return Translate(text, null, LocTranslationSource.Auto);
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters)
+        public LocalizedString TranslateFormat(string text, params object[] parameters)
         {
-            return TranslateFormat(text, parameters, null, LocTranslationSource.Auto);
+            return TranslateFormat(text, null, LocTranslationSource.Auto, parameters);
         }
 
         public LocalizedString TranslatePluralization(string text, int number)

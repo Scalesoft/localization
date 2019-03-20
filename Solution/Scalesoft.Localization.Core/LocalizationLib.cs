@@ -93,11 +93,18 @@ namespace Scalesoft.Localization.Core
             return m_localizationManager.Translate(translationSource, text, cultureInfo, scope);
         }
 
+        [Obsolete("Use new method with params")]
         public LocalizedString TranslateFormat(
             LocTranslationSource translationSource, string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null
         )
         {
             return m_localizationManager.TranslateFormat(translationSource, text, parameters, cultureInfo, scope);
+        }
+
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null,
+            string scope = null, params object[] parameters)
+        {
+            return m_localizationManager.TranslateFormat(translationSource, text, cultureInfo, scope, parameters);
         }
 
         public LocalizedString TranslatePluralization(
