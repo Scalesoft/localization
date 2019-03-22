@@ -22,6 +22,7 @@ namespace Scalesoft.Localization.AspNetCore.IoC
             services.TryAddSingleton<IRequestCultureManager, RequestCultureManager>();
 
             services.AddTransient<ILocalizationService, LocalizationService>();
+            services.AddTransient<IRazorLocalizationService, RazorLocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
             services.AddTransient<IDynamicTextService, DynamicTextService>();
         }
