@@ -20,4 +20,4 @@ Database:
 @Localizer.Translate("support", "home")
 
 @*RazorLocalizer test*@
-<p>@RazorLocalizer.TranslateFormat("long-text", Html.RouteLink("Scalesoft", @"https:\\www.scalesoft.cz\"), Html.EncodedString(4.987654321), Html.EncodedString("<script>console.log(\"hello\");</script>"))</p>
+<p>@RazorLocalizer.TranslateFormat("long-text", Html.RouteLink("Scalesoft", new {}, new {href = @"https:\\www.scalesoft.cz\"}), Html.EncodedString(4.987654321), Html.EncodedString("<script>console.log(\"hello\");</script>"))</p>
