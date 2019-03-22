@@ -48,34 +48,22 @@ namespace Scalesoft.Localization.AspNetCore.Service
 
         public HtmlString Translate(string text)
         {
-            var translatedText = m_localizationService.Translate(text);
-            var encoded = HttpUtility.HtmlEncode(translatedText);
-
-            return new HtmlString(encoded);
+            return Translate(text, null);
         }
 
         public HtmlString TranslateFormat(string text, params IHtmlContent[] parameters)
         {
-            var translatedText = m_localizationService.Translate(text);
-            var encodedFormatted = GetFormattedEncodedText(translatedText, parameters);
-
-            return new HtmlString(encodedFormatted);
+            return TranslateFormat(text, null, parameters);
         }
 
         public HtmlString TranslatePluralization(string text, int number)
         {
-            var translatedText = m_localizationService.TranslatePluralization(text, number);
-            var encoded = HttpUtility.HtmlEncode(translatedText);
-
-            return new HtmlString(encoded);
+            return TranslatePluralization(text, number, null);
         }
 
         public HtmlString TranslateConstant(string text)
         {
-            var translatedText = m_localizationService.TranslateConstant(text);
-            var encoded = HttpUtility.HtmlEncode(translatedText);
-
-            return new HtmlString(encoded);
+            return TranslateConstant(text, null);
         }
 
         private string GetFormattedEncodedText(string text, IHtmlContent[] parameters)
