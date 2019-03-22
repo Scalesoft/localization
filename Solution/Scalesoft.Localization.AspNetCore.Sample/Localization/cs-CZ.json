@@ -35,7 +35,8 @@
     "text": "Text",
     "show": "Zobrazit",
     "result": "Výsledek",
-    "scope": "Scope"
+    "scope": "Scope",
+    "long-text": "Odkaz: {0}, číslo: {1}, nebezpečný string: {2}."
   },
   "constants": {
     "const-date": "MMMM dd, yyyy",
