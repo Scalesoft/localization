@@ -166,7 +166,7 @@
     }
 
     public getCurrentCulture(): string {
-        if (this.mCurrentCulture === "") {
+        if (typeof this.mCurrentCulture === "undefined") {
             const currentCulture = this.getCurrentCultureCookie();
             this.setCurrentCulture(currentCulture);
         }
