@@ -129,7 +129,7 @@ var Localization = /** @class */ (function () {
         xmlHttpRequest.send();
     };
     Localization.prototype.getCurrentCulture = function () {
-        if (this.mCurrentCulture === "") {
+        if (typeof this.mCurrentCulture === "undefined") {
             var currentCulture = this.getCurrentCultureCookie();
             this.setCurrentCulture(currentCulture);
         }
