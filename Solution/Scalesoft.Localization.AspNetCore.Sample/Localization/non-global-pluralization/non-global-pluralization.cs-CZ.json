@@ -1,0 +1,26 @@
+{
+  "culture": "cs-CZ",
+  "scope": "non-global-pluralization",
+  "constants": {
+    "const-date": "MMMM dd, yyyy",
+    "const-time": "hh:mm:ss.f"
+  },
+  "plural": {
+      "cats": {
+      "koček": [ //<-This is default value
+        [ null, -5, "koček" ],
+        //the first value is start of the interval, the second value is end of interval (exclusive).
+        //the third is value for defined interval.
+        //null means positive or negative infinity,
+        //start of the interval is always less or equal than end of the interval.
+        //No interval overlaps are allowed.
+        [ -4, -2, "kočky" ],
+        [ -1, -1, "kočka" ],
+        [ 0, 0, "koček" ],
+        [ 1, 1, "kočka" ],
+        [ 2, 4, "kočky" ],
+        [ 5, null, "koček" ]
+      ]
+    }
+  }
+}

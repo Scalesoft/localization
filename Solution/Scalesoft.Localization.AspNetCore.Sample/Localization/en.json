@@ -31,5 +31,21 @@
     "result": "Result",
     "scope": "Scope",
     "long-text": "Link: {0}, number: {1}, danger string: {2}."
+  },
+  "plural": {
+      "years": {
+      "let": [ //<-This is default value
+        [ null, -2, "years" ],
+        //the first value is start of the interval, the second value is end of interval (exclusive).
+        //the third is value for defined interval.
+        //null means positive or negative infinity,
+        //start of the interval is always less or equal than end of the interval.
+        //No interval overlaps are allowed.
+        [ -1, -1, "year" ],
+        [ 0, 0, "years" ],
+        [ 1, 1, "year" ],
+        [ 2, null, "years" ]
+      ]
+    }
   }
 }
