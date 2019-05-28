@@ -174,11 +174,10 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
         if (typeof pluralizedString === "undefined" || pluralizedString === null) {
             return null;
         }
-        var requestedInterval = new PluralizationInterval(number, number);
         for (var _i = 0, _a = pluralizedString.intervals; _i < _a.length; _i++) {
             var interval = _a[_i];
             var translationInterval = interval.interval;
-            if (LocalizationUtils.isInInterval(requestedInterval, translationInterval)) {
+            if (LocalizationUtils.isInInterval(number, translationInterval)) {
                 return interval.localizedString;
             }
         }
@@ -213,23 +212,11 @@ var LocalizationUtils = /** @class */ (function () {
         })[0] ||
             null;
     };
-    LocalizationUtils.isOverlaping = function (inner, outer) {
-        if (!inner) {
-            throw new Error("Interval is not defined");
-        }
-        return outer.start <= inner.start && inner.end <= outer.end;
-    };
     /*
      * Returns true when inner pluralization interval is in the outer pluralization interval
      */
-    LocalizationUtils.isInInterval = function (inner, outer) {
-        if (!inner) {
-            return false;
-        }
-        if (typeof outer != typeof inner) {
-            return false;
-        }
-        return this.isOverlaping(inner, outer);
+    LocalizationUtils.isInInterval = function (value, interval) {
+        return interval.start <= value && value <= interval.end;
     };
     return LocalizationUtils;
 }());

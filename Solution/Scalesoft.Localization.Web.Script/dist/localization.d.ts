@@ -41,11 +41,11 @@ interface ILocalizedString {
     resourceNotFound: boolean;
     value: string;
 }
-interface IClientPluralizedString {
-    intervals: IClientIntervalWithTranslation[];
+interface IPluralizedString {
+    intervals: IIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
 }
-interface IClientIntervalWithTranslation {
+interface IIntervalWithTranslation {
     interval: PluralizationInterval;
     localizedString: ILocalizedString;
 }
@@ -56,6 +56,5 @@ declare class PluralizationInterval {
 }
 declare class LocalizationUtils {
     static getCookie(name: string): string;
-    private static isOverlaping;
-    static isInInterval(inner: PluralizationInterval, outer: PluralizationInterval): boolean;
+    static isInInterval(value: number, interval: PluralizationInterval): boolean;
 }

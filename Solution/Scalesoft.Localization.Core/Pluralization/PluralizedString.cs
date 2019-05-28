@@ -38,11 +38,9 @@ namespace Scalesoft.Localization.Core.Pluralization
         /// <returns>Pluralized string or default string if not found.</returns>
         public LocalizedString GetPluralizedLocalizedString(int number)
         {
-            var pluralizationKey = new PluralizationInterval(number, number);
-
             foreach (var pluralizedLocalizedString in Intervals)
             {
-                if (pluralizedLocalizedString.Interval.Equals(pluralizationKey))
+                if (pluralizedLocalizedString.Interval.IsInInterval(number))
                 {
                     return pluralizedLocalizedString.LocalizedString;
                 }
@@ -85,7 +83,7 @@ namespace Scalesoft.Localization.Core.Pluralization
             var pluralizedIntervals = Intervals.Select(x => x.Interval);
             foreach (var pluralizedInterval in pluralizedIntervals)
             {
-                if (pluralizedInterval.IsOverlaping(pluralizationInterval))
+                if (pluralizedInterval.Start <= pluralizationInterval.End && pluralizationInterval.Start <= pluralizedInterval.End)
                 {
                     return true;
                 }
