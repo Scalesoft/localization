@@ -30,9 +30,9 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return new HtmlString(encodedFormatted);
         }
 
-        public HtmlString TranslatePluralization(string text, int number, string scope)
+        public HtmlString TranslatePluralization(string text, string scope, int number)
         {
-            var translatedText = m_localizationService.TranslatePluralization(text, number, scope);
+            var translatedText = m_localizationService.TranslatePluralization(text, scope, number);
             var encoded = HttpUtility.HtmlEncode(translatedText);
 
             return new HtmlString(encoded);
@@ -58,7 +58,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
 
         public HtmlString TranslatePluralization(string text, int number)
         {
-            return TranslatePluralization(text, number, null);
+            return TranslatePluralization(text, null, number);
         }
 
         public HtmlString TranslateConstant(string text)

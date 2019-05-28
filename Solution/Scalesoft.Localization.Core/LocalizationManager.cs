@@ -113,8 +113,7 @@ namespace Scalesoft.Localization.Core
 
 
         public LocalizedString TranslatePluralization(
-            LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null
-        )
+            LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null)
         {
             var result = GetLocalizationManager(translationSource).TranslatePluralization(text, number, cultureInfo, scope);
 

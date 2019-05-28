@@ -88,8 +88,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return TranslateFormat(text, scope, LocTranslationSource.Auto, parameters);
         }
 
-        public LocalizedString TranslatePluralization(string text, int number,
-            string scope)
+        public LocalizedString TranslatePluralization(string text, string scope, int number)
         {
             return TranslatePluralization(text, number, scope, LocTranslationSource.Auto);
         }

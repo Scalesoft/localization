@@ -25,10 +25,10 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text, which has to be pluralized (declined) using ILocalizationService and returns HtmlString with <strong>encoded</strong> translation.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
+        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <returns>Localized pluralized HtmlString with encoded content.</returns>
-        HtmlString TranslatePluralization(string text, int number, string scope);
+        HtmlString TranslatePluralization(string text, string scope, int number);
 
         /// <summary>
         /// Translates constants using ILocalizationService and returns HtmlString with <strong>encoded</strong> translation.

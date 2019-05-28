@@ -103,10 +103,10 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text, which has to be pluralized (declined). using a resource file (.json) or a database. Translation source is Auto.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
+        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <returns>Localized pluralized string.</returns>
-        LocalizedString TranslatePluralization(string text, int number, string scope);
+        LocalizedString TranslatePluralization(string text, string scope, int number);
 
         /// <summary>
         /// Translates constants using a resource file (.json) or a database. Translation source is Auto. 
@@ -178,11 +178,11 @@ namespace Scalesoft.Localization.AspNetCore
         LocalizedString TranslateFormat(string text, params object[] parameters);
 
         /// <summary>
-        /// Translates text, which has to be pluralized (declined). Using a resource file (.json) or a database. Translation source is Auto. Scope is default - global.
+        /// Translates text, which has to be pluralized (declined) using ILocalizationService and returns HtmlString with <strong>encoded</strong> translation.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
         /// <param name="number">Integer value defines what value will be chosen.</param>
-        /// <returns>Localized pluralized string.</returns>
+        /// <returns>Localized pluralized HtmlString with encoded content.</returns>
         LocalizedString TranslatePluralization(string text, int number);
 
         /// <summary>
