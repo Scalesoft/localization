@@ -68,33 +68,6 @@ namespace Scalesoft.Localization.Database.EFCore.Service
             }
         }
 
-        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo, string scope)
-        {
-            using (var dbContext = m_dbContextFunc.Invoke())
-            {
-                var culture = GetCultureByNameOrGetDefault(dbContext, cultureInfo.Name);
-                var dictionaryScope = GetDictionaryScope(dbContext, scope);
-
-                var pluralizedStaticTextDao = new PluralizedStaticTextDao(dbContext.PluralizedStaticText);
-                var result = pluralizedStaticTextDao.FindAllByCultureAndScope(culture, dictionaryScope);
-                var resultDictionary = new Dictionary<string, ClientPluralizedString>();
-                foreach (var singleplPluralizedStaticText in result)
-                {
-                    var pluralizedString = new PluralizedString(new LocalizedString(singleplPluralizedStaticText.Name,
-                        singleplPluralizedStaticText.Text, false));
-                    foreach (var intervalText in singleplPluralizedStaticText.IntervalTexts)
-                    {
-                        pluralizedString.Add(new PluralizationInterval(intervalText.IntervalStart, intervalText.IntervalEnd)
-                            , new LocalizedString(singleplPluralizedStaticText.Name, intervalText.Text));
-                    }
-
-                    resultDictionary.Add(singleplPluralizedStaticText.Name, new ClientPluralizedString(pluralizedString));
-                }
-
-                return resultDictionary;
-            }
-        }
-
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope)
         {
             using (var dbContext = m_dbContextFunc.Invoke())

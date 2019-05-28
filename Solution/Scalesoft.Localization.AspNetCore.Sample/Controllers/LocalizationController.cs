@@ -20,7 +20,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
         [HttpGet]
         public IActionResult PluralizedDictionary(string scope)
         {
-            return Json(m_dictionary.GetClientPluralizedDictionary(scope));
+            return Json(m_dictionary.GetPluralizedDictionary(scope));
         }
     }
 }

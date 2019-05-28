@@ -179,13 +179,6 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
         }
 
-        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null,
-            string scope = null)
-        {
-            return GetLocalizationDictionary(cultureInfo, scope).ListPlurals()
-                .ToDictionary(p => p.Key, p => new ClientPluralizedString(p.Value));
-        }
-
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();

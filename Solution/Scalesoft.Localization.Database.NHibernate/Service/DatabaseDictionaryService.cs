@@ -69,29 +69,6 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
             return resultDictionary;
         }
 
-        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo, string scope)
-        {
-            var culture = GetCultureByNameOrGetDefault(cultureInfo.Name);
-            var dictionaryScope = GetDictionaryScope(scope);
-
-            var result = m_pluralizedStaticTextUoW.FindAllByCultureAndScope(culture.Name, dictionaryScope.Name);
-            var resultDictionary = new Dictionary<string, ClientPluralizedString>();
-            foreach (var singleplPluralizedStaticText in result)
-            {
-                var pluralizedString = new PluralizedString(new LocalizedString(singleplPluralizedStaticText.Name,
-                    singleplPluralizedStaticText.Text, false));
-                foreach (var intervalText in singleplPluralizedStaticText.IntervalTexts)
-                {
-                    pluralizedString.Add(new PluralizationInterval(intervalText.IntervalStart, intervalText.IntervalEnd)
-                        , new LocalizedString(singleplPluralizedStaticText.Name, intervalText.Text));
-                }
-
-                resultDictionary.Add(singleplPluralizedStaticText.Name, new ClientPluralizedString(pluralizedString));
-            }
-
-            return resultDictionary;
-        }
-
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope)
         {
                 var culture = GetCultureByNameOrGetDefault(cultureInfo.Name);
