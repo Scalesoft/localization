@@ -84,9 +84,7 @@ namespace Scalesoft.Localization.Core
             return m_configuration.DefaultCulture;
         }
 
-        public LocalizedString Translate(
-            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString Translate(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text)
         {
             var result = GetLocalizationManager(translationSource).Translate(text, cultureInfo, scope);
 
@@ -103,8 +101,8 @@ namespace Scalesoft.Localization.Core
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null,
-            string scope = null, params object[] parameters)
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, CultureInfo cultureInfo,
+            string scope, string text, params object[] parameters)
         {
             var result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);
 
@@ -112,17 +110,15 @@ namespace Scalesoft.Localization.Core
         }
 
 
-        public LocalizedString TranslatePluralization(
-            LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslatePluralization(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope,
+            string text, int number)
         {
             var result = GetLocalizationManager(translationSource).TranslatePluralization(text, number, cultureInfo, scope);
 
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateConstant(
-            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString TranslateConstant(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text)
         {
             var result = GetLocalizationManager(translationSource).TranslateConstant(text, cultureInfo, scope);
 

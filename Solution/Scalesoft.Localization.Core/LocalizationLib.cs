@@ -86,39 +86,26 @@ namespace Scalesoft.Localization.Core
             return m_localizationManager.GetDefaultCulture();
         }
 
-        public LocalizedString Translate(
-            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString Translate(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text)
         {
-            return m_localizationManager.Translate(translationSource, text, cultureInfo, scope);
+            return m_localizationManager.Translate(translationSource, cultureInfo, scope, text);
         }
 
-        [Obsolete("Use new method with params")]
-        public LocalizedString TranslateFormat(
-            LocTranslationSource translationSource, string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, CultureInfo cultureInfo,
+            string scope, string text, params object[] parameters)
         {
-            return m_localizationManager.TranslateFormat(translationSource, text, parameters, cultureInfo, scope);
+            return m_localizationManager.TranslateFormat(translationSource, cultureInfo, scope, text, parameters);
         }
 
-        public LocalizedString TranslateFormat(LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null,
-            string scope = null, params object[] parameters)
+        public LocalizedString TranslatePluralization(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope,
+            string text, int number)
         {
-            return m_localizationManager.TranslateFormat(translationSource, text, cultureInfo, scope, parameters);
+            return m_localizationManager.TranslatePluralization(translationSource, cultureInfo, scope, text, number);
         }
 
-        public LocalizedString TranslatePluralization(
-            LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString TranslateConstant(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text)
         {
-            return m_localizationManager.TranslatePluralization(translationSource, text,number, cultureInfo, scope);
-        }
-
-        public LocalizedString TranslateConstant(
-            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
-        )
-        {
-            return m_localizationManager.TranslateConstant(translationSource, text, cultureInfo, scope);
+            return m_localizationManager.TranslateConstant(translationSource, cultureInfo, scope, text);
         }
 
         public IDictionary<string, LocalizedString> GetDictionary(

@@ -7,21 +7,18 @@ namespace Scalesoft.Localization.Core.Manager
 {
     public interface IAutoLocalizationManager
     {
-        LocalizedString Translate(LocTranslationSource translationSource, string text,
-            CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString Translate(LocTranslationSource translationSource,
+            CultureInfo cultureInfo, string scope, string text);
 
-        [Obsolete("Use new method with params")]
-        LocalizedString TranslateFormat(LocTranslationSource translationSource, string text,
-            object[] parameters, CultureInfo cultureInfo = null, string scope = null);
-
-        LocalizedString TranslateFormat(LocTranslationSource translationSource, string text,
-            CultureInfo cultureInfo = null, string scope = null, params object[] parameters);
+        LocalizedString TranslateFormat(LocTranslationSource translationSource,
+            CultureInfo cultureInfo, string scope, string text,
+            params object[] parameters);
         
-        LocalizedString TranslatePluralization(LocTranslationSource translationSource, string text,
-            int number, CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString TranslatePluralization(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text,
+            int number);
 
-        LocalizedString TranslateConstant(LocTranslationSource translationSource, string text,
-            CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString TranslateConstant(LocTranslationSource translationSource,
+            CultureInfo cultureInfo, string scope, string text);
 
         CultureInfo GetDefaultCulture();
         CultureInfo[] GetSupportedCultures();
