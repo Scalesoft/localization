@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.AspNetCore.Manager;
 using Scalesoft.Localization.Core.Manager;
@@ -68,13 +67,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
         {
             return Translate(text, scope, LocTranslationSource.Auto);
         }
-
-        [Obsolete("Use new method with params")]
-        public LocalizedString TranslateFormat(string text, object[] parameters, string scope)
-        {
-            return TranslateFormat(text, parameters, scope, LocTranslationSource.Auto);
-        }
-
+        
         public LocalizedString TranslateFormat(string text, string scope, params object[] parameters)
         {
             return TranslateFormat(text, scope, LocTranslationSource.Auto, parameters);
@@ -96,13 +89,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
         {
             return Translate(text, null, translationSource);
         }
-
-        [Obsolete("Use new method with params")]
-        public LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource)
-        {
-            return TranslateFormat(text, parameters, null, translationSource);
-        }
-
+        
         public LocalizedString TranslateFormat(string text, LocTranslationSource translationSource, params object[] parameters)
         {
             return TranslateFormat(text, null, translationSource, parameters);

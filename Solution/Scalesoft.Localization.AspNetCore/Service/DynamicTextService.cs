@@ -54,7 +54,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
 
         private CultureInfo RequestCulture()
         {
-            return GetRequestCulture(m_databaseDictionaryManager.DefaultCulture());
+            return GetRequestCulture(m_databaseDictionaryManager.GetDefaultCulture());
         }
     }
 }

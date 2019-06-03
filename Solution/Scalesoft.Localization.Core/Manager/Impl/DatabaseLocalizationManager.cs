@@ -29,7 +29,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             m_dbTranslateService.CheckCulturesInDatabase();
         }
 
-        public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString Translate(CultureInfo cultureInfo, string scope, string text)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
@@ -43,8 +43,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return resultLocalizedString;
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null,
-            string scope = null)
+        public LocalizedString TranslateFormat(CultureInfo cultureInfo,
+            string scope, string text, object[] parameters)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
@@ -58,8 +58,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return resultLocalizedString;
         }
 
-        public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null,
-            string scope = null)
+        public LocalizedString TranslatePluralization(CultureInfo cultureInfo,
+            string scope, string text, int number)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);
@@ -73,7 +73,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return resultLocalizedString;
         }
 
-        public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateConstant(CultureInfo cultureInfo, string scope, string text)
         {
             cultureInfo = CultureInfoNullCheck(cultureInfo);
             scope = ScopeNullCheck(scope);

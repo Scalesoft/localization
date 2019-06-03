@@ -213,9 +213,12 @@ var LocalizationUtils = /** @class */ (function () {
             null;
     };
     /*
-     * Returns true when inner pluralization interval is in the outer pluralization interval
+     * Returns true when value is in the pluralization interval
      */
     LocalizationUtils.isInInterval = function (value, interval) {
+        if (!interval) {
+            return false;
+        }
         return interval.start <= value && value <= interval.end;
     };
     return LocalizationUtils;

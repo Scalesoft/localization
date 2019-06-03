@@ -35,8 +35,7 @@ namespace Scalesoft.Localization.Core.Tests.Manager
                 localizationConfiguration, dictionaryManager, fallbackCultureResolver
             );
 
-            var ls = fileLocalizationManager.TranslateFormat("klíč-stringu", new object[] {"pondělí"},
-                localizationConfiguration.DefaultCulture, "global");
+            var ls = fileLocalizationManager.TranslateFormat(localizationConfiguration.DefaultCulture, "global", "klíč-stringu", new object[] {"pondělí"});
 
             Assert.AreEqual("Dnes je pondělí.", ls.Value);
         }
@@ -63,7 +62,7 @@ namespace Scalesoft.Localization.Core.Tests.Manager
                 localizationConfiguration, dictionaryManager, fallbackCultureResolver
             );
 
-            var ls = fileLocalizationManager.TranslateConstant("const-date", new CultureInfo("cs"));
+            var ls = fileLocalizationManager.TranslateConstant(new CultureInfo("cs"), null, "const-date");
 
             Assert.AreEqual("MMMM dd, yyyy", ls.Value);
             Assert.IsFalse(ls.ResourceNotFound);

@@ -32,8 +32,8 @@ namespace Scalesoft.Localization.Core.Manager
         /// <returns>Dictionary with keys and localized constant values.</returns>
         IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null);
 
-        CultureInfo DefaultCulture();
+        CultureInfo GetDefaultCulture();
 
-        string DefaultScope();
+        string GetDefaultScope();
     }
 }

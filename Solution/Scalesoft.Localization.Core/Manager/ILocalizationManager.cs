@@ -5,16 +5,16 @@ namespace Scalesoft.Localization.Core.Manager
 {
     public interface ILocalizationManager
     {
-        LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString Translate(CultureInfo cultureInfo, string scope, string text);
 
-        LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString TranslateFormat(CultureInfo cultureInfo, string scope, string text, object[] parameters);
 
-        LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString TranslatePluralization(CultureInfo cultureInfo, string scope, string text, int number);
 
-        LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null);
+        LocalizedString TranslateConstant(CultureInfo cultureInfo, string scope, string text);
 
-        CultureInfo DefaultCulture();
+        CultureInfo GetDefaultCulture();
 
-        string DefaultScope();
+        string GetDefaultScope();
     }
 }

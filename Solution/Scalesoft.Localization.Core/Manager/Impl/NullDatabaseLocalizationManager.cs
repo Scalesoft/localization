@@ -23,44 +23,44 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
         }
 
-        public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString Translate(CultureInfo cultureInfo, string scope, string text)
         {
             LogNotSet();
 
             return null;
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null,
-            string scope = null)
+        public LocalizedString TranslateFormat(CultureInfo cultureInfo,
+            string scope, string text, object[] parameters)
         {
             LogNotSet();
 
             return null;
         }
 
-        public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null,
-            string scope = null)
+        public LocalizedString TranslatePluralization(CultureInfo cultureInfo,
+            string scope, string text, int number)
         {
             LogNotSet();
 
             return null;
         }
 
-        public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateConstant(CultureInfo cultureInfo, string scope, string text)
         {
             LogNotSet();
 
             return null;
         }
 
-        public CultureInfo DefaultCulture()
+        public CultureInfo GetDefaultCulture()
         {
             LogNotSet();
 
             return null;
         }
 
-        public string DefaultScope()
+        public string GetDefaultScope()
         {
             LogNotSet();
 

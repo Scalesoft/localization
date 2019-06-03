@@ -22,7 +22,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             m_fallbackCultureResolver = fallbackCultureResolver;
         }
 
-        public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString Translate(CultureInfo cultureInfo, string scope, string text)
         {
             while (true)
             {
@@ -69,15 +69,15 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(CultureInfo cultureInfo, string scope, string text, object[] parameters)
         {
-            var nonParameterizedTranslation = Translate(text, cultureInfo, scope);
+            var nonParameterizedTranslation = Translate(cultureInfo, scope, text);
             var parametrizedTranslationString = string.Format(nonParameterizedTranslation.Value, parameters);
 
             return new LocalizedString(nonParameterizedTranslation.Name, parametrizedTranslationString);
         }
 
-        public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslatePluralization(CultureInfo cultureInfo, string scope, string text, int number)
         {
             while (true)
             {
@@ -124,7 +124,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
         }
 
-        public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateConstant(CultureInfo cultureInfo, string scope, string text)
         {
             while (true)
             {

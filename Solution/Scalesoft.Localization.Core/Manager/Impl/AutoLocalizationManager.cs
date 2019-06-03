@@ -63,58 +63,58 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
         }
 
-        public LocalizedString Translate(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString Translate(CultureInfo cultureInfo, string scope, string text)
         {
             var localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource);
 
-            var result = localizationManager.Translate(text, cultureInfo, scope);
+            var result = localizationManager.Translate(cultureInfo, scope, text);
             if (result == null || result.ResourceNotFound)
             {
                 localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource);
 
-                return localizationManager.Translate(text, cultureInfo, scope);
+                return localizationManager.Translate(cultureInfo, scope, text);
             }
 
             return result;
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateFormat(CultureInfo cultureInfo, string scope, string text, object[] parameters)
         {
             var localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource);
 
-            var result = localizationManager.TranslateFormat(text, parameters, cultureInfo, scope);
+            var result = localizationManager.TranslateFormat(cultureInfo, scope, text, parameters);
             if (result == null)
             {
                 localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource);
-                return localizationManager.TranslateFormat(text, parameters, cultureInfo, scope);
+                return localizationManager.TranslateFormat(cultureInfo, scope, text, parameters);
             }
 
             return result;
         }
 
-        public LocalizedString TranslatePluralization(string text, int number, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslatePluralization(CultureInfo cultureInfo, string scope, string text, int number)
         {
             var localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource);
 
-            var result = localizationManager.TranslatePluralization(text, number, cultureInfo, scope);
+            var result = localizationManager.TranslatePluralization(cultureInfo, scope, text, number);
             if (result == null)
             {
-                return localizationManager.TranslatePluralization(text, number, cultureInfo, scope);
+                return localizationManager.TranslatePluralization(cultureInfo, scope, text, number);
             }
 
             return result;
         }
 
-        public LocalizedString TranslateConstant(string text, CultureInfo cultureInfo = null, string scope = null)
+        public LocalizedString TranslateConstant(CultureInfo cultureInfo, string scope, string text)
         {
             var localizationManager = GetLocalizationManager(m_configuration.FirstAutoTranslateResource);
 
-            var result = localizationManager.TranslateConstant(text, cultureInfo, scope);
+            var result = localizationManager.TranslateConstant(cultureInfo, scope, text);
             if (result == null)
             {
                 localizationManager = GetOtherLocalizationManager(m_configuration.FirstAutoTranslateResource);
 
-                return localizationManager.TranslateConstant(text, cultureInfo, scope);
+                return localizationManager.TranslateConstant(cultureInfo, scope, text);
             }
 
             return result;

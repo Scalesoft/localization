@@ -73,16 +73,6 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text with parameters using a resource file (.json) or a database. Translation source is Auto.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="parameters">Object with parameters. Parameters can be of any type except another object.</param>
-        /// <param name="scope">String name of a scope in dictionary.</param>
-        /// <returns>Localized string with input parameter.</returns>
-        [Obsolete("Use new method with params")]
-        LocalizedString TranslateFormat(string text, object[] parameters, string scope);
-
-        /// <summary>
-        /// Translates text with parameters using a resource file (.json) or a database. Translation source is Auto.
-        /// </summary>
-        /// <param name="text">String key for translation in json resource file.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
         /// <param name="parameters">List of parameters. Parameters can be of any type.</param>
         /// <returns>Localized string with input parameter.</returns> 
@@ -113,16 +103,6 @@ namespace Scalesoft.Localization.AspNetCore
         /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param>
         /// <returns>Localized string.</returns>
         LocalizedString Translate(string text, LocTranslationSource translationSource);
-
-        /// <summary>
-        /// Translates text with parameters using a resource file (.json) or a database. Scope is default - global.
-        /// </summary>
-        /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="parameters">Object with parameters. Parameters can be of any type except another object.</param>
-        /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param>
-        /// <returns>Localized string with input parameter.</returns>
-        [Obsolete("Use new method with params")]
-        LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource);
 
         /// <summary>
         /// Translates text with parameters using a resource file (.json) or a database. Scope is default - global.

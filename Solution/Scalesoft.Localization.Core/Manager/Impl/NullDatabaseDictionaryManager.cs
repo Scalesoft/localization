@@ -46,14 +46,14 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return new Dictionary<string, LocalizedString>();
         }
 
-        public CultureInfo DefaultCulture()
+        public CultureInfo GetDefaultCulture()
         {
             LogNotSet();
 
             return null;
         }
 
-        public string DefaultScope()
+        public string GetDefaultScope()
         {
             LogNotSet();
 

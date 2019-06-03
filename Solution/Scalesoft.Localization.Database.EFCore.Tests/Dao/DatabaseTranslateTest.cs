@@ -67,7 +67,7 @@ namespace Scalesoft.Localization.Database.EFCore.Tests.Dao
             Parallel.For(0, 1000, iteration =>
             {
                 var key = keysFromScope[iteration % keysFromScope.Length];
-                m_databaseLocalizationManager.Translate(key, null, scope);
+                m_databaseLocalizationManager.Translate(null, scope, key);
             });
         }
     }
