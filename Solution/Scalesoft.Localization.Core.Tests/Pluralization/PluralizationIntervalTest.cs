@@ -24,7 +24,7 @@ namespace Scalesoft.Localization.Core.Tests.Pluralization
             var pA = new PluralizationInterval(0, 0);
             const int testNumber = 0;
 
-            var result = pA.IsInInterval(0);
+            var result = pA.IsInInterval(testNumber);
 
             Assert.IsTrue(result);
         }
@@ -43,17 +43,7 @@ namespace Scalesoft.Localization.Core.Tests.Pluralization
         [TestMethod]
         public void IsOvelapingTestConstructorException()
         {
-            var exceptionThrown = false;
-            try
-            {
-                var pA = new PluralizationInterval(2, 0);
-            }
-            catch (ArgumentException)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
+            Assert.ThrowsException<ArgumentException>(() => new PluralizationInterval(2, 0));
         }
     }
 }

@@ -2,7 +2,7 @@
   "culture": "en",
   "scope": "non-global-pluralization",
   "plural": {
-      "cats": {
+    "cats": {
       "cats": [ //<-This is default value
         [ null, -2, "cats" ],
         //the first value is start of the interval, the second value is end of interval (exclusive).

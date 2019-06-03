@@ -43,8 +43,8 @@
     "const-time": "hh:mm:ss.f"
   },
   "plural": {
-      "years": {
-      "years": [ //<-This is default value
+    "years": {
+      "let": [ //<-This is default value
         [ null, -5, "let" ],
         //the first value is start of the interval, the second value is end of interval (exclusive).
         //the third is value for defined interval.

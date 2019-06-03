@@ -33,8 +33,8 @@
     "long-text": "Link: {0}, number: {1}, danger string: {2}."
   },
   "plural": {
-      "years": {
-      "let": [ //<-This is default value
+    "years": {
+      "years": [ //<-This is default value
         [ null, -2, "years" ],
         //the first value is start of the interval, the second value is end of interval (exclusive).
         //the third is value for defined interval.
