@@ -47,7 +47,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Repository
         {
             try
             {
-                var criteria = Restrictions.Where<CultureHierarchyEntity>(x => x.Culture == culture);
+                var criteria = Restrictions.Where<CultureHierarchyEntity>(x => Equals(x.Culture, culture));
 
                 return GetValuesList<CultureHierarchyEntity>(FetchCollections, criteria, ResultQueryModifier);
             }
