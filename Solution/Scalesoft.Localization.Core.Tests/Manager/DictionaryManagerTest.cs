@@ -103,22 +103,22 @@ namespace Scalesoft.Localization.Core.Tests.Manager
                 localizationConfiguration, dictionaryManager, fallbackCultureResolver
             );
 
-            var s1 = fileLocalizationManager.Translate("text-1-odst", new CultureInfo("cs"));
+            var s1 = fileLocalizationManager.Translate(new CultureInfo("cs"), null, "text-1-odst");
             Assert.AreEqual("global cs [text-1-odst]", s1);
 
-            var s2 = fileLocalizationManager.Translate("extra-cs-key", new CultureInfo("en-MX"));
+            var s2 = fileLocalizationManager.Translate(new CultureInfo("en-MX"), null, "extra-cs-key");
             Assert.AreEqual("extra string in CS culture", s2);
 
-            var s3 = fileLocalizationManager.Translate("extra-cs-key", new CultureInfo("es-MX"));
+            var s3 = fileLocalizationManager.Translate(new CultureInfo("es-MX"), null, "extra-cs-key");
             Assert.AreEqual("extra string in CS culture", s3);
 
             const string nopeKey = "nope-key";
-            var sNope = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+            var sNope = fileLocalizationManager.Translate(new CultureInfo("es-MX"), null, nopeKey);
             Assert.AreEqual(nopeKey, sNope);
 
             localizationConfiguration.TranslateFallbackMode = LocTranslateFallbackMode.EmptyString;
 
-            var sNope2 = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+            var sNope2 = fileLocalizationManager.Translate(new CultureInfo("es-MX"), null, nopeKey);
             Assert.AreEqual("", sNope2);
 
             localizationConfiguration.TranslateFallbackMode = LocTranslateFallbackMode.Exception;
@@ -126,7 +126,7 @@ namespace Scalesoft.Localization.Core.Tests.Manager
             var exceptionThrown = false;
             try
             {
-                var sNope3 = fileLocalizationManager.Translate(nopeKey, new CultureInfo("es-MX"));
+                var sNope3 = fileLocalizationManager.Translate(new CultureInfo("es-MX"), null, nopeKey);
             }
             catch (TranslateException)
             {

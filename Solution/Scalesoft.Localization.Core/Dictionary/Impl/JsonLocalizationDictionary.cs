@@ -19,8 +19,6 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
 {
     internal class JsonLocalizationDictionary : ILocalizationDictionary
     {
-        private const string NotLoadedPluralizedMsg = "Pluralized dictionary is not loaded.";
-
         private static readonly object m_initLock = new object();
 
         public const string JsonExtension = "json";
@@ -40,8 +38,7 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
         private readonly IList<string> m_scopeAlias;
 
         private readonly JObject m_jsonDictionary;
-        private readonly JObject m_jsonPluralizedDictionary;
-
+        
         private volatile ConcurrentDictionary<string, LocalizedString> m_dictionary;
         private volatile ConcurrentDictionary<string, PluralizedString> m_pluralizedDictionary;
         private volatile ConcurrentDictionary<string, LocalizedString> m_constantDictionaries;
@@ -81,34 +78,6 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
         ) : this(resourceStream, logger)
         {
             m_parentScopeName = m_parentScopeName ?? parentScopeResolver?.ResolveParentScope(filePath);
-
-            var filePathWithoutExtension = Path.ChangeExtension(filePath, "");
-            var pluralizedFilePath = string.Concat(filePathWithoutExtension, PluralJPath, ".", JsonExtension);
-
-            if (!File.Exists(pluralizedFilePath))
-            {
-                return;
-            }
-
-            using (var fileStream = new FileStream(pluralizedFilePath, FileMode.Open, FileAccess.Read))
-            {
-                m_jsonPluralizedDictionary = LoadDictionaryJObject(fileStream, pluralizedFilePath);
-            }
-
-            var cultureString = (string) m_jsonPluralizedDictionary[CultureJPath];
-            if (!m_cultureInfo.Equals(new CultureInfo(cultureString)))
-            {
-                var message = string.Format(
-                    @"Culture in pluralized version of dictionary ""{0}"" does not match expected value. Expected value is ""{1}""",
-                    filePath, m_cultureInfo.Name);
-
-                if (m_logger != null && m_logger.IsErrorEnabled())
-                {
-                    m_logger.LogError(message);
-                }
-
-                throw new DictionaryLoadException(message);
-            }
         }
 
         public JsonLocalizationDictionary(
@@ -236,19 +205,7 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
 
             var pluralizedDictionary = new ConcurrentDictionary<string, PluralizedString>();
 
-            if (!IsPluralizationLoaded())
-            {
-                if (m_logger != null && m_logger.IsWarningEnabled())
-                {
-                    m_logger.LogWarning(NotLoadedPluralizedMsg);
-                }
-
-                m_pluralizedDictionary = pluralizedDictionary;
-
-                return;
-            }
-
-            var keyValueObjects = (JObject) m_jsonPluralizedDictionary.SelectToken(DictionaryJPath);
+            var keyValueObjects = (JObject) m_jsonDictionary.SelectToken(PluralJPath);
             if (keyValueObjects == null)
             {
                 m_pluralizedDictionary = pluralizedDictionary;
@@ -286,9 +243,8 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
                         var xParsed = int.TryParse(leftInterval.ToString(), out leftIntervalInteger);
                         if (!xParsed)
                         {
-                            var errorMessage = string.Format(
-                                @"The x value ""{0}"" in pluralization dictionary: ""{1}"" culture: ""{2}""",
-                                leftInterval, m_scope, m_cultureInfo.Name);
+                            var errorMessage =
+                                $@"The x value ""{leftInterval}"" in pluralization dictionary: ""{m_scope}"" culture: ""{m_cultureInfo.Name}""";
                             if (m_logger != null && m_logger.IsErrorEnabled())
                             {
                                 m_logger.LogError(errorMessage);
@@ -379,17 +335,7 @@ namespace Scalesoft.Localization.Core.Dictionary.Impl
 
             m_constantDictionaries = constantsDictionary;
         }
-
-        /// <summary>
-        /// Return true if json file containing pluralized strings was loaded.
-        /// </summary>
-        /// <returns>True if pluralized json file was loaded.</returns>
-        private bool IsPluralizationLoaded()
-        {
-            return m_jsonPluralizedDictionary != null;
-        }
-
-
+        
         public ILocalizationDictionary ParentDictionary()
         {
             return m_parentDictionary;

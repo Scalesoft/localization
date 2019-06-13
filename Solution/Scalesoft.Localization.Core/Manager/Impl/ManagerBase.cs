@@ -19,7 +19,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         {
             if (cultureInfo == null)
             {
-                return DefaultCulture();
+                return GetDefaultCulture();
             }
 
             return cultureInfo;
@@ -29,18 +29,18 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         {
             if (string.IsNullOrEmpty(scope))
             {
-                return DefaultScope();
+                return GetDefaultScope();
             }
 
             return scope;
         }
 
-        public CultureInfo DefaultCulture()
+        public CultureInfo GetDefaultCulture()
         {
             return m_configuration.DefaultCulture;
         }
 
-        public string DefaultScope()
+        public string GetDefaultScope()
         {
             return m_configuration.DefaultScope;
         }

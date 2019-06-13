@@ -39,13 +39,6 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return new Dictionary<string, PluralizedString>();
         }
 
-        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
-        {
-            LogNotSet();
-
-            return new Dictionary<string, ClientPluralizedString>();
-        }
-
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             LogNotSet();
@@ -53,14 +46,14 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return new Dictionary<string, LocalizedString>();
         }
 
-        public CultureInfo DefaultCulture()
+        public CultureInfo GetDefaultCulture()
         {
             LogNotSet();
 
             return null;
         }
 
-        public string DefaultScope()
+        public string GetDefaultScope()
         {
             LogNotSet();
 

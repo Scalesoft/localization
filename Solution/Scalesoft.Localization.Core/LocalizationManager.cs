@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -83,39 +84,43 @@ namespace Scalesoft.Localization.Core
             return m_configuration.DefaultCulture;
         }
 
-        public LocalizedString Translate(
-            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString Translate(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text)
         {
-            var result = GetLocalizationManager(translationSource).Translate(text, cultureInfo, scope);
+            var result = GetLocalizationManager(translationSource).Translate(cultureInfo, scope, text);
 
             return FallbackFilter(text, result);
         }
 
+        [Obsolete("Use new method with params")]
         public LocalizedString TranslateFormat(
             LocTranslationSource translationSource, string text, object[] parameters, CultureInfo cultureInfo = null, string scope = null
         )
         {
-            var result = GetLocalizationManager(translationSource).TranslateFormat(text, parameters, cultureInfo, scope);
+            var result = GetLocalizationManager(translationSource).TranslateFormat(cultureInfo, scope, text, parameters);
+
+            return FallbackFilter(text, result);
+        }
+
+        public LocalizedString TranslateFormat(LocTranslationSource translationSource, CultureInfo cultureInfo,
+            string scope, string text, params object[] parameters)
+        {
+            var result = GetLocalizationManager(translationSource).TranslateFormat(cultureInfo, scope, text, parameters);
 
             return FallbackFilter(text, result);
         }
 
 
-        public LocalizedString TranslatePluralization(
-            LocTranslationSource translationSource, string text, int number, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString TranslatePluralization(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope,
+            string text, int number)
         {
-            var result = GetLocalizationManager(translationSource).TranslatePluralization(text, number, cultureInfo, scope);
+            var result = GetLocalizationManager(translationSource).TranslatePluralization(cultureInfo, scope, text, number);
 
             return FallbackFilter(text, result);
         }
 
-        public LocalizedString TranslateConstant(
-            LocTranslationSource translationSource, string text, CultureInfo cultureInfo = null, string scope = null
-        )
+        public LocalizedString TranslateConstant(LocTranslationSource translationSource, CultureInfo cultureInfo, string scope, string text)
         {
-            var result = GetLocalizationManager(translationSource).TranslateConstant(text, cultureInfo, scope);
+            var result = GetLocalizationManager(translationSource).TranslateConstant(cultureInfo, scope, text);
 
             return FallbackFilter(text, result);
         }

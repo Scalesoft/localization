@@ -36,6 +36,18 @@ namespace Scalesoft.Localization.Core.Tests.Pluralization
         }
 
         [TestMethod]
+        public void IsOvelapingOverlapsTest()
+        {
+            var psA = new PluralizedString(new LocalizedString("a", "a"));
+            var pA = new PluralizationInterval(-20, 20);
+            var pB = new PluralizationInterval(-10, 10);
+
+            psA.Add(pA, new LocalizedString("b", "b"));
+
+            Assert.ThrowsException<PluralizedStringIntervalOverlapException>(()=> psA.Add(pB, new LocalizedString("c", "c")));
+        }
+
+        [TestMethod]
         public void IntervalCompletePluralizedStringTest()
         {
             var defaultLocalizedString = new LocalizedString("let", "let");

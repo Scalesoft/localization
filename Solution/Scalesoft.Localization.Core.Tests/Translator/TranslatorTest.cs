@@ -64,9 +64,8 @@ namespace Scalesoft.Localization.Core.Tests.Translator
             {
                 var pluralizationNum = i - 10;
                 var lsA = m_localizationManager.TranslatePluralization(
-                    LocTranslationSource.Auto, "klíč-stringu", pluralizationNum, null,
-                    "slovniky"
-                );
+                    LocTranslationSource.Auto, null,
+                    "slovniky", "klíč-stringu", pluralizationNum);
 
                 Assert.AreEqual(expectedStrings[i], lsA);
             }

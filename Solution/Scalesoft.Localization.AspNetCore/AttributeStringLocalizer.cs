@@ -64,11 +64,11 @@ namespace Scalesoft.Localization.AspNetCore
         }
 
         LocalizedString IStringLocalizer.this[string name] =>
-            m_autoLocalizationManager.Translate(m_location, name, RequestCulture(), m_baseName);
+            m_autoLocalizationManager.Translate(m_location, RequestCulture(), m_baseName, name);
 
 
         LocalizedString IStringLocalizer.this[string name, params object[] arguments] =>
-            m_autoLocalizationManager.TranslateFormat(m_location, name, arguments, RequestCulture(), m_baseName);
+            m_autoLocalizationManager.TranslateFormat(m_location, RequestCulture(), m_baseName, name, arguments);
 
         private CultureInfo RequestCulture()
         {

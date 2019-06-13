@@ -120,33 +120,6 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return result;
         }
 
-        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null, string scope = null)
-        {
-            var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource);
-
-            var result = localizationManager.GetClientPluralizedDictionary(cultureInfo, scope);
-            if (result == null || result.Count == 0)
-            {
-                localizationManager = GetOtherDictionaryManager(m_configuration.FirstAutoTranslateResource);
-                try
-                {
-                    result = localizationManager.GetClientPluralizedDictionary(cultureInfo, scope);
-                }
-                catch (DatabaseLocalizationManagerException e)
-                {
-                    if (m_logger != null && m_logger.IsInformationEnabled())
-                    {
-                        m_logger.LogInformation(@"Requested pluralization dictionary with culture ""{0}"" and scope ""{1}""",
-                            cultureInfo?.Name, scope, e);
-                    }
-
-                    return null;
-                }
-            }
-
-            return result;
-        }
-
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             var localizationManager = GetDictionaryManager(m_configuration.FirstAutoTranslateResource);

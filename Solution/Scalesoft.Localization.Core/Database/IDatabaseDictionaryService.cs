@@ -11,8 +11,6 @@ namespace Scalesoft.Localization.Core.Database
 
         IDictionary<string, PluralizedString> GetPluralizedDictionary(CultureInfo cultureInfo, string scope);
 
-        IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo, string scope);
-
         IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo, string scope);
     }
 }

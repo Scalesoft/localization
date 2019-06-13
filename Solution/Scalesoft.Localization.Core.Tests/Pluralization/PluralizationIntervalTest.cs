@@ -11,9 +11,9 @@ namespace Scalesoft.Localization.Core.Tests.Pluralization
         public void IsOverlapingEqualsTest()
         {
             var pA = new PluralizationInterval(0, 1);
-            var pB = new PluralizationInterval(0, 1);
+            const int testNumber = 1;
 
-            var result = pA.IsOverlaping(pB);
+            var result = pA.IsInInterval(testNumber);
 
             Assert.IsTrue(result);
         }
@@ -22,9 +22,9 @@ namespace Scalesoft.Localization.Core.Tests.Pluralization
         public void IsOvelapingEqualsOneTest()
         {
             var pA = new PluralizationInterval(0, 0);
-            var pB = new PluralizationInterval(0, 0);
+            const int testNumber = 0;
 
-            var result = pA.IsOverlaping(pB);
+            var result = pA.IsInInterval(testNumber);
 
             Assert.IsTrue(result);
         }
@@ -33,38 +33,17 @@ namespace Scalesoft.Localization.Core.Tests.Pluralization
         public void IsOvelapingNotEqualsTest()
         {
             var pA = new PluralizationInterval(0, 0);
-            var pB = new PluralizationInterval(1, 2);
+            const int testNumber = 2;
 
-            var result = pA.IsOverlaping(pB);
+            var result = pA.IsInInterval(testNumber);
 
             Assert.IsFalse(result);
         }
 
         [TestMethod]
-        public void IsOvelapingOverlapsTest()
-        {
-            var pA = new PluralizationInterval(int.MinValue, int.MaxValue);
-            var pB = new PluralizationInterval(-2, 2);
-
-            var result = pA.IsOverlaping(pB);
-
-            Assert.IsTrue(result);
-        }
-
-        [TestMethod]
         public void IsOvelapingTestConstructorException()
         {
-            var exceptionThrown = false;
-            try
-            {
-                var pA = new PluralizationInterval(2, 0);
-            }
-            catch (ArgumentException)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
+            Assert.ThrowsException<ArgumentException>(() => new PluralizationInterval(2, 0));
         }
     }
 }

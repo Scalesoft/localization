@@ -56,7 +56,7 @@ namespace Scalesoft.Localization.Core.Tests.Translator
             Parallel.For(0, 10000, iteration =>
             {
                 var key = availableKeys[iteration % availableKeys.Length];
-                m_fileLocalizationManager.Translate(key);
+                m_fileLocalizationManager.Translate(null, null, key);
             });
         }
 

@@ -1,6 +1,7 @@
 ﻿@using Scalesoft.Localization.AspNetCore
+@using Scalesoft.Localization.AspNetCore.Extensions
 @inject ILocalizationService Localizer
-
+@inject IRazorLocalizationService RazorLocalizer
 
 @{
     ViewData["Title"] = "About";
@@ -17,3 +18,6 @@ Test ViewLocalization:
 Database:
 <br />
 @Localizer.Translate("support", "home")
+
+@*RazorLocalizer test*@
+<p>@RazorLocalizer.TranslateFormat("long-text", Html.RouteLink("Scalesoft", new {}, new {href = @"https:\\www.scalesoft.cz\"}), Html.EncodedString(4.987654321), Html.EncodedString("<script>console.log(\"hello\");</script>"))</p>

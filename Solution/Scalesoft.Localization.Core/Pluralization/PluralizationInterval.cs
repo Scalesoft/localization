@@ -1,16 +1,13 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
-using Scalesoft.Localization.Core.Common;
 using Scalesoft.Localization.Core.Logging;
 
 namespace Scalesoft.Localization.Core.Pluralization
 {
-    public class PluralizationInterval // TODO should implement IEquatable?
+    public class PluralizationInterval
     {
-        private readonly ILogger m_logger;
-
-        public readonly int Start;
-        public readonly int End;
+        public int Start { get; set; }
+        public int End { get; set; }
 
         /// <summary>
         /// Constructor
@@ -34,42 +31,16 @@ namespace Scalesoft.Localization.Core.Pluralization
 
             Start = start;
             End = end;
-            m_logger = logger;
         }
 
         /// <summary>
-        /// Determines whether the union of specified object with this is not empty.
+        /// Determines whether tested value is in the interval.
         /// </summary>
-        /// <param name="obj">Interval to test with this object.</param>
-        /// <returns>true if union of intevals is not empty.</returns>
-        /// <exception cref="NullReferenceException">Is thrown if obj is null.</exception>
-        public bool IsOverlaping(PluralizationInterval obj)
+        /// /// <param name="value">Value to be tested</param>
+        /// <returns>true if value is in the interval.</returns>
+        public bool IsInInterval(int value)
         {
-            Guard.ArgumentNotNull(nameof(obj), obj, m_logger);
-
-            return Start <= obj.End && obj.Start <= End;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var pluralizationInterval = (PluralizationInterval) obj;
-
-            return IsOverlaping(pluralizationInterval);
-        }
-
-        public override int GetHashCode()
-        {
-            return Start.GetHashCode() ^ End.GetHashCode();
+            return Start <= value && value <= End;
         }
     }
 }

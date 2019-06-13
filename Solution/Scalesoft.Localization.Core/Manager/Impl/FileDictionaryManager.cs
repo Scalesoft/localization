@@ -37,7 +37,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             m_dictionaries = new HashSet<ILocalizationDictionary>();
             m_dictionariesPerCultureAndScope = new ConcurrentDictionary<CultureInfo, IDictionary<string, ILocalizationDictionary>>
             {
-                [DefaultCulture()] = new ConcurrentDictionary<string, ILocalizationDictionary>()
+                [GetDefaultCulture()] = new ConcurrentDictionary<string, ILocalizationDictionary>()
             };
 
             foreach (var supportedCulture in m_configuration.SupportedCultures)
@@ -179,13 +179,6 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             return GetLocalizationDictionary(cultureInfo, scope).ListPlurals();
         }
 
-        public IDictionary<string, ClientPluralizedString> GetClientPluralizedDictionary(CultureInfo cultureInfo = null,
-            string scope = null)
-        {
-            return GetLocalizationDictionary(cultureInfo, scope).ListPlurals()
-                .ToDictionary(p => p.Key, p => new ClientPluralizedString(p.Value));
-        }
-
         public IDictionary<string, LocalizedString> GetConstantsDictionary(CultureInfo cultureInfo = null, string scope = null)
         {
             return GetLocalizationDictionary(cultureInfo, scope).ListConstants();
@@ -195,7 +188,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         {
             if (scope == null)
             {
-                scope = DefaultScope();
+                scope = GetDefaultScope();
             }
 
             return GetScopedDictionary(cultureInfo, scope);
@@ -204,7 +197,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         private ILocalizationDictionary GetScopedDictionary(CultureInfo cultureInfo, string scope)
         {
             var dictionaryPerCulture = m_dictionariesPerCultureAndScope[
-                IsCultureSupported(cultureInfo) ? cultureInfo : DefaultCulture()
+                IsCultureSupported(cultureInfo) ? cultureInfo : GetDefaultCulture()
             ];
 
             dictionaryPerCulture.TryGetValue(scope, out var result);
@@ -223,7 +216,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         /// </returns>
         public bool IsCultureSupported(CultureInfo cultureInfo)
         {
-            return DefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures.Contains(cultureInfo);
+            return GetDefaultCulture().Equals(cultureInfo) || m_configuration.SupportedCultures.Contains(cultureInfo);
         }
     }
 }

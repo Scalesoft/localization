@@ -166,7 +166,7 @@
     }
 
     public getCurrentCulture(): string {
-        if (this.mCurrentCulture === "") {
+        if (typeof this.mCurrentCulture === "undefined") {
             const currentCulture = this.getCurrentCultureCookie();
             this.setCurrentCulture(currentCulture);
         }
@@ -215,7 +215,7 @@ class LocalizationDictionary {
 }
 
 class LocalizationPluralizationDictionary {
-    private readonly mDictionary: { [key: string]: IClientPluralizedString };
+    private readonly mDictionary: { [key: string]: IPluralizedString };
 
     constructor(dictionary: string) {
         this.mDictionary = JSON.parse(dictionary);
@@ -226,11 +226,10 @@ class LocalizationPluralizationDictionary {
         if (typeof pluralizedString === "undefined" || pluralizedString === null) {
             return null;
         }
-        const requestedInterval = new PluralizationInterval(number, number);
         for (let interval of pluralizedString.intervals) {
             const translationInterval = interval.interval;
 
-            if (LocalizationUtils.isInInterval(requestedInterval, translationInterval)) {
+            if (LocalizationUtils.isInInterval(number, translationInterval)) {
                 return interval.localizedString;
             }
 
@@ -247,12 +246,12 @@ interface ILocalizedString {
     value: string;
 }
 
-interface IClientPluralizedString {
-    intervals: IClientIntervalWithTranslation[];
+interface IPluralizedString {
+    intervals: IIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
 }
 
-interface IClientIntervalWithTranslation {
+interface IIntervalWithTranslation {
     interval: PluralizationInterval;
     localizedString: ILocalizedString;
 }
@@ -288,27 +287,15 @@ class LocalizationUtils {
             })[0] ||
             null;
     }
-
-    private static isOverlaping(inner: PluralizationInterval, outer: PluralizationInterval): boolean {
-        if (!inner) {
-            throw new Error("Interval is not defined");
-        }
-
-        return outer.start <= inner.start && inner.end <= outer.end;
-    }
-
+    
     /*
-     * Returns true when inner pluralization interval is in the outer pluralization interval
+     * Returns true when value is in the pluralization interval
      */
-    public static isInInterval(inner: PluralizationInterval, outer: PluralizationInterval): boolean {
-        if (!inner) {
+    public static isInInterval(value: number, interval: PluralizationInterval): boolean {
+        if (!interval) {
             return false;
         }
 
-        if (typeof outer != typeof inner) {
-            return false;
-        }
-
-        return this.isOverlaping(inner, outer);
+        return interval.start <= value && value <= interval.end;
     }
 }

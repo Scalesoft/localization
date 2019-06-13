@@ -35,21 +35,21 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text with parameters using a resource file (.json) or a database.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="parameters">Object with parameters. Parameters can be of any type except another object.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
-        /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param>
+        /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param> 
+        /// <param name="parameters">List of parameters. Parameters can be of any type.</param>
         /// <returns>Localized string with input parameter.</returns>
-        LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource);
+        LocalizedString TranslateFormat(string text, string scope, LocTranslationSource translationSource, params object[] parameters);
 
         /// <summary>
         /// Translates text, which has to be pluralized (declined). Using a resource file (.json) or a database.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
         /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param>
+        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <returns>Localized pluralized string.</returns>
-        LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource);
+        LocalizedString TranslatePluralization(string text, string scope, LocTranslationSource translationSource, int number);
 
         /// <summary>
         /// Translates constants using a resource file (.json) or a database.
@@ -73,19 +73,19 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text with parameters using a resource file (.json) or a database. Translation source is Auto.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="parameters">Object with parameters. Parameters can be of any type except another object.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
-        /// <returns>Localized string with input parameter.</returns>
-        LocalizedString TranslateFormat(string text, object[] parameters, string scope);
+        /// <param name="parameters">List of parameters. Parameters can be of any type.</param>
+        /// <returns>Localized string with input parameter.</returns> 
+        LocalizedString TranslateFormat(string text, string scope, params object[] parameters);
 
         /// <summary>
         /// Translates text, which has to be pluralized (declined). using a resource file (.json) or a database. Translation source is Auto.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <param name="scope">String name of a scope in dictionary.</param>
+        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <returns>Localized pluralized string.</returns>
-        LocalizedString TranslatePluralization(string text, int number, string scope);
+        LocalizedString TranslatePluralization(string text, string scope, int number);
 
         /// <summary>
         /// Translates constants using a resource file (.json) or a database. Translation source is Auto. 
@@ -94,7 +94,7 @@ namespace Scalesoft.Localization.AspNetCore
         /// <param name="scope">String name of a scope in dictionary.</param>
         /// <returns>Localized constant string.</returns>
         LocalizedString TranslateConstant(string text, string scope);
-
+        
         //Without scope
         /// <summary>
         /// Translates text using a resource file (.json) or a database. Scope is default - global.
@@ -108,19 +108,19 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text with parameters using a resource file (.json) or a database. Scope is default - global.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="parameters">Object with parameters. Parameters can be of any type except another object.</param>
-        /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param>
+        /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param> 
+        /// <param name="parameters">List of parameters. Parameters can be of any type.</param>
         /// <returns>Localized string with input parameter.</returns>
-        LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource);
+        LocalizedString TranslateFormat(string text, LocTranslationSource translationSource, params object[] parameters);
 
         /// <summary>
         /// Translates text, which has to be pluralized (declined). Using a resource file (.json) or a database. Scope is default - global.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <param name="translationSource">Source file for translation. Values Auto - choose automatically, Database - dictionary from database, File - dictionary from local json file.</param>
+        /// <param name="number">Integer value defines what value will be chosen.</param>
         /// <returns>Localized pluralized string.</returns>
-        LocalizedString TranslatePluralization(string text, int number, LocTranslationSource translationSource);
+        LocalizedString TranslatePluralization(string text, LocTranslationSource translationSource, int number);
 
         /// <summary>
         /// Translates constants using a resource file (.json) or a database. Scope is default - global.
@@ -142,16 +142,16 @@ namespace Scalesoft.Localization.AspNetCore
         /// Translates text with parameters using a resource file (.json) or a database. Translation source is Auto. Scope is default - global. 
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
-        /// <param name="parameters">Object with parameters. Parameters can be of any type except another object.</param>
+        /// <param name="parameters">List of parameters. Parameters can be of any type.</param>
         /// <returns>Localized string with input parameter.</returns>
-        LocalizedString TranslateFormat(string text, object[] parameters);
+        LocalizedString TranslateFormat(string text, params object[] parameters);
 
         /// <summary>
-        /// Translates text, which has to be pluralized (declined). Using a resource file (.json) or a database. Translation source is Auto. Scope is default - global.
+        /// Translates text, which has to be pluralized (declined) using ILocalizationService and returns HtmlString with <strong>encoded</strong> translation.
         /// </summary>
         /// <param name="text">String key for translation in json resource file.</param>
         /// <param name="number">Integer value defines what value will be chosen.</param>
-        /// <returns>Localized pluralized string.</returns>
+        /// <returns>Localized pluralized HtmlString with encoded content.</returns>
         LocalizedString TranslatePluralization(string text, int number);
 
         /// <summary>

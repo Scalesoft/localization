@@ -35,10 +35,29 @@
     "text": "Text",
     "show": "Zobrazit",
     "result": "Výsledek",
-    "scope": "Scope"
+    "scope": "Scope",
+    "long-text": "Odkaz: {0}, číslo: {1}, nebezpečný string: {2}."
   },
   "constants": {
     "const-date": "MMMM dd, yyyy",
     "const-time": "hh:mm:ss.f"
+  },
+  "plural": {
+    "years": {
+      "let": [ //<-This is default value
+        [ null, -5, "let" ],
+        //the first value is start of the interval, the second value is end of interval (exclusive).
+        //the third is value for defined interval.
+        //null means positive or negative infinity,
+        //start of the interval is always less or equal than end of the interval.
+        //No interval overlaps are allowed.
+        [ -4, -2, "roky" ],
+        [ -1, -1, "rok" ],
+        [ 0, 0, "let" ],
+        [ 1, 1, "rok" ],
+        [ 2, 4, "roky" ],
+        [ 5, null, "let" ]
+      ]
+    }
   }
 }

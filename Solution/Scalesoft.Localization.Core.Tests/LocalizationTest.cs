@@ -51,16 +51,16 @@ namespace Scalesoft.Localization.Core.Tests
 
             //Localization.Init("localization.json.config");
 
-            var ls = instance.Translate(LocTranslationSource.File, "text-2-odst");
+            var ls = instance.Translate(LocTranslationSource.File, null, null, "text-2-odst");
 
             Assert.AreEqual("text-2-odst", ls.Name);
             Assert.IsFalse(ls.ResourceNotFound);
             Assert.AreEqual("Druhý odstavec v globálním slovníku", ls.Value);
 
-            var lsQQ = instance.Translate(LocTranslationSource.File, "text-QQ-odst");
+            var lsQQ = instance.Translate(LocTranslationSource.File, null, null, "text-QQ-odst");
             Assert.AreEqual("text-QQ-odst", lsQQ);
 
-            var lsEn = instance.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
+            var lsEn = instance.Translate(LocTranslationSource.File, new CultureInfo("en"), null, "text-2-odst");
 
             Assert.AreEqual("text-2-odst", lsEn.Name);
             Assert.AreEqual("The second paragraph in global dictionary", lsEn.Value);
@@ -94,13 +94,13 @@ namespace Scalesoft.Localization.Core.Tests
             {
                 for (var j = 0; j < 50; j++)
                 {
-                    var ls = instance.Translate(LocTranslationSource.File, "text-2-odst");
-                    var lsQQ = instance.Translate(LocTranslationSource.File, "text-qq-odst");
-                    var lsEn = instance.Translate(LocTranslationSource.File, "text-2-odst", new CultureInfo("en"));
+                    var ls = instance.Translate(LocTranslationSource.File, null, null, "text-2-odst");
+                    var lsQQ = instance.Translate(LocTranslationSource.File, null, null, "text-qq-odst");
+                    var lsEn = instance.Translate(LocTranslationSource.File, new CultureInfo("en"), null, "text-2-odst");
 
-                    var ls2 = instance.Translate(LocTranslationSource.File, "text-1-odst");
-                    var ls2QQ = instance.Translate(LocTranslationSource.File, "q");
-                    var ls2En = instance.Translate(LocTranslationSource.File, "text-5-odst", new CultureInfo("en"));
+                    var ls2 = instance.Translate(LocTranslationSource.File, null, null, "text-1-odst");
+                    var ls2QQ = instance.Translate(LocTranslationSource.File, null, null, "q");
+                    var ls2En = instance.Translate(LocTranslationSource.File, new CultureInfo("en"), null, "text-5-odst");
                 }
             }
 
@@ -130,7 +130,7 @@ namespace Scalesoft.Localization.Core.Tests
 
             var instance = new LocalizationLib(localizationConfiguration);
 
-            var resA = instance.Translate(LocTranslationSource.Auto, "ahoj");
+            var resA = instance.Translate(LocTranslationSource.Auto, null, null, "ahoj");
             Assert.IsTrue(resA.ResourceNotFound);
         }
     }

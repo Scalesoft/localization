@@ -79,7 +79,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
         [TestMethod]
         public void SimpleTranslateTest()
         {
-            var text = m_databaseLocalizationManager.Translate("support", null, "home");
+            var text = m_databaseLocalizationManager.Translate(null, "home", "support");
             Assert.IsNotNull(text);
             Assert.IsNotNull(text.Value);
             Assert.AreNotEqual(0, text.Value.Length);
@@ -103,7 +103,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
             Parallel.For(0, 1000, iteration =>
             {
                 var key = keysFromScope[iteration % keysFromScope.Length];
-                m_databaseLocalizationManager.Translate(key, null, scope);
+                m_databaseLocalizationManager.Translate(null, scope, key);
             });
         }
     }

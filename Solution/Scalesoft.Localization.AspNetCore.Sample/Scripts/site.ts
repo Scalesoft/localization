@@ -21,13 +21,16 @@ namespace LocalizationSample {
             const translatedString = this.localization.translate("Pluralization").value;
             $(".output").append(`<h2>${translatedString}</h2>`);
             for (let i = -11; i < 12; i++) {
-                this.addPluralizationTestLine("years", i);
+                this.addPluralizationTestLine(i, "years");
+            }
+            for (let i = -11; i < 12; i++) {
+                this.addPluralizationTestLine(i, "cats", "non-global-pluralization");
             }
         }
 
-        private addPluralizationTestLine(key: string, value: number, scope?: string) {
+        private addPluralizationTestLine(value: number, key: string, scope: string = null) {
             const localizedString = this.localization.translatePluralization(key, value, scope);
-            $(".output").append(`<div>key="${key}" number=${value} scope="${scope}": <strong>${value} ${localizedString.value}</strong></div>`);
+            $(".output").append(`<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${localizedString.value}</strong></div>`);
         }
     }
 }

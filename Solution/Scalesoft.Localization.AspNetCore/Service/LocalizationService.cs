@@ -38,28 +38,28 @@ namespace Scalesoft.Localization.AspNetCore.Service
         {
             var requestCulture = GetRequestCulture();
 
-            return m_localizationManager.Translate(translationSource, text, requestCulture, scope);
+            return m_localizationManager.Translate(translationSource, requestCulture, scope, text);
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters, string scope, LocTranslationSource translationSource)
+        public LocalizedString TranslateFormat(string text, string scope, LocTranslationSource translationSource, params object[] parameters)
         {
             var requestCulture = GetRequestCulture();
 
-            return m_localizationManager.TranslateFormat(translationSource, text, parameters, requestCulture, scope);
+            return m_localizationManager.TranslateFormat(translationSource, requestCulture, scope, text, parameters);
         }
 
-        public LocalizedString TranslatePluralization(string text, int number, string scope, LocTranslationSource translationSource)
+        public LocalizedString TranslatePluralization(string text, string scope, LocTranslationSource translationSource, int number)
         {
             var requestCulture = GetRequestCulture();
 
-            return m_localizationManager.TranslatePluralization(translationSource, text, number, requestCulture, scope);
+            return m_localizationManager.TranslatePluralization(translationSource, requestCulture, scope, text, number);
         }
 
         public LocalizedString TranslateConstant(string text, string scope, LocTranslationSource translationSource)
         {
             var requestCulture = GetRequestCulture();
 
-            return m_localizationManager.TranslateConstant(translationSource, text, requestCulture, scope);
+            return m_localizationManager.TranslateConstant(translationSource, requestCulture, scope, text);
         }
 
         //Explicit calls and translationSource = LocTranslationSource.Auto
@@ -67,16 +67,15 @@ namespace Scalesoft.Localization.AspNetCore.Service
         {
             return Translate(text, scope, LocTranslationSource.Auto);
         }
-
-        public LocalizedString TranslateFormat(string text, object[] parameters, string scope)
+        
+        public LocalizedString TranslateFormat(string text, string scope, params object[] parameters)
         {
-            return TranslateFormat(text, parameters, scope, LocTranslationSource.Auto);
+            return TranslateFormat(text, scope, LocTranslationSource.Auto, parameters);
         }
 
-        public LocalizedString TranslatePluralization(string text, int number,
-            string scope)
+        public LocalizedString TranslatePluralization(string text, string scope, int number)
         {
-            return TranslatePluralization(text, number, scope, LocTranslationSource.Auto);
+            return TranslatePluralization(text, scope, LocTranslationSource.Auto, number);
         }
 
         public LocalizedString TranslateConstant(string text, string scope)
@@ -90,16 +89,16 @@ namespace Scalesoft.Localization.AspNetCore.Service
         {
             return Translate(text, null, translationSource);
         }
-
-        public LocalizedString TranslateFormat(string text, object[] parameters, LocTranslationSource translationSource)
+        
+        public LocalizedString TranslateFormat(string text, LocTranslationSource translationSource, params object[] parameters)
         {
-            return TranslateFormat(text, parameters, null, translationSource);
+            return TranslateFormat(text, null, translationSource, parameters);
         }
 
-        public LocalizedString TranslatePluralization(string text, int number,
-            LocTranslationSource translationSource)
+        public LocalizedString TranslatePluralization(string text,
+            LocTranslationSource translationSource, int number)
         {
-            return TranslatePluralization(text, number, null, translationSource);
+            return TranslatePluralization(text, null, translationSource, number);
         }
 
         public LocalizedString TranslateConstant(string text, LocTranslationSource translationSource)
@@ -113,14 +112,14 @@ namespace Scalesoft.Localization.AspNetCore.Service
             return Translate(text, null, LocTranslationSource.Auto);
         }
 
-        public LocalizedString TranslateFormat(string text, object[] parameters)
+        public LocalizedString TranslateFormat(string text, params object[] parameters)
         {
-            return TranslateFormat(text, parameters, null, LocTranslationSource.Auto);
+            return TranslateFormat(text, null, LocTranslationSource.Auto, parameters);
         }
 
         public LocalizedString TranslatePluralization(string text, int number)
         {
-            return TranslatePluralization(text, number, null, LocTranslationSource.Auto);
+            return TranslatePluralization(text, null, LocTranslationSource.Auto, number);
         }
 
         public LocalizedString TranslateConstant(string text)
