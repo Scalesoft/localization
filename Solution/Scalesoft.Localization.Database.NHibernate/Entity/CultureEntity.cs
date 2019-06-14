@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Scalesoft.Localization.Database.Abstractions.Entity;
 
 namespace Scalesoft.Localization.Database.NHibernate.Entity
@@ -8,6 +9,10 @@ namespace Scalesoft.Localization.Database.NHibernate.Entity
         public virtual int Id { get; set; }
 
         public virtual string Name { get; set; }
+
+        public virtual IList<CultureHierarchyEntity> CultureHierarchy { get; set; }
+
+        public virtual IList<CultureHierarchyEntity> ChildCultureHierarchy { get; set; }
 
         public virtual bool Equals(CultureEntity other)
         {
