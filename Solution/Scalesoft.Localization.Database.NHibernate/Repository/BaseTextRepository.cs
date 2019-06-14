@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Exceptions;
-using Scalesoft.Localization.Database.Abstractions.Entity;
 using Scalesoft.Localization.Database.NHibernate.Entity;
 
 namespace Scalesoft.Localization.Database.NHibernate.Repository
@@ -41,8 +41,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Repository
         }
 
         public T GetByNameAndCultureAndScope(
-            string name, string cultureName, string dictionaryScopeName
-        )
+            string name, string cultureName, string dictionaryScopeName)
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentException(EmptyArgumentMessage, nameof(name));
             if (string.IsNullOrEmpty(cultureName)) throw new ArgumentException(EmptyArgumentMessage, nameof(cultureName));
@@ -68,6 +67,45 @@ namespace Scalesoft.Localization.Database.NHibernate.Repository
             catch (Exception ex)
             {
                 throw new DataException("GetByNameAndCultureAndScope operation failed", ex);
+            }
+        }
+
+        public T GetByNameAndCultureAndScopeWithHierarchies(
+            string name, string cultureName, string dictionaryScopeName
+        )
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentException(EmptyArgumentMessage, nameof(name));
+            if (string.IsNullOrEmpty(dictionaryScopeName)) throw new ArgumentException(EmptyArgumentMessage, nameof(dictionaryScopeName));
+
+            try
+            {
+                
+                var session = GetSession();
+                
+                DictionaryScopeEntity dictionaryScope = null;
+                CultureEntity culture = null;
+                CultureHierarchyEntity cultureHierarchy = null;
+                CultureEntity childCulture = null;
+
+                var query = session.QueryOver<T>()
+                    .Where(x => x.Name == name)
+                    .Fetch(SelectMode.Fetch, x => x.Culture)
+                    .Fetch(SelectMode.Fetch, x => x.DictionaryScope)
+                    .JoinAlias(x => x.DictionaryScope, () => dictionaryScope)
+                    .JoinAlias(x => x.Culture, () => culture)
+                    .Where(x => dictionaryScope.Name == dictionaryScopeName)
+                    .JoinAlias(x => culture.ChildCultureHierarchy, () => cultureHierarchy)
+                    .JoinAlias(x => cultureHierarchy.Culture, () => childCulture)
+                    .Where(x => childCulture.Name == cultureName)
+                    .OrderBy(() => cultureHierarchy.LevelProperty).Asc
+                    .Take(4).List();
+
+                return query.FirstOrDefault();
+
+            }
+            catch (Exception ex)
+            {
+                throw new DataException("GetByNameAndCultureAndScopeWithHierarchies operation failed", ex);
             }
         }
 

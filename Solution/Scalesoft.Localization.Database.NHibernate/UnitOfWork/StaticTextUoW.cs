@@ -123,7 +123,7 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
             }
         }
 
-        public virtual StaticTextEntity GetByNameAndCultureAndScope(
+        public virtual StaticTextEntity GetByNameAndCultureAndScopeWithHierarchy(
             string name, string cultureName, string dictionaryScopeName
         )
         {
@@ -131,6 +131,22 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
             {
                 var staticTextRepository = new StaticTextRepository(session);
 
+                var result = staticTextRepository.GetByNameAndCultureAndScopeWithHierarchies(
+                    name, cultureName, dictionaryScopeName
+                );
+
+                return result;
+            }
+        }
+
+        public virtual StaticTextEntity GetByNameAndCultureAndScope(
+            string name, string cultureName, string dictionaryScopeName
+        )
+        {
+            using (var session = GetSession())
+            {
+                var staticTextRepository = new StaticTextRepository(session);
+                
                 var result = staticTextRepository.GetByNameAndCultureAndScope(
                     name, cultureName, dictionaryScopeName
                 );
