@@ -16,13 +16,13 @@ namespace Scalesoft.Localization.Database.NHibernate.Mappings
 
             Bag(x => x.CultureHierarchy, colmap =>
             {
-                colmap.Key(x => x.Column("Culture"));
+                colmap.Key(x => x.Column("`Culture`"));
                 colmap.Inverse(true);
             }, map => { map.OneToMany(); });
-
+            
             Bag(x => x.ChildCultureHierarchy, colmap =>
             {
-                colmap.Key(x => x.Column("ParentCulture"));
+                colmap.Key(x => x.Column("`ParentCulture`"));
                 colmap.Inverse(true);
             }, map => { map.OneToMany(); });
         }
