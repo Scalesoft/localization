@@ -23,6 +23,8 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
     {
         private DatabaseLocalizationManager m_databaseLocalizationManager;
         private ISessionFactory m_sessionFactory;
+        private StaticTextUoW m_staticTextUoW;
+        private LocalizationConfiguration m_localizationConfiguration;
 
         [TestInitialize]
         public void InitTest()
@@ -37,9 +39,14 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
                 {
                     new CultureInfo("en"),
                     new CultureInfo("cs"),
+                    new CultureInfo("es"),
+                    new CultureInfo("jp"),
+                    new CultureInfo("ru"),
                 },
                 TranslateFallbackMode = LocTranslateFallbackMode.Key
             };
+
+            m_localizationConfiguration = localizationConfiguration;
 
             var services = new ServiceCollection();
             services.AddLocalizationCore(localizationConfiguration, new NHibernateDatabaseConfiguration(m_sessionFactory));
@@ -59,6 +66,10 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
         {
             var cultureUoW = container.GetRequiredService<CultureUoW>();
             cultureUoW.AddCulture("cs");
+            cultureUoW.AddCulture("en");
+            cultureUoW.AddCulture("es");
+            cultureUoW.AddCulture("jp");
+            cultureUoW.AddCulture("ru");
 
             var scopeUoW = container.GetRequiredService<DictionaryScopeUoW>();
             scopeUoW.AddScope("home");
@@ -66,6 +77,8 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
 
             var now = DateTime.UtcNow;
             var staticTextUoW = container.GetRequiredService<StaticTextUoW>();
+            m_staticTextUoW = staticTextUoW;
+
             staticTextUoW.AddStaticText("support", 0, "Podpora", "cs", "home", "user", now);
             staticTextUoW.AddStaticText("about", 0, "O portálu", "cs", "home", "user", now);
             staticTextUoW.AddStaticText("copyright", 0, "Copyright", "cs", "home", "user", now);
@@ -105,6 +118,54 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
                 var key = keysFromScope[iteration % keysFromScope.Length];
                 m_databaseLocalizationManager.Translate(null, scope, key);
             });
+        }
+
+        [TestMethod]
+        public void TranslateFallbackTest()
+        {
+            const string scope = "home";
+            const string key = "name";
+            var defaultCulture = m_localizationConfiguration.DefaultCulture;
+            const string defaultValue = "Jméno";
+
+            var now = DateTime.UtcNow;
+            
+            var nonDefaultCulturesValuePairs = new Dictionary<string, string>
+            {
+                {"en", "Name"},
+                {"es", "Nombre"},
+                {"jp", "名前"},
+                {"ru", "Имя"},
+            };
+
+            var defaultCulturesValuePair = new KeyValuePair<string, string>(defaultCulture.Name, defaultValue);
+            
+            foreach (var culturesValuePair in nonDefaultCulturesValuePairs)
+            {
+                m_staticTextUoW.AddStaticText("name", 0, culturesValuePair.Value, culturesValuePair.Key, "home", "user", now);
+            }
+
+            m_staticTextUoW.AddStaticText("name", 0, defaultCulturesValuePair.Value, defaultCulturesValuePair.Key, "home", "user", now);
+            
+            foreach (var culturesValuePair in nonDefaultCulturesValuePairs)
+            {
+                var translateResult = m_databaseLocalizationManager.Translate(new CultureInfo(culturesValuePair.Key), scope, key);
+                Assert.AreEqual(culturesValuePair.Value, translateResult.Value);
+            }
+
+            var defaultCultureTranslateResult = m_databaseLocalizationManager.Translate(new CultureInfo(defaultCulturesValuePair.Key), scope, key);
+            Assert.AreEqual(defaultCulturesValuePair.Value, defaultCultureTranslateResult.Value);
+
+            foreach (var culturesValuePair in nonDefaultCulturesValuePairs)
+            {
+                m_staticTextUoW.Delete(key, culturesValuePair.Key, scope);
+            }
+
+            foreach (var culturesValuePair in nonDefaultCulturesValuePairs)
+            {
+                var translateResult = m_databaseLocalizationManager.Translate(new CultureInfo(culturesValuePair.Key), scope, key);
+                Assert.AreEqual(defaultCultureTranslateResult.Value, translateResult.Value);
+            }
         }
     }
 }
