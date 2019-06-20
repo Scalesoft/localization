@@ -38,7 +38,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
             var culture = GetCachedCultureByNameOrGetDefault(cultureInfo.Name);
             var dictionaryScope = GetCachedDictionaryScope(scope);
 
-            var staticText = m_staticTextUoW.GetByNameAndCultureAndScopeWithHierarchy(
+            var staticText = m_staticTextUoW.GetByNameAndCultureAndScope(
                 name, culture.Name, dictionaryScope.Name
             );
 

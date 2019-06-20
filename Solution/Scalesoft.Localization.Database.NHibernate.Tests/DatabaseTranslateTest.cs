@@ -167,5 +167,26 @@ namespace Scalesoft.Localization.Database.NHibernate.Tests
                 Assert.AreEqual(defaultCultureTranslateResult.Value, translateResult.Value);
             }
         }
+
+        [TestMethod]
+        public void GetDynamicTextWithoutFallbackTest()
+        {
+            const string key = "key123";
+            const string scope = "home";
+            const string csText = "Czech label";
+            const string enText = "English label";
+            
+            var now = DateTime.UtcNow;
+            m_staticTextUoW.AddStaticText(key, 0, csText, "cs", scope, "user", now);
+            m_staticTextUoW.AddStaticText(key, 0, enText, "en", scope, "user", now);
+
+            var czech = m_databaseLocalizationManager.GetDynamicText(key, scope, new CultureInfo("cs"));
+            var english = m_databaseLocalizationManager.GetDynamicText(key, scope, new CultureInfo("en"));
+            var spanish = m_databaseLocalizationManager.GetDynamicText(key, scope, new CultureInfo("es"));
+
+            Assert.AreEqual(csText, czech.Text);
+            Assert.AreEqual(enText, english.Text);
+            Assert.IsNull(spanish);
+        }
     }
 }
