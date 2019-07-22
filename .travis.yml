@@ -25,12 +25,12 @@ before_script:
 
 stages:
   - test
-  - deploy
+  - name: deploy
+    if: fork = false AND tag IS present
 
 jobs:
   include:
     - stage: test
       script: pwsh -f tests.ps1 --disableRestore
     - stage: deploy
-      if: fork = false AND tag = true
       script: pwsh -f publish.ps1 --disableRestore "${NUGET_API_KEY}" "${TRAVIS_TAG}"
