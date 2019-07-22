@@ -2,7 +2,7 @@
 
 const gulp = require("gulp"),
     concat = require("gulp-concat"),
-    cssmin = require("gulp-cssmin"),
+    cleanCSS = require("gulp-clean-css"),
     uglify = require("gulp-uglify"),
     sass = require("gulp-dart-sass"),
     typescript = require("gulp-typescript"),
@@ -80,7 +80,7 @@ function swallowTsError(error) {
 }
 
 const getBundles = regexPattern => bundleconfig.filter(
-    bundle => regexPattern.test(bundle.outputFileName)
+    bundle => regexPattern.test(bundle.outputFileName),
 );
 
 gulp.task(taskNames.buildExternalProject,
@@ -95,7 +95,7 @@ gulp.task(taskNames.buildExternalProject,
         externalGulp.on("error", (err) => {
             console.error(err);
         });
-    }
+    },
 );
 
 gulp.task(taskNames.linkExternalProject,
@@ -110,13 +110,13 @@ gulp.task(taskNames.linkExternalProject,
         externalGulp.on("error", (err) => {
             console.error(err);
         });
-    }
+    },
 );
 
 gulp.task(taskNames.linkToExternalProject,
     (callback) => {
         linkDependency(callback);
-    }
+    },
 );
 
 function linkDependency(callback, cwd) {
@@ -135,7 +135,7 @@ function linkDependency(callback, cwd) {
 gulp.task(taskNames.linkToExternalProjectProduction,
     (callback) => {
         linkDependency(callback, paths.webroot);
-    }
+    },
 );
 
 gulp.task(taskNames.bootstrapExternalProject,
@@ -150,7 +150,7 @@ gulp.task(taskNames.lintTs,
         .pipe(tslint({
             formatter: "verbose"
         }))
-        .pipe(tslint.report())
+        .pipe(tslint.report()),
 );
 
 gulp.task(taskNames.lintSass,
@@ -162,7 +162,7 @@ gulp.task(taskNames.lintSass,
                     {formatter: "string", console: true},
                 ],
             })
-        )
+        ),
 );
 
 gulp.task(taskNames.lintSassFixer,
@@ -173,7 +173,7 @@ gulp.task(taskNames.lintSassFixer,
                 {formatter: "verbose", console: true},
             ],
             fix: true,
-        }))
+        })),
 );
 
 gulp.task(taskNames.compileTypescript,
@@ -189,7 +189,7 @@ gulp.task(taskNames.compileTypescript,
         return tsResult.js
             .pipe(sourcemaps.write("."))
             .pipe(gulp.dest(paths.js));
-    }
+    },
 );
 
 gulp.task(taskNames.compileSass,
@@ -197,11 +197,11 @@ gulp.task(taskNames.compileSass,
         .pipe(sourcemaps.init())
         .pipe(sass().on("error", sass.logError))
         .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest(paths.css))
+        .pipe(gulp.dest(paths.css)),
 );
 
 gulp.task(taskNames.sassWatch,
-    () => gulp.watch(paths.sass, gulp.parallel(taskNames.bundleAndMinifyCss))
+    () => gulp.watch(paths.sass, gulp.parallel(taskNames.bundleAndMinifyCss)),
 );
 
 gulp.task(taskNames.typescriptWatch,
@@ -209,11 +209,11 @@ gulp.task(taskNames.typescriptWatch,
         enableSwallowTsError = true;
 
         return gulp.watch(paths.typescript, gulp.parallel(taskNames.bundleAndMinifyJs));
-    }
+    },
 );
 
 gulp.task(taskNames.packageWatch,
-    () => gulp.watch(paths.packageJson, gulp.parallel(taskNames.downloadProductionDeps))
+    () => gulp.watch(paths.packageJson, gulp.parallel(taskNames.downloadProductionDeps)),
 );
 
 const bundleJsTasksName = [];
@@ -255,7 +255,7 @@ gulp.task(taskNames.bundleJs,
         ? gulp.parallel(...bundleJsTasksName)
         : done => {
             done();
-        }
+        },
 );
 
 gulp.task(taskNames.bundleAndMinifyJs,
@@ -265,7 +265,7 @@ gulp.task(taskNames.bundleAndMinifyJs,
             taskNames.compileTypescript
         ),
         taskNames.bundleJs
-    )
+    ),
 );
 
 const bundleCssTasksName = [];
@@ -291,11 +291,13 @@ for (const bundleConfigKey in bundleConfigsCss) {
 
             if (bundle.minify && bundle.minify.enabled) {
                 gulpStream = gulpStream
-                    .pipe(cssmin());
+                    .pipe(sourcemaps.init())
+                    .pipe(cleanCSS())
+                    .pipe(sourcemaps.write());
             }
 
             return gulpStream.pipe(gulp.dest("."));
-        }
+        },
     );
 
     bundleCssTasksName[bundleConfigKey] = taskName;
@@ -306,7 +308,7 @@ gulp.task(taskNames.bundleCss,
         ? gulp.parallel(...bundleCssTasksName)
         : done => {
             done();
-        }
+        },
 );
 
 gulp.task(taskNames.bundleAndMinifyCss,
@@ -317,7 +319,7 @@ gulp.task(taskNames.bundleAndMinifyCss,
             //taskNames.lintSass
         ),
         taskNames.bundleCss
-    )
+    ),
 );
 
 gulp.task(taskNames.bundleAndMinify,
@@ -344,7 +346,7 @@ gulp.task(taskNames.downloadProductionDeps,
                     ignoreScripts: true, // is it good idea?
                 }
             ));
-    }
+    },
 );
 
 gulp.task(taskNames.deleteProductionPackageJson,
@@ -360,23 +362,23 @@ gulp.task(taskNames.downloadAllDeps,
         taskNames.downloadProductionDeps,
         taskNames.linkToExternalProjectProduction,
         taskNames.deleteProductionPackageJson
-    )
+    ),
 );
 
 gulp.task(taskNames.cleanJs,
-    () => del([paths.js])
+    () => del([paths.js]),
 );
 
 gulp.task(taskNames.cleanCss,
-    () => del([paths.css])
+    () => del([paths.css]),
 );
 
 gulp.task(taskNames.cleanDeps,
-    () => del([paths.runtimedeps])
+    () => del([paths.runtimedeps]),
 );
 
 gulp.task(taskNames.clean,
-    gulp.parallel(taskNames.cleanJs, taskNames.cleanCss, taskNames.cleanDeps)
+    gulp.parallel(taskNames.cleanJs, taskNames.cleanCss, taskNames.cleanDeps),
 );
 
 if (fs.existsSync("../skip-gulp-run")) {
@@ -388,10 +390,10 @@ else {
             taskNames.bootstrapExternalProject,
             taskNames.downloadAllDeps,
             taskNames.bundleAndMinify
-        )
+        ),
     );
 }
 
 gulp.task(taskNames.watch,
-    gulp.parallel(taskNames.sassWatch, taskNames.typescriptWatch, taskNames.packageWatch)
+    gulp.parallel(taskNames.sassWatch, taskNames.typescriptWatch, taskNames.packageWatch),
 );
