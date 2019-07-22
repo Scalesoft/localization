@@ -27,13 +27,6 @@ namespace Scalesoft.Localization.AspNetCore.Sample
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .ConfigureAppConfiguration((buildContext, configuration) =>
-                {
-                    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-                    configuration.AddJsonFile("modules.json", optional: true);
-                    configuration.AddJsonFile($"modules.{environment}.json", optional: true);
-                })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
