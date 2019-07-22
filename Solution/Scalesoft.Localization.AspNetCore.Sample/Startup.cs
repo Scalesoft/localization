@@ -47,10 +47,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             services.AddNHibernate(m_configuration);
             
-            m_container = new Container().WithDependencyInjectionAdapter(
-                services,
-                throwIfUnresolved: type => type.Name.EndsWith("Controller")
-            );
+            m_container = new Container().WithDependencyInjectionAdapter(services);
 
             return m_container.Resolve<IServiceProvider>();
         }

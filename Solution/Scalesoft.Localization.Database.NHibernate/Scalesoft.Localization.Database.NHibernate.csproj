@@ -25,7 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
-    <PackageReference Include="NHibernate" Version="5.2.3" />
+    <PackageReference Include="NHibernate" Version="5.2.5" />
   </ItemGroup>
 
   <ItemGroup>
