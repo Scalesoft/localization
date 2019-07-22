@@ -20,19 +20,19 @@
   </ItemGroup>
 
   <Target Name="PreBuildWin" BeforeTargets="PreBuildEvent" Condition=" '$(OS)' == 'Windows_NT' ">
-    <Exec Command="RD /S /Q &quot;$(TargetDir)Resources\&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="RD /S /Q &quot;$(TargetDir)Resources\&quot;" />
   </Target>
 
   <Target Name="PreBuildUnix" BeforeTargets="PreBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
-    <Exec Command="rm -r -f &quot;$(TargetDir)Resources&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="rm -r -f &quot;$(TargetDir)Resources&quot;" />
   </Target>
 
   <Target Name="PostBuildWin" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' ">
-    <Exec Command="XCOPY &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="XCOPY &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources\&quot; /S /Y" />
   </Target>
 
   <Target Name="PostBuildUnix" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' ">
-    <Exec Command="cp -r &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="cp -r &quot;$(ProjectDir)Resources&quot; &quot;$(TargetDir)Resources&quot;" />
   </Target>
 
 </Project>

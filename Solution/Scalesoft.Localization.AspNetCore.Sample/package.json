@@ -2,6 +2,9 @@
 	"version": "1.0.0",
 	"name": "scalesoft.localization.aspnetcore.sample",
 	"private": true,
+	"scripts": {
+		"gulp": "node_modules/.bin/gulp"
+	},
 	"devDependencies": {
 		"@types/jquery": "^3.3.29",
 		"del": "^3.0.0",

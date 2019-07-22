@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
-    <Exec Command="yarn gulp -b $(ProjectDir) --gulpfile $(ProjectDir)gulpfile.js default" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn install" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn gulp default" />
   </Target>
   
 </Project>

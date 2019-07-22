@@ -10,13 +10,16 @@
     "type": "git",
     "url": "https://github.com/Scalesoft/localization.git"
   },
+  "scripts": {
+    "gulp": "node_modules/.bin/gulp"
+  },
   "files": [
     "dist/",
     "package.json"
   ],
   "devDependencies": {
     "gulp": "^4.0",
-	"gulp-rename": "^1.4.0",
+    "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6",
     "gulp-typescript": "^5.0",
     "gulp-uglify": "^3.0",
