@@ -7,5 +7,6 @@
     },
     "constants": {
         "const-date": "MMMM dd, yyyy"
-    }
+    },
+    // you can now use json5 with comma after last array item, and as you can see with comments 
 }
