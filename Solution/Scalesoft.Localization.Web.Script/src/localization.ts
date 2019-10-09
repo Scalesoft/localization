@@ -5,11 +5,16 @@
     private mCurrentCulture: string;
 
     private readonly mDictionary: { [key: string]: LocalizationDictionary } = {};
+    private readonly mDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationDictionary) => void> } = {};
 
     private mPluralizedDictionary: { [key: string]: LocalizationPluralizationDictionary } = {};
+    private readonly mPluralizedDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationPluralizationDictionary) => void> } = {};
 
     private mSiteUrl: string;
 
+    /**
+     * @deprecated Use translateAsync
+     */
     public translate(
         text: string, scope?: string, cultureName?: string
     ): ILocalizedString {
@@ -36,6 +41,9 @@
         }, scope, cultureName);
     }
 
+    /**
+     *@deprecated Use translateFormatAsync
+     */
     public translateFormat(
         text: string, parameters: string[], scope?: string, cultureName?: string
     ): ILocalizedString {
@@ -62,6 +70,9 @@
         }, scope, cultureName);
     }
 
+    /**
+     *@deprecated Use translatePluralizationAsync
+     */
     public translatePluralization(
         text: string, number: number, scope?: string, cultureName?: string
     ): ILocalizedString {
@@ -115,6 +126,9 @@
         this.mSiteUrl = siteUrl;
     }
 
+    /**
+     *@deprecated Use getDictionaryAsync
+     */
     private getDictionary(scope?: string, cultureName?: string): LocalizationDictionary {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
@@ -129,6 +143,9 @@
         return this.getLocalizationDictionaryAsync(scope, cultureName, onSuccess);
     }
 
+    /**
+     *@deprecated Use getPluralizationDictionaryAsync
+     */
     private getPluralizationDictionary(scope?: string, cultureName?: string): LocalizationPluralizationDictionary {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
@@ -161,6 +178,9 @@
         return this.mGlobalScope;
     }
 
+    /**
+     *@deprecated Use getLocalizationDictionaryAsync
+     */
     private getLocalizationDictionary(scope: string, cultureName: string): LocalizationDictionary {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
         const dictionary = this.mDictionary[dictionaryKey];
@@ -179,13 +199,16 @@
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
         const dictionary = this.mDictionary[dictionaryKey];
 
-        if (typeof dictionary === "undefined") {
-            this.downloadDictionary(scope, cultureName, onSuccess);
-        }else {
+        if (dictionary === undefined) {
+            this.downloadDictionaryAsync(scope, cultureName, onSuccess);
+        } else {
             onSuccess(dictionary);
         }
     }
 
+    /**
+     *@deprecated Use getPluralizationLocalizationDictionaryAsync
+     */
     private getPluralizationLocalizationDictionary(scope: string, cultureName: string):
         LocalizationPluralizationDictionary {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
@@ -205,8 +228,8 @@
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mPluralizedDictionary[dictionaryKey];
 
-        if (typeof dictionary === "undefined") {
-            this.downloadPluralizedDictionary(scope, cultureName, onSuccess);
+        if (dictionary === undefined) {
+            this.downloadPluralizedDictionaryAsync(scope, cultureName, onSuccess);
         } else {
             onSuccess(dictionary);
         }
@@ -216,72 +239,185 @@
         return scope.concat("|", cultureName);
     }
 
+    /**
+     *@deprecated Use downloadDictionaryAsync
+     */
     private downloadDictionary(
-        scope: string, cultureName: string, onSuccess?: (dictionary: LocalizationDictionary) => void
+        scope: string, cultureName: string
     ): void {
-        let xmlHttpRequest = new XMLHttpRequest();
+        const dictionaryKey = this.dictionaryKey(scope, cultureName);
+
+        if (this.mDictionaryQueue[scope] === undefined) {
+            this.mDictionaryQueue[scope] = [];
+        }
+
+        const xmlHttpRequest = new XMLHttpRequest();
 
         xmlHttpRequest.onreadystatechange = () => {
-            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
-                if (xmlHttpRequest.status === 200) {
+            if (
+                xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                && xmlHttpRequest.status === 200
+            ) {
+                let response = xmlHttpRequest.responseText;
+
+                if (this.mDictionary[dictionaryKey] === undefined) {
+                    this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
+                }
+
+                this.processDictionaryQueue(scope, dictionaryKey);
+            }
+        };
+
+        xmlHttpRequest.open(
+            "GET",
+            `${this.getBaseUrl()}/Localization/Dictionary?scope=${scope}`,
+            false
+        );
+        xmlHttpRequest.send();
+    }
+
+    private downloadDictionaryAsync(
+        scope: string, cultureName: string, onSuccess: (dictionary: LocalizationDictionary) => void
+    ): void {
+        const dictionaryKey = this.dictionaryKey(scope, cultureName);
+
+        if (this.mDictionaryQueue[scope] === undefined) {
+            this.mDictionaryQueue[scope] = [];
+
+            const xmlHttpRequest = new XMLHttpRequest();
+
+            xmlHttpRequest.onreadystatechange = () => {
+                if (
+                    xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                    && xmlHttpRequest.status === 200
+                ) {
                     let response = xmlHttpRequest.responseText;
-                    let dictionaryKey = this.dictionaryKey(scope, cultureName);
 
                     if (this.mDictionary[dictionaryKey] === undefined) {
                         this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
                     }
 
-                    if (onSuccess !== undefined) {
-                        onSuccess(this.mDictionary[dictionaryKey]);
-                    }
+                    this.processDictionaryQueue(scope, dictionaryKey);
                 }
+            };
+
+            xmlHttpRequest.open(
+                "GET",
+                `${this.getBaseUrl()}/Localization/Dictionary?scope=${scope}`,
+                true
+            );
+            xmlHttpRequest.send();
+        }
+
+        this.mDictionaryQueue[scope].push(onSuccess);
+
+        this.processDictionaryQueue(scope, dictionaryKey);
+    }
+
+    private processDictionaryQueue(scope: string, dictionaryKey: string): void {
+        if (this.mDictionary[dictionaryKey] !== undefined) {
+            let onSuccessQueue = this.mDictionaryQueue[scope].shift();
+            while (onSuccessQueue !== undefined) {
+                onSuccessQueue(this.mDictionary[dictionaryKey]);
+
+                onSuccessQueue = this.mDictionaryQueue[scope].shift();
+            }
+        }
+    }
+
+    /**
+     * @deprecated Use downloadPluralizedDictionaryAsync
+     */
+    private downloadPluralizedDictionary(
+        scope: string, cultureName: string
+    ): void {
+        const dictionaryKey = this.dictionaryKey(scope, cultureName);
+
+        if (this.mPluralizedDictionaryQueue[scope] === undefined) {
+            this.mPluralizedDictionaryQueue[scope] = [];
+        }
+
+        const xmlHttpRequest = new XMLHttpRequest();
+
+        xmlHttpRequest.onreadystatechange = () => {
+            if (
+                xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                && xmlHttpRequest.status === 200
+            ) {
+                let response = xmlHttpRequest.responseText;
+
+                if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
+                    this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                }
+
+                this.processPluralizedDictionaryQueue(scope, dictionaryKey);
             }
         };
 
-        let baseUrl = this.mSiteUrl;
-        if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
-            baseUrl = baseUrl.substring(0, baseUrl.length - 1);
-        }
         xmlHttpRequest.open(
             "GET",
-            `${baseUrl}/Localization/Dictionary?scope=${scope}`,
-            onSuccess !== undefined
+            `${this.getBaseUrl()}/Localization/PluralizedDictionary?scope=${scope}`,
+            false
         );
         xmlHttpRequest.send();
     }
 
-    private downloadPluralizedDictionary(
-        scope: string, cultureName: string, onSuccess?: (dictionary: LocalizationPluralizationDictionary) => void
+    private downloadPluralizedDictionaryAsync(
+        scope: string, cultureName: string, onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
     ): void {
-        let xmlHttpRequest = new XMLHttpRequest();
+        const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
-        xmlHttpRequest.onreadystatechange = () => {
-            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
-                if (xmlHttpRequest.status === 200) {
+        if (this.mPluralizedDictionaryQueue[scope] === undefined) {
+            this.mPluralizedDictionaryQueue[scope] = [];
+
+            const xmlHttpRequest = new XMLHttpRequest();
+
+            xmlHttpRequest.onreadystatechange = () => {
+                if (
+                    xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                    && xmlHttpRequest.status === 200
+                ) {
                     let response = xmlHttpRequest.responseText;
-                    let dictionaryKey = this.dictionaryKey(scope, cultureName);
 
                     if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
                         this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
                     }
 
-                    if (onSuccess !== undefined) {
-                        onSuccess(this.mPluralizedDictionary[dictionaryKey]);
-                    }
+                    this.processPluralizedDictionaryQueue(scope, dictionaryKey);
                 }
-            }
-        };
+            };
 
+            xmlHttpRequest.open(
+                "GET",
+                `${this.getBaseUrl()}/Localization/PluralizedDictionary?scope=${scope}`,
+                true
+            );
+            xmlHttpRequest.send();
+        }
+
+        this.mPluralizedDictionaryQueue[scope].push(onSuccess);
+
+        this.processPluralizedDictionaryQueue(scope, dictionaryKey);
+    }
+
+    private processPluralizedDictionaryQueue(scope: string, dictionaryKey: string): void {
+        if (this.mPluralizedDictionary[dictionaryKey] !== undefined) {
+            let onSuccessQueue = this.mPluralizedDictionaryQueue[scope].shift();
+            while (onSuccessQueue !== undefined) {
+                onSuccessQueue(this.mPluralizedDictionary[dictionaryKey]);
+
+                onSuccessQueue = this.mPluralizedDictionaryQueue[scope].shift();
+            }
+        }
+    }
+
+    private getBaseUrl(): string {
         let baseUrl = this.mSiteUrl;
         if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
             baseUrl = baseUrl.substring(0, baseUrl.length - 1);
         }
-        xmlHttpRequest.open(
-            "GET",
-            `${baseUrl}/Localization/PluralizedDictionary?scope=${scope}`,
-            onSuccess !== undefined
-        );
-        xmlHttpRequest.send();
+
+        return baseUrl;
     }
 
     public getCurrentCulture(): string {

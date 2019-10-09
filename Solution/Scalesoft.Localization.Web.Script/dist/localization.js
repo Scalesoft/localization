@@ -3,8 +3,13 @@ var Localization = /** @class */ (function () {
         this.mGlobalScope = "global";
         this.mCultureCookieName = "Localization.Culture";
         this.mDictionary = {};
+        this.mDictionaryQueue = {};
         this.mPluralizedDictionary = {};
+        this.mPluralizedDictionaryQueue = {};
     }
+    /**
+     * @deprecated Use translateAsync
+     */
     Localization.prototype.translate = function (text, scope, cultureName) {
         var dictionary = this.getDictionary(scope, cultureName);
         var result = dictionary.translate(text);
@@ -23,6 +28,9 @@ var Localization = /** @class */ (function () {
             onSuccess(result);
         }, scope, cultureName);
     };
+    /**
+     *@deprecated Use translateFormatAsync
+     */
     Localization.prototype.translateFormat = function (text, parameters, scope, cultureName) {
         var dictionary = this.getDictionary(scope, cultureName);
         var result = dictionary.translateFormat(text, parameters);
@@ -41,6 +49,9 @@ var Localization = /** @class */ (function () {
             onSuccess(result);
         }, scope, cultureName);
     };
+    /**
+     *@deprecated Use translatePluralizationAsync
+     */
     Localization.prototype.translatePluralization = function (text, number, scope, cultureName) {
         var dictionary = this.getPluralizationDictionary(scope, cultureName);
         try {
@@ -80,6 +91,9 @@ var Localization = /** @class */ (function () {
     Localization.prototype.configureSiteUrl = function (siteUrl) {
         this.mSiteUrl = siteUrl;
     };
+    /**
+     *@deprecated Use getDictionaryAsync
+     */
     Localization.prototype.getDictionary = function (scope, cultureName) {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
@@ -90,6 +104,9 @@ var Localization = /** @class */ (function () {
         cultureName = this.checkCultureName(cultureName);
         return this.getLocalizationDictionaryAsync(scope, cultureName, onSuccess);
     };
+    /**
+     *@deprecated Use getPluralizationDictionaryAsync
+     */
     Localization.prototype.getPluralizationDictionary = function (scope, cultureName) {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
@@ -112,6 +129,9 @@ var Localization = /** @class */ (function () {
         }
         return this.mGlobalScope;
     };
+    /**
+     *@deprecated Use getLocalizationDictionaryAsync
+     */
     Localization.prototype.getLocalizationDictionary = function (scope, cultureName) {
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         var dictionary = this.mDictionary[dictionaryKey];
@@ -124,13 +144,16 @@ var Localization = /** @class */ (function () {
     Localization.prototype.getLocalizationDictionaryAsync = function (scope, cultureName, onSuccess) {
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         var dictionary = this.mDictionary[dictionaryKey];
-        if (typeof dictionary === "undefined") {
-            this.downloadDictionary(scope, cultureName, onSuccess);
+        if (dictionary === undefined) {
+            this.downloadDictionaryAsync(scope, cultureName, onSuccess);
         }
         else {
             onSuccess(dictionary);
         }
     };
+    /**
+     *@deprecated Use getPluralizationLocalizationDictionaryAsync
+     */
     Localization.prototype.getPluralizationLocalizationDictionary = function (scope, cultureName) {
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         var dictionary = this.mPluralizedDictionary[dictionaryKey];
@@ -143,8 +166,8 @@ var Localization = /** @class */ (function () {
     Localization.prototype.getPluralizationLocalizationDictionaryAsync = function (scope, cultureName, onSuccess) {
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         var dictionary = this.mPluralizedDictionary[dictionaryKey];
-        if (typeof dictionary === "undefined") {
-            this.downloadPluralizedDictionary(scope, cultureName, onSuccess);
+        if (dictionary === undefined) {
+            this.downloadPluralizedDictionaryAsync(scope, cultureName, onSuccess);
         }
         else {
             onSuccess(dictionary);
@@ -153,53 +176,120 @@ var Localization = /** @class */ (function () {
     Localization.prototype.dictionaryKey = function (scope, cultureName) {
         return scope.concat("|", cultureName);
     };
-    Localization.prototype.downloadDictionary = function (scope, cultureName, onSuccess) {
+    /**
+     *@deprecated Use downloadDictionaryAsync
+     */
+    Localization.prototype.downloadDictionary = function (scope, cultureName) {
         var _this = this;
+        var dictionaryKey = this.dictionaryKey(scope, cultureName);
+        if (this.mDictionaryQueue[scope] === undefined) {
+            this.mDictionaryQueue[scope] = [];
+        }
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
-                if (xmlHttpRequest.status === 200) {
-                    var response = xmlHttpRequest.responseText;
-                    var dictionaryKey = _this.dictionaryKey(scope, cultureName);
+            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                && xmlHttpRequest.status === 200) {
+                var response = xmlHttpRequest.responseText;
+                if (_this.mDictionary[dictionaryKey] === undefined) {
+                    _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
+                }
+                _this.processDictionaryQueue(scope, dictionaryKey);
+            }
+        };
+        xmlHttpRequest.open("GET", this.getBaseUrl() + "/Localization/Dictionary?scope=" + scope, false);
+        xmlHttpRequest.send();
+    };
+    Localization.prototype.downloadDictionaryAsync = function (scope, cultureName, onSuccess) {
+        var _this = this;
+        var dictionaryKey = this.dictionaryKey(scope, cultureName);
+        if (this.mDictionaryQueue[scope] === undefined) {
+            this.mDictionaryQueue[scope] = [];
+            var xmlHttpRequest_1 = new XMLHttpRequest();
+            xmlHttpRequest_1.onreadystatechange = function () {
+                if (xmlHttpRequest_1.readyState === XMLHttpRequest.DONE
+                    && xmlHttpRequest_1.status === 200) {
+                    var response = xmlHttpRequest_1.responseText;
                     if (_this.mDictionary[dictionaryKey] === undefined) {
                         _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
                     }
-                    if (onSuccess !== undefined) {
-                        onSuccess(_this.mDictionary[dictionaryKey]);
-                    }
+                    _this.processDictionaryQueue(scope, dictionaryKey);
                 }
-            }
-        };
-        var baseUrl = this.mSiteUrl;
-        if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
-            baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+            };
+            xmlHttpRequest_1.open("GET", this.getBaseUrl() + "/Localization/Dictionary?scope=" + scope, true);
+            xmlHttpRequest_1.send();
         }
-        xmlHttpRequest.open("GET", baseUrl + "/Localization/Dictionary?scope=" + scope, onSuccess !== undefined);
-        xmlHttpRequest.send();
+        this.mDictionaryQueue[scope].push(onSuccess);
+        this.processDictionaryQueue(scope, dictionaryKey);
     };
-    Localization.prototype.downloadPluralizedDictionary = function (scope, cultureName, onSuccess) {
+    Localization.prototype.processDictionaryQueue = function (scope, dictionaryKey) {
+        if (this.mDictionary[dictionaryKey] !== undefined) {
+            var onSuccessQueue = this.mDictionaryQueue[scope].shift();
+            while (onSuccessQueue !== undefined) {
+                onSuccessQueue(this.mDictionary[dictionaryKey]);
+                onSuccessQueue = this.mDictionaryQueue[scope].shift();
+            }
+        }
+    };
+    /**
+     * @deprecated Use downloadPluralizedDictionaryAsync
+     */
+    Localization.prototype.downloadPluralizedDictionary = function (scope, cultureName) {
         var _this = this;
+        var dictionaryKey = this.dictionaryKey(scope, cultureName);
+        if (this.mPluralizedDictionaryQueue[scope] === undefined) {
+            this.mPluralizedDictionaryQueue[scope] = [];
+        }
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE) {
-                if (xmlHttpRequest.status === 200) {
-                    var response = xmlHttpRequest.responseText;
-                    var dictionaryKey = _this.dictionaryKey(scope, cultureName);
+            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                && xmlHttpRequest.status === 200) {
+                var response = xmlHttpRequest.responseText;
+                if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
+                    _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                }
+                _this.processPluralizedDictionaryQueue(scope, dictionaryKey);
+            }
+        };
+        xmlHttpRequest.open("GET", this.getBaseUrl() + "/Localization/PluralizedDictionary?scope=" + scope, false);
+        xmlHttpRequest.send();
+    };
+    Localization.prototype.downloadPluralizedDictionaryAsync = function (scope, cultureName, onSuccess) {
+        var _this = this;
+        var dictionaryKey = this.dictionaryKey(scope, cultureName);
+        if (this.mPluralizedDictionaryQueue[scope] === undefined) {
+            this.mPluralizedDictionaryQueue[scope] = [];
+            var xmlHttpRequest_2 = new XMLHttpRequest();
+            xmlHttpRequest_2.onreadystatechange = function () {
+                if (xmlHttpRequest_2.readyState === XMLHttpRequest.DONE
+                    && xmlHttpRequest_2.status === 200) {
+                    var response = xmlHttpRequest_2.responseText;
                     if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
                         _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
                     }
-                    if (onSuccess !== undefined) {
-                        onSuccess(_this.mPluralizedDictionary[dictionaryKey]);
-                    }
+                    _this.processPluralizedDictionaryQueue(scope, dictionaryKey);
                 }
+            };
+            xmlHttpRequest_2.open("GET", this.getBaseUrl() + "/Localization/PluralizedDictionary?scope=" + scope, true);
+            xmlHttpRequest_2.send();
+        }
+        this.mPluralizedDictionaryQueue[scope].push(onSuccess);
+        this.processPluralizedDictionaryQueue(scope, dictionaryKey);
+    };
+    Localization.prototype.processPluralizedDictionaryQueue = function (scope, dictionaryKey) {
+        if (this.mPluralizedDictionary[dictionaryKey] !== undefined) {
+            var onSuccessQueue = this.mPluralizedDictionaryQueue[scope].shift();
+            while (onSuccessQueue !== undefined) {
+                onSuccessQueue(this.mPluralizedDictionary[dictionaryKey]);
+                onSuccessQueue = this.mPluralizedDictionaryQueue[scope].shift();
             }
-        };
+        }
+    };
+    Localization.prototype.getBaseUrl = function () {
         var baseUrl = this.mSiteUrl;
         if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
             baseUrl = baseUrl.substring(0, baseUrl.length - 1);
         }
-        xmlHttpRequest.open("GET", baseUrl + "/Localization/PluralizedDictionary?scope=" + scope, onSuccess !== undefined);
-        xmlHttpRequest.send();
+        return baseUrl;
     };
     Localization.prototype.getCurrentCulture = function () {
         if (typeof this.mCurrentCulture === "undefined") {

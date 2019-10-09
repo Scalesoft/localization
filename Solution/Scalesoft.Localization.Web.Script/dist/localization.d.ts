@@ -3,30 +3,64 @@ declare class Localization {
     private mCultureCookieName;
     private mCurrentCulture;
     private readonly mDictionary;
+    private readonly mDictionaryQueue;
     private mPluralizedDictionary;
+    private readonly mPluralizedDictionaryQueue;
     private mSiteUrl;
+    /**
+     * @deprecated Use translateAsync
+     */
     translate(text: string, scope?: string, cultureName?: string): ILocalizedString;
     translateAsync(onSuccess: (translation: ILocalizedString) => void, text: string, scope?: string, cultureName?: string): void;
+    /**
+     *@deprecated Use translateFormatAsync
+     */
     translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString;
     translateFormatAsync(onSuccess: (translation: ILocalizedString) => void, text: string, parameters: string[], scope?: string, cultureName?: string): void;
+    /**
+     *@deprecated Use translatePluralizationAsync
+     */
     translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString;
     translatePluralizationAsync(onSuccess: (translation: ILocalizedString) => void, text: string, number: number, scope?: string, cultureName?: string): void;
     private getFallbackTranslation;
     private handleError;
     configureSiteUrl(siteUrl: string): void;
+    /**
+     *@deprecated Use getDictionaryAsync
+     */
     private getDictionary;
     private getDictionaryAsync;
+    /**
+     *@deprecated Use getPluralizationDictionaryAsync
+     */
     private getPluralizationDictionary;
     private getPluralizationDictionaryAsync;
     private checkCultureName;
     private checkScope;
+    /**
+     *@deprecated Use getLocalizationDictionaryAsync
+     */
     private getLocalizationDictionary;
     private getLocalizationDictionaryAsync;
+    /**
+     *@deprecated Use getPluralizationLocalizationDictionaryAsync
+     */
     private getPluralizationLocalizationDictionary;
     private getPluralizationLocalizationDictionaryAsync;
     private dictionaryKey;
+    /**
+     *@deprecated Use downloadDictionaryAsync
+     */
     private downloadDictionary;
+    private downloadDictionaryAsync;
+    private processDictionaryQueue;
+    /**
+     * @deprecated Use downloadPluralizedDictionaryAsync
+     */
     private downloadPluralizedDictionary;
+    private downloadPluralizedDictionaryAsync;
+    private processPluralizedDictionaryQueue;
+    private getBaseUrl;
     getCurrentCulture(): string;
     private setCurrentCulture;
     private getCurrentCultureCookie;
