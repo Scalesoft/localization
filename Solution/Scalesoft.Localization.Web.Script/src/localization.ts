@@ -181,9 +181,9 @@
 
         if (typeof dictionary === "undefined") {
             this.downloadDictionary(scope, cultureName, onSuccess);
+        }else {
+            onSuccess(dictionary);
         }
-
-        onSuccess(dictionary);
     }
 
     private getPluralizationLocalizationDictionary(scope: string, cultureName: string):
@@ -204,11 +204,12 @@
     ) {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mPluralizedDictionary[dictionaryKey];
+
         if (typeof dictionary === "undefined") {
             this.downloadPluralizedDictionary(scope, cultureName, onSuccess);
+        } else {
+            onSuccess(dictionary);
         }
-
-        onSuccess(dictionary);
     }
 
     private dictionaryKey(scope: string, cultureName: string): string {

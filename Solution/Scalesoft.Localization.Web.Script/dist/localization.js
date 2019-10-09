@@ -127,7 +127,9 @@ var Localization = /** @class */ (function () {
         if (typeof dictionary === "undefined") {
             this.downloadDictionary(scope, cultureName, onSuccess);
         }
-        onSuccess(dictionary);
+        else {
+            onSuccess(dictionary);
+        }
     };
     Localization.prototype.getPluralizationLocalizationDictionary = function (scope, cultureName) {
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
@@ -144,7 +146,9 @@ var Localization = /** @class */ (function () {
         if (typeof dictionary === "undefined") {
             this.downloadPluralizedDictionary(scope, cultureName, onSuccess);
         }
-        onSuccess(dictionary);
+        else {
+            onSuccess(dictionary);
+        }
     };
     Localization.prototype.dictionaryKey = function (scope, cultureName) {
         return scope.concat("|", cultureName);
