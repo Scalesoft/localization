@@ -5,6 +5,7 @@ namespace LocalizationSample {
     });
 
     class LocalizationTest {
+        private readonly useAsync: boolean = true;
         private readonly localization: Localization;
 
         constructor() {
@@ -18,19 +19,41 @@ namespace LocalizationSample {
         }
 
         private testPluralization() {
-            const translatedString = this.localization.translate("Pluralization").value;
-            $(".output").append(`<h2>${translatedString}</h2>`);
-            for (let i = -11; i < 12; i++) {
-                this.addPluralizationTestLine(i, "years");
-            }
-            for (let i = -11; i < 12; i++) {
-                this.addPluralizationTestLine(i, "cats", "non-global-pluralization");
+            if (this.useAsync) {
+                this.localization.translateAsync(
+                    translation => {
+                        $(".output").append(`<h2>${translation.value}</h2>`);
+                        for (let i = -11; i < 12; i++) {
+                            this.addPluralizationTestLine(i, "years");
+                        }
+                        for (let i = -11; i < 12; i++) {
+                            this.addPluralizationTestLine(i, "cats", "non-global-pluralization");
+                        }
+                    }, "Pluralization",
+                );
+            } else {
+                const translatedString = this.localization.translate("Pluralization").value;
+                $(".output").append(`<h2>${translatedString}</h2>`);
+                for (let i = -11; i < 12; i++) {
+                    this.addPluralizationTestLine(i, "years");
+                }
+                for (let i = -11; i < 12; i++) {
+                    this.addPluralizationTestLine(i, "cats", "non-global-pluralization");
+                }
             }
         }
 
         private addPluralizationTestLine(value: number, key: string, scope: string = null) {
-            const localizedString = this.localization.translatePluralization(key, value, scope);
-            $(".output").append(`<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${localizedString.value}</strong></div>`);
+            if (this.useAsync) {
+                this.localization.translatePluralizationAsync(
+                    translation => {
+                        $(".output").append(`<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${translation.value}</strong></div>`);
+                    }, key, value, scope
+                );
+            } else {
+                const localizedString = this.localization.translatePluralization(key, value, scope);
+                $(".output").append(`<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${localizedString.value}</strong></div>`);
+            }
         }
     }
 }
