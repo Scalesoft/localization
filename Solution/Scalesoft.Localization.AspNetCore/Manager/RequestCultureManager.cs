@@ -45,7 +45,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             return new CultureInfo(cultureValue);
         }
 
-        public void SetDefaultCookie()
+        public void SetOrFixDefaultCookie()
         {
             var response = m_httpContextAccessor.HttpContext.Response;
             var request = m_httpContextAccessor.HttpContext.Request;

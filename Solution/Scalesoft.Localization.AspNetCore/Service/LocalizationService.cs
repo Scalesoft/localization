@@ -36,7 +36,7 @@ namespace Scalesoft.Localization.AspNetCore.Service
 
         public void SetDefaultCookie()
         {
-            m_requestCultureManager.SetDefaultCookie();
+            m_requestCultureManager.SetOrFixDefaultCookie();
         }
 
         public LocalizedString Translate(string text, string scope, LocTranslationSource translationSource)
