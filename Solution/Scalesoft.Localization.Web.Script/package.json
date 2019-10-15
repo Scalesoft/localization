@@ -23,6 +23,7 @@
     "gulp-sourcemaps": "^2.6",
     "gulp-typescript": "^5.0",
     "gulp-uglify": "^3.0",
+    "es6-promise": "^4.2",
     "typescript": "^3.0"
   }
 }

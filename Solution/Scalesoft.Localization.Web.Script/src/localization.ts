@@ -1,4 +1,11 @@
-﻿class Localization {
+﻿const LocalizationStatusSuccess = (text: string, scope: string): ILocalizationStatus => ({
+    success: true,
+    message: "Success",
+    text,
+    scope,
+});
+
+class Localization {
     private mGlobalScope = "global";
 
     private mCultureCookieName: string = "Localization.Culture";
@@ -13,6 +20,41 @@
     } = {};
 
     private mSiteUrl: string;
+
+    private readonly mLocalizationConfiguration: ILocalizationConfiguration;
+
+    private mErrorHandlerCalled = false;
+
+    public constructor(localizationConfiguration?: ILocalizationConfiguration) {
+        this.mLocalizationConfiguration = localizationConfiguration === undefined || localizationConfiguration === null
+            ? {
+                errorResolution: LocalizationErrorResolution.Key,
+            } : localizationConfiguration;
+    }
+
+    private callErrorHandler(errorStatus: ILocalizationError) {
+        if (!this.mErrorHandlerCalled) {
+            this.mErrorHandlerCalled = true;
+
+            if (this.mLocalizationConfiguration.onError !== undefined) {
+                this.mLocalizationConfiguration.onError(errorStatus);
+            }
+        }
+    }
+
+    private getTranslationOnError(text: string, scope: string): ILocalizedString | null {
+        switch (this.mLocalizationConfiguration.errorResolution) {
+            case LocalizationErrorResolution.Null:
+                return null;
+
+            case LocalizationErrorResolution.Key:
+                return {
+                    name: text,
+                    resourceNotFound: true,
+                    value: text,
+                };
+        }
+    }
 
     /**
      * @deprecated Use translateAsync
@@ -33,7 +75,7 @@
     }
 
     public translateAsync(
-        onSuccess: (translation: ILocalizedString) => void,
+        onComplete: (translation: ILocalizedString, status: ILocalizationStatus) => void,
         text: string,
         scope?: string,
         cultureName?: string
@@ -44,10 +86,22 @@
                     return this.getFallbackTranslation(text, scope, cultureName);
                 }
 
-                onSuccess(result);
-            },
-            scope,
-            cultureName);
+                onComplete(result, LocalizationStatusSuccess(text, scope));
+            }, status => {
+                const errorStatus = {
+                    success: false,
+                    message: "Unable to load required dictionary",
+                    errorType: 'loadDictionary',
+                    text,
+                    scope: status.scope,
+                    context: status.context,
+                };
+
+                this.callErrorHandler(errorStatus);
+
+                onComplete(this.getTranslationOnError(text, scope), errorStatus);
+            }, scope, cultureName,
+        );
     }
 
     /**
@@ -70,22 +124,33 @@
     }
 
     public translateFormatAsync(
-        onSuccess: (translation: ILocalizedString) => void,
+        onComplete: (translation: ILocalizedString, status: ILocalizationStatus) => void,
         text: string,
         parameters: string[],
         scope?: string,
         cultureName?: string,
     ) {
         this.getDictionaryAsync((dictionary) => {
-                const result = dictionary.translateFormat(text, parameters);
-                if (result == null) {
-                    return this.getFallbackTranslation(text, scope, cultureName);
-                }
+            const result = dictionary.translateFormat(text, parameters);
+            if (result == null) {
+                return this.getFallbackTranslation(text, scope, cultureName);
+            }
 
-                onSuccess(result);
-            },
-            scope,
-            cultureName);
+            onComplete(result, LocalizationStatusSuccess(text, scope));
+        }, status => {
+            const errorStatus = {
+                success: false,
+                message: "Unable to load required dictionary",
+                errorType: 'loadDictionary',
+                text,
+                scope: status.scope,
+                context: status.context,
+            };
+
+            this.callErrorHandler(errorStatus);
+
+            onComplete(this.getTranslationOnError(text, scope), errorStatus);
+        }, scope, cultureName);
     }
 
     /**
@@ -111,11 +176,11 @@
     }
 
     public translatePluralizationAsync(
-        onSuccess: (translation: ILocalizedString) => void,
+        onComplete: (translation: ILocalizedString, status: ILocalizationStatus) => void,
         text: string,
         number: number,
         scope?: string,
-        cultureName?: string
+        cultureName?: string,
     ) {
         this.getPluralizationDictionaryAsync(
             dictionary => {
@@ -125,13 +190,30 @@
                         return this.getFallbackTranslation(text, scope, cultureName);
                     }
 
-                    onSuccess(result);
+                    onComplete(result, LocalizationStatusSuccess(text, scope));
                 } catch (exception) {
-                    onSuccess(this.handleError(exception, text))
+                    onComplete(this.handleError(exception, text), {
+                        success: false,
+                        message: exception.message,
+                        errorType: 'exception',
+                        text,
+                        scope,
+                    })
                 }
-            },
-            scope,
-            cultureName
+            }, status => {
+                const errorStatus = {
+                    success: false,
+                    message: "Unable to load required pluralization dictionary",
+                    errorType: 'loadDictionary',
+                    text,
+                    scope: status.scope,
+                    context: status.context,
+                };
+
+                this.callErrorHandler(errorStatus);
+
+                onComplete(this.getTranslationOnError(text, scope), errorStatus);
+            }, scope, cultureName,
         );
     }
 
@@ -140,13 +222,13 @@
             `Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`,
         );
 
-        return { name: text, value: "X{undefined}", resourceNotFound: true };
+        return {name: text, value: "X{undefined}", resourceNotFound: true};
     }
 
     private handleError(exception: Error, text: string) {
         console.error(exception.message);
 
-        return { name: text, value: "X{error}", resourceNotFound: true };
+        return {name: text, value: "X{error}", resourceNotFound: true};
     }
 
     public configureSiteUrl(siteUrl: string) {
@@ -163,13 +245,16 @@
         return this.getLocalizationDictionary(scope, cultureName);
     }
 
-    private getDictionaryAsync(onSuccess: (dictionary: LocalizationDictionary) => void,
+    private getDictionaryAsync(
+        onSuccess: (dictionary: LocalizationDictionary) => void,
+        onFailed: (scope: IDictionaryError) => void,
         scope?: string,
-        cultureName?: string) {
+        cultureName?: string,
+    ) {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
 
-        return this.getLocalizationDictionaryAsync(scope, cultureName, onSuccess);
+        return this.getLocalizationDictionaryAsync(scope, cultureName, onSuccess, onFailed);
     }
 
     /**
@@ -184,13 +269,13 @@
 
     private getPluralizationDictionaryAsync(
         onSuccess: (dictionary: LocalizationPluralizationDictionary) => void,
-        scope?: string,
-        cultureName?: string
+        onFailed: (scope: IDictionaryError) => void,
+        scope?: string, cultureName?: string,
     ) {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
 
-        return this.getPluralizationLocalizationDictionaryAsync(scope, cultureName, onSuccess);
+        return this.getPluralizationLocalizationDictionaryAsync(scope, cultureName, onSuccess, onFailed);
     }
 
     private checkCultureName(cultureName?: string): string {
@@ -227,13 +312,14 @@
     private getLocalizationDictionaryAsync(
         scope: string,
         cultureName: string,
-        onSuccess: (dictionary: LocalizationDictionary) => void
+        onSuccess: (dictionary: LocalizationDictionary) => void,
+        onFailed: (scope: IDictionaryError) => void,
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
         const dictionary = this.mDictionary[dictionaryKey];
 
         if (dictionary === undefined) {
-            this.downloadDictionaryAsync(scope, cultureName, onSuccess);
+            this.downloadDictionaryAsync(scope, cultureName, onSuccess, onFailed);
         } else {
             onSuccess(dictionary);
         }
@@ -258,13 +344,14 @@
     private getPluralizationLocalizationDictionaryAsync(
         scope: string,
         cultureName: string,
-        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
+        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void,
+        onFailed: (scope: IDictionaryError) => void,
     ) {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mPluralizedDictionary[dictionaryKey];
 
         if (dictionary === undefined) {
-            this.downloadPluralizedDictionaryAsync(scope, cultureName, onSuccess);
+            this.downloadPluralizedDictionaryAsync(scope, cultureName, onSuccess, onFailed);
         } else {
             onSuccess(dictionary);
         }
@@ -279,7 +366,7 @@
      */
     private downloadDictionary(
         scope: string,
-        cultureName: string
+        cultureName: string,
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -312,9 +399,9 @@
     }
 
     private downloadDictionaryAsync(
-        scope: string,
-        cultureName: string,
-        onSuccess: (dictionary: LocalizationDictionary) => void
+        scope: string, cultureName: string,
+        onSuccess: (dictionary: LocalizationDictionary) => void,
+        onFailed: (scope: IDictionaryError) => void,
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -324,9 +411,11 @@
             const xmlHttpRequest = new XMLHttpRequest();
 
             xmlHttpRequest.onreadystatechange = () => {
-                if (
-                    xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
-                ) {
+                if (xmlHttpRequest.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+
+                if (xmlHttpRequest.status === 200) {
                     let response = xmlHttpRequest.responseText;
 
                     if (this.mDictionary[dictionaryKey] === undefined) {
@@ -334,6 +423,13 @@
                     }
 
                     this.processDictionaryQueue(scope, dictionaryKey);
+                } else {
+                    onFailed(
+                        {
+                            scope,
+                            context: xmlHttpRequest,
+                        }
+                    );
                 }
             };
 
@@ -366,7 +462,7 @@
      */
     private downloadPluralizedDictionary(
         scope: string,
-        cultureName: string
+        cultureName: string,
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -378,7 +474,8 @@
 
         xmlHttpRequest.onreadystatechange = () => {
             if (
-                xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
+                xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                && xmlHttpRequest.status === 200
             ) {
                 let response = xmlHttpRequest.responseText;
 
@@ -401,7 +498,8 @@
     private downloadPluralizedDictionaryAsync(
         scope: string,
         cultureName: string,
-        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
+        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void,
+        onFailed: (scope: IDictionaryError) => void,
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -411,9 +509,11 @@
             const xmlHttpRequest = new XMLHttpRequest();
 
             xmlHttpRequest.onreadystatechange = () => {
-                if (
-                    xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
-                ) {
+                if (xmlHttpRequest.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+
+                if (xmlHttpRequest.status === 200) {
                     let response = xmlHttpRequest.responseText;
 
                     if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
@@ -421,6 +521,13 @@
                     }
 
                     this.processPluralizedDictionaryQueue(scope, dictionaryKey);
+                } else {
+                    onFailed(
+                        {
+                            scope,
+                            context: xmlHttpRequest,
+                        }
+                    );
                 }
             };
 
@@ -446,6 +553,48 @@
                 onSuccessQueue = this.mPluralizedDictionaryQueue[scope].shift();
             }
         }
+    }
+
+    private getDownloadPromise(
+        scope: string, cultureName: string,
+    ): Promise<LocalizationPluralizationDictionary> {
+        const dictionaryKey = this.dictionaryKey(scope, cultureName);
+
+        return new Promise((resolve, reject) => {
+            const xmlHttpRequest = new XMLHttpRequest();
+
+            xmlHttpRequest.open(
+                "GET",
+                `${this.getBaseUrl()}/Localization/PluralizedDictionary?scope=${scope}`,
+                true,
+            );
+            xmlHttpRequest.send();
+
+            xmlHttpRequest.onreadystatechange = () => {
+                if (xmlHttpRequest.readyState !== XMLHttpRequest.DONE) {
+                    return;
+                }
+
+                if (
+                    xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300
+                ) {
+                    let response = xmlHttpRequest.responseText;
+
+                    if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
+                        this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                    }
+
+                    resolve(this.mPluralizedDictionary[dictionaryKey]);
+                } else {
+                    reject({
+                        scope,
+                        status: xmlHttpRequest.status,
+                        statusText: xmlHttpRequest.statusText,
+                        context: xmlHttpRequest,
+                    });
+                }
+            };
+        });
     }
 
     private getBaseUrl(): string {
@@ -517,7 +666,7 @@ class LocalizationDictionary {
 
         const formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
 
-        return { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
+        return {name: text, value: formatedText, resourceNotFound: translation.resourceNotFound};
     }
 
     private formatString(str: ILocalizedString, obj: string[]): string {
@@ -551,15 +700,50 @@ class LocalizationPluralizationDictionary {
     }
 }
 
-interface ILocalizedString {
-    name: string;
-    resourceNotFound: boolean;
-    value: string;
+enum LocalizationErrorResolution {
+    Null = 0,
+    Key = 1,
+}
+
+interface ILocalizationConfiguration {
+    errorResolution: LocalizationErrorResolution,
+    onError?: (localizationError: ILocalizationError) => void,
 }
 
 interface ILocalizationCookie {
     DefaultCulture: string;
     CurrentCulture: string | null;
+}
+
+
+interface ILocalizationError {
+    text: string;
+    scope: string;
+    message: string;
+    errorType?: string;
+    dictionary?: string;
+    context?: object;
+}
+
+interface ILocalizationStatus {
+    success: boolean;
+    text: string;
+    scope: string;
+    message: string;
+    errorType?: string;
+    dictionary?: string;
+    context?: object;
+}
+
+interface IDictionaryError {
+    scope: string;
+    context: object;
+}
+
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value: string;
 }
 
 interface IPluralizedString {
