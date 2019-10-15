@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore.IoC;
-using Scalesoft.Localization.AspNetCore.Sample.Filters;
+using Scalesoft.Localization.AspNetCore.Sample.Extensions;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Dictionary;
 using Scalesoft.Localization.Core.Manager;
@@ -40,7 +40,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
             services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
 
             // Add framework services.
-            services.AddMvc(RegisterFilters)
+            services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) => factory
@@ -70,6 +70,8 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             app.UseStaticFiles();
 
+            app.UseLocalizationCookieSetter();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -83,12 +85,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
             AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "cs-CZ.json");
             AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "en.json");
         }
-
-        private void RegisterFilters(MvcOptions options)
-        {
-            options.Filters.Add<SetLocalizationCookieFilter>();
-        }
-
+        
         private void AddLocalizationDictionary(
             IAutoDictionaryManager dictionaryManager,
             IDictionaryFactory dictionaryFactory,
