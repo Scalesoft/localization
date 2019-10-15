@@ -15,9 +15,7 @@ class Localization {
     private readonly mDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationDictionary) => void> } = {};
 
     private mPluralizedDictionary: { [key: string]: LocalizationPluralizationDictionary } = {};
-    private readonly mPluralizedDictionaryQueue: {
-        [key: string]: Array<(dictionary: LocalizationPluralizationDictionary) => void>
-    } = {};
+    private readonly mPluralizedDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationPluralizationDictionary) => void> } = {};
 
     private mSiteUrl: string;
 
@@ -75,18 +73,29 @@ class Localization {
     }
 
     public translateAsync(
-        onComplete: (translation: ILocalizedString, status: ILocalizationStatus) => void,
         text: string,
         scope?: string,
-        cultureName?: string
-    ) {
-        this.getDictionaryAsync((dictionary) => {
+        cultureName?: string,
+    ): Promise<ILocalizationResult> {
+        return new Promise((resolve, reject) => {
+            this.getDictionaryAsync((dictionary) => {
                 const result = dictionary.translate(text);
+
                 if (result == null) {
-                    return this.getFallbackTranslation(text, scope, cultureName);
+                    resolve(
+                        {
+                            value: this.getFallbackTranslation(text, scope, cultureName),
+                            status: LocalizationStatusSuccess(text, scope),
+                        }
+                    );
                 }
 
-                onComplete(result, LocalizationStatusSuccess(text, scope));
+                resolve(
+                    {
+                        value: result,
+                        status: LocalizationStatusSuccess(text, scope),
+                    }
+                );
             }, status => {
                 const errorStatus = {
                     success: false,
@@ -99,9 +108,14 @@ class Localization {
 
                 this.callErrorHandler(errorStatus);
 
-                onComplete(this.getTranslationOnError(text, scope), errorStatus);
-            }, scope, cultureName,
-        );
+                reject(
+                    {
+                        value: this.getTranslationOnError(text, scope),
+                        status: LocalizationStatusSuccess(text, scope),
+                    }
+                );
+            }, scope, cultureName);
+        });
     }
 
     /**
@@ -111,7 +125,7 @@ class Localization {
         text: string,
         parameters: string[],
         scope?: string,
-        cultureName?: string
+        cultureName?: string,
     ): ILocalizedString {
         const dictionary = this.getDictionary(scope, cultureName);
 
@@ -124,33 +138,50 @@ class Localization {
     }
 
     public translateFormatAsync(
-        onComplete: (translation: ILocalizedString, status: ILocalizationStatus) => void,
         text: string,
         parameters: string[],
         scope?: string,
         cultureName?: string,
-    ) {
-        this.getDictionaryAsync((dictionary) => {
-            const result = dictionary.translateFormat(text, parameters);
-            if (result == null) {
-                return this.getFallbackTranslation(text, scope, cultureName);
-            }
+    ): Promise<ILocalizationResult> {
+        return new Promise((resolve, reject) => {
+            this.getDictionaryAsync((dictionary) => {
+                const result = dictionary.translateFormat(text, parameters);
 
-            onComplete(result, LocalizationStatusSuccess(text, scope));
-        }, status => {
-            const errorStatus = {
-                success: false,
-                message: "Unable to load required dictionary",
-                errorType: 'loadDictionary',
-                text,
-                scope: status.scope,
-                context: status.context,
-            };
+                if (result == null) {
+                    resolve(
+                        {
+                            value: this.getFallbackTranslation(text, scope, cultureName),
+                            status: LocalizationStatusSuccess(text, scope),
+                        }
+                    );
+                }
 
-            this.callErrorHandler(errorStatus);
+                resolve(
+                    {
+                        value: result,
+                        status: LocalizationStatusSuccess(text, scope),
+                    }
+                );
+            }, status => {
+                const errorStatus = {
+                    success: false,
+                    message: "Unable to load required dictionary",
+                    errorType: 'loadDictionary',
+                    text,
+                    scope: status.scope,
+                    context: status.context,
+                };
 
-            onComplete(this.getTranslationOnError(text, scope), errorStatus);
-        }, scope, cultureName);
+                this.callErrorHandler(errorStatus);
+
+                reject(
+                    {
+                        value: this.getTranslationOnError(text, scope),
+                        status: LocalizationStatusSuccess(text, scope),
+                    }
+                );
+            }, scope, cultureName);
+        });
     }
 
     /**
@@ -160,7 +191,7 @@ class Localization {
         text: string,
         number: number,
         scope?: string,
-        cultureName?: string
+        cultureName?: string,
     ): ILocalizedString {
         const dictionary = this.getPluralizationDictionary(scope, cultureName);
         try {
@@ -176,29 +207,44 @@ class Localization {
     }
 
     public translatePluralizationAsync(
-        onComplete: (translation: ILocalizedString, status: ILocalizationStatus) => void,
         text: string,
         number: number,
         scope?: string,
         cultureName?: string,
-    ) {
-        this.getPluralizationDictionaryAsync(
-            dictionary => {
+    ): Promise<ILocalizationResult> {
+        return new Promise((resolve, reject) => {
+            this.getPluralizationDictionaryAsync((dictionary) => {
                 try {
                     const result = dictionary.translatePluralization(text, number);
+
                     if (result == null) {
-                        return this.getFallbackTranslation(text, scope, cultureName);
+                        resolve(
+                            {
+                                value: this.getFallbackTranslation(text, scope, cultureName),
+                                status: LocalizationStatusSuccess(text, scope),
+                            }
+                        );
                     }
 
-                    onComplete(result, LocalizationStatusSuccess(text, scope));
+                    resolve(
+                        {
+                            value: result,
+                            status: LocalizationStatusSuccess(text, scope),
+                        }
+                    );
                 } catch (exception) {
-                    onComplete(this.handleError(exception, text), {
-                        success: false,
-                        message: exception.message,
-                        errorType: 'exception',
-                        text,
-                        scope,
-                    })
+                    reject(
+                        {
+                            value: this.handleError(exception, text),
+                            status: {
+                                success: false,
+                                message: exception.message,
+                                errorType: 'exception',
+                                text,
+                                scope,
+                            },
+                        }
+                    );
                 }
             }, status => {
                 const errorStatus = {
@@ -212,9 +258,14 @@ class Localization {
 
                 this.callErrorHandler(errorStatus);
 
-                onComplete(this.getTranslationOnError(text, scope), errorStatus);
-            }, scope, cultureName,
-        );
+                reject(
+                    {
+                        value: this.getTranslationOnError(text, scope),
+                        status: LocalizationStatusSuccess(text, scope),
+                    }
+                );
+            }, scope, cultureName);
+        });
     }
 
     private getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
@@ -378,7 +429,8 @@ class Localization {
 
         xmlHttpRequest.onreadystatechange = () => {
             if (
-                xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
+                xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                && xmlHttpRequest.status === 200
             ) {
                 let response = xmlHttpRequest.responseText;
 
@@ -715,7 +767,6 @@ interface ILocalizationCookie {
     CurrentCulture: string | null;
 }
 
-
 interface ILocalizationError {
     text: string;
     scope: string;
@@ -738,6 +789,11 @@ interface ILocalizationStatus {
 interface IDictionaryError {
     scope: string;
     context: object;
+}
+
+interface ILocalizationResult {
+    value: ILocalizedString,
+    status: ILocalizationStatus,
 }
 
 interface ILocalizedString {
@@ -777,11 +833,11 @@ class LocalizationUtils {
     public static getCookie(name: string): string {
         name = name + "=";
         return document.cookie
-            .split(";")
-            .map(c => c.trim())
-            .filter(cookie => cookie.indexOf(name) === 0)
-            .map(cookie => decodeURIComponent(cookie.substring(name.length)))[0] ||
-            null;
+                .split(";")
+                .map(c => c.trim())
+                .filter(cookie => cookie.indexOf(name) === 0)
+                .map(cookie => decodeURIComponent(cookie.substring(name.length)))[0]
+            || null;
     }
 
     /*

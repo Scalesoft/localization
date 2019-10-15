@@ -1,3 +1,4 @@
+declare const LocalizationStatusSuccess: (text: string, scope: string) => ILocalizationStatus;
 declare class Localization {
     private mGlobalScope;
     private mCultureCookieName;
@@ -7,21 +8,26 @@ declare class Localization {
     private mPluralizedDictionary;
     private readonly mPluralizedDictionaryQueue;
     private mSiteUrl;
+    private readonly mLocalizationConfiguration;
+    private mErrorHandlerCalled;
+    constructor(localizationConfiguration?: ILocalizationConfiguration);
+    private callErrorHandler;
+    private getTranslationOnError;
     /**
      * @deprecated Use translateAsync
      */
     translate(text: string, scope?: string, cultureName?: string): ILocalizedString;
-    translateAsync(onSuccess: (translation: ILocalizedString) => void, text: string, scope?: string, cultureName?: string): void;
+    translateAsync(text: string, scope?: string, cultureName?: string): Promise<ILocalizationResult>;
     /**
      *@deprecated Use translateFormatAsync
      */
     translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString;
-    translateFormatAsync(onSuccess: (translation: ILocalizedString) => void, text: string, parameters: string[], scope?: string, cultureName?: string): void;
+    translateFormatAsync(text: string, parameters: string[], scope?: string, cultureName?: string): Promise<ILocalizationResult>;
     /**
      *@deprecated Use translatePluralizationAsync
      */
     translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString;
-    translatePluralizationAsync(onSuccess: (translation: ILocalizedString) => void, text: string, number: number, scope?: string, cultureName?: string): void;
+    translatePluralizationAsync(text: string, number: number, scope?: string, cultureName?: string): Promise<ILocalizationResult>;
     private getFallbackTranslation;
     private handleError;
     configureSiteUrl(siteUrl: string): void;
@@ -60,6 +66,7 @@ declare class Localization {
     private downloadPluralizedDictionary;
     private downloadPluralizedDictionaryAsync;
     private processPluralizedDictionaryQueue;
+    private getDownloadPromise;
     private getBaseUrl;
     getCurrentCulture(): string;
     private setCurrentCulture;
@@ -78,14 +85,47 @@ declare class LocalizationPluralizationDictionary {
     constructor(dictionary: string);
     translatePluralization(text: string, number: number): ILocalizedString;
 }
-interface ILocalizedString {
-    name: string;
-    resourceNotFound: boolean;
-    value: string;
+declare enum LocalizationErrorResolution {
+    Null = 0,
+    Key = 1
+}
+interface ILocalizationConfiguration {
+    errorResolution: LocalizationErrorResolution;
+    onError?: (localizationError: ILocalizationError) => void;
 }
 interface ILocalizationCookie {
     DefaultCulture: string;
     CurrentCulture: string | null;
+}
+interface ILocalizationError {
+    text: string;
+    scope: string;
+    message: string;
+    errorType?: string;
+    dictionary?: string;
+    context?: object;
+}
+interface ILocalizationStatus {
+    success: boolean;
+    text: string;
+    scope: string;
+    message: string;
+    errorType?: string;
+    dictionary?: string;
+    context?: object;
+}
+interface IDictionaryError {
+    scope: string;
+    context: object;
+}
+interface ILocalizationResult {
+    value: ILocalizedString;
+    status: ILocalizationStatus;
+}
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value: string;
 }
 interface IPluralizedString {
     intervals: IIntervalWithTranslation[];
