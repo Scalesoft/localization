@@ -61,7 +61,6 @@ declare class Localization {
     private downloadPluralizedDictionaryAsync;
     private processPluralizedDictionaryQueue;
     private getBaseUrl;
-    private checkAndGetCurrentCulture;
     getCurrentCulture(): string;
     private setCurrentCulture;
     private getParsedCultureCookie;

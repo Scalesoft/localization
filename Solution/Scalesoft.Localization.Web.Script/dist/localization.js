@@ -121,7 +121,7 @@ var Localization = /** @class */ (function () {
         if (cultureName) {
             return cultureName;
         }
-        return this.checkAndGetCurrentCulture();
+        return this.getCurrentCulture();
     };
     Localization.prototype.checkScope = function (scope) {
         if (scope) {
@@ -287,21 +287,13 @@ var Localization = /** @class */ (function () {
         }
         return baseUrl;
     };
-    Localization.prototype.checkAndGetCurrentCulture = function () {
-        if (typeof this.mCurrentCulture === "undefined") {
-            var parsedCookieValue = this.getParsedCultureCookie();
-            var currentCulture = parsedCookieValue.currentCulture;
-            this.setCurrentCulture(currentCulture);
-        }
-        return this.mCurrentCulture;
-    };
     Localization.prototype.getCurrentCulture = function () {
         if (typeof this.mCurrentCulture === "undefined") {
             var parsedCookieValue = this.getParsedCultureCookie();
             var currentCulture = parsedCookieValue.currentCulture
                 ? parsedCookieValue.currentCulture
                 : parsedCookieValue.defaultCulture;
-            return currentCulture;
+            this.setCurrentCulture(currentCulture);
         }
         return this.mCurrentCulture;
     };
