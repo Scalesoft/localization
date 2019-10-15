@@ -195,7 +195,7 @@ var Localization = /** @class */ (function () {
         return { name: text, value: "X{error}", resourceNotFound: true };
     };
     Localization.prototype.configureSiteUrl = function (siteUrl) {
-        this.mSiteUrl = siteUrl;
+        this.mLocalizationConfiguration.siteUrl = siteUrl;
     };
     /**
      *@deprecated Use getDictionaryAsync
@@ -436,7 +436,7 @@ var Localization = /** @class */ (function () {
         });
     };
     Localization.prototype.getBaseUrl = function () {
-        var baseUrl = this.mSiteUrl;
+        var baseUrl = this.mLocalizationConfiguration.siteUrl;
         if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
             baseUrl = baseUrl.substring(0, baseUrl.length - 1);
         }

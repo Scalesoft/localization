@@ -17,8 +17,6 @@ class Localization {
     private mPluralizedDictionary: { [key: string]: LocalizationPluralizationDictionary } = {};
     private readonly mPluralizedDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationPluralizationDictionary) => void> } = {};
 
-    private mSiteUrl: string;
-
     private readonly mLocalizationConfiguration: ILocalizationConfiguration;
 
     private mErrorHandlerCalled = false;
@@ -283,7 +281,7 @@ class Localization {
     }
 
     public configureSiteUrl(siteUrl: string) {
-        this.mSiteUrl = siteUrl;
+        this.mLocalizationConfiguration.siteUrl = siteUrl;
     }
 
     /**
@@ -651,7 +649,7 @@ class Localization {
     }
 
     private getBaseUrl(): string {
-        let baseUrl = this.mSiteUrl;
+        let baseUrl = this.mLocalizationConfiguration.siteUrl;
         if (baseUrl && baseUrl.charAt(baseUrl.length - 1) === "/") {
             baseUrl = baseUrl.substring(0, baseUrl.length - 1);
         }
@@ -760,6 +758,7 @@ enum LocalizationErrorResolution {
 
 interface ILocalizationConfiguration {
     errorResolution: LocalizationErrorResolution,
+    siteUrl?: string,
     onError?: (localizationError: ILocalizationError) => void,
 }
 

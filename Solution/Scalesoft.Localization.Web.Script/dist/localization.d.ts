@@ -7,7 +7,6 @@ declare class Localization {
     private readonly mDictionaryQueue;
     private mPluralizedDictionary;
     private readonly mPluralizedDictionaryQueue;
-    private mSiteUrl;
     private readonly mLocalizationConfiguration;
     private mErrorHandlerCalled;
     constructor(localizationConfiguration?: ILocalizationConfiguration);
@@ -91,6 +90,7 @@ declare enum LocalizationErrorResolution {
 }
 interface ILocalizationConfiguration {
     errorResolution: LocalizationErrorResolution;
+    siteUrl?: string;
     onError?: (localizationError: ILocalizationError) => void;
 }
 interface ILocalizationCookie {
