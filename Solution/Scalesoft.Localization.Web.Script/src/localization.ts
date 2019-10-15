@@ -198,7 +198,7 @@
             return cultureName;
         }
 
-        return this.checkAndGetCurrentCulture();
+        return this.getCurrentCulture();
     }
 
     private checkScope(scope?: string): string {
@@ -457,16 +457,6 @@
         return baseUrl;
     }
 
-    private checkAndGetCurrentCulture(): string {
-        if (typeof this.mCurrentCulture === "undefined") {
-            const parsedCookieValue = this.getParsedCultureCookie();
-            const currentCulture = parsedCookieValue.currentCulture;
-            this.setCurrentCulture(currentCulture);
-        }
-
-        return this.mCurrentCulture;
-    }
-
     public getCurrentCulture(): string {
         if (typeof this.mCurrentCulture === "undefined") {
             const parsedCookieValue = this.getParsedCultureCookie();
@@ -474,7 +464,7 @@
                 ? parsedCookieValue.currentCulture
                 : parsedCookieValue.defaultCulture;
 
-            return currentCulture;
+            this.setCurrentCulture(currentCulture);
         }
 
         return this.mCurrentCulture;
