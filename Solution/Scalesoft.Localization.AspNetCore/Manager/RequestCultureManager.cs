@@ -2,8 +2,8 @@ using System;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
-using Newtonsoft.Json;
 using Scalesoft.Localization.AspNetCore.Models;
+using Scalesoft.Localization.Core.Exception;
 using Scalesoft.Localization.Core.Manager;
 
 namespace Scalesoft.Localization.AspNetCore.Manager
@@ -32,13 +32,11 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             string cookieCurrentCulture = null;
             if (!string.IsNullOrEmpty(cultureCookie))
             {
-                try
+                var currentCookieDeserialized = SerializationManager.DeserializeCookie(cultureCookie);
+
+                if (currentCookieDeserialized.Success)
                 {
-                    var currentCookieDeserialized = SerializationManager.DeserializeCookie(cultureCookie);
-                    cookieCurrentCulture = currentCookieDeserialized.CurrentCulture;
-                }
-                catch (JsonException)
-                {
+                    cookieCurrentCulture = currentCookieDeserialized.Value.CurrentCulture;
                 }
             }
 
@@ -60,11 +58,8 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
             else
             {
-                try
-                {
-                    SerializationManager.DeserializeCookie(currentCultureCookie);
-                }
-                catch (JsonException)
+                var deserializationResult = SerializationManager.DeserializeCookie(currentCultureCookie);
+                if (!deserializationResult.Success)
                 {
                     SetDefaultLanguageCookie(response);
                 }
@@ -93,7 +88,14 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
             else
             {
-                var currentCookieDeserialized = SerializationManager.DeserializeCookie(currentCultureCookie);
+                var currentCookieDeserializedResult = SerializationManager.DeserializeCookie(currentCultureCookie);
+                if (!currentCookieDeserializedResult.Success)
+                {
+                    throw new LocalizationManagerException("Failed to deserialize localization cookie");
+                }
+
+                var currentCookieDeserialized = currentCookieDeserializedResult.Value;
+
                 currentCookieDeserialized.CurrentCulture = currentCultureName;
 
                 SetCookieValue(response, currentCookieDeserialized);

@@ -10,9 +10,22 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             return JsonConvert.SerializeObject(cookie);
         }
 
-        public static LocalizationCookie DeserializeCookie(string cookie)
+        public static DeserializationResult DeserializeCookie(string cookie)
         {
-            return JsonConvert.DeserializeObject<LocalizationCookie>(cookie);
+            LocalizationCookie value = null;
+            var success = false;
+
+            try
+            {
+                value = JsonConvert.DeserializeObject<LocalizationCookie>(cookie);
+                success = true;
+            }
+            catch (JsonException)
+            {
+                // keep fail values
+            }
+
+            return new DeserializationResult {Success = success, Value = value};
         }
     }
 }
