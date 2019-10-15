@@ -119,7 +119,7 @@ interface IDictionaryError {
     context: object;
 }
 interface ILocalizationResult {
-    value: ILocalizedString;
+    result: ILocalizedString;
     status: ILocalizationStatus;
 }
 interface ILocalizedString {

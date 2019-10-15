@@ -60,7 +60,7 @@ class Localization {
     public translate(
         text: string,
         scope?: string,
-        cultureName?: string
+        cultureName?: string,
     ): ILocalizedString {
         const dictionary = this.getDictionary(scope, cultureName);
 
@@ -84,7 +84,7 @@ class Localization {
                 if (result == null) {
                     resolve(
                         {
-                            value: this.getFallbackTranslation(text, scope, cultureName),
+                            result: this.getFallbackTranslation(text, scope, cultureName),
                             status: LocalizationStatusSuccess(text, scope),
                         }
                     );
@@ -92,7 +92,7 @@ class Localization {
 
                 resolve(
                     {
-                        value: result,
+                        result: result,
                         status: LocalizationStatusSuccess(text, scope),
                     }
                 );
@@ -110,7 +110,7 @@ class Localization {
 
                 reject(
                     {
-                        value: this.getTranslationOnError(text, scope),
+                        result: this.getTranslationOnError(text, scope),
                         status: LocalizationStatusSuccess(text, scope),
                     }
                 );
@@ -150,7 +150,7 @@ class Localization {
                 if (result == null) {
                     resolve(
                         {
-                            value: this.getFallbackTranslation(text, scope, cultureName),
+                            result: this.getFallbackTranslation(text, scope, cultureName),
                             status: LocalizationStatusSuccess(text, scope),
                         }
                     );
@@ -158,7 +158,7 @@ class Localization {
 
                 resolve(
                     {
-                        value: result,
+                        result: result,
                         status: LocalizationStatusSuccess(text, scope),
                     }
                 );
@@ -176,7 +176,7 @@ class Localization {
 
                 reject(
                     {
-                        value: this.getTranslationOnError(text, scope),
+                        result: this.getTranslationOnError(text, scope),
                         status: LocalizationStatusSuccess(text, scope),
                     }
                 );
@@ -220,7 +220,7 @@ class Localization {
                     if (result == null) {
                         resolve(
                             {
-                                value: this.getFallbackTranslation(text, scope, cultureName),
+                                result: this.getFallbackTranslation(text, scope, cultureName),
                                 status: LocalizationStatusSuccess(text, scope),
                             }
                         );
@@ -228,14 +228,14 @@ class Localization {
 
                     resolve(
                         {
-                            value: result,
+                            result: result,
                             status: LocalizationStatusSuccess(text, scope),
                         }
                     );
                 } catch (exception) {
                     reject(
                         {
-                            value: this.handleError(exception, text),
+                            result: this.handleError(exception, text),
                             status: {
                                 success: false,
                                 message: exception.message,
@@ -260,7 +260,7 @@ class Localization {
 
                 reject(
                     {
-                        value: this.getTranslationOnError(text, scope),
+                        result: this.getTranslationOnError(text, scope),
                         status: LocalizationStatusSuccess(text, scope),
                     }
                 );
@@ -608,7 +608,8 @@ class Localization {
     }
 
     private getDownloadPromise(
-        scope: string, cultureName: string,
+        scope: string,
+        cultureName: string,
     ): Promise<LocalizationPluralizationDictionary> {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -792,7 +793,7 @@ interface IDictionaryError {
 }
 
 interface ILocalizationResult {
-    value: ILocalizedString,
+    result: ILocalizedString,
     status: ILocalizationStatus,
 }
 

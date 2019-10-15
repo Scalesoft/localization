@@ -56,12 +56,12 @@ var Localization = /** @class */ (function () {
                 var result = dictionary.translate(text);
                 if (result == null) {
                     resolve({
-                        value: _this.getFallbackTranslation(text, scope, cultureName),
+                        result: _this.getFallbackTranslation(text, scope, cultureName),
                         status: LocalizationStatusSuccess(text, scope),
                     });
                 }
                 resolve({
-                    value: result,
+                    result: result,
                     status: LocalizationStatusSuccess(text, scope),
                 });
             }, function (status) {
@@ -75,7 +75,7 @@ var Localization = /** @class */ (function () {
                 };
                 _this.callErrorHandler(errorStatus);
                 reject({
-                    value: _this.getTranslationOnError(text, scope),
+                    result: _this.getTranslationOnError(text, scope),
                     status: LocalizationStatusSuccess(text, scope),
                 });
             }, scope, cultureName);
@@ -99,12 +99,12 @@ var Localization = /** @class */ (function () {
                 var result = dictionary.translateFormat(text, parameters);
                 if (result == null) {
                     resolve({
-                        value: _this.getFallbackTranslation(text, scope, cultureName),
+                        result: _this.getFallbackTranslation(text, scope, cultureName),
                         status: LocalizationStatusSuccess(text, scope),
                     });
                 }
                 resolve({
-                    value: result,
+                    result: result,
                     status: LocalizationStatusSuccess(text, scope),
                 });
             }, function (status) {
@@ -118,7 +118,7 @@ var Localization = /** @class */ (function () {
                 };
                 _this.callErrorHandler(errorStatus);
                 reject({
-                    value: _this.getTranslationOnError(text, scope),
+                    result: _this.getTranslationOnError(text, scope),
                     status: LocalizationStatusSuccess(text, scope),
                 });
             }, scope, cultureName);
@@ -148,18 +148,18 @@ var Localization = /** @class */ (function () {
                     var result = dictionary.translatePluralization(text, number);
                     if (result == null) {
                         resolve({
-                            value: _this.getFallbackTranslation(text, scope, cultureName),
+                            result: _this.getFallbackTranslation(text, scope, cultureName),
                             status: LocalizationStatusSuccess(text, scope),
                         });
                     }
                     resolve({
-                        value: result,
+                        result: result,
                         status: LocalizationStatusSuccess(text, scope),
                     });
                 }
                 catch (exception) {
                     reject({
-                        value: _this.handleError(exception, text),
+                        result: _this.handleError(exception, text),
                         status: {
                             success: false,
                             message: exception.message,
@@ -180,7 +180,7 @@ var Localization = /** @class */ (function () {
                 };
                 _this.callErrorHandler(errorStatus);
                 reject({
-                    value: _this.getTranslationOnError(text, scope),
+                    result: _this.getTranslationOnError(text, scope),
                     status: LocalizationStatusSuccess(text, scope),
                 });
             }, scope, cultureName);
