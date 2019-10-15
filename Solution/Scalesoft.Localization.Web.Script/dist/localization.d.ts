@@ -61,8 +61,10 @@ declare class Localization {
     private downloadPluralizedDictionaryAsync;
     private processPluralizedDictionaryQueue;
     private getBaseUrl;
+    private checkAndGetCurrentCulture;
     getCurrentCulture(): string;
     private setCurrentCulture;
+    private getParsedCultureCookie;
     private getCurrentCultureCookie;
 }
 declare class LocalizationDictionary {
@@ -81,6 +83,10 @@ interface ILocalizedString {
     name: string;
     resourceNotFound: boolean;
     value: string;
+}
+interface ILocalizationCookie {
+    defaultCulture: string;
+    currentCulture: string;
 }
 interface IPluralizedString {
     intervals: IIntervalWithTranslation[];

@@ -21,7 +21,7 @@ namespace LocalizationSample {
         private testPluralization() {
             if (this.useAsync) {
                 this.localization.translateAsync(
-                    translation => {
+                    (translation) => {
                         $(".output").append(`<h2>${translation.value}</h2>`);
                         for (let i = -11; i < 12; i++) {
                             this.addPluralizationTestLine(i, "years");
@@ -46,9 +46,9 @@ namespace LocalizationSample {
         private addPluralizationTestLine(value: number, key: string, scope: string = null) {
             if (this.useAsync) {
                 this.localization.translatePluralizationAsync(
-                    translation => {
+                    (translation) => {
                         $(".output").append(`<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${translation.value}</strong></div>`);
-                    }, key, value, scope
+                    }, key, value, scope,
                 );
             } else {
                 const localizedString = this.localization.translatePluralization(key, value, scope);

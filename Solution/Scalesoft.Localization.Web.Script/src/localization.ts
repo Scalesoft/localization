@@ -8,7 +8,9 @@
     private readonly mDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationDictionary) => void> } = {};
 
     private mPluralizedDictionary: { [key: string]: LocalizationPluralizationDictionary } = {};
-    private readonly mPluralizedDictionaryQueue: { [key: string]: Array<(dictionary: LocalizationPluralizationDictionary) => void> } = {};
+    private readonly mPluralizedDictionaryQueue: {
+        [key: string]: Array<(dictionary: LocalizationPluralizationDictionary) => void>
+    } = {};
 
     private mSiteUrl: string;
 
@@ -16,7 +18,9 @@
      * @deprecated Use translateAsync
      */
     public translate(
-        text: string, scope?: string, cultureName?: string
+        text: string,
+        scope?: string,
+        cultureName?: string
     ): ILocalizedString {
         const dictionary = this.getDictionary(scope, cultureName);
 
@@ -29,23 +33,31 @@
     }
 
     public translateAsync(
-        onSuccess: (translation: ILocalizedString) => void, text: string, scope?: string, cultureName?: string
+        onSuccess: (translation: ILocalizedString) => void,
+        text: string,
+        scope?: string,
+        cultureName?: string
     ) {
         this.getDictionaryAsync((dictionary) => {
-            const result = dictionary.translate(text);
-            if (result == null) {
-                return this.getFallbackTranslation(text, scope, cultureName);
-            }
+                const result = dictionary.translate(text);
+                if (result == null) {
+                    return this.getFallbackTranslation(text, scope, cultureName);
+                }
 
-            onSuccess(result);
-        }, scope, cultureName);
+                onSuccess(result);
+            },
+            scope,
+            cultureName);
     }
 
     /**
      *@deprecated Use translateFormatAsync
      */
     public translateFormat(
-        text: string, parameters: string[], scope?: string, cultureName?: string
+        text: string,
+        parameters: string[],
+        scope?: string,
+        cultureName?: string
     ): ILocalizedString {
         const dictionary = this.getDictionary(scope, cultureName);
 
@@ -58,23 +70,32 @@
     }
 
     public translateFormatAsync(
-        onSuccess: (translation: ILocalizedString) => void, text: string, parameters: string[], scope?: string, cultureName?: string,
+        onSuccess: (translation: ILocalizedString) => void,
+        text: string,
+        parameters: string[],
+        scope?: string,
+        cultureName?: string,
     ) {
         this.getDictionaryAsync((dictionary) => {
-            const result = dictionary.translateFormat(text, parameters);
-            if (result == null) {
-                return this.getFallbackTranslation(text, scope, cultureName);
-            }
+                const result = dictionary.translateFormat(text, parameters);
+                if (result == null) {
+                    return this.getFallbackTranslation(text, scope, cultureName);
+                }
 
-            onSuccess(result);
-        }, scope, cultureName);
+                onSuccess(result);
+            },
+            scope,
+            cultureName);
     }
 
     /**
      *@deprecated Use translatePluralizationAsync
      */
     public translatePluralization(
-        text: string, number: number, scope?: string, cultureName?: string
+        text: string,
+        number: number,
+        scope?: string,
+        cultureName?: string
     ): ILocalizedString {
         const dictionary = this.getPluralizationDictionary(scope, cultureName);
         try {
@@ -90,7 +111,11 @@
     }
 
     public translatePluralizationAsync(
-        onSuccess: (translation: ILocalizedString) => void, text: string, number: number, scope?: string, cultureName?: string
+        onSuccess: (translation: ILocalizedString) => void,
+        text: string,
+        number: number,
+        scope?: string,
+        cultureName?: string
     ) {
         this.getPluralizationDictionaryAsync(
             dictionary => {
@@ -104,7 +129,9 @@
                 } catch (exception) {
                     onSuccess(this.handleError(exception, text))
                 }
-            }, scope, cultureName
+            },
+            scope,
+            cultureName
         );
     }
 
@@ -113,13 +140,13 @@
             `Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`,
         );
 
-        return {name: text, value: "X{undefined}", resourceNotFound: true};
+        return { name: text, value: "X{undefined}", resourceNotFound: true };
     }
 
     private handleError(exception: Error, text: string) {
         console.error(exception.message);
 
-        return {name: text, value: "X{error}", resourceNotFound: true};
+        return { name: text, value: "X{error}", resourceNotFound: true };
     }
 
     public configureSiteUrl(siteUrl: string) {
@@ -136,7 +163,9 @@
         return this.getLocalizationDictionary(scope, cultureName);
     }
 
-    private getDictionaryAsync(onSuccess: (dictionary: LocalizationDictionary) => void, scope?: string, cultureName?: string) {
+    private getDictionaryAsync(onSuccess: (dictionary: LocalizationDictionary) => void,
+        scope?: string,
+        cultureName?: string) {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
 
@@ -154,7 +183,9 @@
     }
 
     private getPluralizationDictionaryAsync(
-        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void, scope?: string, cultureName?: string
+        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void,
+        scope?: string,
+        cultureName?: string
     ) {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
@@ -167,7 +198,7 @@
             return cultureName;
         }
 
-        return this.getCurrentCulture();
+        return this.checkAndGetCurrentCulture();
     }
 
     private checkScope(scope?: string): string {
@@ -194,7 +225,9 @@
     }
 
     private getLocalizationDictionaryAsync(
-        scope: string, cultureName: string, onSuccess: (dictionary: LocalizationDictionary) => void
+        scope: string,
+        cultureName: string,
+        onSuccess: (dictionary: LocalizationDictionary) => void
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
         const dictionary = this.mDictionary[dictionaryKey];
@@ -223,7 +256,9 @@
     }
 
     private getPluralizationLocalizationDictionaryAsync(
-        scope: string, cultureName: string, onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
+        scope: string,
+        cultureName: string,
+        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
     ) {
         let dictionaryKey = this.dictionaryKey(scope, cultureName);
         let dictionary = this.mPluralizedDictionary[dictionaryKey];
@@ -243,7 +278,8 @@
      *@deprecated Use downloadDictionaryAsync
      */
     private downloadDictionary(
-        scope: string, cultureName: string
+        scope: string,
+        cultureName: string
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -255,8 +291,7 @@
 
         xmlHttpRequest.onreadystatechange = () => {
             if (
-                xmlHttpRequest.readyState === XMLHttpRequest.DONE
-                && xmlHttpRequest.status === 200
+                xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
             ) {
                 let response = xmlHttpRequest.responseText;
 
@@ -277,7 +312,9 @@
     }
 
     private downloadDictionaryAsync(
-        scope: string, cultureName: string, onSuccess: (dictionary: LocalizationDictionary) => void
+        scope: string,
+        cultureName: string,
+        onSuccess: (dictionary: LocalizationDictionary) => void
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -288,8 +325,7 @@
 
             xmlHttpRequest.onreadystatechange = () => {
                 if (
-                    xmlHttpRequest.readyState === XMLHttpRequest.DONE
-                    && xmlHttpRequest.status === 200
+                    xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
                 ) {
                     let response = xmlHttpRequest.responseText;
 
@@ -329,7 +365,8 @@
      * @deprecated Use downloadPluralizedDictionaryAsync
      */
     private downloadPluralizedDictionary(
-        scope: string, cultureName: string
+        scope: string,
+        cultureName: string
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -341,8 +378,7 @@
 
         xmlHttpRequest.onreadystatechange = () => {
             if (
-                xmlHttpRequest.readyState === XMLHttpRequest.DONE
-                && xmlHttpRequest.status === 200
+                xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
             ) {
                 let response = xmlHttpRequest.responseText;
 
@@ -363,7 +399,9 @@
     }
 
     private downloadPluralizedDictionaryAsync(
-        scope: string, cultureName: string, onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
+        scope: string,
+        cultureName: string,
+        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void
     ): void {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
@@ -374,8 +412,7 @@
 
             xmlHttpRequest.onreadystatechange = () => {
                 if (
-                    xmlHttpRequest.readyState === XMLHttpRequest.DONE
-                    && xmlHttpRequest.status === 200
+                    xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200
                 ) {
                     let response = xmlHttpRequest.responseText;
 
@@ -420,10 +457,24 @@
         return baseUrl;
     }
 
+    private checkAndGetCurrentCulture(): string {
+        if (typeof this.mCurrentCulture === "undefined") {
+            const parsedCookieValue = this.getParsedCultureCookie();
+            const currentCulture = parsedCookieValue.currentCulture;
+            this.setCurrentCulture(currentCulture);
+        }
+
+        return this.mCurrentCulture;
+    }
+
     public getCurrentCulture(): string {
         if (typeof this.mCurrentCulture === "undefined") {
-            const currentCulture = this.getCurrentCultureCookie();
-            this.setCurrentCulture(currentCulture);
+            const parsedCookieValue = this.getParsedCultureCookie();
+            const currentCulture = parsedCookieValue.currentCulture
+                ? parsedCookieValue.currentCulture
+                : parsedCookieValue.defaultCulture;
+
+            return currentCulture;
         }
 
         return this.mCurrentCulture;
@@ -431,6 +482,13 @@
 
     private setCurrentCulture(culture: string) {
         this.mCurrentCulture = culture;
+    }
+
+    private getParsedCultureCookie(): ILocalizationCookie {
+        const currentCultureCookieValue = this.getCurrentCultureCookie();
+        const parsedCookieValue = JSON.parse(currentCultureCookieValue) as ILocalizationCookie;
+
+        return parsedCookieValue;
     }
 
     private getCurrentCultureCookie(): string {
@@ -459,7 +517,7 @@ class LocalizationDictionary {
 
         const formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
 
-        return {name: text, value: formatedText, resourceNotFound: translation.resourceNotFound};
+        return { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
     }
 
     private formatString(str: ILocalizedString, obj: string[]): string {
@@ -499,6 +557,11 @@ interface ILocalizedString {
     value: string;
 }
 
+interface ILocalizationCookie {
+    defaultCulture: string;
+    currentCulture: string;
+}
+
 interface IPluralizedString {
     intervals: IIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
@@ -530,11 +593,11 @@ class LocalizationUtils {
     public static getCookie(name: string): string {
         name = name + "=";
         return document.cookie
-                .split(";")
-                .map(c => c.trim())
-                .filter(cookie => cookie.indexOf(name) === 0)
-                .map(cookie => decodeURIComponent(cookie.substring(name.length)))[0]
-            || null;
+            .split(";")
+            .map(c => c.trim())
+            .filter(cookie => cookie.indexOf(name) === 0)
+            .map(cookie => decodeURIComponent(cookie.substring(name.length)))[0] ||
+            null;
     }
 
     /*

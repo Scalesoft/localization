@@ -121,7 +121,7 @@ var Localization = /** @class */ (function () {
         if (cultureName) {
             return cultureName;
         }
-        return this.getCurrentCulture();
+        return this.checkAndGetCurrentCulture();
     };
     Localization.prototype.checkScope = function (scope) {
         if (scope) {
@@ -187,8 +187,7 @@ var Localization = /** @class */ (function () {
         }
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE
-                && xmlHttpRequest.status === 200) {
+            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200) {
                 var response = xmlHttpRequest.responseText;
                 if (_this.mDictionary[dictionaryKey] === undefined) {
                     _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
@@ -206,8 +205,7 @@ var Localization = /** @class */ (function () {
             this.mDictionaryQueue[scope] = [];
             var xmlHttpRequest_1 = new XMLHttpRequest();
             xmlHttpRequest_1.onreadystatechange = function () {
-                if (xmlHttpRequest_1.readyState === XMLHttpRequest.DONE
-                    && xmlHttpRequest_1.status === 200) {
+                if (xmlHttpRequest_1.readyState === XMLHttpRequest.DONE && xmlHttpRequest_1.status === 200) {
                     var response = xmlHttpRequest_1.responseText;
                     if (_this.mDictionary[dictionaryKey] === undefined) {
                         _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
@@ -241,8 +239,7 @@ var Localization = /** @class */ (function () {
         }
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.onreadystatechange = function () {
-            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE
-                && xmlHttpRequest.status === 200) {
+            if (xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200) {
                 var response = xmlHttpRequest.responseText;
                 if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
                     _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
@@ -260,8 +257,7 @@ var Localization = /** @class */ (function () {
             this.mPluralizedDictionaryQueue[scope] = [];
             var xmlHttpRequest_2 = new XMLHttpRequest();
             xmlHttpRequest_2.onreadystatechange = function () {
-                if (xmlHttpRequest_2.readyState === XMLHttpRequest.DONE
-                    && xmlHttpRequest_2.status === 200) {
+                if (xmlHttpRequest_2.readyState === XMLHttpRequest.DONE && xmlHttpRequest_2.status === 200) {
                     var response = xmlHttpRequest_2.responseText;
                     if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
                         _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
@@ -291,15 +287,31 @@ var Localization = /** @class */ (function () {
         }
         return baseUrl;
     };
+    Localization.prototype.checkAndGetCurrentCulture = function () {
+        if (typeof this.mCurrentCulture === "undefined") {
+            var parsedCookieValue = this.getParsedCultureCookie();
+            var currentCulture = parsedCookieValue.currentCulture;
+            this.setCurrentCulture(currentCulture);
+        }
+        return this.mCurrentCulture;
+    };
     Localization.prototype.getCurrentCulture = function () {
         if (typeof this.mCurrentCulture === "undefined") {
-            var currentCulture = this.getCurrentCultureCookie();
-            this.setCurrentCulture(currentCulture);
+            var parsedCookieValue = this.getParsedCultureCookie();
+            var currentCulture = parsedCookieValue.currentCulture
+                ? parsedCookieValue.currentCulture
+                : parsedCookieValue.defaultCulture;
+            return currentCulture;
         }
         return this.mCurrentCulture;
     };
     Localization.prototype.setCurrentCulture = function (culture) {
         this.mCurrentCulture = culture;
+    };
+    Localization.prototype.getParsedCultureCookie = function () {
+        var currentCultureCookieValue = this.getCurrentCultureCookie();
+        var parsedCookieValue = JSON.parse(currentCultureCookieValue);
+        return parsedCookieValue;
     };
     Localization.prototype.getCurrentCultureCookie = function () {
         return LocalizationUtils.getCookie(this.mCultureCookieName);
@@ -367,8 +379,8 @@ var LocalizationUtils = /** @class */ (function () {
             .split(";")
             .map(function (c) { return c.trim(); })
             .filter(function (cookie) { return cookie.indexOf(name) === 0; })
-            .map(function (cookie) { return decodeURIComponent(cookie.substring(name.length)); })[0]
-            || null;
+            .map(function (cookie) { return decodeURIComponent(cookie.substring(name.length)); })[0] ||
+            null;
     };
     /*
      * Returns true when value is in the pluralization interval

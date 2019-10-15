@@ -5,10 +5,12 @@ using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore.IoC;
+using Scalesoft.Localization.AspNetCore.Sample.Filters;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Dictionary;
 using Scalesoft.Localization.Core.Manager;
@@ -38,7 +40,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
             services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
 
             // Add framework services.
-            services.AddMvc()
+            services.AddMvc(RegisterFilters)
                 .AddDataAnnotationsLocalization(options =>
                 {
                     options.DataAnnotationLocalizerProvider = (type, factory) => factory
@@ -48,7 +50,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
             services.AddNHibernate(m_configuration);
             
             m_container = new Container().WithDependencyInjectionAdapter(services);
-
+            
             return m_container.Resolve<IServiceProvider>();
         }
 
@@ -80,6 +82,11 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "cs-CZ.json");
             AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "en.json");
+        }
+
+        private void RegisterFilters(MvcOptions options)
+        {
+            options.Filters.Add<SetLocalizationCookieFilter>();
         }
 
         private void AddLocalizationDictionary(

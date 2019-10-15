@@ -50,16 +50,8 @@ namespace Scalesoft.Localization.AspNetCore.Sample.Controllers
 
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            var requestCulture = new RequestCulture(culture); //TODO validation of unsupported culture name
-            HttpContext.Request.HttpContext.Response.Cookies.Append(
-                "Localization.Culture",
-                requestCulture.Culture.Name,
-                new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddYears(1)
-                }
-            );
-
+            m_localizationManager.SetCulture(culture); //TODO validation of unsupported culture name
+            
             return LocalRedirect(returnUrl);
         }
     }

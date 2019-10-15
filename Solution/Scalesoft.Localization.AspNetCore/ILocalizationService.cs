@@ -21,6 +21,11 @@ namespace Scalesoft.Localization.AspNetCore
         /// <param name="culture"></param>
         void SetCulture(string culture);
 
+        /// <summary>
+        /// Creates the cookie with default language set
+        /// </summary>
+        void SetDefaultCookie();
+
         //Explicit calls
         /// <summary>
         /// Translates text using a resource file (.json) or a database.
