@@ -458,11 +458,11 @@
     }
 
     public getCurrentCulture(): string {
-        if (typeof this.mCurrentCulture === "undefined") {
+        if (this.mCurrentCulture === undefined) {
             const parsedCookieValue = this.getParsedCultureCookie();
-            const currentCulture = parsedCookieValue.currentCulture
-                ? parsedCookieValue.currentCulture
-                : parsedCookieValue.defaultCulture;
+            const currentCulture = parsedCookieValue.CurrentCulture === null
+                ? parsedCookieValue.DefaultCulture
+                : parsedCookieValue.CurrentCulture;
 
             this.setCurrentCulture(currentCulture);
         }
@@ -477,6 +477,16 @@
     private getParsedCultureCookie(): ILocalizationCookie {
         const currentCultureCookieValue = this.getCurrentCultureCookie();
         const parsedCookieValue = JSON.parse(currentCultureCookieValue) as ILocalizationCookie;
+
+        if (
+            parsedCookieValue.DefaultCulture === undefined
+            || parsedCookieValue.CurrentCulture === undefined
+        ) {
+            console.error(
+                `Unexpected value of the cookie ${this.mCultureCookieName}. Expected object with properties 'DefaultCulture', and 'CurrentCulture'.`,
+                parsedCookieValue
+            );
+        }
 
         return parsedCookieValue;
     }
@@ -548,8 +558,8 @@ interface ILocalizedString {
 }
 
 interface ILocalizationCookie {
-    defaultCulture: string;
-    currentCulture: string;
+    DefaultCulture: string;
+    CurrentCulture: string | null;
 }
 
 interface IPluralizedString {
