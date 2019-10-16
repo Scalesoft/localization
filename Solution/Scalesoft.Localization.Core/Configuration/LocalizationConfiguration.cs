@@ -19,5 +19,7 @@ namespace Scalesoft.Localization.Core.Configuration
         public bool AutoLoadResources { get; set; }
 
         public LocLocalizationResource FirstAutoTranslateResource { get; set; }
+
+        public bool SecureCookie { get; set; } = false;
     }
 }
