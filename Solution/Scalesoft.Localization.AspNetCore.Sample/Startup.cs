@@ -5,12 +5,10 @@ using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore.IoC;
-using Scalesoft.Localization.AspNetCore.Sample.Extensions;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Dictionary;
 using Scalesoft.Localization.Core.Manager;
@@ -70,7 +68,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             app.UseStaticFiles();
 
-            app.UseLocalizationCookieSetter();
+            app.UseLocalization();
 
             app.UseMvc(routes =>
             {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Scalesoft.Localization.AspNetCore.Sample.Middleware
+namespace Scalesoft.Localization.AspNetCore.Middleware
 {
     public class LocalizationCookieMiddleware
     {

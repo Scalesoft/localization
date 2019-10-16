@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using Scalesoft.Localization.AspNetCore.Factory;
 using Scalesoft.Localization.AspNetCore.Manager;
+using Scalesoft.Localization.AspNetCore.Middleware;
 using Scalesoft.Localization.AspNetCore.Service;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Database;
@@ -25,6 +27,11 @@ namespace Scalesoft.Localization.AspNetCore.IoC
             services.AddTransient<IRazorLocalizationService, RazorLocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
             services.AddTransient<IDynamicTextService, DynamicTextService>();
+        }
+
+        public static IApplicationBuilder UseLocalization(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<LocalizationCookieMiddleware>();
         }
     }
 }
