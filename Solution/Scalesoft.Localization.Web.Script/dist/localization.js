@@ -288,11 +288,11 @@ var Localization = /** @class */ (function () {
         return baseUrl;
     };
     Localization.prototype.getCurrentCulture = function () {
-        if (typeof this.mCurrentCulture === "undefined") {
+        if (this.mCurrentCulture === undefined) {
             var parsedCookieValue = this.getParsedCultureCookie();
-            var currentCulture = parsedCookieValue.currentCulture
-                ? parsedCookieValue.currentCulture
-                : parsedCookieValue.defaultCulture;
+            var currentCulture = parsedCookieValue.CurrentCulture === null
+                ? parsedCookieValue.DefaultCulture
+                : parsedCookieValue.CurrentCulture;
             this.setCurrentCulture(currentCulture);
         }
         return this.mCurrentCulture;
@@ -303,6 +303,10 @@ var Localization = /** @class */ (function () {
     Localization.prototype.getParsedCultureCookie = function () {
         var currentCultureCookieValue = this.getCurrentCultureCookie();
         var parsedCookieValue = JSON.parse(currentCultureCookieValue);
+        if (parsedCookieValue.DefaultCulture === undefined
+            || parsedCookieValue.CurrentCulture === undefined) {
+            console.error("Unexpected value of the cookie " + this.mCultureCookieName + ". Expected object with properties 'DefaultCulture', and 'CurrentCulture'.", parsedCookieValue);
+        }
         return parsedCookieValue;
     };
     Localization.prototype.getCurrentCultureCookie = function () {

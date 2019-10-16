@@ -84,8 +84,8 @@ interface ILocalizedString {
     value: string;
 }
 interface ILocalizationCookie {
-    defaultCulture: string;
-    currentCulture: string;
+    DefaultCulture: string;
+    CurrentCulture: string | null;
 }
 interface IPluralizedString {
     intervals: IIntervalWithTranslation[];
