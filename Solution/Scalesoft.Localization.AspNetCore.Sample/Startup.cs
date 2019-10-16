@@ -46,16 +46,15 @@ namespace Scalesoft.Localization.AspNetCore.Sample
                 });
 
             services.AddNHibernate(m_configuration);
-            
+
             m_container = new Container().WithDependencyInjectionAdapter(services);
-            
+
             return m_container.Resolve<IServiceProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -83,12 +82,12 @@ namespace Scalesoft.Localization.AspNetCore.Sample
             AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "cs-CZ.json");
             AddLocalizationDictionary(dictionaryManager, dictionaryFactory, "en.json");
         }
-        
+
         private void AddLocalizationDictionary(
             IAutoDictionaryManager dictionaryManager,
             IDictionaryFactory dictionaryFactory,
             string fileName
-            )
+        )
         {
             var filePath = Path.Combine("OtherLocalization", fileName);
 
