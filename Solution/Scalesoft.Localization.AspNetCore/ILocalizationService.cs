@@ -24,7 +24,7 @@ namespace Scalesoft.Localization.AspNetCore
         /// <summary>
         /// Creates the cookie with default language set
         /// </summary>
-        void SetDefaultCookie();
+        void SetResponseCookie();
 
         //Explicit calls
         /// <summary>

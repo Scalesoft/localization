@@ -16,7 +16,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            m_localization.SetDefaultCookie();
+            m_localization.SetResponseCookie();
             await m_next.Invoke(context);
         }
     }

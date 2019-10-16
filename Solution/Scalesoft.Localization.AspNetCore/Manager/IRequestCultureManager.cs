@@ -8,6 +8,6 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         void SetCulture(string culture);
 
-        void SetOrFixDefaultCookie();
+        void SetResponseCookie();
     }
 }

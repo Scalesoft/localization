@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Scalesoft.Localization.AspNetCore.Models;
 using Scalesoft.Localization.Core.Manager;
 
@@ -24,26 +25,14 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         public CultureInfo ResolveRequestCulture(CultureInfo defaultCulture)
         {
-            var request = m_httpContextAccessor.HttpContext.Request;
-
-            var cultureCookie = request.Cookies[CultureCookieName];
-            string cookieCurrentCulture = null;
-            if (!string.IsNullOrEmpty(cultureCookie))
-            {
-                var currentCookieDeserialized = SerializationManager.DeserializeCookie(cultureCookie);
-
-                if (currentCookieDeserialized.Success)
-                {
-                    cookieCurrentCulture = currentCookieDeserialized.Value.CurrentCulture;
-                }
-            }
-
-            var cultureValue = cookieCurrentCulture ?? defaultCulture.Name;
+            var localizationCookie = GetCookieValue();
+            
+            var cultureValue = localizationCookie.CurrentCulture ?? defaultCulture.Name;
 
             return new CultureInfo(cultureValue);
         }
 
-        public void SetOrFixDefaultCookie()
+        public void SetResponseCookie()
         {
             SetCookieValues();
         }
@@ -55,62 +44,35 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         private void SetCookieValues(string culture = null)
         {
-            var response = m_httpContextAccessor.HttpContext.Response;
-            var request = m_httpContextAccessor.HttpContext.Request;
-
-            var currentCultureCookie = request.Cookies[CultureCookieName];
-
-            string currentCultureName = null;
-
+            var localizationCookie = GetCookieValue();
+            
             if (culture != null)
             {
-                var cultureInfo = new CultureInfo(culture);
-
-                currentCultureName = cultureInfo.Name;
+                var requestCulture = new RequestCulture(culture);
+                localizationCookie.CurrentCulture = requestCulture.Culture.Name;
             }
 
-            if (string.IsNullOrEmpty(currentCultureCookie))
-            {
-                SetLanguageCookie(response, currentCultureName);
-            }
-            else
-            {
-                var deserializationResult = SerializationManager.DeserializeCookie(currentCultureCookie);
-
-                var cultureMustBeSet = currentCultureName != null &&
-                                       deserializationResult.Success &&
-                                       deserializationResult.Value.CurrentCulture != currentCultureName;
-
-                if (!deserializationResult.Success || cultureMustBeSet)
-                {
-                    SetLanguageCookie(response, currentCultureName);
-                }
-            }
+            localizationCookie.DefaultCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
+            
+            SetCookieValue(localizationCookie);
         }
 
-        private void SetCookieValue(HttpResponse response, LocalizationCookie cookie)
+        private LocalizationCookie GetCookieValue()
         {
-            var serializedCookie = SerializationManager.SerializeCookie(cookie);
-
-            SetCookieValue(response, serializedCookie);
+            var request = m_httpContextAccessor.HttpContext.Request;
+            var currentCultureCookie = request.Cookies[CultureCookieName];
+            var deserializedCookie = CookieSerializer.Deserialize(currentCultureCookie); // TODO maybe check null value
+            return deserializedCookie;
         }
-
-        private void SetLanguageCookie(HttpResponse response, string culture = null)
+        
+        private void SetCookieValue(LocalizationCookie cookie)
         {
-            var newCookie = new LocalizationCookie
-            {
-                CurrentCulture = culture,
-                DefaultCulture = m_autoLocalizationManager.GetDefaultCulture().Name,
-            };
+            var response = m_httpContextAccessor.HttpContext.Response;
+            var serializedCookie = CookieSerializer.Serialize(cookie);
 
-            SetCookieValue(response, newCookie);
-        }
-
-        private void SetCookieValue(HttpResponse response, string value)
-        {
             response.Cookies.Append(
                 CultureCookieName,
-                value,
+                serializedCookie,
                 new CookieOptions
                 {
                     Expires = DateTimeOffset.UtcNow.AddYears(1),
