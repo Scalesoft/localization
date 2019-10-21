@@ -1,4 +1,5 @@
 declare const LocalizationStatusSuccess: (text: string, scope: string) => ILocalizationStatus;
+declare const LocalizationDictionaryStatusSuccess: (scope: string) => IDictionaryError;
 declare class Localization {
     private mGlobalScope;
     private mCultureCookieName;
@@ -13,17 +14,17 @@ declare class Localization {
     private callErrorHandler;
     private getTranslationOnError;
     /**
-     * @deprecated Use translateAsync
+     * @deprecated Use translateAsync or getDictionaryAsync() => translate
      */
     translate(text: string, scope?: string, cultureName?: string): ILocalizedString;
     translateAsync(text: string, scope?: string, cultureName?: string): Promise<ILocalizationResult>;
     /**
-     *@deprecated Use translateFormatAsync
+     *@deprecated Use translateFormatAsync or getDictionaryAsync() => translateFormat
      */
     translateFormat(text: string, parameters: string[], scope?: string, cultureName?: string): ILocalizedString;
     translateFormatAsync(text: string, parameters: string[], scope?: string, cultureName?: string): Promise<ILocalizationResult>;
     /**
-     *@deprecated Use translatePluralizationAsync
+     *@deprecated Use translatePluralizationAsync or getPluralizationDictionaryAsync() => translatePluralization
      */
     translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString;
     translatePluralizationAsync(text: string, number: number, scope?: string, cultureName?: string): Promise<ILocalizationResult>;
@@ -34,12 +35,12 @@ declare class Localization {
      *@deprecated Use getDictionaryAsync
      */
     private getDictionary;
-    private getDictionaryAsync;
+    getDictionaryAsync(scope?: string, cultureName?: string): Promise<ILocalizationDictionaryResult<LocalizationDictionary>>;
     /**
      *@deprecated Use getPluralizationDictionaryAsync
      */
     private getPluralizationDictionary;
-    private getPluralizationDictionaryAsync;
+    getPluralizationDictionaryAsync(scope?: string, cultureName?: string): Promise<ILocalizationDictionaryResult<LocalizationPluralizationDictionary>>;
     private checkCultureName;
     private checkScope;
     /**
@@ -75,14 +76,14 @@ declare class Localization {
 declare class LocalizationDictionary {
     private readonly mDictionary;
     constructor(dictionary: string);
-    translate(text: string): ILocalizedString;
-    translateFormat(text: string, parameters: string[]): ILocalizedString;
+    translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null;
+    translateFormat(text: string, parameters: string[], fallback: () => ILocalizedString): ILocalizedString;
     private formatString;
 }
 declare class LocalizationPluralizationDictionary {
     private readonly mDictionary;
     constructor(dictionary: string);
-    translatePluralization(text: string, number: number): ILocalizedString;
+    translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString;
 }
 declare enum LocalizationErrorResolution {
     Null = 0,
@@ -116,7 +117,11 @@ interface ILocalizationStatus {
 }
 interface IDictionaryError {
     scope: string;
-    context: object;
+    context: object | null;
+}
+interface ILocalizationDictionaryResult<TDictionary> {
+    result: TDictionary | null;
+    status: IDictionaryError;
 }
 interface ILocalizationResult {
     result: ILocalizedString;

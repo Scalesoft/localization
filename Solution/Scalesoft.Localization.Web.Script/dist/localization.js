@@ -4,6 +4,10 @@ var LocalizationStatusSuccess = function (text, scope) { return ({
     text: text,
     scope: scope,
 }); };
+var LocalizationDictionaryStatusSuccess = function (scope) { return ({
+    scope: scope,
+    context: null,
+}); };
 var Localization = /** @class */ (function () {
     function Localization(localizationConfiguration) {
         this.mGlobalScope = "global";
@@ -39,102 +43,83 @@ var Localization = /** @class */ (function () {
         }
     };
     /**
-     * @deprecated Use translateAsync
+     * @deprecated Use translateAsync or getDictionaryAsync() => translate
      */
     Localization.prototype.translate = function (text, scope, cultureName) {
+        var _this = this;
         var dictionary = this.getDictionary(scope, cultureName);
-        var result = dictionary.translate(text);
-        if (result == null) {
-            return this.getFallbackTranslation(text, scope, cultureName);
-        }
-        return result;
+        return dictionary.translate(text, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
     };
     Localization.prototype.translateAsync = function (text, scope, cultureName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.getDictionaryAsync(function (dictionary) {
-                var result = dictionary.translate(text);
-                if (result == null) {
-                    resolve({
-                        result: _this.getFallbackTranslation(text, scope, cultureName),
-                        status: LocalizationStatusSuccess(text, scope),
-                    });
-                }
+            _this.getDictionaryAsync(scope, cultureName)
+                .then(function (dictionaryResponse) {
+                var result = dictionaryResponse.result.translate(text, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
                 resolve({
                     result: result,
                     status: LocalizationStatusSuccess(text, scope),
                 });
-            }, function (status) {
+            }, function (dictionaryResponse) {
                 var errorStatus = {
                     success: false,
                     message: "Unable to load required dictionary",
                     errorType: 'loadDictionary',
                     text: text,
-                    scope: status.scope,
-                    context: status.context,
+                    scope: dictionaryResponse.status.scope,
+                    context: dictionaryResponse.status.context,
                 };
                 _this.callErrorHandler(errorStatus);
                 reject({
                     result: _this.getTranslationOnError(text, scope),
                     status: LocalizationStatusSuccess(text, scope),
                 });
-            }, scope, cultureName);
+            });
         });
     };
     /**
-     *@deprecated Use translateFormatAsync
+     *@deprecated Use translateFormatAsync or getDictionaryAsync() => translateFormat
      */
     Localization.prototype.translateFormat = function (text, parameters, scope, cultureName) {
+        var _this = this;
         var dictionary = this.getDictionary(scope, cultureName);
-        var result = dictionary.translateFormat(text, parameters);
-        if (result == null) {
-            return this.getFallbackTranslation(text, scope, cultureName);
-        }
-        return result;
+        return dictionary.translateFormat(text, parameters, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
     };
     Localization.prototype.translateFormatAsync = function (text, parameters, scope, cultureName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.getDictionaryAsync(function (dictionary) {
-                var result = dictionary.translateFormat(text, parameters);
-                if (result == null) {
-                    resolve({
-                        result: _this.getFallbackTranslation(text, scope, cultureName),
-                        status: LocalizationStatusSuccess(text, scope),
-                    });
-                }
+            _this.getDictionaryAsync(scope, cultureName)
+                .then(function (dictionaryResponse) {
+                var result = dictionaryResponse.result.translateFormat(text, parameters, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
                 resolve({
                     result: result,
                     status: LocalizationStatusSuccess(text, scope),
                 });
-            }, function (status) {
+            }, function (dictionaryResponse) {
                 var errorStatus = {
                     success: false,
                     message: "Unable to load required dictionary",
                     errorType: 'loadDictionary',
                     text: text,
-                    scope: status.scope,
-                    context: status.context,
+                    scope: dictionaryResponse.status.scope,
+                    context: dictionaryResponse.status.context,
                 };
                 _this.callErrorHandler(errorStatus);
                 reject({
                     result: _this.getTranslationOnError(text, scope),
                     status: LocalizationStatusSuccess(text, scope),
                 });
-            }, scope, cultureName);
+            });
         });
     };
     /**
-     *@deprecated Use translatePluralizationAsync
+     *@deprecated Use translatePluralizationAsync or getPluralizationDictionaryAsync() => translatePluralization
      */
     Localization.prototype.translatePluralization = function (text, number, scope, cultureName) {
+        var _this = this;
         var dictionary = this.getPluralizationDictionary(scope, cultureName);
         try {
-            var result = dictionary.translatePluralization(text, number);
-            if (result == null) {
-                return this.getFallbackTranslation(text, scope, cultureName);
-            }
-            return result;
+            return dictionary.translatePluralization(text, number, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
         }
         catch (exception) {
             return this.handleError(exception, text);
@@ -143,15 +128,10 @@ var Localization = /** @class */ (function () {
     Localization.prototype.translatePluralizationAsync = function (text, number, scope, cultureName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this.getPluralizationDictionaryAsync(function (dictionary) {
+            _this.getPluralizationDictionaryAsync(scope, cultureName)
+                .then(function (dictionaryResponse) {
                 try {
-                    var result = dictionary.translatePluralization(text, number);
-                    if (result == null) {
-                        resolve({
-                            result: _this.getFallbackTranslation(text, scope, cultureName),
-                            status: LocalizationStatusSuccess(text, scope),
-                        });
-                    }
+                    var result = dictionaryResponse.result.translatePluralization(text, number, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
                     resolve({
                         result: result,
                         status: LocalizationStatusSuccess(text, scope),
@@ -169,21 +149,21 @@ var Localization = /** @class */ (function () {
                         },
                     });
                 }
-            }, function (status) {
+            }, function (dictionaryResponse) {
                 var errorStatus = {
                     success: false,
                     message: "Unable to load required pluralization dictionary",
                     errorType: 'loadDictionary',
                     text: text,
-                    scope: status.scope,
-                    context: status.context,
+                    scope: dictionaryResponse.status.scope,
+                    context: dictionaryResponse.status.context,
                 };
                 _this.callErrorHandler(errorStatus);
                 reject({
                     result: _this.getTranslationOnError(text, scope),
                     status: LocalizationStatusSuccess(text, scope),
                 });
-            }, scope, cultureName);
+            });
         });
     };
     Localization.prototype.getFallbackTranslation = function (text, scope, cultureName) {
@@ -205,10 +185,23 @@ var Localization = /** @class */ (function () {
         cultureName = this.checkCultureName(cultureName);
         return this.getLocalizationDictionary(scope, cultureName);
     };
-    Localization.prototype.getDictionaryAsync = function (onSuccess, onFailed, scope, cultureName) {
+    Localization.prototype.getDictionaryAsync = function (scope, cultureName) {
+        var _this = this;
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
-        return this.getLocalizationDictionaryAsync(scope, cultureName, onSuccess, onFailed);
+        return new Promise(function (resolve, reject) {
+            _this.getLocalizationDictionaryAsync(scope, cultureName, function (dictionary) {
+                resolve({
+                    result: dictionary,
+                    status: LocalizationDictionaryStatusSuccess(scope),
+                });
+            }, function (status) {
+                reject({
+                    result: null,
+                    status: status,
+                });
+            });
+        });
     };
     /**
      *@deprecated Use getPluralizationDictionaryAsync
@@ -218,10 +211,23 @@ var Localization = /** @class */ (function () {
         cultureName = this.checkCultureName(cultureName);
         return this.getPluralizationLocalizationDictionary(scope, cultureName);
     };
-    Localization.prototype.getPluralizationDictionaryAsync = function (onSuccess, onFailed, scope, cultureName) {
+    Localization.prototype.getPluralizationDictionaryAsync = function (scope, cultureName) {
+        var _this = this;
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
-        return this.getPluralizationLocalizationDictionaryAsync(scope, cultureName, onSuccess, onFailed);
+        return new Promise(function (resolve, reject) {
+            _this.getPluralizationLocalizationDictionaryAsync(scope, cultureName, function (dictionary) {
+                resolve({
+                    result: dictionary,
+                    status: LocalizationDictionaryStatusSuccess(scope),
+                });
+            }, function (status) {
+                reject({
+                    result: null,
+                    status: status,
+                });
+            });
+        });
     };
     Localization.prototype.checkCultureName = function (cultureName) {
         if (cultureName) {
@@ -473,15 +479,18 @@ var LocalizationDictionary = /** @class */ (function () {
     function LocalizationDictionary(dictionary) {
         this.mDictionary = JSON.parse(dictionary);
     }
-    LocalizationDictionary.prototype.translate = function (text) {
+    LocalizationDictionary.prototype.translate = function (text, fallback) {
         var result = this.mDictionary[text];
-        if (typeof result === "undefined") {
-            return null;
+        if (result === undefined) {
+            return fallback();
         }
         return result;
     };
-    LocalizationDictionary.prototype.translateFormat = function (text, parameters) {
-        var translation = this.translate(text);
+    LocalizationDictionary.prototype.translateFormat = function (text, parameters, fallback) {
+        var translation = this.translate(text, function () { return null; });
+        if (translation === null) {
+            return fallback();
+        }
         var formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
         return { name: text, value: formatedText, resourceNotFound: translation.resourceNotFound };
     };
@@ -494,10 +503,10 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
     function LocalizationPluralizationDictionary(dictionary) {
         this.mDictionary = JSON.parse(dictionary);
     }
-    LocalizationPluralizationDictionary.prototype.translatePluralization = function (text, number) {
+    LocalizationPluralizationDictionary.prototype.translatePluralization = function (text, number, fallback) {
         var pluralizedString = this.mDictionary[text];
-        if (typeof pluralizedString === "undefined" || pluralizedString === null) {
-            return null;
+        if (pluralizedString === undefined || pluralizedString === null) {
+            return fallback();
         }
         for (var _i = 0, _a = pluralizedString.intervals; _i < _a.length; _i++) {
             var interval = _a[_i];

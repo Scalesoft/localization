@@ -5,6 +5,11 @@
     scope,
 });
 
+const LocalizationDictionaryStatusSuccess = (scope: string): IDictionaryError => ({
+    scope,
+    context: null,
+});
+
 class Localization {
     private mGlobalScope = "global";
 
@@ -53,7 +58,7 @@ class Localization {
     }
 
     /**
-     * @deprecated Use translateAsync
+     * @deprecated Use translateAsync or getDictionaryAsync() => translate
      */
     public translate(
         text: string,
@@ -62,12 +67,10 @@ class Localization {
     ): ILocalizedString {
         const dictionary = this.getDictionary(scope, cultureName);
 
-        const result = dictionary.translate(text);
-        if (result == null) {
-            return this.getFallbackTranslation(text, scope, cultureName);
-        }
-
-        return result;
+        return dictionary.translate(
+            text,
+            () => this.getFallbackTranslation(text, scope, cultureName),
+        );
     }
 
     public translateAsync(
@@ -76,48 +79,43 @@ class Localization {
         cultureName?: string,
     ): Promise<ILocalizationResult> {
         return new Promise((resolve, reject) => {
-            this.getDictionaryAsync((dictionary) => {
-                const result = dictionary.translate(text);
+            this.getDictionaryAsync(scope, cultureName)
+                .then((dictionaryResponse) => {
+                    const result = dictionaryResponse.result.translate(
+                        text,
+                        () => this.getFallbackTranslation(text, scope, cultureName),
+                    );
 
-                if (result == null) {
                     resolve(
                         {
-                            result: this.getFallbackTranslation(text, scope, cultureName),
+                            result: result,
                             status: LocalizationStatusSuccess(text, scope),
                         }
                     );
-                }
+                }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
+                    const errorStatus = {
+                        success: false,
+                        message: "Unable to load required dictionary",
+                        errorType: 'loadDictionary',
+                        text,
+                        scope: dictionaryResponse.status.scope,
+                        context: dictionaryResponse.status.context,
+                    };
 
-                resolve(
-                    {
-                        result: result,
-                        status: LocalizationStatusSuccess(text, scope),
-                    }
-                );
-            }, status => {
-                const errorStatus = {
-                    success: false,
-                    message: "Unable to load required dictionary",
-                    errorType: 'loadDictionary',
-                    text,
-                    scope: status.scope,
-                    context: status.context,
-                };
+                    this.callErrorHandler(errorStatus);
 
-                this.callErrorHandler(errorStatus);
-
-                reject(
-                    {
-                        result: this.getTranslationOnError(text, scope),
-                        status: LocalizationStatusSuccess(text, scope),
-                    }
-                );
-            }, scope, cultureName);
+                    reject(
+                        {
+                            result: this.getTranslationOnError(text, scope),
+                            status: LocalizationStatusSuccess(text, scope),
+                        }
+                    );
+                });
         });
     }
 
     /**
-     *@deprecated Use translateFormatAsync
+     *@deprecated Use translateFormatAsync or getDictionaryAsync() => translateFormat
      */
     public translateFormat(
         text: string,
@@ -127,12 +125,11 @@ class Localization {
     ): ILocalizedString {
         const dictionary = this.getDictionary(scope, cultureName);
 
-        const result = dictionary.translateFormat(text, parameters);
-        if (result == null) {
-            return this.getFallbackTranslation(text, scope, cultureName);
-        }
-
-        return result;
+        return dictionary.translateFormat(
+            text,
+            parameters,
+            () => this.getFallbackTranslation(text, scope, cultureName),
+        );
     }
 
     public translateFormatAsync(
@@ -142,48 +139,44 @@ class Localization {
         cultureName?: string,
     ): Promise<ILocalizationResult> {
         return new Promise((resolve, reject) => {
-            this.getDictionaryAsync((dictionary) => {
-                const result = dictionary.translateFormat(text, parameters);
+            this.getDictionaryAsync(scope, cultureName)
+                .then((dictionaryResponse) => {
+                    const result = dictionaryResponse.result.translateFormat(
+                        text,
+                        parameters,
+                        () => this.getFallbackTranslation(text, scope, cultureName),
+                    );
 
-                if (result == null) {
                     resolve(
                         {
-                            result: this.getFallbackTranslation(text, scope, cultureName),
+                            result: result,
                             status: LocalizationStatusSuccess(text, scope),
                         }
                     );
-                }
+                }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
+                    const errorStatus = {
+                        success: false,
+                        message: "Unable to load required dictionary",
+                        errorType: 'loadDictionary',
+                        text,
+                        scope: dictionaryResponse.status.scope,
+                        context: dictionaryResponse.status.context,
+                    };
 
-                resolve(
-                    {
-                        result: result,
-                        status: LocalizationStatusSuccess(text, scope),
-                    }
-                );
-            }, status => {
-                const errorStatus = {
-                    success: false,
-                    message: "Unable to load required dictionary",
-                    errorType: 'loadDictionary',
-                    text,
-                    scope: status.scope,
-                    context: status.context,
-                };
+                    this.callErrorHandler(errorStatus);
 
-                this.callErrorHandler(errorStatus);
-
-                reject(
-                    {
-                        result: this.getTranslationOnError(text, scope),
-                        status: LocalizationStatusSuccess(text, scope),
-                    }
-                );
-            }, scope, cultureName);
+                    reject(
+                        {
+                            result: this.getTranslationOnError(text, scope),
+                            status: LocalizationStatusSuccess(text, scope),
+                        }
+                    );
+                });
         });
     }
 
     /**
-     *@deprecated Use translatePluralizationAsync
+     *@deprecated Use translatePluralizationAsync or getPluralizationDictionaryAsync() => translatePluralization
      */
     public translatePluralization(
         text: string,
@@ -192,13 +185,13 @@ class Localization {
         cultureName?: string,
     ): ILocalizedString {
         const dictionary = this.getPluralizationDictionary(scope, cultureName);
-        try {
-            const result = dictionary.translatePluralization(text, number);
-            if (result == null) {
-                return this.getFallbackTranslation(text, scope, cultureName);
-            }
 
-            return result;
+        try {
+            return dictionary.translatePluralization(
+                text,
+                number,
+                () => this.getFallbackTranslation(text, scope, cultureName),
+            );
         } catch (exception) {
             return this.handleError(exception, text);
         }
@@ -211,58 +204,54 @@ class Localization {
         cultureName?: string,
     ): Promise<ILocalizationResult> {
         return new Promise((resolve, reject) => {
-            this.getPluralizationDictionaryAsync((dictionary) => {
-                try {
-                    const result = dictionary.translatePluralization(text, number);
+            this.getPluralizationDictionaryAsync(scope, cultureName)
+                .then((dictionaryResponse) => {
+                    try {
+                        const result = dictionaryResponse.result.translatePluralization(
+                            text,
+                            number,
+                            () => this.getFallbackTranslation(text, scope, cultureName),
+                        );
 
-                    if (result == null) {
                         resolve(
                             {
-                                result: this.getFallbackTranslation(text, scope, cultureName),
+                                result: result,
                                 status: LocalizationStatusSuccess(text, scope),
                             }
                         );
+                    } catch (exception) {
+                        reject(
+                            {
+                                result: this.handleError(exception, text),
+                                status: {
+                                    success: false,
+                                    message: exception.message,
+                                    errorType: 'exception',
+                                    text,
+                                    scope,
+                                },
+                            }
+                        );
                     }
+                }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
+                    const errorStatus = {
+                        success: false,
+                        message: "Unable to load required pluralization dictionary",
+                        errorType: 'loadDictionary',
+                        text,
+                        scope: dictionaryResponse.status.scope,
+                        context: dictionaryResponse.status.context,
+                    };
 
-                    resolve(
+                    this.callErrorHandler(errorStatus);
+
+                    reject(
                         {
-                            result: result,
+                            result: this.getTranslationOnError(text, scope),
                             status: LocalizationStatusSuccess(text, scope),
                         }
                     );
-                } catch (exception) {
-                    reject(
-                        {
-                            result: this.handleError(exception, text),
-                            status: {
-                                success: false,
-                                message: exception.message,
-                                errorType: 'exception',
-                                text,
-                                scope,
-                            },
-                        }
-                    );
-                }
-            }, status => {
-                const errorStatus = {
-                    success: false,
-                    message: "Unable to load required pluralization dictionary",
-                    errorType: 'loadDictionary',
-                    text,
-                    scope: status.scope,
-                    context: status.context,
-                };
-
-                this.callErrorHandler(errorStatus);
-
-                reject(
-                    {
-                        result: this.getTranslationOnError(text, scope),
-                        status: LocalizationStatusSuccess(text, scope),
-                    }
-                );
-            }, scope, cultureName);
+                });
         });
     }
 
@@ -294,16 +283,30 @@ class Localization {
         return this.getLocalizationDictionary(scope, cultureName);
     }
 
-    private getDictionaryAsync(
-        onSuccess: (dictionary: LocalizationDictionary) => void,
-        onFailed: (scope: IDictionaryError) => void,
+    public getDictionaryAsync(
         scope?: string,
         cultureName?: string,
-    ) {
+    ): Promise<ILocalizationDictionaryResult<LocalizationDictionary>> {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
 
-        return this.getLocalizationDictionaryAsync(scope, cultureName, onSuccess, onFailed);
+        return new Promise((resolve, reject) => {
+            this.getLocalizationDictionaryAsync(scope, cultureName, (dictionary: LocalizationDictionary) => {
+                resolve(
+                    {
+                        result: dictionary,
+                        status: LocalizationDictionaryStatusSuccess(scope),
+                    }
+                );
+            }, (status: IDictionaryError) => {
+                reject(
+                    {
+                        result: null,
+                        status,
+                    }
+                );
+            });
+        });
     }
 
     /**
@@ -316,15 +319,30 @@ class Localization {
         return this.getPluralizationLocalizationDictionary(scope, cultureName);
     }
 
-    private getPluralizationDictionaryAsync(
-        onSuccess: (dictionary: LocalizationPluralizationDictionary) => void,
-        onFailed: (scope: IDictionaryError) => void,
-        scope?: string, cultureName?: string,
-    ) {
+    public getPluralizationDictionaryAsync(
+        scope?: string,
+        cultureName?: string,
+    ): Promise<ILocalizationDictionaryResult<LocalizationPluralizationDictionary>> {
         scope = this.checkScope(scope);
         cultureName = this.checkCultureName(cultureName);
 
-        return this.getPluralizationLocalizationDictionaryAsync(scope, cultureName, onSuccess, onFailed);
+        return new Promise((resolve, reject) => {
+            this.getPluralizationLocalizationDictionaryAsync(scope, cultureName, (dictionary: LocalizationPluralizationDictionary) => {
+                resolve(
+                    {
+                        result: dictionary,
+                        status: LocalizationDictionaryStatusSuccess(scope),
+                    }
+                );
+            }, (status: IDictionaryError) => {
+                reject(
+                    {
+                        result: null,
+                        status,
+                    }
+                );
+            });
+        });
     }
 
     private checkCultureName(cultureName?: string): string {
@@ -703,17 +721,22 @@ class LocalizationDictionary {
         this.mDictionary = JSON.parse(dictionary);
     }
 
-    public translate(text: string): ILocalizedString {
+    public translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null {
         const result = this.mDictionary[text];
-        if (typeof result === "undefined") {
-            return null;
+
+        if (result === undefined) {
+            return fallback();
         }
 
         return result;
     }
 
-    public translateFormat(text: string, parameters: string[]): ILocalizedString {
-        const translation = this.translate(text);
+    public translateFormat(text: string, parameters: string[], fallback: () => ILocalizedString): ILocalizedString {
+        const translation = this.translate(text, () => null);
+
+        if (translation === null) {
+            return fallback();
+        }
 
         const formatedText = !parameters ? translation.value : this.formatString(translation, parameters);
 
@@ -732,11 +755,13 @@ class LocalizationPluralizationDictionary {
         this.mDictionary = JSON.parse(dictionary);
     }
 
-    public translatePluralization(text: string, number: number): ILocalizedString {
+    public translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString {
         const pluralizedString = this.mDictionary[text];
-        if (typeof pluralizedString === "undefined" || pluralizedString === null) {
-            return null;
+
+        if (pluralizedString === undefined || pluralizedString === null) {
+            return fallback();
         }
+
         for (let interval of pluralizedString.intervals) {
             const translationInterval = interval.interval;
 
@@ -788,7 +813,12 @@ interface ILocalizationStatus {
 
 interface IDictionaryError {
     scope: string;
-    context: object;
+    context: object | null;
+}
+
+interface ILocalizationDictionaryResult<TDictionary> {
+    result: TDictionary | null,
+    status: IDictionaryError,
 }
 
 interface ILocalizationResult {
