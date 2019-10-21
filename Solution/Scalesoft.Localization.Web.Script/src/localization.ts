@@ -69,7 +69,7 @@ class Localization {
 
         return dictionary.translate(
             text,
-            () => this.getFallbackTranslation(text, scope, cultureName),
+            () => dictionary.getFallbackTranslation(text, scope, cultureName),
         );
     }
 
@@ -83,7 +83,7 @@ class Localization {
                 .then((dictionaryResponse) => {
                     const result = dictionaryResponse.result.translate(
                         text,
-                        () => this.getFallbackTranslation(text, scope, cultureName),
+                        () => dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName),
                     );
 
                     resolve(
@@ -128,7 +128,7 @@ class Localization {
         return dictionary.translateFormat(
             text,
             parameters,
-            () => this.getFallbackTranslation(text, scope, cultureName),
+            () => dictionary.getFallbackTranslation(text, scope, cultureName),
         );
     }
 
@@ -144,7 +144,7 @@ class Localization {
                     const result = dictionaryResponse.result.translateFormat(
                         text,
                         parameters,
-                        () => this.getFallbackTranslation(text, scope, cultureName),
+                        () => dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName),
                     );
 
                     resolve(
@@ -190,7 +190,7 @@ class Localization {
             return dictionary.translatePluralization(
                 text,
                 number,
-                () => this.getFallbackTranslation(text, scope, cultureName),
+                () => dictionary.getFallbackTranslation(text, scope, cultureName),
             );
         } catch (exception) {
             return this.handleError(exception, text);
@@ -210,7 +210,7 @@ class Localization {
                         const result = dictionaryResponse.result.translatePluralization(
                             text,
                             number,
-                            () => this.getFallbackTranslation(text, scope, cultureName),
+                            () => dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName),
                         );
 
                         resolve(
@@ -253,14 +253,6 @@ class Localization {
                     );
                 });
         });
-    }
-
-    private getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
-        console.log(
-            `Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`,
-        );
-
-        return {name: text, value: "X{undefined}", resourceNotFound: true};
     }
 
     private handleError(exception: Error, text: string) {
@@ -714,11 +706,25 @@ class Localization {
     }
 }
 
-class LocalizationDictionary {
-    private readonly mDictionary: { [key: string]: ILocalizedString };
+abstract class BaseLocalizationDictionary<TResponse> {
+    protected readonly mDictionary: { [key: string]: TResponse };
 
-    constructor(dictionary: string) {
+    protected constructor(dictionary: string) {
         this.mDictionary = JSON.parse(dictionary);
+    }
+
+    public getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
+        console.log(
+            `Localized string with key=${text} was not found in dictionary=${scope} with culture=${cultureName}`,
+        );
+
+        return {name: text, value: "X{undefined}", resourceNotFound: true};
+    }
+}
+
+class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
+    constructor(dictionary: string) {
+        super(dictionary);
     }
 
     public translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null {
@@ -748,11 +754,9 @@ class LocalizationDictionary {
     }
 }
 
-class LocalizationPluralizationDictionary {
-    private readonly mDictionary: { [key: string]: IPluralizedString };
-
+class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
     constructor(dictionary: string) {
-        this.mDictionary = JSON.parse(dictionary);
+        super(dictionary);
     }
 
     public translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString {
@@ -772,7 +776,6 @@ class LocalizationPluralizationDictionary {
         }
 
         return pluralizedString.defaultLocalizedString;
-
     }
 }
 

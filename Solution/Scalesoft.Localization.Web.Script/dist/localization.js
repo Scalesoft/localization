@@ -1,3 +1,16 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var LocalizationStatusSuccess = function (text, scope) { return ({
     success: true,
     message: "Success",
@@ -46,16 +59,15 @@ var Localization = /** @class */ (function () {
      * @deprecated Use translateAsync or getDictionaryAsync() => translate
      */
     Localization.prototype.translate = function (text, scope, cultureName) {
-        var _this = this;
         var dictionary = this.getDictionary(scope, cultureName);
-        return dictionary.translate(text, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
+        return dictionary.translate(text, function () { return dictionary.getFallbackTranslation(text, scope, cultureName); });
     };
     Localization.prototype.translateAsync = function (text, scope, cultureName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this.getDictionaryAsync(scope, cultureName)
                 .then(function (dictionaryResponse) {
-                var result = dictionaryResponse.result.translate(text, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
+                var result = dictionaryResponse.result.translate(text, function () { return dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName); });
                 resolve({
                     result: result,
                     status: LocalizationStatusSuccess(text, scope),
@@ -81,16 +93,15 @@ var Localization = /** @class */ (function () {
      *@deprecated Use translateFormatAsync or getDictionaryAsync() => translateFormat
      */
     Localization.prototype.translateFormat = function (text, parameters, scope, cultureName) {
-        var _this = this;
         var dictionary = this.getDictionary(scope, cultureName);
-        return dictionary.translateFormat(text, parameters, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
+        return dictionary.translateFormat(text, parameters, function () { return dictionary.getFallbackTranslation(text, scope, cultureName); });
     };
     Localization.prototype.translateFormatAsync = function (text, parameters, scope, cultureName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this.getDictionaryAsync(scope, cultureName)
                 .then(function (dictionaryResponse) {
-                var result = dictionaryResponse.result.translateFormat(text, parameters, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
+                var result = dictionaryResponse.result.translateFormat(text, parameters, function () { return dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName); });
                 resolve({
                     result: result,
                     status: LocalizationStatusSuccess(text, scope),
@@ -116,10 +127,9 @@ var Localization = /** @class */ (function () {
      *@deprecated Use translatePluralizationAsync or getPluralizationDictionaryAsync() => translatePluralization
      */
     Localization.prototype.translatePluralization = function (text, number, scope, cultureName) {
-        var _this = this;
         var dictionary = this.getPluralizationDictionary(scope, cultureName);
         try {
-            return dictionary.translatePluralization(text, number, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
+            return dictionary.translatePluralization(text, number, function () { return dictionary.getFallbackTranslation(text, scope, cultureName); });
         }
         catch (exception) {
             return this.handleError(exception, text);
@@ -131,7 +141,7 @@ var Localization = /** @class */ (function () {
             _this.getPluralizationDictionaryAsync(scope, cultureName)
                 .then(function (dictionaryResponse) {
                 try {
-                    var result = dictionaryResponse.result.translatePluralization(text, number, function () { return _this.getFallbackTranslation(text, scope, cultureName); });
+                    var result = dictionaryResponse.result.translatePluralization(text, number, function () { return dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName); });
                     resolve({
                         result: result,
                         status: LocalizationStatusSuccess(text, scope),
@@ -165,10 +175,6 @@ var Localization = /** @class */ (function () {
                 });
             });
         });
-    };
-    Localization.prototype.getFallbackTranslation = function (text, scope, cultureName) {
-        console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
-        return { name: text, value: "X{undefined}", resourceNotFound: true };
     };
     Localization.prototype.handleError = function (exception, text) {
         console.error(exception.message);
@@ -475,9 +481,20 @@ var Localization = /** @class */ (function () {
     };
     return Localization;
 }());
-var LocalizationDictionary = /** @class */ (function () {
-    function LocalizationDictionary(dictionary) {
+var BaseLocalizationDictionary = /** @class */ (function () {
+    function BaseLocalizationDictionary(dictionary) {
         this.mDictionary = JSON.parse(dictionary);
+    }
+    BaseLocalizationDictionary.prototype.getFallbackTranslation = function (text, scope, cultureName) {
+        console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
+        return { name: text, value: "X{undefined}", resourceNotFound: true };
+    };
+    return BaseLocalizationDictionary;
+}());
+var LocalizationDictionary = /** @class */ (function (_super) {
+    __extends(LocalizationDictionary, _super);
+    function LocalizationDictionary(dictionary) {
+        return _super.call(this, dictionary) || this;
     }
     LocalizationDictionary.prototype.translate = function (text, fallback) {
         var result = this.mDictionary[text];
@@ -498,10 +515,11 @@ var LocalizationDictionary = /** @class */ (function () {
         return str.value.replace(/\{\s*([^}\s]+)\s*\}/g, function (m, p1, offset, string) { return obj[p1]; });
     };
     return LocalizationDictionary;
-}());
-var LocalizationPluralizationDictionary = /** @class */ (function () {
+}(BaseLocalizationDictionary));
+var LocalizationPluralizationDictionary = /** @class */ (function (_super) {
+    __extends(LocalizationPluralizationDictionary, _super);
     function LocalizationPluralizationDictionary(dictionary) {
-        this.mDictionary = JSON.parse(dictionary);
+        return _super.call(this, dictionary) || this;
     }
     LocalizationPluralizationDictionary.prototype.translatePluralization = function (text, number, fallback) {
         var pluralizedString = this.mDictionary[text];
@@ -518,7 +536,7 @@ var LocalizationPluralizationDictionary = /** @class */ (function () {
         return pluralizedString.defaultLocalizedString;
     };
     return LocalizationPluralizationDictionary;
-}());
+}(BaseLocalizationDictionary));
 var LocalizationErrorResolution;
 (function (LocalizationErrorResolution) {
     LocalizationErrorResolution[LocalizationErrorResolution["Null"] = 0] = "Null";

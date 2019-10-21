@@ -28,7 +28,6 @@ declare class Localization {
      */
     translatePluralization(text: string, number: number, scope?: string, cultureName?: string): ILocalizedString;
     translatePluralizationAsync(text: string, number: number, scope?: string, cultureName?: string): Promise<ILocalizationResult>;
-    private getFallbackTranslation;
     private handleError;
     configureSiteUrl(siteUrl: string): void;
     /**
@@ -73,15 +72,20 @@ declare class Localization {
     private getParsedCultureCookie;
     private getCurrentCultureCookie;
 }
-declare class LocalizationDictionary {
-    private readonly mDictionary;
+declare abstract class BaseLocalizationDictionary<TResponse> {
+    protected readonly mDictionary: {
+        [key: string]: TResponse;
+    };
+    protected constructor(dictionary: string);
+    getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString;
+}
+declare class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
     constructor(dictionary: string);
     translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null;
     translateFormat(text: string, parameters: string[], fallback: () => ILocalizedString): ILocalizedString;
     private formatString;
 }
-declare class LocalizationPluralizationDictionary {
-    private readonly mDictionary;
+declare class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
     constructor(dictionary: string);
     translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString;
 }
