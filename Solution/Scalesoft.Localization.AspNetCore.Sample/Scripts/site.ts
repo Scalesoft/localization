@@ -1,6 +1,6 @@
 /// <reference path="../../Scalesoft.Localization.Web.Script/src/localization.ts" />
 namespace LocalizationSample {
-    $(document.documentElement).ready(() => {
+    $(() => {
         new LocalizationTest().init();
     });
 
@@ -9,8 +9,12 @@ namespace LocalizationSample {
         private readonly localization: Localization;
 
         constructor() {
-            this.localization = new Localization();
-            this.localization.configureSiteUrl("/");
+            this.localization = new Localization(
+                {
+                    errorResolution: LocalizationErrorResolution.Key,
+                    siteUrl: "/",
+                }
+            );
         }
 
         public init() {
@@ -19,6 +23,20 @@ namespace LocalizationSample {
 
         private testPluralization() {
             if (this.useAsync) {
+                this.localization.getDictionaryAsync()
+                    .then((dictionaryResult) => {
+                        const translation = dictionaryResult.result.translate(
+                            "Pluralization",
+                            () => dictionaryResult.result.getFallbackTranslation(
+                                "Pluralization",
+                                "global",
+                                undefined
+                            ),
+                        );
+
+                        $(".output").append(`<h3 title="Localized directly using dictionary">${translation.value}</h3>`);
+                    });
+
                 this.localization.translateAsync("Pluralization")
                     .then((translation) => {
                         $(".output").append(`<h2>${translation.result.value}</h2>`);
