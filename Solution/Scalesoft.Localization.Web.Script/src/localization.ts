@@ -463,6 +463,16 @@ class Localization {
         onSuccess: (dictionary: LocalizationDictionary) => void,
         onFailed: (scope: IDictionaryError) => void,
     ): void {
+        /*
+        this.getDownloadPromise(
+            (response) => new LocalizationDictionary(response),
+            this.mDictionary,
+            "Dictionary",
+            scope,
+            cultureName
+        );
+        */
+
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
         if (this.mDictionaryQueue[scope] === undefined) {
@@ -561,6 +571,16 @@ class Localization {
         onSuccess: (dictionary: LocalizationPluralizationDictionary) => void,
         onFailed: (scope: IDictionaryError) => void,
     ): void {
+        /*
+        this.getDownloadPromise(
+            (response) => new LocalizationPluralizationDictionary(response),
+            this.mPluralizedDictionary,
+            "PluralizedDictionary",
+            scope,
+            cultureName
+        );
+        */
+
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
         if (this.mPluralizedDictionaryQueue[scope] === undefined) {
@@ -615,10 +635,16 @@ class Localization {
         }
     }
 
+    /**
+     * TODO Use in downloadPluralizedDictionaryAsync and downloadDictionaryAsync when synchronous methods are removed
+     */
     private getDownloadPromise(
+        dictionaryFactory: (response: string) => BaseLocalizationDictionary<IPluralizedString>,
+        dictionaryCache: { [key: string]: BaseLocalizationDictionary<IPluralizedString> },
+        path: string,
         scope: string,
         cultureName: string,
-    ): Promise<LocalizationPluralizationDictionary> {
+    ): Promise<BaseLocalizationDictionary<IPluralizedString>> {
         const dictionaryKey = this.dictionaryKey(scope, cultureName);
 
         return new Promise((resolve, reject) => {
@@ -626,7 +652,7 @@ class Localization {
 
             xmlHttpRequest.open(
                 "GET",
-                `${this.getBaseUrl()}/Localization/PluralizedDictionary?scope=${scope}`,
+                `${this.getBaseUrl()}/Localization/${path}?scope=${scope}`,
                 true,
             );
             xmlHttpRequest.send();
@@ -641,11 +667,11 @@ class Localization {
                 ) {
                     let response = xmlHttpRequest.responseText;
 
-                    if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
-                        this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                    if (dictionaryCache[dictionaryKey] === undefined) {
+                        dictionaryCache[dictionaryKey] = dictionaryFactory(response);
                     }
 
-                    resolve(this.mPluralizedDictionary[dictionaryKey]);
+                    resolve(dictionaryCache[dictionaryKey]);
                 } else {
                     reject({
                         scope,
