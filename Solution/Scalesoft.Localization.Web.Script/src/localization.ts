@@ -87,10 +87,10 @@ class Localization {
                     );
 
                     resolve(
-                        {
-                            result: result,
-                            status: LocalizationStatusSuccess(text, scope),
-                        }
+                        new LocalizationResult(
+                            result,
+                            LocalizationStatusSuccess(text, scope),
+                        )
                     );
                 }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
                     const errorStatus = {
@@ -105,10 +105,10 @@ class Localization {
                     this.callErrorHandler(errorStatus);
 
                     reject(
-                        {
-                            result: this.getTranslationOnError(text, scope),
-                            status: LocalizationStatusSuccess(text, scope),
-                        }
+                        new LocalizationResult(
+                            this.getTranslationOnError(text, scope),
+                            LocalizationStatusSuccess(text, scope),
+                        )
                     );
                 });
         });
@@ -148,10 +148,10 @@ class Localization {
                     );
 
                     resolve(
-                        {
-                            result: result,
-                            status: LocalizationStatusSuccess(text, scope),
-                        }
+                        new LocalizationResult(
+                            result,
+                            LocalizationStatusSuccess(text, scope),
+                        )
                     );
                 }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
                     const errorStatus = {
@@ -166,10 +166,10 @@ class Localization {
                     this.callErrorHandler(errorStatus);
 
                     reject(
-                        {
-                            result: this.getTranslationOnError(text, scope),
-                            status: LocalizationStatusSuccess(text, scope),
-                        }
+                        new LocalizationResult(
+                            this.getTranslationOnError(text, scope),
+                            LocalizationStatusSuccess(text, scope),
+                        )
                     );
                 });
         });
@@ -214,23 +214,23 @@ class Localization {
                         );
 
                         resolve(
-                            {
-                                result: result,
-                                status: LocalizationStatusSuccess(text, scope),
-                            }
+                            new LocalizationResult(
+                                result,
+                                LocalizationStatusSuccess(text, scope),
+                            )
                         );
                     } catch (exception) {
                         reject(
-                            {
-                                result: this.handleError(exception, text),
-                                status: {
+                            new LocalizationResult(
+                                this.handleError(exception, text),
+                                {
                                     success: false,
                                     message: exception.message,
                                     errorType: 'exception',
                                     text,
                                     scope,
                                 },
-                            }
+                            )
                         );
                     }
                 }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
@@ -246,10 +246,10 @@ class Localization {
                     this.callErrorHandler(errorStatus);
 
                     reject(
-                        {
-                            result: this.getTranslationOnError(text, scope),
-                            status: LocalizationStatusSuccess(text, scope),
-                        }
+                        new LocalizationResult(
+                            this.getTranslationOnError(text, scope),
+                            LocalizationStatusSuccess(text, scope),
+                        )
                     );
                 });
         });
@@ -853,6 +853,22 @@ interface ILocalizationDictionaryResult<TDictionary> {
 interface ILocalizationResult {
     result: ILocalizedString,
     status: ILocalizationStatus,
+
+    toString(): string,
+}
+
+class LocalizationResult implements ILocalizationResult {
+    public readonly result: ILocalizedString;
+    public readonly status: ILocalizationStatus;
+
+    constructor(result: ILocalizedString, status: ILocalizationStatus) {
+        this.result = result;
+        this.status = status;
+    }
+
+    public toString(): string {
+        return this.result.value;
+    }
 }
 
 interface ILocalizedString {

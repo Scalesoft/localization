@@ -65,6 +65,9 @@ declare class Localization {
     private downloadPluralizedDictionary;
     private downloadPluralizedDictionaryAsync;
     private processPluralizedDictionaryQueue;
+    /**
+     * TODO Use in downloadPluralizedDictionaryAsync and downloadDictionaryAsync when synchronous methods are removed
+     */
     private getDownloadPromise;
     private getBaseUrl;
     getCurrentCulture(): string;
@@ -99,8 +102,8 @@ interface ILocalizationConfiguration {
     onError?: (localizationError: ILocalizationError) => void;
 }
 interface ILocalizationCookie {
-    DefaultCulture: string;
-    CurrentCulture: string | null;
+    defaultCulture: string;
+    currentCulture: string | null;
 }
 interface ILocalizationError {
     text: string;
@@ -130,6 +133,13 @@ interface ILocalizationDictionaryResult<TDictionary> {
 interface ILocalizationResult {
     result: ILocalizedString;
     status: ILocalizationStatus;
+    toString(): string;
+}
+declare class LocalizationResult implements ILocalizationResult {
+    readonly result: ILocalizedString;
+    readonly status: ILocalizationStatus;
+    constructor(result: ILocalizedString, status: ILocalizationStatus);
+    toString(): string;
 }
 interface ILocalizedString {
     name: string;

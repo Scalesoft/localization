@@ -68,10 +68,7 @@ var Localization = /** @class */ (function () {
             _this.getDictionaryAsync(scope, cultureName)
                 .then(function (dictionaryResponse) {
                 var result = dictionaryResponse.result.translate(text, function () { return dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName); });
-                resolve({
-                    result: result,
-                    status: LocalizationStatusSuccess(text, scope),
-                });
+                resolve(new LocalizationResult(result, LocalizationStatusSuccess(text, scope)));
             }, function (dictionaryResponse) {
                 var errorStatus = {
                     success: false,
@@ -82,10 +79,7 @@ var Localization = /** @class */ (function () {
                     context: dictionaryResponse.status.context,
                 };
                 _this.callErrorHandler(errorStatus);
-                reject({
-                    result: _this.getTranslationOnError(text, scope),
-                    status: LocalizationStatusSuccess(text, scope),
-                });
+                reject(new LocalizationResult(_this.getTranslationOnError(text, scope), LocalizationStatusSuccess(text, scope)));
             });
         });
     };
@@ -102,10 +96,7 @@ var Localization = /** @class */ (function () {
             _this.getDictionaryAsync(scope, cultureName)
                 .then(function (dictionaryResponse) {
                 var result = dictionaryResponse.result.translateFormat(text, parameters, function () { return dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName); });
-                resolve({
-                    result: result,
-                    status: LocalizationStatusSuccess(text, scope),
-                });
+                resolve(new LocalizationResult(result, LocalizationStatusSuccess(text, scope)));
             }, function (dictionaryResponse) {
                 var errorStatus = {
                     success: false,
@@ -116,10 +107,7 @@ var Localization = /** @class */ (function () {
                     context: dictionaryResponse.status.context,
                 };
                 _this.callErrorHandler(errorStatus);
-                reject({
-                    result: _this.getTranslationOnError(text, scope),
-                    status: LocalizationStatusSuccess(text, scope),
-                });
+                reject(new LocalizationResult(_this.getTranslationOnError(text, scope), LocalizationStatusSuccess(text, scope)));
             });
         });
     };
@@ -142,22 +130,16 @@ var Localization = /** @class */ (function () {
                 .then(function (dictionaryResponse) {
                 try {
                     var result = dictionaryResponse.result.translatePluralization(text, number, function () { return dictionaryResponse.result.getFallbackTranslation(text, scope, cultureName); });
-                    resolve({
-                        result: result,
-                        status: LocalizationStatusSuccess(text, scope),
-                    });
+                    resolve(new LocalizationResult(result, LocalizationStatusSuccess(text, scope)));
                 }
                 catch (exception) {
-                    reject({
-                        result: _this.handleError(exception, text),
-                        status: {
-                            success: false,
-                            message: exception.message,
-                            errorType: 'exception',
-                            text: text,
-                            scope: scope,
-                        },
-                    });
+                    reject(new LocalizationResult(_this.handleError(exception, text), {
+                        success: false,
+                        message: exception.message,
+                        errorType: 'exception',
+                        text: text,
+                        scope: scope,
+                    }));
                 }
             }, function (dictionaryResponse) {
                 var errorStatus = {
@@ -169,10 +151,7 @@ var Localization = /** @class */ (function () {
                     context: dictionaryResponse.status.context,
                 };
                 _this.callErrorHandler(errorStatus);
-                reject({
-                    result: _this.getTranslationOnError(text, scope),
-                    status: LocalizationStatusSuccess(text, scope),
-                });
+                reject(new LocalizationResult(_this.getTranslationOnError(text, scope), LocalizationStatusSuccess(text, scope)));
             });
         });
     };
@@ -318,6 +297,15 @@ var Localization = /** @class */ (function () {
         xmlHttpRequest.send();
     };
     Localization.prototype.downloadDictionaryAsync = function (scope, cultureName, onSuccess, onFailed) {
+        /*
+        this.getDownloadPromise(
+            (response) => new LocalizationDictionary(response),
+            this.mDictionary,
+            "Dictionary",
+            scope,
+            cultureName
+        );
+        */
         var _this = this;
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         if (this.mDictionaryQueue[scope] === undefined) {
@@ -380,6 +368,15 @@ var Localization = /** @class */ (function () {
         xmlHttpRequest.send();
     };
     Localization.prototype.downloadPluralizedDictionaryAsync = function (scope, cultureName, onSuccess, onFailed) {
+        /*
+        this.getDownloadPromise(
+            (response) => new LocalizationPluralizationDictionary(response),
+            this.mPluralizedDictionary,
+            "PluralizedDictionary",
+            scope,
+            cultureName
+        );
+        */
         var _this = this;
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         if (this.mPluralizedDictionaryQueue[scope] === undefined) {
@@ -418,12 +415,15 @@ var Localization = /** @class */ (function () {
             }
         }
     };
-    Localization.prototype.getDownloadPromise = function (scope, cultureName) {
+    /**
+     * TODO Use in downloadPluralizedDictionaryAsync and downloadDictionaryAsync when synchronous methods are removed
+     */
+    Localization.prototype.getDownloadPromise = function (dictionaryFactory, dictionaryCache, path, scope, cultureName) {
         var _this = this;
         var dictionaryKey = this.dictionaryKey(scope, cultureName);
         return new Promise(function (resolve, reject) {
             var xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.open("GET", _this.getBaseUrl() + "/Localization/PluralizedDictionary?scope=" + scope, true);
+            xmlHttpRequest.open("GET", _this.getBaseUrl() + "/Localization/" + path + "?scope=" + scope, true);
             xmlHttpRequest.send();
             xmlHttpRequest.onreadystatechange = function () {
                 if (xmlHttpRequest.readyState !== XMLHttpRequest.DONE) {
@@ -431,10 +431,10 @@ var Localization = /** @class */ (function () {
                 }
                 if (xmlHttpRequest.status >= 200 && xmlHttpRequest.status < 300) {
                     var response = xmlHttpRequest.responseText;
-                    if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
-                        _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                    if (dictionaryCache[dictionaryKey] === undefined) {
+                        dictionaryCache[dictionaryKey] = dictionaryFactory(response);
                     }
-                    resolve(_this.mPluralizedDictionary[dictionaryKey]);
+                    resolve(dictionaryCache[dictionaryKey]);
                 }
                 else {
                     reject({
@@ -457,9 +457,9 @@ var Localization = /** @class */ (function () {
     Localization.prototype.getCurrentCulture = function () {
         if (this.mCurrentCulture === undefined) {
             var parsedCookieValue = this.getParsedCultureCookie();
-            var currentCulture = parsedCookieValue.CurrentCulture === null
-                ? parsedCookieValue.DefaultCulture
-                : parsedCookieValue.CurrentCulture;
+            var currentCulture = parsedCookieValue.currentCulture === null
+                ? parsedCookieValue.defaultCulture
+                : parsedCookieValue.currentCulture;
             this.setCurrentCulture(currentCulture);
         }
         return this.mCurrentCulture;
@@ -470,9 +470,9 @@ var Localization = /** @class */ (function () {
     Localization.prototype.getParsedCultureCookie = function () {
         var currentCultureCookieValue = this.getCurrentCultureCookie();
         var parsedCookieValue = JSON.parse(currentCultureCookieValue);
-        if (parsedCookieValue.DefaultCulture === undefined
-            || parsedCookieValue.CurrentCulture === undefined) {
-            console.error("Unexpected value of the cookie " + this.mCultureCookieName + ". Expected object with properties 'DefaultCulture', and 'CurrentCulture'.", parsedCookieValue);
+        if (parsedCookieValue.defaultCulture === undefined
+            || parsedCookieValue.currentCulture === undefined) {
+            console.error("Unexpected value of the cookie " + this.mCultureCookieName + ". Expected object with properties 'defaultCulture', and 'currentCulture'.", parsedCookieValue);
         }
         return parsedCookieValue;
     };
@@ -542,6 +542,16 @@ var LocalizationErrorResolution;
     LocalizationErrorResolution[LocalizationErrorResolution["Null"] = 0] = "Null";
     LocalizationErrorResolution[LocalizationErrorResolution["Key"] = 1] = "Key";
 })(LocalizationErrorResolution || (LocalizationErrorResolution = {}));
+var LocalizationResult = /** @class */ (function () {
+    function LocalizationResult(result, status) {
+        this.result = result;
+        this.status = status;
+    }
+    LocalizationResult.prototype.toString = function () {
+        return this.result.value;
+    };
+    return LocalizationResult;
+}());
 var PluralizationInterval = /** @class */ (function () {
     function PluralizationInterval(start, end) {
         if (start > end) {
