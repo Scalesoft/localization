@@ -20,24 +20,30 @@ namespace Scalesoft.Localization.AspNetCore.Service
             m_dictionaryManager = autoDictionaryManager;
         }
 
-        public IDictionary<string, LocalizedString> GetDictionary(string scope = null,
-            LocTranslationSource translationSource = LocTranslationSource.Auto)
+        public IDictionary<string, LocalizedString> GetDictionary(
+            string scope = null,
+            LocTranslationSource translationSource = LocTranslationSource.Auto
+        )
         {
             var requestCulture = RequestCulture();
 
             return m_dictionaryManager.GetDictionary(translationSource, requestCulture, scope);
         }
 
-        public IDictionary<string, PluralizedString> GetPluralizedDictionary(string scope = null,
-            LocTranslationSource translationSource = LocTranslationSource.Auto)
+        public IDictionary<string, PluralizedString> GetPluralizedDictionary(
+            string scope = null,
+            LocTranslationSource translationSource = LocTranslationSource.Auto
+        )
         {
             var requestCulture = RequestCulture();
 
             return m_dictionaryManager.GetPluralizedDictionary(translationSource, requestCulture, scope);
         }
 
-        public IDictionary<string, LocalizedString> GetConstantsDictionary(string scope = null,
-            LocTranslationSource translationSource = LocTranslationSource.Auto)
+        public IDictionary<string, LocalizedString> GetConstantsDictionary(
+            string scope = null,
+            LocTranslationSource translationSource = LocTranslationSource.Auto
+        )
         {
             var requestCulture = RequestCulture();
 

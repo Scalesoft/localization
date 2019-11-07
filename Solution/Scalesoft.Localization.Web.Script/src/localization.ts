@@ -696,9 +696,9 @@ class Localization {
     public getCurrentCulture(): string {
         if (this.mCurrentCulture === undefined) {
             const parsedCookieValue = this.getParsedCultureCookie();
-            const currentCulture = parsedCookieValue.CurrentCulture === null
-                ? parsedCookieValue.DefaultCulture
-                : parsedCookieValue.CurrentCulture;
+            const currentCulture = parsedCookieValue.currentCulture === null
+                ? parsedCookieValue.defaultCulture
+                : parsedCookieValue.currentCulture;
 
             this.setCurrentCulture(currentCulture);
         }
@@ -715,11 +715,11 @@ class Localization {
         const parsedCookieValue = JSON.parse(currentCultureCookieValue) as ILocalizationCookie;
 
         if (
-            parsedCookieValue.DefaultCulture === undefined
-            || parsedCookieValue.CurrentCulture === undefined
+            parsedCookieValue.defaultCulture === undefined
+            || parsedCookieValue.currentCulture === undefined
         ) {
             console.error(
-                `Unexpected value of the cookie ${this.mCultureCookieName}. Expected object with properties 'DefaultCulture', and 'CurrentCulture'.`,
+                `Unexpected value of the cookie ${this.mCultureCookieName}. Expected object with properties 'defaultCulture', and 'currentCulture'.`,
                 parsedCookieValue
             );
         }
@@ -817,8 +817,8 @@ interface ILocalizationConfiguration {
 }
 
 interface ILocalizationCookie {
-    DefaultCulture: string;
-    CurrentCulture: string | null;
+    defaultCulture: string;
+    currentCulture: string | null;
 }
 
 interface ILocalizationError {

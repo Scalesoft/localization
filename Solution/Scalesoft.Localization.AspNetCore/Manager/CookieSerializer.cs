@@ -1,13 +1,19 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Scalesoft.Localization.AspNetCore.Models;
 
 namespace Scalesoft.Localization.AspNetCore.Manager
 {
     public class CookieSerializer
     {
+        private static JsonSerializerSettings JsonSerializerSettings => new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+        };
+
         public static string Serialize(LocalizationCookie cookie)
         {
-            return JsonConvert.SerializeObject(cookie);
+            return JsonConvert.SerializeObject(cookie, JsonSerializerSettings);
         }
 
         public static LocalizationCookie Deserialize(string cookie)
@@ -19,7 +25,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
             try
             {
-                return JsonConvert.DeserializeObject<LocalizationCookie>(cookie);
+                return JsonConvert.DeserializeObject<LocalizationCookie>(cookie, JsonSerializerSettings);
             }
             catch (JsonException)
             {
