@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Scalesoft.Localization.AspNetCore.Models;
@@ -61,13 +62,22 @@ namespace Scalesoft.Localization.AspNetCore.Manager
         {
             var localizationCookie = GetCookieValue();
 
+            // Set new current culture if specified
             if (culture != null)
             {
                 var requestCulture = new RequestCulture(culture);
                 localizationCookie.CurrentCulture = requestCulture.Culture.Name;
             }
 
+            // Always set default culture
             localizationCookie.DefaultCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
+
+            // Instead of unsupported culture use null (default)
+            if (localizationCookie.CurrentCulture != null &&
+                m_configuration.SupportedCultures.All(x => x.Name != localizationCookie.CurrentCulture))
+            {
+                localizationCookie.CurrentCulture = null;
+            }
 
             SetCookieValue(localizationCookie);
         }
