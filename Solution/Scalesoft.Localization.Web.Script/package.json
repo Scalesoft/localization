@@ -1,5 +1,5 @@
 {
-  "version": "2.5.1",
+  "version": "2.6.0",
   "name": "scalesoft-localization-web",
   "description": "A JavaScript client-side library for Scalesoft localization framework.",
   "license": "LGPL-3.0",
@@ -18,12 +18,12 @@
     "package.json"
   ],
   "devDependencies": {
+    "es6-promise": "^4.2",
     "gulp": "^4.0",
     "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6",
     "gulp-typescript": "^5.0",
     "gulp-uglify": "^3.0",
-    "es6-promise": "^4.2",
     "typescript": "^3.0"
   }
 }
