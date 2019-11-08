@@ -9,12 +9,10 @@ namespace LocalizationSample {
         private readonly localization: Localization;
 
         constructor() {
-            this.localization = new Localization(
-                {
-                    errorResolution: LocalizationErrorResolution.Key,
-                    siteUrl: "/",
-                }
-            );
+            this.localization = new Localization({
+                errorResolution: LocalizationErrorResolution.Key,
+                siteUrl: "/",
+            });
         }
 
         public init() {
@@ -30,7 +28,7 @@ namespace LocalizationSample {
                             () => dictionaryResult.result.getFallbackTranslation(
                                 "Pluralization",
                                 "global",
-                                undefined
+                                undefined,
                             ),
                         );
 
@@ -63,9 +61,7 @@ namespace LocalizationSample {
             if (this.useAsync) {
                 this.localization.translatePluralizationAsync(key, value, scope)
                     .then((translation) => {
-                        $(".output").append(
-                            `<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${translation.result.value}</strong></div>`
-                        );
+                        $(".output").append(`<div>key="${key}" scope="${scope}" number=${value}: <strong>${value} ${translation.result.value}</strong></div>`);
                     });
             } else {
                 const localizedString = this.localization.translatePluralization(key, value, scope);
