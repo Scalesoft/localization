@@ -443,7 +443,7 @@ class Localization {
                 let response = xmlHttpRequest.responseText;
 
                 if (this.mDictionary[dictionaryKey] === undefined) {
-                    this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
+                    this.mDictionary[dictionaryKey] = new LocalizationDictionary(response, scope);
                 }
 
                 this.processDictionaryQueue(scope, dictionaryKey);
@@ -489,7 +489,7 @@ class Localization {
                     let response = xmlHttpRequest.responseText;
 
                     if (this.mDictionary[dictionaryKey] === undefined) {
-                        this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
+                        this.mDictionary[dictionaryKey] = new LocalizationDictionary(response, scope);
                     }
 
                     this.processDictionaryQueue(scope, dictionaryKey);
@@ -550,7 +550,7 @@ class Localization {
                 let response = xmlHttpRequest.responseText;
 
                 if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
-                    this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                    this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response, scope);
                 }
 
                 this.processPluralizedDictionaryQueue(scope, dictionaryKey);
@@ -597,7 +597,7 @@ class Localization {
                     let response = xmlHttpRequest.responseText;
 
                     if (this.mPluralizedDictionary[dictionaryKey] === undefined) {
-                        this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                        this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response, scope);
                     }
 
                     this.processPluralizedDictionaryQueue(scope, dictionaryKey);
@@ -734,9 +734,11 @@ class Localization {
 
 abstract class BaseLocalizationDictionary<TResponse> {
     protected readonly mDictionary: { [key: string]: TResponse };
+    private readonly mScope: string;
 
-    protected constructor(dictionary: string) {
+    protected constructor(dictionary: string, scope: string) {
         this.mDictionary = JSON.parse(dictionary);
+        this.mScope = scope;
     }
 
     public getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString {
@@ -746,11 +748,15 @@ abstract class BaseLocalizationDictionary<TResponse> {
 
         return {name: text, value: "X{undefined}", resourceNotFound: true};
     }
+
+    public get Scope() {
+        return this.mScope
+    }
 }
 
 class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
-    constructor(dictionary: string) {
-        super(dictionary);
+    constructor(dictionary: string, scope: string) {
+        super(dictionary, scope);
     }
 
     public translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null {
@@ -781,8 +787,8 @@ class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString
 }
 
 class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
-    constructor(dictionary: string) {
-        super(dictionary);
+    constructor(dictionary: string, scope: string) {
+        super(dictionary, scope);
     }
 
     public translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString {

@@ -288,7 +288,7 @@ var Localization = /** @class */ (function () {
                 && xmlHttpRequest.status === 200) {
                 var response = xmlHttpRequest.responseText;
                 if (_this.mDictionary[dictionaryKey] === undefined) {
-                    _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
+                    _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response, scope);
                 }
                 _this.processDictionaryQueue(scope, dictionaryKey);
             }
@@ -318,7 +318,7 @@ var Localization = /** @class */ (function () {
                 if (xmlHttpRequest_1.status === 200) {
                     var response = xmlHttpRequest_1.responseText;
                     if (_this.mDictionary[dictionaryKey] === undefined) {
-                        _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response);
+                        _this.mDictionary[dictionaryKey] = new LocalizationDictionary(response, scope);
                     }
                     _this.processDictionaryQueue(scope, dictionaryKey);
                 }
@@ -359,7 +359,7 @@ var Localization = /** @class */ (function () {
                 && xmlHttpRequest.status === 200) {
                 var response = xmlHttpRequest.responseText;
                 if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
-                    _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                    _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response, scope);
                 }
                 _this.processPluralizedDictionaryQueue(scope, dictionaryKey);
             }
@@ -389,7 +389,7 @@ var Localization = /** @class */ (function () {
                 if (xmlHttpRequest_2.status === 200) {
                     var response = xmlHttpRequest_2.responseText;
                     if (_this.mPluralizedDictionary[dictionaryKey] === undefined) {
-                        _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response);
+                        _this.mPluralizedDictionary[dictionaryKey] = new LocalizationPluralizationDictionary(response, scope);
                     }
                     _this.processPluralizedDictionaryQueue(scope, dictionaryKey);
                 }
@@ -482,19 +482,27 @@ var Localization = /** @class */ (function () {
     return Localization;
 }());
 var BaseLocalizationDictionary = /** @class */ (function () {
-    function BaseLocalizationDictionary(dictionary) {
+    function BaseLocalizationDictionary(dictionary, scope) {
         this.mDictionary = JSON.parse(dictionary);
+        this.mScope = scope;
     }
     BaseLocalizationDictionary.prototype.getFallbackTranslation = function (text, scope, cultureName) {
         console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
         return { name: text, value: "X{undefined}", resourceNotFound: true };
     };
+    Object.defineProperty(BaseLocalizationDictionary.prototype, "Scope", {
+        get: function () {
+            return this.mScope;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return BaseLocalizationDictionary;
 }());
 var LocalizationDictionary = /** @class */ (function (_super) {
     __extends(LocalizationDictionary, _super);
-    function LocalizationDictionary(dictionary) {
-        return _super.call(this, dictionary) || this;
+    function LocalizationDictionary(dictionary, scope) {
+        return _super.call(this, dictionary, scope) || this;
     }
     LocalizationDictionary.prototype.translate = function (text, fallback) {
         var result = this.mDictionary[text];
@@ -518,8 +526,8 @@ var LocalizationDictionary = /** @class */ (function (_super) {
 }(BaseLocalizationDictionary));
 var LocalizationPluralizationDictionary = /** @class */ (function (_super) {
     __extends(LocalizationPluralizationDictionary, _super);
-    function LocalizationPluralizationDictionary(dictionary) {
-        return _super.call(this, dictionary) || this;
+    function LocalizationPluralizationDictionary(dictionary, scope) {
+        return _super.call(this, dictionary, scope) || this;
     }
     LocalizationPluralizationDictionary.prototype.translatePluralization = function (text, number, fallback) {
         var pluralizedString = this.mDictionary[text];

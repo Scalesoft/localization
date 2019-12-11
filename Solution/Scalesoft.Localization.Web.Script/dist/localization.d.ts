@@ -79,17 +79,19 @@ declare abstract class BaseLocalizationDictionary<TResponse> {
     protected readonly mDictionary: {
         [key: string]: TResponse;
     };
-    protected constructor(dictionary: string);
+    readonly mScope: string;
+    protected constructor(dictionary: string, scope: string);
     getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString;
+    readonly Scope: string;
 }
 declare class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
-    constructor(dictionary: string);
+    constructor(dictionary: string, scope: string);
     translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null;
     translateFormat(text: string, parameters: string[], fallback: () => ILocalizedString): ILocalizedString;
     private formatString;
 }
 declare class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
-    constructor(dictionary: string);
+    constructor(dictionary: string, scope: string);
     translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString;
 }
 declare enum LocalizationErrorResolution {
