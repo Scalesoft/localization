@@ -749,8 +749,8 @@ abstract class BaseLocalizationDictionary<TResponse> {
         return {name: text, value: "X{undefined}", resourceNotFound: true};
     }
 
-    public get Scope() {
-        return this.mScope
+    public get scope() {
+        return this.mScope;
     }
 }
 

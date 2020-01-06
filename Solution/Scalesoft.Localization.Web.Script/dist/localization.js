@@ -490,7 +490,7 @@ var BaseLocalizationDictionary = /** @class */ (function () {
         console.log("Localized string with key=" + text + " was not found in dictionary=" + scope + " with culture=" + cultureName);
         return { name: text, value: "X{undefined}", resourceNotFound: true };
     };
-    Object.defineProperty(BaseLocalizationDictionary.prototype, "Scope", {
+    Object.defineProperty(BaseLocalizationDictionary.prototype, "scope", {
         get: function () {
             return this.mScope;
         },

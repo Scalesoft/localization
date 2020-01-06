@@ -79,10 +79,10 @@ declare abstract class BaseLocalizationDictionary<TResponse> {
     protected readonly mDictionary: {
         [key: string]: TResponse;
     };
-    readonly mScope: string;
+    private readonly mScope;
     protected constructor(dictionary: string, scope: string);
     getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString;
-    readonly Scope: string;
+    readonly scope: string;
 }
 declare class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
     constructor(dictionary: string, scope: string);
