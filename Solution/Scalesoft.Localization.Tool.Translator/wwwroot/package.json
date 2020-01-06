@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "name": "scalesoft.localization.tool.translator",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.2",
+    "jquery": "^3.3"
+  }
+}
