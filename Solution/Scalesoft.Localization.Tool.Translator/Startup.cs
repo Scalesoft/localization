@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Scalesoft.Localization.Tool.Translator.Core;
 
 namespace Scalesoft.Localization.Tool.Translator
 {
@@ -19,6 +20,8 @@ namespace Scalesoft.Localization.Tool.Translator
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddScoped<DictionaryManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

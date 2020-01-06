@@ -1,0 +1,9 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "DynamicTextSaveViewModel",
+  "dictionary": {
+    "default-culture-action": "Akce s výchozím jazykem při uložení textu (pokud neexistuje) (nepovinné)",
+    "culture": "Jazyk",
+    "name": "Název"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "culture": "en",
+  "scope": "global",
+  "dictionary": {
+    "Home": "Home",
+    "About": "About",
+    "Contact": "Contact",
+    "Client-Side": "JavaScript",
+    "Pluralization": "Pluralization",
+    "UserAccount": "User account",
+    "Language": "Language",
+    "SingOut": "Sign out",
+    "SignIn": "Sign in",
+    "SignUp": "Sign up",
+    "Cancel": "Cancel",
+    "Login-text": "Login",
+    "Login-submit": "Login",
+    "RegisterAccount": "Register Account",
+    "login-methods-header": "Login methods",
+    "text-1-odst": "Localized text-1-odst",
+    "Database": "Database",
+    "Save": "Save",
+    "Delete": "Delete",
+    "save-dynamic-text-title": "Save Dynamic Text",
+    "delete-all-dynamic-text-title": "Delete Dynamic Text for all cultures",
+    "delete-dynamic-text-title": "Delete Dynamic Text for a specific culture",
+    "dynamic-text-list-title": "Show Dynamic Text",
+    "name": "Name",
+    "text": "Text",
+    "show": "Show",
+    "result": "Result",
+    "scope": "Scope",
+    "long-text": "Link: {0}, number: {1}, danger string: {2}."
+  },
+  "plural": {
+    "years": {
+      "years": [ //<-This is default value
+        [ null, -2, "years" ],
+        //the first value is start of the interval, the second value is end of interval (exclusive).
+        //the third is value for defined interval.
+        //null means positive or negative infinity,
+        //start of the interval is always less or equal than end of the interval.
+        //No interval overlaps are allowed.
+        [ -1, -1, "year" ],
+        [ 0, 0, "years" ],
+        [ 1, 1, "year" ],
+        [ 2, null, "years" ]
+      ]
+    }
+  }
+}

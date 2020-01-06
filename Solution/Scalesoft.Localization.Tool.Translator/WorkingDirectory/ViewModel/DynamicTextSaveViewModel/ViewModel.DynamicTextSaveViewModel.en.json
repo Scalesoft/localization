@@ -1,0 +1,9 @@
+﻿{
+  "culture": "en",
+  "scope": "DynamicTextSaveViewModel",
+  "dictionary": {
+    "default-culture-action": "Default language action on save (if it does not exist) (optional)",
+    "culture": "Culture",
+    "name": "Name"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "culture": "cs-CZ",
+  "scope": "global",
+  "dictionary": {
+    "Home": "Domů",
+    "About": "O nás",
+    "Contact": "Kontakt",
+    "Client-Side": "JavaScript",
+    "Pluralization": "Pluralizace",
+    "UserAccount": "Uživatelský účet",
+    "Language": "Jazyk",
+    "SingOut": "Odhlásit",
+    "SignIn": "Přihlášení",
+    "SignUp": "Registace",
+    "Password": "Heslo",
+    "reset-password": "Resetovat heslo",
+    "Cancel": "Zrušit",
+    "login-heading": "Přihlášení",
+    "login-title": "Přihlášení",
+    "Login-text": "Přihlášení",
+    "Login-submit": "Přihlásit se",
+    "RegisterAccount": "Zaregistrovat se",
+    "Contact-title": "Kontakt",
+    "HelloWorld": "Ahoj Světě",
+    "login-methods-header": "Metody přihlášení",
+    "text-1-odst": "Lokalizovany text-1-odst",
+    "Database": "Databáze",
+    "Save": "Uložit",
+    "Delete": "Smazat",
+    "save-dynamic-text-title": "Uložit dynamický text",
+    "delete-all-dynamic-text-title": "Smazat dynamický text pro všechny cultures",
+    "delete-dynamic-text-title": "Smazat dynamický text pro specifickou culture",
+    "dynamic-text-list-title": "Zobrazit dynamický text",
+    "name": "Název",
+    "text": "Text",
+    "show": "Zobrazit",
+    "result": "Výsledek",
+    "scope": "Scope",
+    "long-text": "Odkaz: {0}, číslo: {1}, nebezpečný string: {2}."
+  },
+  "constants": {
+    "const-date": "MMMM dd, yyyy",
+    "const-time": "hh:mm:ss.f"
+  },
+  "plural": {
+    "years": {
+      "let": [ //<-This is default value
+        [ null, -5, "let" ],
+        //the first value is start of the interval, the second value is end of interval (exclusive).
+        //the third is value for defined interval.
+        //null means positive or negative infinity,
+        //start of the interval is always less or equal than end of the interval.
+        //No interval overlaps are allowed.
+        [ -4, -2, "roky" ],
+        [ -1, -1, "rok" ],
+        [ 0, 0, "let" ],
+        [ 1, 1, "rok" ],
+        [ 2, 4, "roky" ],
+        [ 5, null, "let" ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+﻿{
+  "culture": "en",
+  "scope": "ViewModel",
+  "dictionary": {
+    "loginUser": "Hello {0}!"
+  }
+}

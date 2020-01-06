@@ -1,0 +1,9 @@
+﻿{
+  "culture": "en",
+  "scope": "DefaultCultureAction",
+  "dictionary": {
+    "copy": "Copy",
+    "empty-string": "Create an empty string",
+    "nothing": "Nothing"
+  }
+}

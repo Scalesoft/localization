@@ -1,0 +1,9 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "DefaultCultureAction",
+  "dictionary": {
+    "copy": "Zkopírovat",
+    "empty-string": "Vytvořit prázdný řetězec",
+    "nothing": "Nic"
+  }
+}

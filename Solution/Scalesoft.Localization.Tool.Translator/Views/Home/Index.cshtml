@@ -1,8 +1,46 @@
-﻿@{
+﻿@model IList<ScopeViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-3">
+        <div class="card">
+            <div class="card-header">
+                Scope
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var scope in Model)
+                    {
+                        <li><a href="#">@scope.Scope</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="card">
+            <div class="card-header">
+                Selected scope: TODO
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Key</th>
+                        <th>Czech</th>
+                        <th>English</th>
+                        <th>Polish</th>
+                    </tr>
+                    <tr>
+                        <td>welcome</td>
+                        <td>Welcome</td>
+                        <td>Vítejte</td>
+                        <td>Witamy</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+

@@ -1,0 +1,14 @@
+﻿{
+  "culture": "en",
+  "scope": "main.contact",
+  "dictionary": {
+    "UserAccount": "User account",
+    "Language": "Language",
+    "SingOut": "Sign out",
+    "SignIn": "Sign in",
+    "SignUp": "Sign up",
+    "Login-text": "Login",
+    "Login-submit": "Login",
+    "RegisterAccount": "Register Account"
+  }
+}

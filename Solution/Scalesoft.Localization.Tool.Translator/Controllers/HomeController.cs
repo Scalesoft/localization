@@ -1,22 +1,27 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Scalesoft.Localization.Tool.Translator.Core;
 using Scalesoft.Localization.Tool.Translator.Models;
 
 namespace Scalesoft.Localization.Tool.Translator.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly DictionaryManager m_dictionaryManager;
         private readonly ILogger<HomeController> m_logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DictionaryManager dictionaryManager, ILogger<HomeController> logger)
         {
+            m_dictionaryManager = dictionaryManager;
             m_logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var data = m_dictionaryManager.GetData();
+
+            return View(data);
         }
 
         public IActionResult Privacy()

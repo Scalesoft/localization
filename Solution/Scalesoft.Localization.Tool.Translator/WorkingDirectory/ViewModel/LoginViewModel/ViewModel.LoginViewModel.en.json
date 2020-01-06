@@ -1,0 +1,9 @@
+﻿{
+  "culture": "en",
+  "scope": "InputModel",
+  "dictionary": {
+    "RememberMe": "Remember me",
+    "UserName": "Username",
+    "Password": "Password"
+  }
+}

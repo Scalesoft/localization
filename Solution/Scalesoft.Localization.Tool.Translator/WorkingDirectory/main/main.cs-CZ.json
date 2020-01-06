@@ -1,0 +1,18 @@
+﻿{
+  "culture": "cs-CZ",
+  "scope": "main",
+  "dictionary": {
+    "UserAccount": "Uživatelský účet",
+    "Language": "Jazyk",
+    "SingOut": "Odhlásit",
+    "SignIn": "Přihlášení",
+    "SignUp": "Registace",
+    "Password": "Heslo",
+    "Login-text": "Přihlášení",
+    "Login-submit": "Přihlásit se",
+    "RegisterAccount": "Zaregistrovat se",
+    "Contact-title": "Kontakt",
+    "HelloWorld": "Ahoj Světě",
+    "UserName": "Uživatelské jméno"
+  }
+}
