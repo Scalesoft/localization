@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
@@ -86,6 +88,43 @@ namespace Scalesoft.Localization.Tool.Translator.Core
         public ScopeViewModel GetDataForScope(string scope)
         {
             return GetData(scope).SingleOrDefault();
+        }
+
+        public void CreateDictionariesForCulture(string culture)
+        {
+            var scopes = GetData();
+
+            foreach (var scopeViewModel in scopes)
+            {
+                var dictionary = scopeViewModel.Dictionaries[0];
+                
+                // Content
+                var model = new DictionaryModel
+                {
+                    Culture = culture,
+                    Scope = scopeViewModel.Scope,
+                };
+                var fileContent = JsonConvert.SerializeObject(model, Formatting.Indented);
+
+                // Path
+                var directory = dictionary.FileInfo.Directory;
+                var fileName = dictionary.FileInfo.Name;
+                var extension = dictionary.FileInfo.Extension;
+                var originalCulture = dictionary.DictionaryData.Culture;
+                var cultureIndex = fileName.LastIndexOf(originalCulture, StringComparison.Ordinal);
+
+                fileName = fileName.Substring(0, cultureIndex);
+                fileName = $"{fileName}{culture}{extension}";
+
+                // Write file
+                Debug.Assert(directory != null, nameof(directory) + " != null");
+                var newFileFullPath = Path.Combine(directory.FullName, fileName);
+                using (var fileStream = File.Create(newFileFullPath))
+                using (var writer = new StreamWriter(fileStream))
+                {
+                    writer.Write(fileContent);
+                }
+            }
         }
     }
 }

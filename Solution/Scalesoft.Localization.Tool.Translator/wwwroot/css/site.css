@@ -67,6 +67,10 @@ body .container {
     max-width: initial;
 }
 
+body .reduced-container {
+    max-width: 1000px;
+}
+
 .footer {
   position: absolute;
   bottom: 0;

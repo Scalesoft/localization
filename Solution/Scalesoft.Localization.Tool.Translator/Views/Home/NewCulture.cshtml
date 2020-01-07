@@ -1,0 +1,17 @@
+﻿@model NewCultureViewModel
+
+@{
+    ViewData["Title"] = "New Culture";
+}
+
+<div class="container reduced-container">
+    <h1>@ViewData["Title"]</h1>
+
+    <form asp-controller="Home" asp-action="CreateNewCulture" method="post">
+        <div class="form-group">
+            <label for="culture-code">Culture code</label>
+            <input type="text" class="form-control" id="culture-code" asp-for="CultureName">
+        </div>
+        <button type="submit" class="btn btn-primary">Create localization files for specified culture</button>
+    </form>
+</div>

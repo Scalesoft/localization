@@ -34,9 +34,26 @@ namespace Scalesoft.Localization.Tool.Translator.Controllers
             return PartialView("_Editor", editorData);
         }
 
-        public IActionResult Privacy()
+        public IActionResult About()
         {
             return View();
+        }
+
+        public IActionResult NewCulture()
+        {
+            return View(new NewCultureViewModel());
+        }
+
+        public IActionResult CreateNewCulture(NewCultureViewModel data)
+        {
+            if (string.IsNullOrEmpty(data.CultureName))
+            {
+                return RedirectToAction("NewCulture");
+            }
+
+            m_dictionaryManager.CreateDictionariesForCulture(data.CultureName);
+
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
