@@ -22,6 +22,7 @@ namespace Scalesoft.Localization.Tool.Translator
             services.AddControllersWithViews();
 
             services.AddScoped<DictionaryManager>();
+            services.AddScoped<EditorDataConverter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

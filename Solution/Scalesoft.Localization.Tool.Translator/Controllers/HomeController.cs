@@ -9,11 +9,13 @@ namespace Scalesoft.Localization.Tool.Translator.Controllers
     public class HomeController : Controller
     {
         private readonly DictionaryManager m_dictionaryManager;
+        private readonly EditorDataConverter m_editorDataConverter;
         private readonly ILogger<HomeController> m_logger;
 
-        public HomeController(DictionaryManager dictionaryManager, ILogger<HomeController> logger)
+        public HomeController(DictionaryManager dictionaryManager, EditorDataConverter editorDataConverter, ILogger<HomeController> logger)
         {
             m_dictionaryManager = dictionaryManager;
+            m_editorDataConverter = editorDataConverter;
             m_logger = logger;
         }
 
@@ -27,8 +29,9 @@ namespace Scalesoft.Localization.Tool.Translator.Controllers
         public IActionResult GetEditor(string scope)
         {
             var data = m_dictionaryManager.GetDataForScope(scope);
+            var editorData = m_editorDataConverter.ConvertToViewModel(data);
 
-            return PartialView("_Editor", data);
+            return PartialView("_Editor", editorData);
         }
 
         public IActionResult Privacy()

@@ -1,27 +1,23 @@
-﻿@model ScopeViewModel
+﻿@model EditorViewModel
 
 <h5>Standard dictionary</h5>
 <table class="table">
     <tr>
         <th>Key</th>
-        @foreach (var file in Model.Dictionaries)
+        @foreach (var culture in Model.Cultures)
         {
-            <th>@file.DictionaryData.Culture</th>
+            <th>@culture</th>
         }
     </tr>
-    @if (Model.Dictionaries[0].DictionaryData.Dictionary != null)
+    @foreach (var row in Model.StandardRows)
     {
-        @foreach (var item in Model.Dictionaries[0].DictionaryData.Dictionary)
-        {
-            <tr>
-                <td>@item.Key</td>
-                @foreach (var file in Model.Dictionaries)
-                {
-                    var item2 = file.DictionaryData.Dictionary?[item.Key];
-                    <td>@item2</td>
-                }
-            </tr>
-        }
+        <tr>
+            <td>@row.Key</td>
+            @foreach (var translation in row.Translations)
+            {
+                <td>@translation</td>
+            }
+        </tr>
     }
 </table>
 
@@ -29,33 +25,45 @@
 <table class="table">
     <tr>
         <th>Key</th>
-        @foreach (var file in Model.Dictionaries)
+        @foreach (var culture in Model.Cultures)
         {
-            <th>@file.DictionaryData.Culture</th>
+            <th>@culture</th>
         }
     </tr>
-    @if (Model.Dictionaries[0].DictionaryData.Constants != null)
+    @foreach (var row in Model.ConstantRows)
     {
-        @foreach (var item in Model.Dictionaries[0].DictionaryData.Constants)
-        {
-            <tr>
-                <td>@item.Key</td>
-                @foreach (var file in Model.Dictionaries)
-                {
-                    var item2 = file.DictionaryData.Constants?[item.Key];
-                    <td>@item2</td>
-                }
-            </tr>
-        }
+        <tr>
+            <td>@row.Key</td>
+            @foreach (var translation in row.Translations)
+            {
+                <td>@translation</td>
+            }
+        </tr>
     }
 </table>
 
 <h5>Pluralization</h5>
-@if (Model.Dictionaries[0].DictionaryData.Plural != null)
-{
-    <div class="alert alert-warning">
-        Pluralization is not supported in this editor
-    </div>
-}
-
+<table class="table">
+    <tr>
+        <th>Key</th>
+        @foreach (var culture in Model.Cultures)
+        {
+            <th>@culture</th>
+        }
+    </tr>
+    <tr>
+        <td></td>
+        @foreach (var pluralization in Model.Pluralizations)
+        {
+            <td>
+                @if (pluralization != null)
+                {
+                    <div class="alert alert-warning">
+                        Pluralization is not supported in this editor
+                    </div>
+                }
+            </td>
+        }
+    </tr>
+</table>
 
