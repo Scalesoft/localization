@@ -76,6 +76,7 @@ namespace Scalesoft.Localization.Tool.Translator.Core
                     {
                         Scope = dictionaryEnvelopeViewModel.DictionaryData.Scope,
                         Dictionaries = new List<DictionaryEnvelopeViewModel>(),
+                        RelativePath = GetRelativePath(dictionaryEnvelopeViewModel.FileInfo),
                     };
                     resultList.Add(scopeModel);
                 }
@@ -84,6 +85,16 @@ namespace Scalesoft.Localization.Tool.Translator.Core
             }
 
             return resultList;
+        }
+
+        private string GetRelativePath(FileInfo fileInfo)
+        {
+            Debug.Assert(fileInfo.Directory != null, "fileInfo.Directory != null");
+
+            var dirPath = fileInfo.Directory.FullName;
+            var index = dirPath.IndexOf(WorkingDirectory, StringComparison.Ordinal);
+            var result = dirPath.Substring(index + WorkingDirectory.Length);
+            return result;
         }
 
         public ScopeViewModel GetDataForScope(string scope)

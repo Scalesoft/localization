@@ -6,5 +6,6 @@ namespace Scalesoft.Localization.Tool.Translator.Models
     {
         public string Scope { get; set; }
         public IList<DictionaryEnvelopeViewModel> Dictionaries { get; set; }
+        public string RelativePath { get; set; }
     }
 }
