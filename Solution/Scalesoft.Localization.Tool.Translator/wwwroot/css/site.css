@@ -74,3 +74,11 @@ body .container {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+li a.active {
+    font-weight: bold;
+}
+
+.table {
+    margin-bottom: 45px;
+}

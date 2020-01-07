@@ -24,6 +24,13 @@ namespace Scalesoft.Localization.Tool.Translator.Controllers
             return View(data);
         }
 
+        public IActionResult GetEditor(string scope)
+        {
+            var data = m_dictionaryManager.GetDataForScope(scope);
+
+            return PartialView("_Editor", data);
+        }
+
         public IActionResult Privacy()
         {
             return View();

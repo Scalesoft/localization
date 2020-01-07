@@ -1,4 +1,4 @@
-﻿/// <binding BeforeBuild='yarn-runtime' ProjectOpened='default, yarn-runtime' />
+﻿/// <binding BeforeBuild='yarn-runtime, default' ProjectOpened='yarn-runtime' />
 
 var gulp = require("gulp"),
     sourcemaps = require("gulp-sourcemaps"),

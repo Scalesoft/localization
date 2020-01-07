@@ -54,10 +54,15 @@ namespace Scalesoft.Localization.Tool.Translator.Core
             }
         }
 
-        public IList<ScopeViewModel> GetData()
+        public IList<ScopeViewModel> GetData(string scope = null)
         {
-            var dictionaries = GetDictionaries();
+            var dictionaries = GetDictionaries().AsEnumerable();
             var resultList = new List<ScopeViewModel>();
+
+            if (scope != null)
+            {
+                dictionaries = dictionaries.Where(x => x.DictionaryData.Scope == scope);
+            }
 
             foreach (var dictionaryEnvelopeViewModel in dictionaries)
             {
@@ -76,6 +81,11 @@ namespace Scalesoft.Localization.Tool.Translator.Core
             }
 
             return resultList;
+        }
+
+        public ScopeViewModel GetDataForScope(string scope)
+        {
+            return GetData(scope).SingleOrDefault();
         }
     }
 }

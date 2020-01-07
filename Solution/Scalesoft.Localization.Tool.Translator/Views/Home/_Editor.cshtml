@@ -1,0 +1,61 @@
+﻿@model ScopeViewModel
+
+<h5>Standard dictionary</h5>
+<table class="table">
+    <tr>
+        <th>Key</th>
+        @foreach (var file in Model.Dictionaries)
+        {
+            <th>@file.DictionaryData.Culture</th>
+        }
+    </tr>
+    @if (Model.Dictionaries[0].DictionaryData.Dictionary != null)
+    {
+        @foreach (var item in Model.Dictionaries[0].DictionaryData.Dictionary)
+        {
+            <tr>
+                <td>@item.Key</td>
+                @foreach (var file in Model.Dictionaries)
+                {
+                    var item2 = file.DictionaryData.Dictionary?[item.Key];
+                    <td>@item2</td>
+                }
+            </tr>
+        }
+    }
+</table>
+
+<h5>Constants</h5>
+<table class="table">
+    <tr>
+        <th>Key</th>
+        @foreach (var file in Model.Dictionaries)
+        {
+            <th>@file.DictionaryData.Culture</th>
+        }
+    </tr>
+    @if (Model.Dictionaries[0].DictionaryData.Constants != null)
+    {
+        @foreach (var item in Model.Dictionaries[0].DictionaryData.Constants)
+        {
+            <tr>
+                <td>@item.Key</td>
+                @foreach (var file in Model.Dictionaries)
+                {
+                    var item2 = file.DictionaryData.Constants?[item.Key];
+                    <td>@item2</td>
+                }
+            </tr>
+        }
+    }
+</table>
+
+<h5>Pluralization</h5>
+@if (Model.Dictionaries[0].DictionaryData.Plural != null)
+{
+    <div class="alert alert-warning">
+        Pluralization is not supported in this editor
+    </div>
+}
+
+
