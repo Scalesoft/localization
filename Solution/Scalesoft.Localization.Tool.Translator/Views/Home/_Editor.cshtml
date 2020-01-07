@@ -1,7 +1,15 @@
 ﻿@model EditorViewModel
 
+<div class="alert alert-warning unsaved-changes-alert">
+    The changes are not saved.
+    <button type="button" class="btn btn-primary save-button">Save</button>
+    <span class="saving-spinner">Saving...</span>
+</div>
+
+<div id="common-data" data-scope="@Model.Scope"></div>
+
 <h5>Standard dictionary</h5>
-<table class="table">
+<table class="table standard-dictionary">
     <tr>
         <th>Key</th>
         @foreach (var culture in Model.Cultures)
@@ -32,7 +40,7 @@
 </table>
 
 <h5>Constants</h5>
-<table class="table">
+<table class="table constants">
     <tr>
         <th>Key</th>
         @foreach (var culture in Model.Cultures)
@@ -87,3 +95,8 @@
     </tr>
 </table>
 
+<div class="alert alert-warning unsaved-changes-alert">
+    The changes are not saved.
+    <button type="button" class="btn btn-primary save-button">Save</button>
+    <span class="saving-spinner">Saving...</span>
+</div>

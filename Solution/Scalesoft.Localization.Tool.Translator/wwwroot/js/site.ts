@@ -43,12 +43,12 @@ class LocalizationEditor {
     }
 
     private initEditorEvents() {
+        this.updateUnsavedChangesAlert();
+
         $(".edit-cell").click((e) => {
             const cellJq = $(e.currentTarget).closest("td");
             const value = cellJq.data("value");
-            const culture = cellJq.data("culture");
-            const key = $(e.currentTarget).closest("tr").data("key");
-
+            
             if (cellJq.hasClass("modified-value")) {
                 return;
             }
@@ -66,6 +66,8 @@ class LocalizationEditor {
             cellJq.append(editorInputJq);
             cellJq.addClass("modified-value");
 
+            this.updateUnsavedChangesAlert();
+
             editorInputJq.find(".translation-text")
                 .val(value)
                 .focus();
@@ -75,7 +77,80 @@ class LocalizationEditor {
                 cellJq.append(originalJq);
                 cellJq.removeClass("modified-value");
                 editorInputJq.remove();
+                this.updateUnsavedChangesAlert();
             });
         });
+
+        $(".unsaved-changes-alert .saving-spinner").hide();
+
+        $(".unsaved-changes-alert .save-button").click(() => {
+            this.saveChanges();
+        });
     }
+
+    private updateUnsavedChangesAlert() {
+        const alertJq = $(".unsaved-changes-alert");
+        if ($(".modified-value").length > 0) {
+            alertJq.show();
+        } else {
+            alertJq.hide();
+        }
+    }
+
+    private getChangedItems(container: JQuery): ITranslationItemChange[] {
+        const resultList: ITranslationItemChange[] = [];
+        container.find(".modified-value").each((index, element) => {
+            const cellJq = $(element);
+            const culture = cellJq.data("culture") as string;
+            const key = cellJq.closest("tr").data("key") as string;
+            const value = cellJq.find(".translation-text").val() as string;
+
+            resultList.push({
+                culture: culture,
+                key: key,
+                value: value,
+            });
+        });
+
+        return resultList;
+    }
+
+    private saveChanges() {
+        const scope = $("#common-data").data("scope") as string;
+        const standardDictionary = this.getChangedItems($(".standard-dictionary"));
+        const constants = this.getChangedItems($(".constants"));
+        const data: ISaveLocalization = {
+            scope: scope,
+            dictionary: standardDictionary,
+            constants: constants
+        }
+
+        const savingSpinnerJq = $(".unsaved-changes-alert .saving-spinner");
+        savingSpinnerJq.show();
+
+        $.ajax({
+            type: "POST",
+            url: this.baseUrl + "Home/SaveChanges",
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        }).done(() => {
+            $("#scope-list .active").click();
+        }).fail(() => {
+            alert("Saving failed");
+        }).always(() => {
+            savingSpinnerJq.hide();
+        });
+    }
+}
+
+interface ITranslationItemChange {
+    culture: string;
+    key: string;
+    value: string;
+}
+
+interface ISaveLocalization {
+    scope: string;
+    dictionary: ITranslationItemChange[];
+    constants: ITranslationItemChange[];
 }

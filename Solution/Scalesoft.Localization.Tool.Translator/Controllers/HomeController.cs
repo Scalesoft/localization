@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.Tool.Translator.Core;
 using Scalesoft.Localization.Tool.Translator.Models;
+using Scalesoft.Localization.Tool.Translator.Models.Requests;
 
 namespace Scalesoft.Localization.Tool.Translator.Controllers
 {
@@ -54,6 +55,11 @@ namespace Scalesoft.Localization.Tool.Translator.Controllers
             m_dictionaryManager.CreateDictionariesForCulture(data.CultureName);
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult SaveChanges([FromBody] SaveLocalizationRequest request)
+        {
+            return Ok();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
