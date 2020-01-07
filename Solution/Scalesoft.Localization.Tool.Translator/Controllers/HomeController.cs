@@ -59,6 +59,8 @@ namespace Scalesoft.Localization.Tool.Translator.Controllers
 
         public IActionResult SaveChanges([FromBody] SaveLocalizationRequest request)
         {
+            m_dictionaryManager.SaveDictionaryChanges(request);
+
             return Ok();
         }
 

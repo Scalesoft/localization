@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Scalesoft.Localization.Tool.Translator.Models;
 using Scalesoft.Localization.Tool.Translator.Models.Json;
+using Scalesoft.Localization.Tool.Translator.Models.Requests;
 
 namespace Scalesoft.Localization.Tool.Translator.Core
 {
@@ -123,6 +124,47 @@ namespace Scalesoft.Localization.Tool.Translator.Core
                 using (var writer = new StreamWriter(fileStream))
                 {
                     writer.Write(fileContent);
+                }
+            }
+        }
+
+        public void SaveDictionaryChanges(SaveLocalizationRequest request)
+        {
+            var scopes = GetDataForScope(request.Scope);
+            foreach (var dictionaryEnvelopeViewModel in scopes.Dictionaries)
+            {
+                var anyChange = false;
+                var model = dictionaryEnvelopeViewModel.DictionaryData;
+                var changesForCulture1 = request.Dictionary.Where(x => x.Culture == model.Culture);
+                var changesForCulture2 = request.Constants.Where(x => x.Culture == model.Culture);
+
+                foreach (var itemChangeRequest in changesForCulture1)
+                {
+                    if (model.Dictionary == null)
+                    {
+                        model.Dictionary = new Dictionary<string, string>();
+                    }
+
+                    model.Dictionary[itemChangeRequest.Key] = itemChangeRequest.Value;
+                    anyChange = true;
+                }
+
+                foreach (var itemChangeRequest in changesForCulture2)
+                {
+                    if (model.Constants == null)
+                    {
+                        model.Constants = new Dictionary<string, string>();
+                    }
+
+                    model.Constants[itemChangeRequest.Key] = itemChangeRequest.Value;
+                    anyChange = true;
+                }
+
+                if (anyChange)
+                {
+                    var serializedContent = JsonConvert.SerializeObject(model, Formatting.Indented);
+
+                    File.WriteAllText(dictionaryEnvelopeViewModel.FileInfo.FullName, serializedContent);
                 }
             }
         }
