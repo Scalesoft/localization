@@ -36,7 +36,46 @@ class LocalizationEditor {
             (responseText, responseStatus) => {
                 if (responseStatus !== "success") {
                     this.editorContainerJq.text("Error loading dictionaries for selected scope");
+                } else {
+                    this.initEditorEvents();
                 }
             });
+    }
+
+    private initEditorEvents() {
+        $(".edit-cell").click((e) => {
+            const cellJq = $(e.currentTarget).closest("td");
+            const value = cellJq.data("value");
+            const culture = cellJq.data("culture");
+            const key = $(e.currentTarget).closest("tr").data("key");
+
+            if (cellJq.hasClass("modified-value")) {
+                return;
+            }
+
+            const editorInputJq = $(`<div class="input-group">
+    <input type="text" class="form-control translation-text">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary cancel-button" type="button">Cancel</button>
+    </div>
+    <div class="backup d-none"></div>
+</div>`);
+            const originalJq = cellJq.children();
+            const backupJq = editorInputJq.find(".backup");
+            backupJq.append(originalJq);
+            cellJq.append(editorInputJq);
+            cellJq.addClass("modified-value");
+
+            editorInputJq.find(".translation-text")
+                .val(value)
+                .focus();
+
+            editorInputJq.find(".cancel-button").click((e) => {
+                e.stopPropagation();
+                cellJq.append(originalJq);
+                cellJq.removeClass("modified-value");
+                editorInputJq.remove();
+            });
+        });
     }
 }

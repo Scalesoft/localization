@@ -11,11 +11,21 @@
     </tr>
     @foreach (var row in Model.StandardRows)
     {
-        <tr>
+        <tr data-key="@row.Key">
             <td>@row.Key</td>
+            @{var index = 0;}
             @foreach (var translation in row.Translations)
             {
-                <td>@translation</td>
+                <td class="edit-cell" data-culture="@Model.Cultures[index++]" data-value="@translation">
+                    @if (translation == null)
+                    {
+                        <span class="badge badge-secondary">null</span>
+                    }
+                    else
+                    {
+                        <span>@translation</span>
+                    }
+                </td>
             }
         </tr>
     }
@@ -32,11 +42,21 @@
     </tr>
     @foreach (var row in Model.ConstantRows)
     {
-        <tr>
+        <tr data-key="@row.Key">
             <td>@row.Key</td>
+            @{var index = 0;}
             @foreach (var translation in row.Translations)
             {
-                <td>@translation</td>
+                <td class="edit-cell" data-culture="@Model.Cultures[index++]" data-value="@translation">
+                    @if (translation == null)
+                    {
+                        <span class="badge badge-secondary">null</span>
+                    }
+                    else
+                    {
+                        <span>@translation</span>
+                    }
+                </td>
             }
         </tr>
     }
@@ -59,7 +79,7 @@
                 @if (pluralization != null)
                 {
                     <div class="alert alert-warning">
-                        Pluralization is not supported in this editor
+                        File contains pluralization but it is not supported in this editor
                     </div>
                 }
             </td>

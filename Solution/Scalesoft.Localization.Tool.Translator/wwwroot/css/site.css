@@ -85,4 +85,9 @@ li a.active {
 
 .table {
     margin-bottom: 45px;
+    table-layout: fixed;
+}
+
+.edit-cell {
+    cursor: pointer;
 }
