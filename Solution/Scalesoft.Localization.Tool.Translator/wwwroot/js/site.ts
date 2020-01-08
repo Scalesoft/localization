@@ -19,6 +19,7 @@ class LocalizationEditor {
     public init() {
         const hyperLinksJq = this.scopeListJq.find("a");
         hyperLinksJq.click((e) => {
+            e.preventDefault();
             hyperLinksJq.removeClass("active");
 
             const hyperLinkJq = $(e.currentTarget);
