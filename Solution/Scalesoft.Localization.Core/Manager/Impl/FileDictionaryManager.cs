@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -113,11 +114,28 @@ namespace Scalesoft.Localization.Core.Manager.Impl
             }
 
             var dictionariesPerCulture = m_dictionariesPerCultureAndScope[dictionary.CultureInfo()];
-            dictionariesPerCulture.Add(dictionary.Scope(), dictionary);
+
+            TryAddDictionaryKey(dictionariesPerCulture, dictionary.Scope(), dictionary);
 
             foreach (var scopeAlias in dictionary.ScopeAlias())
             {
-                dictionariesPerCulture.Add(scopeAlias, dictionary);
+                TryAddDictionaryKey(dictionariesPerCulture, scopeAlias, dictionary);
+            }
+        }
+
+        private void TryAddDictionaryKey<TK,TV>(IDictionary<TK,TV> dictionary, TK key, TV value)
+        {
+            try
+            {
+                dictionary.Add(key, value);
+            }
+            catch (ArgumentNullException e)
+            {
+                throw new DictionaryLoadException("Cannot add null key to the dictionary", e);
+            }
+            catch (ArgumentException e)
+            {
+                throw new DictionaryLoadException($"Key {key} already exists in the dictionary", e);
             }
         }
 
