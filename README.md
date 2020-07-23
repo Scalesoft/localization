@@ -40,6 +40,13 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 }
 ```
 
+### Using library with database:
+
+While using database texts, register entities mappings to NHibernate. Mappings can be obtained by this method:
+```c#
+NHibernateDatabaseConfiguration.GetMappings();
+```
+
 ## Structure of config json file:
 ```json
 {
