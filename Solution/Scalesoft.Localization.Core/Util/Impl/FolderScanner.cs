@@ -81,6 +81,8 @@ namespace Scalesoft.Localization.Core.Util.Impl
                         m_logger.LogError(message);
                     }
 
+                    // global scope must be present in a culture even if a culture is dynamic user-created
+                    // it is required to build hierarchy
                     exceptionLogStringBuilder.AppendLine(message);
                     shouldThrowException = true;
                 }
@@ -106,13 +108,13 @@ namespace Scalesoft.Localization.Core.Util.Impl
 
             var exceptionLogStringBuilder = new StringBuilder();
             var shouldThrowException = false;
-            
+
             var allSupportedCultures = libConfiguration.SupportedCultures.ToList();
             if (!allSupportedCultures.Contains(libConfiguration.DefaultCulture))
             {
                 allSupportedCultures.Add(libConfiguration.DefaultCulture);
             }
-            
+
             foreach (var scopeDirectory in scopeDirectories)
             {
                 foreach (var supportedCulture in allSupportedCultures)
@@ -139,13 +141,14 @@ namespace Scalesoft.Localization.Core.Util.Impl
                             ConstructResourceFileName(libConfiguration, scopeDirectory, supportedCulture, ""),
                             string.Join("|", m_dictionaryFactory.FileExtensions)
                             );
-                        if (m_logger != null && m_logger.IsErrorEnabled())
+                        if (m_logger != null && m_logger.IsInformationEnabled())
                         {
-                            m_logger.LogError(message);
+                            m_logger.LogInformation(message);
                         }
 
-                        exceptionLogStringBuilder.AppendLine(message);
-                        shouldThrowException = true;
+                        // do not throw errors if a culture is missing to allow for dynamic user-created dictionaries
+                        //exceptionLogStringBuilder.AppendLine(message);
+                        //shouldThrowException = true;
                     }
                 }
             }
@@ -175,13 +178,14 @@ namespace Scalesoft.Localization.Core.Util.Impl
                         globalPathWithoutExtension,
                         string.Join("|", m_dictionaryFactory.FileExtensions)
                     );
-                    if (m_logger != null && m_logger.IsErrorEnabled())
+                    if (m_logger != null && m_logger.IsInformationEnabled())
                     {
-                        m_logger.LogError(message);
+                        m_logger.LogInformation(message);
                     }
 
-                    exceptionLogStringBuilder.AppendLine(message);
-                    shouldThrowException = true;
+                    // do not throw errors if a culture is missing to allow for dynamic user-created dictionaries
+                    //exceptionLogStringBuilder.AppendLine(message);
+                    //shouldThrowException = true;
                 }
             }
 
