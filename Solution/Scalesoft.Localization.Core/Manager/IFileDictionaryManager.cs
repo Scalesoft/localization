@@ -8,5 +8,7 @@ namespace Scalesoft.Localization.Core.Manager
         void AddDictionaryToHierarchyTrees(ILocalizationDictionary dictionary);
 
         ILocalizationDictionary GetLocalizationDictionary(CultureInfo cultureInfo = null, string scope = null);
+
+        bool IsCultureSupported(CultureInfo cultureInfo);
     }
 }
