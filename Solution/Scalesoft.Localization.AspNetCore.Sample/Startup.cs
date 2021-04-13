@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore.IoC;
 using Scalesoft.Localization.Core.Configuration;
@@ -23,7 +24,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
         private IContainer m_container;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             m_configuration = configuration;
         }
@@ -47,13 +48,15 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             services.AddNHibernate(m_configuration);
 
+            services.AddApplicationInsightsTelemetry();
+
             m_container = new Container().WithDependencyInjectionAdapter(services);
 
             return m_container.Resolve<IServiceProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -69,11 +72,15 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             app.UseLocalization();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseEndpoints(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapControllerRoute(
+                    "areaRoute",
+                    "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                routes.MapControllerRoute("default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
 
             var dictionaryFactory = app.ApplicationServices.GetService<IDictionaryFactory>();

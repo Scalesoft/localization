@@ -33,7 +33,6 @@ namespace Scalesoft.Localization.AspNetCore.Sample
                     logging.SetMinimumLevel(LogLevel.Trace);
                 })
                 .UseNLog()
-                .UseApplicationInsights()
                 .Build();
         }
     }
