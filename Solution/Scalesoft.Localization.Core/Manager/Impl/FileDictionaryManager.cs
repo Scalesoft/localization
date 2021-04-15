@@ -94,7 +94,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         private IEnumerable<string> CheckResourceFiles(LocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory)
         {
             var fs = new FolderScanner(dictionaryFactory);
-            return fs.CheckResourceFiles(configuration);
+
+            return fs.GetAllDictionaryFullpaths(configuration.BasePath);
         }
 
         public void AddDictionaryToHierarchyTrees(ILocalizationDictionary dictionary)
