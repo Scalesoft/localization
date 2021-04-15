@@ -71,7 +71,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         /// Automatically loads dictionary files based on folder structure in basePath (specified in library config).
         /// </summary>
         /// <param name="dictionaryFactory">Dictionary factory.</param>
-        private void AutoLoadDictionaries(IDictionaryFactory dictionaryFactory)
+        public void AutoLoadDictionaries(IDictionaryFactory dictionaryFactory)
         {
             var localizationFilesToLoad = CheckResourceFiles(m_configuration, dictionaryFactory);
 

@@ -10,5 +10,7 @@ namespace Scalesoft.Localization.Core.Manager
         ILocalizationDictionary GetLocalizationDictionary(CultureInfo cultureInfo = null, string scope = null);
 
         bool IsCultureSupported(CultureInfo cultureInfo);
+
+        void AutoLoadDictionaries(IDictionaryFactory dictionaryFactory);
     }
 }
