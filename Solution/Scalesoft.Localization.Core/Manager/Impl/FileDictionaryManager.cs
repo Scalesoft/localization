@@ -111,7 +111,8 @@ namespace Scalesoft.Localization.Core.Manager.Impl
 
             if (!m_dictionariesPerCultureAndScope.Keys.Contains(dictionary.CultureInfo()))
             {
-                throw new DictionaryLoadException(string.Format(UnknownCultureException, dictionary.CultureInfo(), dictionary.Scope()));
+                // Ignore unsupported languages without any error
+                return;
             }
 
             var dictionariesPerCulture = m_dictionariesPerCultureAndScope[dictionary.CultureInfo()];
