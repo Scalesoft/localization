@@ -88,8 +88,11 @@ namespace Scalesoft.Localization.Database.NHibernate.UnitOfWork
                     name, cultureName, dictionaryScopeName
                 );
 
-                staticTextRepository.Delete(staticTextEntity);
-                session.Flush();
+                if (staticTextEntity != null)
+                {
+                    staticTextRepository.Delete(staticTextEntity);
+                    session.Flush();
+                }
             }
         }
 
