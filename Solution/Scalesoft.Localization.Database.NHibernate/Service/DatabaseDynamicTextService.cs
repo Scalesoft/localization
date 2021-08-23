@@ -150,12 +150,6 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
                 scope = m_configuration.DefaultScope;
             }
 
-            var dictionaryScope = GetDictionaryScope(scope);
-            if (dictionaryScope.Name != scope)
-            {
-                throw new ArgumentException($"Unknown scope {scope}");
-            }
-
             var culture = GetCultureByNameOrGetDefault(cultureInfo.Name);
 
             if (culture.Name != cultureInfo.Name)
@@ -163,7 +157,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
                 throw new ArgumentException($"Unknown culture {cultureInfo.Name}");
             }
 
-            m_staticTextUoW.Delete(name, culture.Name, dictionaryScope.Name);
+            m_staticTextUoW.Delete(name, culture.Name, scope);
         }
 
         public void DeleteAllDynamicText(string name, string scope)
@@ -173,13 +167,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
                 scope = m_configuration.DefaultScope;
             }
 
-            var dictionaryScope = GetDictionaryScope(scope);
-            if (dictionaryScope.Name != scope)
-            {
-                throw new ArgumentException($"Unknown scope {scope}");
-            }
-
-            m_staticTextUoW.DeleteAll(name, dictionaryScope.Name);
+            m_staticTextUoW.DeleteAll(name, scope);
         }
 
         /// <summary>
