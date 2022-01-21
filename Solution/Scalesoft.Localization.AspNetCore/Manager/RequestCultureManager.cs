@@ -109,7 +109,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         private void SetCookieValue(LocalizationCookie cookie, IUserCookieCategories userCookieCategories)
         {
-            if (userCookieCategories.PreferentialAllowed)
+            if (!userCookieCategories.PreferentialAllowed)
             {
                 return;
             }
