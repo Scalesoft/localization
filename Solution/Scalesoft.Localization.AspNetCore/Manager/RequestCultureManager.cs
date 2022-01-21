@@ -16,19 +16,19 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
-        private readonly IUserCookieCategoriesResolver m_userCookieCategoriesResolver;
+        private readonly IUserCookiePreferenceResolver m_userCookiePreferenceResolver;
         private readonly LocalizationConfiguration m_configuration;
 
         public RequestCultureManager(
             IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
-            IUserCookieCategoriesResolver userCookieCategoriesResolver,
+            IUserCookiePreferenceResolver userCookiePreferenceResolver,
             LocalizationConfiguration configuration
         )
         {
             m_httpContextAccessor = httpContextAccessor;
             m_autoLocalizationManager = autoLocalizationManager;
-            m_userCookieCategoriesResolver = userCookieCategoriesResolver;
+            m_userCookiePreferenceResolver = userCookiePreferenceResolver;
             m_configuration = configuration;
         }
 
@@ -67,8 +67,8 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         private void BuildCookieModelAndSetCookie(string culture = null)
         {
-            var userCookieCategories = m_userCookieCategoriesResolver.Resolve(m_httpContextAccessor.HttpContext.Request);
-            if (!userCookieCategories.PreferentialAllowed)
+            var preferentialAllowed = m_userCookiePreferenceResolver.PreferentialCookieAllowed(m_httpContextAccessor.HttpContext.Request);
+            if (!preferentialAllowed)
             {
                 return;
             }

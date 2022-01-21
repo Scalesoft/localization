@@ -15,9 +15,9 @@ namespace Scalesoft.Localization.AspNetCore.IoC
 {
     public static class AspNetCoreLocalizationServiceCollectionExtensions
     {
-        public static void AddLocalizationService(
-            this IServiceCollection services, LocalizationConfiguration configuration, Func<IUserCookieCategoriesResolver> cookiePrefsResolverFactory, IDatabaseConfiguration databaseConfiguration = null
-        )
+        public static void AddLocalizationService<T>(
+            this IServiceCollection services, LocalizationConfiguration configuration, IDatabaseConfiguration databaseConfiguration = null
+        ) where T : class, IUserCookiePreferenceResolver
         {
             services.AddLocalizationCore(configuration, databaseConfiguration);
 
@@ -28,7 +28,7 @@ namespace Scalesoft.Localization.AspNetCore.IoC
             services.AddTransient<IRazorLocalizationService, RazorLocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
             services.AddTransient<IDynamicTextService, DynamicTextService>();
-            services.AddScoped<IUserCookieCategoriesResolver>(sp => cookiePrefsResolverFactory());
+            services.TryAddScoped<IUserCookiePreferenceResolver, T>();
         }
 
         public static IApplicationBuilder UseLocalization(this IApplicationBuilder builder)

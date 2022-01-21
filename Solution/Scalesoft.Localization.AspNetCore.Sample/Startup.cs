@@ -37,7 +37,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
             var databaseConfiguration = new NHibernateDatabaseConfiguration();
-            services.AddLocalizationService(localizationConfiguration, () => new CookiePrefsResolver(), databaseConfiguration);
+            services.AddLocalizationService<CookiePrefsResolver>(localizationConfiguration, databaseConfiguration);
 
             // Add framework services.
             services.AddMvc()

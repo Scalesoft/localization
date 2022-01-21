@@ -3,17 +3,11 @@ using Scalesoft.Localization.AspNetCore.Manager;
 
 namespace Scalesoft.Localization.AspNetCore.Sample.CookiePrefs
 {
-    public class CookiePrefsResolver : IUserCookieCategoriesResolver
+    public class CookiePrefsResolver : IUserCookiePreferenceResolver
     {
-        public IUserCookieCategories Resolve(HttpRequest request)
+        public bool PreferentialCookieAllowed(HttpRequest request)
         {
-            return new UserCookieCategories { EssentialAllowed = true, PreferentialAllowed = true };
-        }
-
-        private class UserCookieCategories : IUserCookieCategories
-        {
-            public bool EssentialAllowed { get; set; }
-            public bool PreferentialAllowed { get; set; }
+            return true;
         }
     }
 }
