@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore.IoC;
+using Scalesoft.Localization.AspNetCore.Sample.CookiePrefs;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Dictionary;
 using Scalesoft.Localization.Core.Manager;
@@ -36,7 +37,7 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
             var databaseConfiguration = new NHibernateDatabaseConfiguration();
-            services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
+            services.AddLocalizationService(localizationConfiguration, () => new CookiePrefsResolver(), databaseConfiguration);
 
             // Add framework services.
             services.AddMvc()
