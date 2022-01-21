@@ -57,16 +57,22 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         public void SetResponseCookie()
         {
-            SetCookieValues();
+            BuildCookieModelAndSetCookie();
         }
 
         public void SetCulture(string culture)
         {
-            SetCookieValues(culture);
+            BuildCookieModelAndSetCookie(culture);
         }
 
-        private void SetCookieValues(string culture = null)
+        private void BuildCookieModelAndSetCookie(string culture = null)
         {
+            var userCookieCategories = m_userCookieCategoriesResolver.Resolve(m_httpContextAccessor.HttpContext.Request);
+            if (!userCookieCategories.PreferentialAllowed)
+            {
+                return;
+            }
+
             var localizationCookie = GetCookieValue();
             if (localizationCookie == null)
             {
@@ -92,28 +98,19 @@ namespace Scalesoft.Localization.AspNetCore.Manager
                 localizationCookie.CurrentCulture = null;
             }
 
-            SetCookieValue(localizationCookie, m_userCookieCategoriesResolver.Resolve(m_httpContextAccessor.HttpContext.Request));
+            SetCookieValue(localizationCookie);
         }
 
         private LocalizationCookie GetCookieValue()
         {
             var request = m_httpContextAccessor.HttpContext.Request;
-            if (request.Cookies.TryGetValue(CultureCookieName, out var currentCultureCookie))
-            {
-                var deserializedCookie = CookieSerializer.Deserialize(currentCultureCookie);
-                return deserializedCookie;
-            }
-
-            return null;
+            var currentCultureCookie = request.Cookies[CultureCookieName];
+            var deserializedCookie = CookieSerializer.Deserialize(currentCultureCookie);
+            return deserializedCookie;
         }
 
-        private void SetCookieValue(LocalizationCookie cookie, IUserCookieCategories userCookieCategories)
+        private void SetCookieValue(LocalizationCookie cookie)
         {
-            if (!userCookieCategories.PreferentialAllowed)
-            {
-                return;
-            }
-
             var response = m_httpContextAccessor.HttpContext.Response;
             var serializedCookie = CookieSerializer.Serialize(cookie);
 
