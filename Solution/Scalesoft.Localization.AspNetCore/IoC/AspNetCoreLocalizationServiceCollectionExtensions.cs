@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
@@ -15,7 +16,7 @@ namespace Scalesoft.Localization.AspNetCore.IoC
     public static class AspNetCoreLocalizationServiceCollectionExtensions
     {
         public static void AddLocalizationService(
-            this IServiceCollection services, LocalizationConfiguration configuration, IDatabaseConfiguration databaseConfiguration = null
+            this IServiceCollection services, LocalizationConfiguration configuration, Func<IUserCookieCategoriesResolver> cookiePrefsResolverFactory, IDatabaseConfiguration databaseConfiguration = null
         )
         {
             services.AddLocalizationCore(configuration, databaseConfiguration);
@@ -27,6 +28,7 @@ namespace Scalesoft.Localization.AspNetCore.IoC
             services.AddTransient<IRazorLocalizationService, RazorLocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
             services.AddTransient<IDynamicTextService, DynamicTextService>();
+            services.AddTransient<IUserCookieCategoriesResolver>(sp => cookiePrefsResolverFactory());
         }
 
         public static IApplicationBuilder UseLocalization(this IApplicationBuilder builder)

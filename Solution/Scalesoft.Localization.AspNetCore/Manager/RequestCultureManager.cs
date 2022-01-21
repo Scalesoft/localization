@@ -16,16 +16,19 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
+        private readonly IUserCookieCategoriesResolver m_userCookieCategoriesResolver;
         private readonly LocalizationConfiguration m_configuration;
 
         public RequestCultureManager(
             IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
+            IUserCookieCategoriesResolver userCookieCategoriesResolver,
             LocalizationConfiguration configuration
         )
         {
             m_httpContextAccessor = httpContextAccessor;
             m_autoLocalizationManager = autoLocalizationManager;
+            m_userCookieCategoriesResolver = userCookieCategoriesResolver;
             m_configuration = configuration;
         }
 
@@ -39,6 +42,10 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
 
             var localizationCookie = GetCookieValue();
+            if (localizationCookie == null)
+            {
+                return m_autoLocalizationManager.GetDefaultCulture();
+            }
 
             var cultureValue = localizationCookie.CurrentCulture ?? defaultCulture.Name;
             var cultureInfo = new CultureInfo(cultureValue);
@@ -61,6 +68,10 @@ namespace Scalesoft.Localization.AspNetCore.Manager
         private void SetCookieValues(string culture = null)
         {
             var localizationCookie = GetCookieValue();
+            if (localizationCookie == null)
+            {
+                return;
+            }
 
             // Set new current culture if specified
             if (culture != null)
@@ -68,9 +79,11 @@ namespace Scalesoft.Localization.AspNetCore.Manager
                 var requestCulture = new RequestCulture(culture);
                 localizationCookie.CurrentCulture = requestCulture.Culture.Name;
             }
-
-            // Always set default culture
-            localizationCookie.DefaultCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
+            else
+            {
+                // Else set to default culture
+                localizationCookie.CurrentCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
+            }
 
             // Instead of unsupported culture use null (default)
             if (localizationCookie.CurrentCulture != null &&
@@ -79,19 +92,28 @@ namespace Scalesoft.Localization.AspNetCore.Manager
                 localizationCookie.CurrentCulture = null;
             }
 
-            SetCookieValue(localizationCookie);
+            SetCookieValue(localizationCookie, m_userCookieCategoriesResolver.Resolve(m_httpContextAccessor.HttpContext.Request));
         }
 
         private LocalizationCookie GetCookieValue()
         {
             var request = m_httpContextAccessor.HttpContext.Request;
-            var currentCultureCookie = request.Cookies[CultureCookieName];
-            var deserializedCookie = CookieSerializer.Deserialize(currentCultureCookie);
-            return deserializedCookie;
+            if (request.Cookies.TryGetValue(CultureCookieName, out var currentCultureCookie))
+            {
+                var deserializedCookie = CookieSerializer.Deserialize(currentCultureCookie);
+                return deserializedCookie;
+            }
+
+            return null;
         }
 
-        private void SetCookieValue(LocalizationCookie cookie)
+        private void SetCookieValue(LocalizationCookie cookie, IUserCookieCategories userCookieCategories)
         {
+            if (userCookieCategories.PreferentialAllowed)
+            {
+                return;
+            }
+
             var response = m_httpContextAccessor.HttpContext.Response;
             var serializedCookie = CookieSerializer.Serialize(cookie);
 
