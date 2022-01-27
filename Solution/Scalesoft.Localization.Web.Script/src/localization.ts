@@ -715,7 +715,7 @@ class Localization {
 
                 xmlHttpRequest.open(
                     "GET",
-                    `${this.getBaseUrl()}/Localization/CurrentDictionary`,
+                    `${this.getBaseUrl()}/Localization/CurrentCulture`,
                     false,
                 );
                 xmlHttpRequest.send();
@@ -749,7 +749,7 @@ class Localization {
 
                     xmlHttpRequest.open(
                         "GET",
-                        `${this.getBaseUrl()}/Localization/CurrentDictionary`,
+                        `${this.getBaseUrl()}/Localization/CurrentCulture`,
                         true,
                     );
                     xmlHttpRequest.send();
