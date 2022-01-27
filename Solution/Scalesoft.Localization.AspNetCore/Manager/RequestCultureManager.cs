@@ -11,24 +11,24 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 {
     public class RequestCultureManager : IRequestCultureManager
     {
-        protected const string CultureCookieName = "Localization.Culture";
+        public const string CultureCookieName = "Localization.Culture";
         protected const string ResolvedCultureCachedItem = "ResolvedCulture";
 
         private readonly IHttpContextAccessor m_httpContextAccessor;
         private readonly IAutoLocalizationManager m_autoLocalizationManager;
-        private readonly IUserCookiePreferenceResolver m_userCookiePreferenceResolver;
+        private readonly ICookieConfigResolver m_cookieConfigResolver;
         private readonly LocalizationConfiguration m_configuration;
 
         public RequestCultureManager(
             IHttpContextAccessor httpContextAccessor,
             IAutoLocalizationManager autoLocalizationManager,
-            IUserCookiePreferenceResolver userCookiePreferenceResolver,
+            ICookieConfigResolver cookieConfigResolver,
             LocalizationConfiguration configuration
         )
         {
             m_httpContextAccessor = httpContextAccessor;
             m_autoLocalizationManager = autoLocalizationManager;
-            m_userCookiePreferenceResolver = userCookiePreferenceResolver;
+            m_cookieConfigResolver = cookieConfigResolver;
             m_configuration = configuration;
         }
 
@@ -42,12 +42,8 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
 
             var localizationCookie = GetCookieValue();
-            if (localizationCookie == null)
-            {
-                return m_autoLocalizationManager.GetDefaultCulture();
-            }
 
-            var cultureValue = localizationCookie.CurrentCulture ?? defaultCulture.Name;
+            var cultureValue = localizationCookie?.CurrentCulture ?? defaultCulture.Name;
             var cultureInfo = new CultureInfo(cultureValue);
 
             m_httpContextAccessor.HttpContext.Items[ResolvedCultureCachedItem] = cultureInfo;
@@ -67,7 +63,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
 
         private void BuildCookieModelAndSetCookie(string culture = null)
         {
-            var preferentialAllowed = m_userCookiePreferenceResolver.PreferentialCookieAllowed(m_httpContextAccessor.HttpContext.Request);
+            var preferentialAllowed = m_cookieConfigResolver.IsCookieAllowed(m_httpContextAccessor.HttpContext.Request);
             if (!preferentialAllowed)
             {
                 return;
@@ -89,13 +85,6 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             {
                 // Else set to default culture
                 localizationCookie.CurrentCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
-            }
-
-            // Instead of unsupported culture use null (default)
-            if (localizationCookie.CurrentCulture != null &&
-                m_configuration.SupportedCultures.All(x => x.Name != localizationCookie.CurrentCulture))
-            {
-                localizationCookie.CurrentCulture = null;
             }
 
             SetCookieValue(localizationCookie);
