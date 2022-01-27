@@ -15,12 +15,14 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
     IDatabaseConfiguration databaseConfiguration = null;
     //IDatabaseConfiguration databaseConfiguration = new NHibernateDatabaseConfiguration();
     
-    services.AddLocalizationService(
+    services.AddLocalizationService<CookieConfigResolver>(
         localizationConfiguration,
         databaseConfiguration
     );
 }
 ```
+
+Where `CookieConfigResolver` implements `ICookieConfigResolver`
 
 ### Using library without config file:
 ```c#
@@ -253,7 +255,7 @@ public void ConfigureServices(IServiceCollection services)
     //IDatabaseConfiguration databaseConfiguration = new NHibernateDatabaseConfiguration();
     
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddLocalizationService(
+    services.AddLocalizationService<CookieConfigResolver>(
         localizationConfiguration,
         databaseConfiguration
     );
@@ -263,6 +265,8 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 {  
 }
 ``` 
+
+Where `CookieConfigResolver` implements `ICookieConfigResolver`
 
 ## Database structure 
 Init database schema script for SQL Server is in Sample project named `CreateDBSchema.sql`. Run it in SQL Server Management studio
