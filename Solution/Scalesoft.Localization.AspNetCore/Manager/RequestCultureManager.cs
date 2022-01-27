@@ -66,6 +66,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             var preferentialAllowed = m_cookieConfigResolver.IsCookieAllowed(m_httpContextAccessor.HttpContext.Request);
             if (!preferentialAllowed)
             {
+                RemoveCookieIfExists();
                 return;
             }
 
@@ -88,6 +89,15 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
 
             SetCookieValue(localizationCookie);
+        }
+
+        private void RemoveCookieIfExists()
+        {
+            var request = m_httpContextAccessor.HttpContext.Request;
+            if (request.Cookies.ContainsKey(CultureCookieName))
+            {
+                m_httpContextAccessor.HttpContext.Response.Cookies.Delete(CultureCookieName);
+            }
         }
 
         private LocalizationCookie GetCookieValue()
