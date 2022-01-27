@@ -699,7 +699,7 @@ class Localization {
     public getCurrentCulture(): string {
         if (this.mCurrentCulture === undefined) {
             const parsedCookieValue = this.getParsedCultureCookie();
-            if(!parsedCookieValue){
+            if (!parsedCookieValue) {
                 const xmlHttpRequest = new XMLHttpRequest();
 
                 xmlHttpRequest.onreadystatechange = () => {
@@ -719,9 +719,9 @@ class Localization {
                     false,
                 );
                 xmlHttpRequest.send();
+            } else {
+                this.setCurrentCulture(parsedCookieValue.currentCulture);
             }
-
-            this.setCurrentCulture(parsedCookieValue.currentCulture);
         }
 
         return this.mCurrentCulture;
@@ -731,7 +731,7 @@ class Localization {
         return new Promise((resolve, reject) => {
             if (this.mCurrentCulture === undefined) {
                 const parsedCookieValue = this.getParsedCultureCookie();
-                if(!parsedCookieValue){
+                if (!parsedCookieValue) {
                     const xmlHttpRequest = new XMLHttpRequest();
 
                     xmlHttpRequest.onreadystatechange = () => {
@@ -753,9 +753,9 @@ class Localization {
                         true,
                     );
                     xmlHttpRequest.send();
+                } else {
+                    this.setCurrentCulture(parsedCookieValue.currentCulture);
                 }
-
-                this.setCurrentCulture(parsedCookieValue.currentCulture);
             }
 
             resolve(this.mCurrentCulture);
