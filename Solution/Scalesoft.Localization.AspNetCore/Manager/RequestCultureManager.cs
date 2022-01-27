@@ -71,10 +71,6 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
 
             var localizationCookie = GetCookieValue();
-            if (localizationCookie == null)
-            {
-                return;
-            }
 
             // Set new current culture if specified
             if (culture != null)
@@ -84,8 +80,11 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             }
             else
             {
-                // Else set to default culture
-                localizationCookie.CurrentCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
+                // Else set to default culture if not already set
+                if (string.IsNullOrEmpty(localizationCookie.CurrentCulture))
+                {
+                    localizationCookie.CurrentCulture = m_autoLocalizationManager.GetDefaultCulture().Name;
+                }
             }
 
             SetCookieValue(localizationCookie);
