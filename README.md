@@ -15,14 +15,17 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
     IDatabaseConfiguration databaseConfiguration = null;
     //IDatabaseConfiguration databaseConfiguration = new NHibernateDatabaseConfiguration();
     
-    services.AddLocalizationService<CookieConfigResolver>(
+    services.AddLocalizationService(
         localizationConfiguration,
         databaseConfiguration
     );
 }
 ```
 
-Where `CookieConfigResolver` implements `ICookieConfigResolver`
+The cookies are enabled by default but this behavior can be changed by adding the class which implements `ICookieConfigResolver` (useful for GDPR cookie consent):
+```c#
+services.AddSingleton<ICookieConfigResolver, CustomCookieConfigResolver>();
+```
 
 ### Using library without config file:
 ```c#
@@ -255,7 +258,7 @@ public void ConfigureServices(IServiceCollection services)
     //IDatabaseConfiguration databaseConfiguration = new NHibernateDatabaseConfiguration();
     
     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-    services.AddLocalizationService<CookieConfigResolver>(
+    services.AddLocalizationService(
         localizationConfiguration,
         databaseConfiguration
     );
@@ -265,8 +268,6 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 {  
 }
 ``` 
-
-Where `CookieConfigResolver` implements `ICookieConfigResolver`
 
 ## Database structure 
 Init database schema script for SQL Server is in Sample project named `CreateDBSchema.sql`. Run it in SQL Server Management studio

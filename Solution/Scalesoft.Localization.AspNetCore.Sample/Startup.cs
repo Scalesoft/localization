@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Scalesoft.Localization.AspNetCore.IoC;
-using Scalesoft.Localization.AspNetCore.Sample.CookiePrefs;
+using Scalesoft.Localization.AspNetCore.Manager;
 using Scalesoft.Localization.Core.Configuration;
 using Scalesoft.Localization.Core.Dictionary;
 using Scalesoft.Localization.Core.Manager;
@@ -37,7 +37,8 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             var localizationConfiguration = m_configuration.GetSection("Localization").Get<LocalizationConfiguration>();
             var databaseConfiguration = new NHibernateDatabaseConfiguration();
-            services.AddLocalizationService<CookiePrefsResolver>(localizationConfiguration, databaseConfiguration);
+            services.AddLocalizationService(localizationConfiguration, databaseConfiguration);
+            services.AddSingleton<ICookieConfigResolver, DefaultCookieConfigResolver>(); // Add custom cookie config resolver if required (e.g. GDPR cookie consent)
 
             // Add framework services.
             services.AddMvc()
