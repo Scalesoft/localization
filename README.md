@@ -22,6 +22,11 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
 }
 ```
 
+The cookies are enabled by default but this behavior can be changed by adding the class which implements `ICookieConfigResolver` (useful for GDPR cookie consent):
+```c#
+services.AddSingleton<ICookieConfigResolver, CustomCookieConfigResolver>();
+```
+
 ### Using library without config file:
 ```c#
 public IServiceProvider ConfigureServices(IServiceCollection services)

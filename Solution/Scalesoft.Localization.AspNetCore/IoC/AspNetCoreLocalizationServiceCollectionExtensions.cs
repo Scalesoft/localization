@@ -27,6 +27,7 @@ namespace Scalesoft.Localization.AspNetCore.IoC
             services.AddTransient<IRazorLocalizationService, RazorLocalizationService>();
             services.AddTransient<IDictionaryService, DictionaryService>();
             services.AddTransient<IDynamicTextService, DynamicTextService>();
+            services.TryAddSingleton<ICookieConfigResolver, DefaultCookieConfigResolver>();
         }
 
         public static IApplicationBuilder UseLocalization(this IApplicationBuilder builder)

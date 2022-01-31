@@ -90,13 +90,13 @@ class Localization {
                         new LocalizationResult(
                             result,
                             LocalizationStatusSuccess(text, scope),
-                        )
+                        ),
                     );
                 }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
                     const errorStatus = {
                         success: false,
                         message: "Unable to load required dictionary",
-                        errorType: 'loadDictionary',
+                        errorType: "loadDictionary",
                         text,
                         scope: dictionaryResponse.status.scope,
                         context: dictionaryResponse.status.context,
@@ -108,7 +108,7 @@ class Localization {
                         new LocalizationResult(
                             this.getTranslationOnError(text, scope),
                             LocalizationStatusSuccess(text, scope),
-                        )
+                        ),
                     );
                 });
         });
@@ -151,13 +151,13 @@ class Localization {
                         new LocalizationResult(
                             result,
                             LocalizationStatusSuccess(text, scope),
-                        )
+                        ),
                     );
                 }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
                     const errorStatus = {
                         success: false,
                         message: "Unable to load required dictionary",
-                        errorType: 'loadDictionary',
+                        errorType: "loadDictionary",
                         text,
                         scope: dictionaryResponse.status.scope,
                         context: dictionaryResponse.status.context,
@@ -169,7 +169,7 @@ class Localization {
                         new LocalizationResult(
                             this.getTranslationOnError(text, scope),
                             LocalizationStatusSuccess(text, scope),
-                        )
+                        ),
                     );
                 });
         });
@@ -217,7 +217,7 @@ class Localization {
                             new LocalizationResult(
                                 result,
                                 LocalizationStatusSuccess(text, scope),
-                            )
+                            ),
                         );
                     } catch (exception) {
                         reject(
@@ -226,18 +226,18 @@ class Localization {
                                 {
                                     success: false,
                                     message: exception.message,
-                                    errorType: 'exception',
+                                    errorType: "exception",
                                     text,
                                     scope,
                                 },
-                            )
+                            ),
                         );
                     }
                 }, (dictionaryResponse: ILocalizationDictionaryResult<LocalizationDictionary>) => {
                     const errorStatus = {
                         success: false,
                         message: "Unable to load required pluralization dictionary",
-                        errorType: 'loadDictionary',
+                        errorType: "loadDictionary",
                         text,
                         scope: dictionaryResponse.status.scope,
                         context: dictionaryResponse.status.context,
@@ -249,7 +249,7 @@ class Localization {
                         new LocalizationResult(
                             this.getTranslationOnError(text, scope),
                             LocalizationStatusSuccess(text, scope),
-                        )
+                        ),
                     );
                 });
         });
@@ -288,14 +288,14 @@ class Localization {
                     {
                         result: dictionary,
                         status: LocalizationDictionaryStatusSuccess(scope),
-                    }
+                    },
                 );
             }, (status: IDictionaryError) => {
                 reject(
                     {
                         result: null,
                         status,
-                    }
+                    },
                 );
             });
         });
@@ -324,14 +324,14 @@ class Localization {
                     {
                         result: dictionary,
                         status: LocalizationDictionaryStatusSuccess(scope),
-                    }
+                    },
                 );
             }, (status: IDictionaryError) => {
                 reject(
                     {
                         result: null,
                         status,
-                    }
+                    },
                 );
             });
         });
@@ -453,7 +453,7 @@ class Localization {
         xmlHttpRequest.open(
             "GET",
             `${this.getBaseUrl()}/Localization/Dictionary?scope=${scope}`,
-            false
+            false,
         );
         xmlHttpRequest.send();
     }
@@ -498,7 +498,7 @@ class Localization {
                         {
                             scope,
                             context: xmlHttpRequest,
-                        }
+                        },
                     );
                 }
             };
@@ -506,7 +506,7 @@ class Localization {
             xmlHttpRequest.open(
                 "GET",
                 `${this.getBaseUrl()}/Localization/Dictionary?scope=${scope}`,
-                true
+                true,
             );
             xmlHttpRequest.send();
         }
@@ -560,7 +560,7 @@ class Localization {
         xmlHttpRequest.open(
             "GET",
             `${this.getBaseUrl()}/Localization/PluralizedDictionary?scope=${scope}`,
-            false
+            false,
         );
         xmlHttpRequest.send();
     }
@@ -606,7 +606,7 @@ class Localization {
                         {
                             scope,
                             context: xmlHttpRequest,
-                        }
+                        },
                     );
                 }
             };
@@ -614,7 +614,7 @@ class Localization {
             xmlHttpRequest.open(
                 "GET",
                 `${this.getBaseUrl()}/Localization/PluralizedDictionary?scope=${scope}`,
-                true
+                true,
             );
             xmlHttpRequest.send();
         }
@@ -693,17 +693,73 @@ class Localization {
         return baseUrl;
     }
 
+    /**
+     * @deprecated Use getCurrentCultureAsync
+     */
     public getCurrentCulture(): string {
         if (this.mCurrentCulture === undefined) {
             const parsedCookieValue = this.getParsedCultureCookie();
-            const currentCulture = parsedCookieValue.currentCulture === null
-                ? parsedCookieValue.defaultCulture
-                : parsedCookieValue.currentCulture;
+            if (!parsedCookieValue) {
+                const xmlHttpRequest = new XMLHttpRequest();
 
-            this.setCurrentCulture(currentCulture);
+                xmlHttpRequest.onreadystatechange = () => {
+                    if (
+                        xmlHttpRequest.readyState === XMLHttpRequest.DONE
+                        && xmlHttpRequest.status === 200
+                    ) {
+                        let response = xmlHttpRequest.responseText;
+
+                        this.setCurrentCulture(response);
+                    }
+                };
+
+                xmlHttpRequest.open(
+                    "GET",
+                    `${this.getBaseUrl()}/Localization/CurrentCulture`,
+                    false,
+                );
+                xmlHttpRequest.send();
+            } else {
+                this.setCurrentCulture(parsedCookieValue.currentCulture);
+            }
         }
 
         return this.mCurrentCulture;
+    }
+
+    public getCurrentCultureAsync(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            if (this.mCurrentCulture === undefined) {
+                const parsedCookieValue = this.getParsedCultureCookie();
+                if (!parsedCookieValue) {
+                    const xmlHttpRequest = new XMLHttpRequest();
+
+                    xmlHttpRequest.onreadystatechange = () => {
+                        if (xmlHttpRequest.readyState !== XMLHttpRequest.DONE) {
+                            return;
+                        }
+
+                        if (xmlHttpRequest.status === 200) {
+                            this.setCurrentCulture(xmlHttpRequest.responseText);
+                            resolve(this.mCurrentCulture);
+                        } else {
+                            reject();
+                        }
+                    };
+
+                    xmlHttpRequest.open(
+                        "GET",
+                        `${this.getBaseUrl()}/Localization/CurrentCulture`,
+                        true,
+                    );
+                    xmlHttpRequest.send();
+                } else {
+                    this.setCurrentCulture(parsedCookieValue.currentCulture);
+                }
+            }
+
+            resolve(this.mCurrentCulture);
+        });
     }
 
     private setCurrentCulture(culture: string) {
@@ -712,15 +768,18 @@ class Localization {
 
     private getParsedCultureCookie(): ILocalizationCookie {
         const currentCultureCookieValue = this.getCurrentCultureCookie();
+        if (!currentCultureCookieValue) {
+            return null;
+        }
+
         const parsedCookieValue = JSON.parse(currentCultureCookieValue) as ILocalizationCookie;
 
         if (
-            parsedCookieValue.defaultCulture === undefined
-            || parsedCookieValue.currentCulture === undefined
+            parsedCookieValue.currentCulture === undefined
         ) {
             console.error(
-                `Unexpected value of the cookie ${this.mCultureCookieName}. Expected object with properties 'defaultCulture', and 'currentCulture'.`,
-                parsedCookieValue
+                `Unexpected value of the cookie ${this.mCultureCookieName}. Expected object with property 'currentCulture'.`,
+                parsedCookieValue,
             );
         }
 
@@ -823,8 +882,7 @@ interface ILocalizationConfiguration {
 }
 
 interface ILocalizationCookie {
-    defaultCulture: string;
-    currentCulture: string | null;
+    currentCulture: string;
 }
 
 interface ILocalizationError {
