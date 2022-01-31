@@ -13,10 +13,10 @@ namespace Scalesoft.Localization.Tool.Translator.Core
 {
     public class DictionaryManager
     {
-        private readonly IHostingEnvironment m_webHostEnvironment;
+        private readonly IWebHostEnvironment m_webHostEnvironment;
         private const string WorkingDirectory = "WorkingDirectory";
 
-        public DictionaryManager(IHostingEnvironment webHostEnvironment)
+        public DictionaryManager(IWebHostEnvironment webHostEnvironment)
         {
             m_webHostEnvironment = webHostEnvironment;
         }
