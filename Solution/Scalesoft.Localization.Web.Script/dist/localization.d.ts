@@ -70,7 +70,11 @@ declare class Localization {
      */
     private getDownloadPromise;
     private getBaseUrl;
+    /**
+     * @deprecated Use getCurrentCultureAsync
+     */
     getCurrentCulture(): string;
+    getCurrentCultureAsync(): Promise<string>;
     private setCurrentCulture;
     private getParsedCultureCookie;
     private getCurrentCultureCookie;
@@ -82,7 +86,7 @@ declare abstract class BaseLocalizationDictionary<TResponse> {
     private readonly mScope;
     protected constructor(dictionary: string, scope: string);
     getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString;
-    readonly scope: string;
+    get scope(): string;
 }
 declare class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
     constructor(dictionary: string, scope: string);
@@ -104,8 +108,7 @@ interface ILocalizationConfiguration {
     onError?: (localizationError: ILocalizationError) => void;
 }
 interface ILocalizationCookie {
-    defaultCulture: string;
-    currentCulture: string | null;
+    currentCulture: string;
 }
 interface ILocalizationError {
     text: string;

@@ -73,7 +73,7 @@ var Localization = /** @class */ (function () {
                 var errorStatus = {
                     success: false,
                     message: "Unable to load required dictionary",
-                    errorType: 'loadDictionary',
+                    errorType: "loadDictionary",
                     text: text,
                     scope: dictionaryResponse.status.scope,
                     context: dictionaryResponse.status.context,
@@ -101,7 +101,7 @@ var Localization = /** @class */ (function () {
                 var errorStatus = {
                     success: false,
                     message: "Unable to load required dictionary",
-                    errorType: 'loadDictionary',
+                    errorType: "loadDictionary",
                     text: text,
                     scope: dictionaryResponse.status.scope,
                     context: dictionaryResponse.status.context,
@@ -136,7 +136,7 @@ var Localization = /** @class */ (function () {
                     reject(new LocalizationResult(_this.handleError(exception, text), {
                         success: false,
                         message: exception.message,
-                        errorType: 'exception',
+                        errorType: "exception",
                         text: text,
                         scope: scope,
                     }));
@@ -145,7 +145,7 @@ var Localization = /** @class */ (function () {
                 var errorStatus = {
                     success: false,
                     message: "Unable to load required pluralization dictionary",
-                    errorType: 'loadDictionary',
+                    errorType: "loadDictionary",
                     text: text,
                     scope: dictionaryResponse.status.scope,
                     context: dictionaryResponse.status.context,
@@ -454,25 +454,71 @@ var Localization = /** @class */ (function () {
         }
         return baseUrl;
     };
+    /**
+     * @deprecated Use getCurrentCultureAsync
+     */
     Localization.prototype.getCurrentCulture = function () {
+        var _this = this;
         if (this.mCurrentCulture === undefined) {
             var parsedCookieValue = this.getParsedCultureCookie();
-            var currentCulture = parsedCookieValue.currentCulture === null
-                ? parsedCookieValue.defaultCulture
-                : parsedCookieValue.currentCulture;
-            this.setCurrentCulture(currentCulture);
+            if (!parsedCookieValue) {
+                var xmlHttpRequest_3 = new XMLHttpRequest();
+                xmlHttpRequest_3.onreadystatechange = function () {
+                    if (xmlHttpRequest_3.readyState === XMLHttpRequest.DONE
+                        && xmlHttpRequest_3.status === 200) {
+                        var response = xmlHttpRequest_3.responseText;
+                        _this.setCurrentCulture(response);
+                    }
+                };
+                xmlHttpRequest_3.open("GET", this.getBaseUrl() + "/Localization/CurrentCulture", false);
+                xmlHttpRequest_3.send();
+            }
+            else {
+                this.setCurrentCulture(parsedCookieValue.currentCulture);
+            }
         }
         return this.mCurrentCulture;
+    };
+    Localization.prototype.getCurrentCultureAsync = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (_this.mCurrentCulture === undefined) {
+                var parsedCookieValue = _this.getParsedCultureCookie();
+                if (!parsedCookieValue) {
+                    var xmlHttpRequest_4 = new XMLHttpRequest();
+                    xmlHttpRequest_4.onreadystatechange = function () {
+                        if (xmlHttpRequest_4.readyState !== XMLHttpRequest.DONE) {
+                            return;
+                        }
+                        if (xmlHttpRequest_4.status === 200) {
+                            _this.setCurrentCulture(xmlHttpRequest_4.responseText);
+                            resolve(_this.mCurrentCulture);
+                        }
+                        else {
+                            reject();
+                        }
+                    };
+                    xmlHttpRequest_4.open("GET", _this.getBaseUrl() + "/Localization/CurrentCulture", true);
+                    xmlHttpRequest_4.send();
+                }
+                else {
+                    _this.setCurrentCulture(parsedCookieValue.currentCulture);
+                }
+            }
+            resolve(_this.mCurrentCulture);
+        });
     };
     Localization.prototype.setCurrentCulture = function (culture) {
         this.mCurrentCulture = culture;
     };
     Localization.prototype.getParsedCultureCookie = function () {
         var currentCultureCookieValue = this.getCurrentCultureCookie();
+        if (!currentCultureCookieValue) {
+            return null;
+        }
         var parsedCookieValue = JSON.parse(currentCultureCookieValue);
-        if (parsedCookieValue.defaultCulture === undefined
-            || parsedCookieValue.currentCulture === undefined) {
-            console.error("Unexpected value of the cookie " + this.mCultureCookieName + ". Expected object with properties 'defaultCulture', and 'currentCulture'.", parsedCookieValue);
+        if (parsedCookieValue.currentCulture === undefined) {
+            console.error("Unexpected value of the cookie " + this.mCultureCookieName + ". Expected object with property 'currentCulture'.", parsedCookieValue);
         }
         return parsedCookieValue;
     };
