@@ -1,29 +1,29 @@
 {
-  "version": "2.8.1",
+  "version": "2.9.0-beta.0",
   "name": "scalesoft-localization-web",
   "description": "A JavaScript client-side library for Scalesoft localization framework.",
   "license": "LGPL-3.0",
   "author": "Scalesoft s.r.o.",
-  "main": "dist/localization.js",
+  "main": "dist/localization.esm.js",
+  "module": "dist/localization.esm.js",
   "types": "dist/localization.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Scalesoft/localization.git"
   },
   "scripts": {
-    "gulp": "node_modules/.bin/gulp"
+    "build": "rollup -c rollup.config.js"
   },
   "files": [
     "dist/",
     "package.json"
   ],
   "devDependencies": {
-    "es6-promise": "4.2.8",
-    "gulp": "4.0.2",
-    "gulp-rename": "1.4.0",
-    "gulp-sourcemaps": "2.6.5",
-    "gulp-typescript": "5.0.1",
-    "gulp-uglify": "3.0.2",
-    "typescript": "3.8.3"
+    "@rollup/plugin-typescript": "^8.3.0",
+    "rollup": "^2.67.2",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.3.1",
+    "typescript": "4.5.5"
   }
 }
