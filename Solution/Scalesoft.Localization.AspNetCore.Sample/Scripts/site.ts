@@ -1,4 +1,5 @@
-/// <reference path="../../Scalesoft.Localization.Web.Script/src/localization.ts" />
+import {Localization, LocalizationErrorResolution} from "../../Scalesoft.Localization.Web.Script/dist/localization";
+
 namespace LocalizationSample {
     $(() => {
         new LocalizationTest().init();

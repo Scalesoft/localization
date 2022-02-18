@@ -13,7 +13,7 @@
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
     <Exec WorkingDirectory="$(ProjectDir)" Command="yarn install" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn gulp default" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn build" />
   </Target>
   
 </Project>

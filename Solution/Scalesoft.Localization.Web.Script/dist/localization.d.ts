@@ -1,6 +1,6 @@
-declare const LocalizationStatusSuccess: (text: string, scope: string) => ILocalizationStatus;
-declare const LocalizationDictionaryStatusSuccess: (scope: string) => IDictionaryError;
-declare class Localization {
+export declare const LocalizationStatusSuccess: (text: string, scope: string) => ILocalizationStatus;
+export declare const LocalizationDictionaryStatusSuccess: (scope: string) => IDictionaryError;
+export declare class Localization {
     private mGlobalScope;
     private mCultureCookieName;
     private mCurrentCulture;
@@ -79,7 +79,7 @@ declare class Localization {
     private getParsedCultureCookie;
     private getCurrentCultureCookie;
 }
-declare abstract class BaseLocalizationDictionary<TResponse> {
+export declare abstract class BaseLocalizationDictionary<TResponse> {
     protected readonly mDictionary: {
         [key: string]: TResponse;
     };
@@ -88,29 +88,29 @@ declare abstract class BaseLocalizationDictionary<TResponse> {
     getFallbackTranslation(text: string, scope: string, cultureName: string): ILocalizedString;
     get scope(): string;
 }
-declare class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
+export declare class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
     constructor(dictionary: string, scope: string);
     translate(text: string, fallback: () => ILocalizedString): ILocalizedString | null;
     translateFormat(text: string, parameters: string[], fallback: () => ILocalizedString): ILocalizedString;
     private formatString;
 }
-declare class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
+export declare class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
     constructor(dictionary: string, scope: string);
     translatePluralization(text: string, number: number, fallback: () => ILocalizedString): ILocalizedString;
 }
-declare enum LocalizationErrorResolution {
+export declare enum LocalizationErrorResolution {
     Null = 0,
     Key = 1
 }
-interface ILocalizationConfiguration {
+export interface ILocalizationConfiguration {
     errorResolution: LocalizationErrorResolution;
     siteUrl?: string;
     onError?: (localizationError: ILocalizationError) => void;
 }
-interface ILocalizationCookie {
+export interface ILocalizationCookie {
     currentCulture: string;
 }
-interface ILocalizationError {
+export interface ILocalizationError {
     text: string;
     scope: string;
     message: string;
@@ -118,7 +118,7 @@ interface ILocalizationError {
     dictionary?: string;
     context?: object;
 }
-interface ILocalizationStatus {
+export interface ILocalizationStatus {
     success: boolean;
     text: string;
     scope: string;
@@ -127,44 +127,44 @@ interface ILocalizationStatus {
     dictionary?: string;
     context?: object;
 }
-interface IDictionaryError {
+export interface IDictionaryError {
     scope: string;
     context: object | null;
 }
-interface ILocalizationDictionaryResult<TDictionary> {
+export interface ILocalizationDictionaryResult<TDictionary> {
     result: TDictionary | null;
     status: IDictionaryError;
 }
-interface ILocalizationResult {
+export interface ILocalizationResult {
     result: ILocalizedString;
     status: ILocalizationStatus;
     toString(): string;
 }
-declare class LocalizationResult implements ILocalizationResult {
+export declare class LocalizationResult implements ILocalizationResult {
     readonly result: ILocalizedString;
     readonly status: ILocalizationStatus;
     constructor(result: ILocalizedString, status: ILocalizationStatus);
     toString(): string;
 }
-interface ILocalizedString {
+export interface ILocalizedString {
     name: string;
     resourceNotFound: boolean;
     value: string;
 }
-interface IPluralizedString {
+export interface IPluralizedString {
     intervals: IIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
 }
-interface IIntervalWithTranslation {
+export interface IIntervalWithTranslation {
     interval: PluralizationInterval;
     localizedString: ILocalizedString;
 }
-declare class PluralizationInterval {
+export declare class PluralizationInterval {
     readonly start: number;
     readonly end: number;
     constructor(start: number, end: number);
 }
-declare class LocalizationUtils {
+export declare class LocalizationUtils {
     static getCookie(name: string): string;
     static isInInterval(value: number, interval: PluralizationInterval): boolean;
 }

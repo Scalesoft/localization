@@ -1,16 +1,16 @@
-﻿const LocalizationStatusSuccess = (text: string, scope: string): ILocalizationStatus => ({
+﻿export const LocalizationStatusSuccess = (text: string, scope: string): ILocalizationStatus => ({
     success: true,
     message: "Success",
     text,
     scope,
 });
 
-const LocalizationDictionaryStatusSuccess = (scope: string): IDictionaryError => ({
+export const LocalizationDictionaryStatusSuccess = (scope: string): IDictionaryError => ({
     scope,
     context: null,
 });
 
-class Localization {
+export class Localization {
     private mGlobalScope = "global";
 
     private mCultureCookieName: string = "Localization.Culture";
@@ -791,7 +791,7 @@ class Localization {
     }
 }
 
-abstract class BaseLocalizationDictionary<TResponse> {
+export abstract class BaseLocalizationDictionary<TResponse> {
     protected readonly mDictionary: { [key: string]: TResponse };
     private readonly mScope: string;
 
@@ -813,7 +813,7 @@ abstract class BaseLocalizationDictionary<TResponse> {
     }
 }
 
-class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
+export class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString> {
     constructor(dictionary: string, scope: string) {
         super(dictionary, scope);
     }
@@ -845,7 +845,7 @@ class LocalizationDictionary extends BaseLocalizationDictionary<ILocalizedString
     }
 }
 
-class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
+export class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPluralizedString> {
     constructor(dictionary: string, scope: string) {
         super(dictionary, scope);
     }
@@ -870,22 +870,22 @@ class LocalizationPluralizationDictionary extends BaseLocalizationDictionary<IPl
     }
 }
 
-enum LocalizationErrorResolution {
+export enum LocalizationErrorResolution {
     Null = 0,
     Key = 1,
 }
 
-interface ILocalizationConfiguration {
+export interface ILocalizationConfiguration {
     errorResolution: LocalizationErrorResolution,
     siteUrl?: string,
     onError?: (localizationError: ILocalizationError) => void,
 }
 
-interface ILocalizationCookie {
+export interface ILocalizationCookie {
     currentCulture: string;
 }
 
-interface ILocalizationError {
+export interface ILocalizationError {
     text: string;
     scope: string;
     message: string;
@@ -894,7 +894,7 @@ interface ILocalizationError {
     context?: object;
 }
 
-interface ILocalizationStatus {
+export interface ILocalizationStatus {
     success: boolean;
     text: string;
     scope: string;
@@ -904,24 +904,24 @@ interface ILocalizationStatus {
     context?: object;
 }
 
-interface IDictionaryError {
+export interface IDictionaryError {
     scope: string;
     context: object | null;
 }
 
-interface ILocalizationDictionaryResult<TDictionary> {
+export interface ILocalizationDictionaryResult<TDictionary> {
     result: TDictionary | null,
     status: IDictionaryError,
 }
 
-interface ILocalizationResult {
+export interface ILocalizationResult {
     result: ILocalizedString,
     status: ILocalizationStatus,
 
     toString(): string,
 }
 
-class LocalizationResult implements ILocalizationResult {
+export class LocalizationResult implements ILocalizationResult {
     public readonly result: ILocalizedString;
     public readonly status: ILocalizationStatus;
 
@@ -935,23 +935,23 @@ class LocalizationResult implements ILocalizationResult {
     }
 }
 
-interface ILocalizedString {
+export interface ILocalizedString {
     name: string;
     resourceNotFound: boolean;
     value: string;
 }
 
-interface IPluralizedString {
+export interface IPluralizedString {
     intervals: IIntervalWithTranslation[];
     defaultLocalizedString: ILocalizedString;
 }
 
-interface IIntervalWithTranslation {
+export interface IIntervalWithTranslation {
     interval: PluralizationInterval;
     localizedString: ILocalizedString;
 }
 
-class PluralizationInterval {
+export class PluralizationInterval {
     public readonly start: number;
     public readonly end: number;
 
@@ -967,7 +967,7 @@ class PluralizationInterval {
     }
 }
 
-class LocalizationUtils {
+export class LocalizationUtils {
 
     public static getCookie(name: string): string {
         name = name + "=";
