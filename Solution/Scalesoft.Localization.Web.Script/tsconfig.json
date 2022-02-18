@@ -3,15 +3,10 @@
     "declaration": true,
     "noImplicitAny": true,
     "removeComments": false,
+    "outDir":".",
     "sourceMap": true,
     "target": "es5",
-    "lib": [
-      "dom",
-      "es5",
-      "scripthost",
-      "es2015.promise",
-      "es2015.iterable"
-    ]
+    "module":"ESNext"
   },
   "exclude": [
     "node_modules",

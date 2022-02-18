@@ -86,13 +86,13 @@ const getBundles = regexPattern => bundleconfig.filter(
 gulp.task(taskNames.buildExternalProject,
     (callback) => {
         var yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
-        const externalGulp = spawn(yarn, ["gulp"], { cwd: paths.localizationWebScriptProject });
+        const externalBuild = spawn(yarn, ["build"], { cwd: paths.localizationWebScriptProject });
 
-        externalGulp.on("close", (code) => {
+        externalBuild.on("close", (code) => {
             callback(code);
         });
 
-        externalGulp.on("error", (err) => {
+        externalBuild.on("error", (err) => {
             console.error(err);
         });
     },
