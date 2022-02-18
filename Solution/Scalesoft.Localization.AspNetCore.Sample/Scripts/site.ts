@@ -1,4 +1,4 @@
-import {Localization, LocalizationErrorResolution} from "scalesoft-localization-web";
+import {Localization, LocalizationErrorResolution} from "../../Scalesoft.Localization.Web.Script/dist/localization";
 
 namespace LocalizationSample {
     $(() => {

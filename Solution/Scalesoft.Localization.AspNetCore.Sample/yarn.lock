@@ -3463,11 +3463,6 @@ sass@^1.10.3:
   dependencies:
     chokidar ">=2.0.0 <4.0.0"
 
-scalesoft-localization-web@*:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/scalesoft-localization-web/-/scalesoft-localization-web-2.7.0.tgz#d9036b58069cc72d825df3bb2b6ea4208a9b69f9"
-  integrity sha512-9rh2RtBD3crou3FFmc5Wxo4XMlxIdhnvAJLacKK4bDvrh6lulrRObd4Nvnl3r7Oc9zfMJb0MRLuEivvBNT+Rdg==
-
 semver-greatest-satisfied-range@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/semver-greatest-satisfied-range/-/semver-greatest-satisfied-range-1.1.0.tgz#13e8c2658ab9691cb0cd71093240280d36f77a5b"

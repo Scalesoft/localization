@@ -33,6 +33,8 @@
     <ProjectReference Include="..\Scalesoft.Localization.AspNetCore\Scalesoft.Localization.AspNetCore.csproj" />
     <ProjectReference Include="..\Scalesoft.Localization.Core\Scalesoft.Localization.Core.csproj" />
     <ProjectReference Include="..\Scalesoft.Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj" />
+    <!-- Referernce for invoking yarn build in dependent project: -->
+    <ProjectReference Include="..\Scalesoft.Localization.Web.Script\Scalesoft.Localization.Web.Script.csproj" />
   </ItemGroup>
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">

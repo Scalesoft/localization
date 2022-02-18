@@ -360,7 +360,7 @@ gulp.task(taskNames.deleteProductionPackageJson,
 gulp.task(taskNames.downloadAllDeps,
     gulp.series(
         taskNames.downloadProductionDeps,
-        taskNames.linkToExternalProjectProduction,
+        // taskNames.linkToExternalProjectProduction, // Link is not required, because sample is using JavaScript import keyword
         taskNames.deleteProductionPackageJson
     ),
 );
@@ -387,7 +387,7 @@ if (fs.existsSync("../skip-gulp-run")) {
 else {
     gulp.task("default",
         gulp.series(
-            taskNames.bootstrapExternalProject,
+            // taskNames.bootstrapExternalProject, // Disable external project build, use csproj invoked build instead
             taskNames.downloadAllDeps,
             taskNames.bundleAndMinify
         ),
