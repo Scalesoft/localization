@@ -14,7 +14,9 @@ const gulp = require("gulp"),
     stylelint = require("gulp-stylelint"),
     bundleconfig = require("./bundleconfig.json"),
     spawn = require("child_process").spawn,
-    path = require("path");
+    path = require("path"),
+    webpack = require('webpack'),
+    webpackConfig = require('./webpack.config.js');
     
 const paths = {
     webroot: `./wwwroot/`,
@@ -46,7 +48,8 @@ const taskNames = {
     lintSass: "lint:sass",
     lintSassFixer: "lint:sass:fix",
     compileSass: "compile:sass",
-    compileTypescript: "compile:typescript",
+    // compileTypescript: "compile:typescript",
+    webpackTypescript: "webpack:ts",
     sassWatch: "watch:sass",
     typescriptWatch: "watch:typescript",
     packageWatch: "watch:package",
@@ -176,6 +179,7 @@ gulp.task(taskNames.lintSassFixer,
         })),
 );
 
+/*
 gulp.task(taskNames.compileTypescript,
     () => {
         const tsResult = tsProject.src()
@@ -191,6 +195,29 @@ gulp.task(taskNames.compileTypescript,
             .pipe(gulp.dest(paths.js));
     },
 );
+*/
+
+function getWebpackErrorMessages(errors) {
+    let errorMessages = [];
+    for (let i = 0; i < errors.length; i++) {
+        errorMessages.push(errors[i].message);
+    }
+    return errorMessages;
+}
+
+gulp.task(taskNames.webpackTypescript,
+    (resolve, reject) => {
+        return webpack(webpackConfig, (err, stats) => {
+            if (err) {
+                return reject(err)
+            }
+            if (stats.hasErrors()) {
+                const messages = getWebpackErrorMessages(stats.compilation.errors);
+                return reject(new Error(messages.join('\n')))
+            }
+            resolve()
+        });
+    });
 
 gulp.task(taskNames.compileSass,
     () => gulp.src(paths.sass)
@@ -262,7 +289,7 @@ gulp.task(taskNames.bundleAndMinifyJs,
     gulp.series(
         gulp.parallel(
             taskNames.lintTs,
-            taskNames.compileTypescript
+            taskNames.webpackTypescript
         ),
         taskNames.bundleJs
     ),
