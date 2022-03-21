@@ -78,7 +78,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
                 var requestCulture = new RequestCulture(culture);
                 localizationCookie.CurrentCulture = requestCulture.Culture.Name;
             }
-            
+
             // Instead of unsupported culture use default
             if (localizationCookie.CurrentCulture != null &&
                 m_configuration.SupportedCultures.All(x => x.Name != localizationCookie.CurrentCulture))
@@ -100,7 +100,10 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             var request = m_httpContextAccessor.HttpContext.Request;
             if (request.Cookies.ContainsKey(CultureCookieName))
             {
-                m_httpContextAccessor.HttpContext.Response.Cookies.Delete(CultureCookieName);
+                m_httpContextAccessor.HttpContext.Response.Cookies.Delete(CultureCookieName, new CookieOptions
+                {
+                    Secure = m_configuration.SecureCookie,
+                });
             }
         }
 
