@@ -102,6 +102,7 @@ namespace Scalesoft.Localization.AspNetCore.Manager
             {
                 m_httpContextAccessor.HttpContext.Response.Cookies.Delete(CultureCookieName, new CookieOptions
                 {
+                    IsEssential = true,
                     Secure = m_configuration.SecureCookie,
                 });
             }
