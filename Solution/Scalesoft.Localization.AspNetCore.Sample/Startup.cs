@@ -50,8 +50,6 @@ namespace Scalesoft.Localization.AspNetCore.Sample
 
             services.AddNHibernate(m_configuration);
 
-            services.AddApplicationInsightsTelemetry();
-
             m_container = new Container().WithDependencyInjectionAdapter(services);
 
             return m_container.Resolve<IServiceProvider>();
@@ -63,7 +61,6 @@ namespace Scalesoft.Localization.AspNetCore.Sample
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
             }
             else
             {
