@@ -1,10 +1,3 @@
-[![Build Status](https://img.shields.io/travis/Scalesoft/localization.svg?style=flat-square)](https://travis-ci.org/Scalesoft/localization)
-
-## Not implemented yet:
-* Support for obtaining dictionary parts.
-* Support for Database texts.
-
-
 ## Usage
 ### First the library must be initialized:
 ```c#
