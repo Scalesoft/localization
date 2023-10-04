@@ -93,7 +93,7 @@ namespace Scalesoft.Localization.Core.Manager.Impl
         /// <returns>List of resource files to load.</returns>
         private IEnumerable<string> CheckResourceFiles(LocalizationConfiguration configuration, IDictionaryFactory dictionaryFactory)
         {
-            var fs = new FolderScanner(dictionaryFactory);
+            var fs = new FolderScanner(dictionaryFactory, configuration);
 
             return fs.GetAllDictionaryFullpaths(configuration.BasePath);
         }

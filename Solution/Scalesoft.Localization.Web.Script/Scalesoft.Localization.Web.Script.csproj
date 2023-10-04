@@ -11,9 +11,9 @@
     <None Remove="node_modules\**" />
   </ItemGroup>
 
-  <Target Name="Gulp" BeforeTargets="BeforeBuild">
+  <!--<Target Name="Gulp" BeforeTargets="BeforeBuild">
     <Exec WorkingDirectory="$(ProjectDir)" Command="yarn install" />
     <Exec WorkingDirectory="$(ProjectDir)" Command="yarn build" />
-  </Target>
+  </Target>-->
   
 </Project>

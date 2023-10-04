@@ -24,10 +24,10 @@
     <ProjectReference Include="..\Scalesoft.Localization.Web.Script\Scalesoft.Localization.Web.Script.csproj" />
   </ItemGroup>
 
-  <Target Name="Gulp" BeforeTargets="BeforeBuild">
+  <!--<Target Name="Gulp" BeforeTargets="BeforeBuild">
     <Exec WorkingDirectory="$(ProjectDir)" Command="yarn install" />
     <Exec WorkingDirectory="$(ProjectDir)" Command="yarn gulp default" />
-  </Target>
+  </Target>-->
 
   <ItemGroup>
     <Content Update="nlog.config">

@@ -26,7 +26,7 @@ namespace Scalesoft.Localization.Core.Tests.Util.Impl
             };
 
 
-            var folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance);
+            var folderScanner = new FolderScanner(JsonDictionaryFactory.FactoryInstance, configuration);
             Assert.AreEqual(15, folderScanner.GetAllDictionaryFullpaths(configuration.BasePath).Count);
         }
     }

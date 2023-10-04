@@ -23,8 +23,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
-  <Target Name="Gulp" BeforeTargets="BeforeBuild">
+  <!--<Target Name="Gulp" BeforeTargets="BeforeBuild">
     <Exec Command="yarn gulp default" />
-  </Target>
+  </Target>-->
 
 </Project>

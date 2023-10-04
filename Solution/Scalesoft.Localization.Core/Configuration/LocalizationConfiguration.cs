@@ -21,5 +21,7 @@ namespace Scalesoft.Localization.Core.Configuration
         public LocLocalizationResource FirstAutoTranslateResource { get; set; }
 
         public bool SecureCookie { get; set; } = false;
+
+        public bool IsContainerEnvironment { get; set; } = false;
     }
 }

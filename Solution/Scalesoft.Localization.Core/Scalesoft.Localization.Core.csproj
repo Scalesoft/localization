@@ -5,8 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageOutputPath>..\..\build\</PackageOutputPath>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Authors>Scalesoft s.r.o.</Authors>
-    <Company>Scalesoft s.r.o.</Company>
+    <Authors>Majority Sweden AB</Authors>
+    <Company>Majority Sweden AB</Company>
     <PackageId>Scalesoft.Localization.Core</PackageId>
     <Product>Scalesoft.Localization.Core</Product>
     <PackageLicense>https://www.gnu.org/licenses/lgpl-3.0.html</PackageLicense>
@@ -14,6 +14,7 @@
     <RepositoryUrl>https://github.com/Scalesoft/localization</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <Version>2.6.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
