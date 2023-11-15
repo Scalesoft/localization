@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scalesoft.Localization.Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scalesoft.Localization.Tool.Translator", "Scalesoft.Localization.Tool.Translator\Scalesoft.Localization.Tool.Translator.csproj", "{673788EF-63DB-4F54-9D24-E8BB8B459F69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scalesoft.Localization.Web.SyncScript", "Scalesoft.Localization.Web.SyncScript\Scalesoft.Localization.Web.SyncScript.csproj", "{095319B2-D124-47A6-8B2E-F04A84540C5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{673788EF-63DB-4F54-9D24-E8BB8B459F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{673788EF-63DB-4F54-9D24-E8BB8B459F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{673788EF-63DB-4F54-9D24-E8BB8B459F69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{095319B2-D124-47A6-8B2E-F04A84540C5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095319B2-D124-47A6-8B2E-F04A84540C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095319B2-D124-47A6-8B2E-F04A84540C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095319B2-D124-47A6-8B2E-F04A84540C5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
