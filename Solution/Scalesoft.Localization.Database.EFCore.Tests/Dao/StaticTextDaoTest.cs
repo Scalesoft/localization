@@ -31,7 +31,7 @@ namespace Scalesoft.Localization.Database.EFCore.Tests.Dao
                     {
                         var sqlStr = streamReader.ReadToEnd();
 
-                        context.Database.ExecuteSqlCommand(sqlStr);
+                        context.Database.ExecuteSqlRaw(sqlStr);
                         context.SaveChanges();
                     }
                 }
