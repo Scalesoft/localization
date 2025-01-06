@@ -3,7 +3,7 @@
     "declaration": true,
     "noImplicitAny": true,
     "removeComments": false,
-    "outDir":".",
+    "outDir": "dist",
     "sourceMap": true,
     "target": "es5",
     "module":"ESNext"
