@@ -1,5 +1,4 @@
 const path = require("path");
-const tsNameof = require("ts-nameof");
 
 module.exports = {
     entry: {
@@ -18,10 +17,7 @@ module.exports = {
             {
                 test: /\.ts$/,
                 use: [{
-                    loader: "ts-loader",
-                    options: {
-                        getCustomTransformers: () => ({ before: [tsNameof] })
-                    }
+                    loader: "ts-loader"
                 }],
                 exclude: /node_modules/
             }

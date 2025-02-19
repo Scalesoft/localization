@@ -3,7 +3,7 @@
 	"name": "scalesoft.localization.aspnetcore.sample",
 	"private": true,
 	"scripts": {
-		"gulp": "node_modules/.bin/gulp"
+		"gulp": "gulp"
 	},
 	"devDependencies": {
 		"@types/jquery": "3.3.33",
@@ -17,18 +17,10 @@
 		"gulp-tslint": "8.1.4",
 		"gulp-typescript": "5.0.1",
 		"gulp-uglify": "3.0.2",
-		"gulp-yarn": "2.0.0",
 		"stylelint": "10.1.0",
-		"ts-nameof": "4.2.2",
 		"tslint": "5.20.1",
-		"ts-loader": "8.3.0",
-		"typescript": "3.8.3",
-		"webpack": "4.46.0"
-	},
-	"dependencies": {
-		"bootstrap": "4.4.1",
-		"jquery": "3.4.1",
-		"jquery-validation": "1.19.1",
-		"jquery-validation-unobtrusive": "3.2.11"
+		"ts-loader": "9.5.2",
+		"typescript": "5.7.3",
+		"webpack": "5.98.0"
 	}
 }

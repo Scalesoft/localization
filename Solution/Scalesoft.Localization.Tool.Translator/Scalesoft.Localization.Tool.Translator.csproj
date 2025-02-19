@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
+    <Folder Include="wwwroot\node_modules\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
-    <Exec Command="yarn gulp default" />
+    <Exec Command="npm run gulp default" />
   </Target>
 
 </Project>

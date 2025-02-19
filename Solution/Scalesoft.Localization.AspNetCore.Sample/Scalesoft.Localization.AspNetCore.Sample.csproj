@@ -20,13 +20,13 @@
     <ProjectReference Include="..\Scalesoft.Localization.AspNetCore\Scalesoft.Localization.AspNetCore.csproj" />
     <ProjectReference Include="..\Scalesoft.Localization.Core\Scalesoft.Localization.Core.csproj" />
     <ProjectReference Include="..\Scalesoft.Localization.Database.NHibernate\Scalesoft.Localization.Database.NHibernate.csproj" />
-    <!-- Referernce for invoking yarn build in dependent project: -->
+    <!-- Referernce for invoking npm build in dependent project: -->
     <ProjectReference Include="..\Scalesoft.Localization.Web.Script\Scalesoft.Localization.Web.Script.csproj" />
   </ItemGroup>
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
-    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn install" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn gulp default" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="npm install" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="npm run gulp default" />
   </Target>
 
   <ItemGroup>
