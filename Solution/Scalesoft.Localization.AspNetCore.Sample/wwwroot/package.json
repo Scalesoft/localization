@@ -1,0 +1,11 @@
+{
+	"version": "1.0.0",
+	"name": "scalesoft.localization.aspnetcore.sample",
+	"private": true,
+	"dependencies": {
+		"bootstrap": "4.6.2",
+		"jquery": "3.7.1",
+		"jquery-validation": "1.21.0",
+		"jquery-validation-unobtrusive": "3.2.12"
+	}
+}

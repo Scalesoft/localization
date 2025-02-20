@@ -7,7 +7,7 @@ export default {
     output: [
         {
             file: 'dist/localization.esm.js',
-            format: 'es',
+            format: 'esm',
             sourcemap: true,
         },
         {
@@ -36,6 +36,10 @@ export default {
         cleanup({
             comments: 'none',
         }),
-        typescript({tsconfig: './tsconfig.json'}),
+        typescript({
+            tsconfig: './tsconfig.json',
+            outDir: 'dist',
+            declarationDir: 'dist',
+        }),
     ],
 };

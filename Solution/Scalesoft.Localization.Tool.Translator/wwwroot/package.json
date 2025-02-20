@@ -3,7 +3,7 @@
   "name": "scalesoft.localization.tool.translator",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.2",
-    "jquery": "^3.3"
+    "bootstrap": "4.6.2",
+    "jquery": "3.7.1"
   }
 }

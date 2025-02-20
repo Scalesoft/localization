@@ -6,15 +6,23 @@ $FailedCount = 0
 
 Write-Host
 
-yarn outdated
+npm install
 
 if ($LASTEXITCODE -ne 0)
 {
     $FailedCount++
 }
 
+npm audit --registry=https://registry.npmjs.org
+
 Write-Host
-Write-Host "1 Yarn projects checked for outdated packages," $FailedCount "failed" -foregroundcolor green
+
+$MessageColor = "green"
+if ($FailedCount -gt 0)
+{
+    $MessageColor = "red"
+}
+Write-Host "1 NPM projects attempted to install," $FailedCount "failed" -foregroundcolor $MessageColor
 
 cd $CurrentPath
 

@@ -8,22 +8,18 @@ const gulp = require("gulp"),
     typescript = require("gulp-typescript"),
     sourcemaps = require("gulp-sourcemaps"),
     del = require("del"),
-    yarn = require("gulp-yarn"),
     fs = require("fs"),
     tslint = require("gulp-tslint"),
     stylelint = require("gulp-stylelint"),
     bundleconfig = require("./bundleconfig.json"),
-    spawn = require("child_process").spawn,
-    path = require("path"),
     webpack = require('webpack'),
-    webpackConfig = require('./webpack.config.js');
+    webpackConfig = require('./webpack.config.js'),
+    exec = require("child_process").exec;
     
 const paths = {
     webroot: `./wwwroot/`,
     nodemodules: `./node_modules/`,
     packageJson: `./package.json`,
-    yarnRc: `./.yarnrc`,
-    yarnLock: `./yarn.lock`,
     sass: `./Styles/**/*.scss`,
     scripts: `./Scripts`,
     typescript: `./Scripts/**/*.ts`,
@@ -48,7 +44,6 @@ const taskNames = {
     lintSass: "lint:sass",
     lintSassFixer: "lint:sass:fix",
     compileSass: "compile:sass",
-    // compileTypescript: "compile:typescript",
     webpackTypescript: "webpack:ts",
     sassWatch: "watch:sass",
     typescriptWatch: "watch:typescript",
@@ -60,93 +55,16 @@ const taskNames = {
     cleanDevDeps: "clean:dev-deps",
     clean: "clean",
     downloadAllDeps: "download",
-    downloadProductionDeps: "download:production-deps",
-    deleteProductionPackageJson: "delete-production-package-json",
     bundleJs: "bundle:js",
     bundleCss: "bundle:css",
     bundleAndMinifyJs: "minify:js",
     bundleAndMinifyCss: "minify:css",
     bundleAndMinify: "minify",
-    buildExternalProject: "build-external-project",
-    linkExternalProject: "link-external-project",
-    linkToExternalProject: "link-to-external-project",
-    bootstrapExternalProject: "bootstrap-external-project",
-    linkToExternalProjectProduction: "link-external-project-production",
 };
-
-let enableSwallowTsError = false;
-
-function swallowTsError(error) {
-    process.stderr.write(`${error.toString()}\n`);
-
-    this.emit("end");
-}
 
 const getBundles = regexPattern => bundleconfig.filter(
     bundle => regexPattern.test(bundle.outputFileName),
 );
-
-gulp.task(taskNames.buildExternalProject,
-    (callback) => {
-        var yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
-        const externalBuild = spawn(yarn, ["build"], { cwd: paths.localizationWebScriptProject });
-
-        externalBuild.on("close", (code) => {
-            callback(code);
-        });
-
-        externalBuild.on("error", (err) => {
-            console.error(err);
-        });
-    },
-);
-
-gulp.task(taskNames.linkExternalProject,
-    (callback) => {
-        var yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
-        const externalGulp = spawn(yarn, ["link"], { cwd: paths.localizationWebScriptProject });
-
-        externalGulp.on("close", (code) => {
-            callback(code);
-        });
-
-        externalGulp.on("error", (err) => {
-            console.error(err);
-        });
-    },
-);
-
-gulp.task(taskNames.linkToExternalProject,
-    (callback) => {
-        linkDependency(callback);
-    },
-);
-
-function linkDependency(callback, cwd) {
-    const yarn = (process.platform === "win32" ? "yarn.cmd" : "yarn");
-    const externalGulp = spawn(yarn, ["link", "scalesoft-localization-web"], {cwd});
-
-    externalGulp.on("close", (code) => {
-        callback(code);
-    });
-
-    externalGulp.on("error", (err) => {
-        console.error(err);
-    });
-}
-
-gulp.task(taskNames.linkToExternalProjectProduction,
-    (callback) => {
-        linkDependency(callback, paths.webroot);
-    },
-);
-
-gulp.task(taskNames.bootstrapExternalProject,
-    gulp.series(
-        taskNames.buildExternalProject,
-        taskNames.linkExternalProject,
-        taskNames.linkToExternalProject
-    ));
 
 gulp.task(taskNames.lintTs,
     () => tsProject.src()
@@ -178,24 +96,6 @@ gulp.task(taskNames.lintSassFixer,
             fix: true,
         })),
 );
-
-/*
-gulp.task(taskNames.compileTypescript,
-    () => {
-        const tsResult = tsProject.src()
-            .pipe(sourcemaps.init())
-            .pipe(
-                tsProject().on("error",
-                    enableSwallowTsError ? swallowTsError : () => process.exit(1)
-                )
-            );
-
-        return tsResult.js
-            .pipe(sourcemaps.write("."))
-            .pipe(gulp.dest(paths.js));
-    },
-);
-*/
 
 function getWebpackErrorMessages(errors) {
     let errorMessages = [];
@@ -233,14 +133,12 @@ gulp.task(taskNames.sassWatch,
 
 gulp.task(taskNames.typescriptWatch,
     () => {
-        enableSwallowTsError = true;
-
         return gulp.watch(paths.typescript, gulp.parallel(taskNames.bundleAndMinifyJs));
     },
 );
 
 gulp.task(taskNames.packageWatch,
-    () => gulp.watch(paths.packageJson, gulp.parallel(taskNames.downloadProductionDeps)),
+    () => gulp.watch(paths.packageJson, gulp.parallel(taskNames.downloadAllDeps)),
 );
 
 const bundleJsTasksName = [];
@@ -356,41 +254,13 @@ gulp.task(taskNames.bundleAndMinify,
     )
 );
 
-gulp.task(taskNames.downloadProductionDeps,
-    () => {
-        if (!fs.existsSync(paths.webroot)) {
-            fs.mkdirSync(paths.webroot);
-        }
-
-        return gulp.src(["./package.json", "./yarn.lock"])
-            .pipe(gulp.dest(paths.webroot))
-            .pipe(yarn(
-                {
-                    production: true,
-                    noProgress: true,
-                    noBinLinks: true,
-                    nonInteractive: true,
-                    ignoreScripts: true, // is it good idea?
-                }
-            ));
-    },
-);
-
-gulp.task(taskNames.deleteProductionPackageJson,
-    () => del([
-        `${paths.webroot}/package.json`,
-        `${paths.webroot}/yarn.lock`,
-        `${paths.webroot}/.yarnrc`,
-    ])
-);
-
-gulp.task(taskNames.downloadAllDeps,
-    gulp.series(
-        taskNames.downloadProductionDeps,
-        // taskNames.linkToExternalProjectProduction, // Link is not required, because sample is using JavaScript import keyword
-        taskNames.deleteProductionPackageJson
-    ),
-);
+gulp.task(taskNames.downloadAllDeps, function (cb) {
+    exec("npm install", { cwd: "./wwwroot" }, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.error(stderr);
+        cb(err);
+    });
+});
 
 gulp.task(taskNames.cleanJs,
     () => del([paths.js]),
@@ -414,7 +284,6 @@ if (fs.existsSync("../skip-gulp-run")) {
 else {
     gulp.task("default",
         gulp.series(
-            // taskNames.bootstrapExternalProject, // Disable external project build, use csproj invoked build instead
             taskNames.downloadAllDeps,
             taskNames.bundleAndMinify
         ),

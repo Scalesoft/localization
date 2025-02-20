@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <Target Name="Gulp" BeforeTargets="BeforeBuild">
-    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn install" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="yarn build" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="npm install --legacy-peer-deps" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="npm run build" />
   </Target>
   
 </Project>

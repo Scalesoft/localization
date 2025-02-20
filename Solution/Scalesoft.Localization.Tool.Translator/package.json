@@ -2,13 +2,15 @@
   "version": "1.0.0",
   "name": "scalesoft.localization.tool.translator",
   "private": true,
+  "scripts": {
+    "gulp": "gulp"
+  },
   "devDependencies": {
-    "@types/bootstrap": "4.3.1",
-    "@types/jquery": "3.3.31",
-    "gulp": "4.0.2",
-    "gulp-sourcemaps": "2.6.5",
+    "@types/bootstrap": "4.6.6",
+    "@types/jquery": "3.5.32",
+    "gulp": "5.0.0",
+    "gulp-sourcemaps": "3.0.0",
     "gulp-typescript": "5.0.1",
-    "gulp-yarn": "2.0.0",
-    "typescript": "3.8.3"
+    "typescript": "5.7.2"
   }
 }
