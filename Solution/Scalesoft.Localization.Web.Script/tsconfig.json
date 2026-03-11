@@ -6,6 +6,7 @@
     "outDir": "dist",
     "sourceMap": true,
     "target": "es5",
+    "lib": ["ES2015", "DOM"],
     "module":"ESNext"
   },
   "exclude": [
