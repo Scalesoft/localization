@@ -7,7 +7,6 @@ const gulp = require("gulp"),
     sass = require("gulp-dart-sass"),
     typescript = require("gulp-typescript"),
     sourcemaps = require("gulp-sourcemaps"),
-    del = require("del"),
     fs = require("fs"),
     tslint = require("gulp-tslint"),
     stylelint = require("gulp-stylelint"),
@@ -263,15 +262,15 @@ gulp.task(taskNames.downloadAllDeps, function (cb) {
 });
 
 gulp.task(taskNames.cleanJs,
-    () => del([paths.js]),
+    async () => (await import("del")).deleteAsync([paths.js]),
 );
 
 gulp.task(taskNames.cleanCss,
-    () => del([paths.css]),
+    async () => (await import("del")).deleteAsync([paths.css]),
 );
 
 gulp.task(taskNames.cleanDeps,
-    () => del([paths.runtimedeps]),
+    async () => (await import("del")).deleteAsync([paths.runtimedeps]),
 );
 
 gulp.task(taskNames.clean,
