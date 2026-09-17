@@ -12,6 +12,10 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
     {
         private const int CacheTimeSpanInSeconds = 30;
 
+        private const string CacheKeyProduct = "Scalesoft.Localization";
+        private const string CultureCacheKeyNamespace = "Culture";
+        private const string DictionaryScopeCacheKeyNamespace = "DictionaryScope";
+
         private readonly ILogger m_logger;
         protected readonly CultureUoW m_cultureUoW;
         protected readonly DictionaryScopeUoW m_dictionaryScopeUoW;
@@ -34,12 +38,17 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
             m_memoryCache = memoryCache;
         }
 
+        private static string CreateCacheKey(string cacheKeyNamespace, string key)
+        {
+            return $"{CacheKeyProduct}:{cacheKeyNamespace}:{key}";
+        }
+
         public ICulture GetCachedCultureByNameOrGetDefault(string cultureName)
         {
             if (string.IsNullOrEmpty(cultureName)) throw new ArgumentException("Argument is required", nameof(cultureName));
 
             return m_memoryCache.GetOrCreate(
-                cultureName,
+                CreateCacheKey(CultureCacheKeyNamespace, cultureName),
                 entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromSeconds(CacheTimeSpanInSeconds);
@@ -87,7 +96,7 @@ namespace Scalesoft.Localization.Database.NHibernate.Service
             if (string.IsNullOrEmpty(scopeName)) throw new ArgumentException("Argument is required", nameof(scopeName));
 
             return m_memoryCache.GetOrCreate(
-                scopeName,
+                CreateCacheKey(DictionaryScopeCacheKeyNamespace, scopeName),
                 entry =>
                 {
                     entry.SlidingExpiration = TimeSpan.FromSeconds(CacheTimeSpanInSeconds);
