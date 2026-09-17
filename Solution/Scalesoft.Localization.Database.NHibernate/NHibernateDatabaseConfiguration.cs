@@ -30,10 +30,10 @@ namespace Scalesoft.Localization.Database.NHibernate
         public void RegisterToIoc(IServiceCollection services)
         {
             services.AddSingleton<IDatabaseLocalizationManager, DatabaseLocalizationManager>();
-            services.AddTransient<IDatabaseDictionaryManager, DatabaseDictionaryManager>();
+            services.AddSingleton<IDatabaseDictionaryManager, DatabaseDictionaryManager>();
             services.AddSingleton<IDatabaseDynamicTextService, DatabaseDynamicTextService>();
 
-            services.AddTransient<IDatabaseDictionaryService, DatabaseDictionaryService>();
+            services.AddSingleton<IDatabaseDictionaryService, DatabaseDictionaryService>();
             services.AddSingleton<IDatabaseTranslateService, DatabaseTranslateService>();
 
             services.AddSingleton<CultureHierarchyUoW>();
